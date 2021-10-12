@@ -28,6 +28,8 @@ class _FormQuizState extends State<FormQuiz> {
 
   List<SurveyAnswer> _surveyAnswers = [];
   int id = 1;
+  bool saveData = true;
+  String messageSave = '';
   @override
   void initState() {
     super.initState();
@@ -52,7 +54,7 @@ class _FormQuizState extends State<FormQuiz> {
         return Stack(alignment: Alignment.center, children: [
           Form(
             key: _formKey,
-            child: _survey.idEncuesta != null
+            child: _survey.idEncuesta != null && !saveData
                 ? Column(
                     children: [
                       AppBar(
@@ -192,7 +194,24 @@ class _FormQuizState extends State<FormQuiz> {
                               )))
                     ],
                   )
-                : Container(height: 100,),
+                : saveData
+                    ? Column(
+                        children: [
+                          Text(
+                                messageSave.toString(),
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: ColorsApp.success),
+                              ),
+                              Row(children: [
+                                
+                              ])
+                        ],
+                      )
+                    : Container(
+                        height: 100,
+                      ),
           ),
           if (loading) ...[
             Positioned(
@@ -203,7 +222,9 @@ class _FormQuizState extends State<FormQuiz> {
                 child: Container(
                     alignment: Alignment.center,
                     width: constraints.maxWidth,
-                    child: Center(child: CircularProgressIndicator(color: ColorsApp.primary))))
+                    child: Center(
+                        child: CircularProgressIndicator(
+                            color: ColorsApp.primary))))
           ]
         ]);
       }),
@@ -431,7 +452,9 @@ class _FormQuizState extends State<FormQuiz> {
       'answers': json.encode(_surveyAnswers.toList()).toString()
     };
     ApiResponse _apiResponse = await _quizService.saveAnswers(params);
-    if (_apiResponse.success) {}
+    if (_apiResponse.success) {
+      messageSave = _apiResponse.message;
+    }
     Navigator.pop(buildContext);
   }
 }

@@ -1,21 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jiffy/jiffy.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:upn_financiero_mobil/src/constants/colors.dart';
-import 'package:upn_financiero_mobil/src/models/models.dart'
-    show ApiResponse, JustificationModel, MarkingWorkerModel, ProcessJustifcationModel, Survey;
+import 'package:upn_financiero_mobil/src/models/models.dart' show Survey;
 import 'package:intl/intl.dart';
-import 'package:upn_financiero_mobil/src/providers/user_preferences/user_preferences.dart';
 import 'package:upn_financiero_mobil/src/providers/utils/functions/capitalize.dart';
-import 'package:upn_financiero_mobil/src/services/justification/index.dart';
-import 'package:upn_financiero_mobil/src/shared/components/visor_pdf_img.dart';
-import 'package:upn_financiero_mobil/src/shared/widgets/loading_indicator.dart';
-import 'package:upn_financiero_mobil/src/shared/widgets/widgets.dart';
 
 class ListQuiz extends StatelessWidget {
   final List<Survey> listData;
@@ -45,7 +33,7 @@ class ListQuiz extends StatelessWidget {
               itemBuilder: (context, index) {
                 return TextButton(
                   onPressed: () {
-                  /*   _showModalDetail(
+                    /*   _showModalDetail(
                         buildContext,
                         listData[index].idSolicJustif.toString(),
                         listData[index].idEstadoJustif.toString()); */
@@ -93,8 +81,7 @@ class ListQuiz extends StatelessWidget {
                                         Text(
                                             'Fecha: ' +
                                                 DateFormat('dd|MM|yyyy').format(
-                                                        listData[index]
-                                                            .fecha!),
+                                                    listData[index].fecha!),
                                             style: GoogleFonts.montserrat(
                                                 fontWeight: FontWeight.w500,
                                                 color: ColorsApp.primary,
@@ -172,5 +159,3 @@ class ListQuiz extends StatelessWidget {
     }
   }
 }
-
-
