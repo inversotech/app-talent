@@ -38,6 +38,8 @@ final Map endPoints = {
     'markings-ini': apiUrl + 'assistance/assistance/markings-ini',
     'survey-detail': apiUrl + 'assistance/settings/survey-covid-detail',
     'survey-answer': apiUrl + 'assistance/settings/survey-answer',
+    'survey-answer-covid': apiUrl + 'assistance/settings/survey-answer-covid',
+    
   },
   'account-status': {
     'entity-type': apiUrl + 'report/account-status/entity-type/',

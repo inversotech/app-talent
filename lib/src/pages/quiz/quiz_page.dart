@@ -3,12 +3,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:upn_financiero_mobil/src/constants/colors.dart';
 import 'package:upn_financiero_mobil/src/models/general/date_model.dart';
+import 'package:upn_financiero_mobil/src/models/models.dart'
+    show PaginationModel, Survey;
 import 'package:upn_financiero_mobil/src/providers/utils/functions/capitalize.dart';
+import 'package:upn_financiero_mobil/src/services/quiz/quiz_service.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/app_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/year_month_datepicker.dart';
 
 import 'components/form_quiz.dart';
+import 'components/list_quiz.dart';
 
 class QuizPage extends StatefulWidget {
   QuizPage({Key? key}) : super(key: key);
@@ -25,6 +29,25 @@ class _QuizPageState extends State<QuizPage> {
       year: DateTime.now().year,
       month: DateTime.now().month,
       nameMonth: capitalize(DateFormat.MMMM('es').format(DateTime.now())));
+  bool loading = false;
+  int page = 1;
+  int perPage = 10;
+  PaginationModel pagination = new PaginationModel();
+  QuizService _quizService = QuizService();
+  List<Survey> listData = [];
+  @override
+  void initState() {
+    super.initState();
+    getListDataInitial();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+    _refreshController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppScreen(
@@ -50,7 +73,7 @@ class _QuizPageState extends State<QuizPage> {
                   child: IconButton(
                     iconSize: 30,
                     onPressed: () {
-                       Navigator.push(context,
+                      Navigator.push(context,
                           MaterialPageRoute(builder: (context) => FormQuiz()));
                     },
                     icon: Icon(Icons.person_add, color: ColorsApp.primary),
@@ -73,9 +96,32 @@ class _QuizPageState extends State<QuizPage> {
             ),
             SizedBox(height: 20.0),
             _widgetFilters(context),
+            SizedBox(height: 8.0),
+            _widgetBody(constraints, context)
           ],
         );
       }),
+    );
+  }
+
+  Container _widgetBody(BoxConstraints constraints, BuildContext context) {
+    return Container(
+      width: constraints.maxWidth,
+      child: Column(
+        children: [
+          ListQuiz(
+            constraints: constraints,
+            listData: listData,
+            loading: loading,
+            onPressed: (arguments) {
+              // goToForm(arguments, context);
+            },
+            onChangeList: () {
+              // getListData(context);
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -137,6 +183,70 @@ class _QuizPageState extends State<QuizPage> {
     }
   }
 
-  void _onLoading() async {}
-  void _onRefresh() async {}
+  void getListDataInitial() async {
+    setState(() {
+      loading = true;
+    });
+    await getListMoreData();
+    setState(() {
+      loading = false;
+    });
+  }
+
+  void _onLoading() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    await getListMoreData();
+  }
+
+  void _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    final Map<String, String> params = {
+      'id_anho': dateModel.year.toString(),
+      'id_mes': dateModel.month.toString(),
+      'per_page': perPage.toString(),
+      'page': '1'
+    };
+    pagination = await _quizService.getSurveyAnswers(params);
+    List<dynamic> jsonList =
+        pagination.data == null ? [] : pagination.data as List<dynamic>;
+
+    List<Survey> list =
+        jsonList.map((jsonElement) => Survey.fromJson(jsonElement)).toList();
+    listData = list;
+    if (pagination.total <= perPage) {
+      _refreshController.refreshCompleted();
+      _refreshController.loadNoData();
+    } else {
+      _refreshController.refreshCompleted();
+      _refreshController.loadComplete();
+    }
+    page = 2;
+    setState(() {});
+  }
+
+  Future getListMoreData() async {
+    final Map<String, String> params = {
+      'id_anho': dateModel.year.toString(),
+      'id_mes': dateModel.month.toString(),
+      'per_page': perPage.toString(),
+      'page': page.toString()
+    };
+    pagination = await _quizService.getSurveyAnswers(params);
+    List<dynamic> jsonList =
+        pagination.data == null ? [] : pagination.data as List<dynamic>;
+    if (jsonList.isNotEmpty) {
+      List<Survey> list =
+          jsonList.map((jsonElement) => Survey.fromJson(jsonElement)).toList();
+      listData.addAll(list);
+      page++;
+    }
+    if (pagination.total <= perPage ||
+        jsonList.length < perPage ||
+        jsonList.isEmpty) {
+      _refreshController.loadNoData();
+    } else {
+      _refreshController.loadComplete();
+    }
+    setState(() {});
+  }
 }

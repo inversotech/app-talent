@@ -192,18 +192,18 @@ class _FormQuizState extends State<FormQuiz> {
                               )))
                     ],
                   )
-                : Container(),
+                : Container(height: 100,),
           ),
           if (loading) ...[
             Positioned(
                 bottom: 0.0,
                 right: 0.0,
                 left: 0.0,
-                top: 100,
+                top: 0.0,
                 child: Container(
                     alignment: Alignment.center,
                     width: constraints.maxWidth,
-                    child: Center(child: CircularProgressIndicator())))
+                    child: Center(child: CircularProgressIndicator(color: ColorsApp.primary))))
           ]
         ]);
       }),

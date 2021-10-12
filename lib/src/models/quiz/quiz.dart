@@ -23,6 +23,7 @@ class Survey {
         this.fechaMod,
         this.codigo,
         this.items,
+        this.fecha
     });
 
     String? idEncuesta;
@@ -36,6 +37,7 @@ class Survey {
     DateTime? fechaMod;
     String? codigo;
     List<SurveyItem>? items;
+    DateTime? fecha;
 
     factory Survey.fromJson(Map<String, dynamic> json) => Survey(
         idEncuesta: json["id_encuesta"] == null ? null : json["id_encuesta"],
@@ -50,6 +52,7 @@ class Survey {
         codigo: json["codigo"] == null ? null : json["codigo"],
         items: json["items"] == null ? [] : (json["items"] as List).map((jsonElement) => SurveyItem.fromJson(jsonElement))
           .toList(),
+        fecha: json["fecha"] == null ? null : DateTime.parse(json["fecha"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -64,5 +67,6 @@ class Survey {
         "fecha_mod": fechaMod == null ? null : fechaMod!.toIso8601String(),
         "codigo": codigo == null ? null : codigo,
         "items": items == null ? null :  List<dynamic>.from(items!.map((x) => x.toJson())),
+        "fecha": fecha == null ? null : fecha!.toIso8601String(),
     };
 }
