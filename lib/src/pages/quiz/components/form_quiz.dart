@@ -28,7 +28,7 @@ class _FormQuizState extends State<FormQuiz> {
 
   List<SurveyAnswer> _surveyAnswers = [];
   int id = 1;
-  bool saveData = true;
+  bool saveData = false;
   String messageSave = '';
   @override
   void initState() {
@@ -210,7 +210,7 @@ class _FormQuizState extends State<FormQuiz> {
                         ],
                       )
                     : Container(
-                        height: 100,
+                        height: 200,
                       ),
           ),
           if (loading) ...[
@@ -223,8 +223,7 @@ class _FormQuizState extends State<FormQuiz> {
                     alignment: Alignment.center,
                     width: constraints.maxWidth,
                     child: Center(
-                        child: CircularProgressIndicator(
-                            color: ColorsApp.primary))))
+                        child: CircularProgressIndicator())))
           ]
         ]);
       }),

@@ -84,12 +84,11 @@ class DepositedHelpTravel extends StatelessWidget {
                                       color: ColorsApp.warning,
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(25))),
-                                  child:  Image.asset(
-                                      'assets/icons/search.png',
-                                      height: 30,
-                                      width: 30,
-                                      color: Colors.white,
-                                    
+                                  child: Image.asset(
+                                    'assets/icons/search.png',
+                                    height: 30,
+                                    width: 30,
+                                    color: Colors.white,
                                   ),
                                 ))
                           ],
@@ -130,12 +129,11 @@ class DepositedHelpTravel extends StatelessWidget {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(25))),
                                   child: Image.asset(
-                                      'assets/icons/search.png',
-                                      height: 30,
-                                      width: 30,
-                                      color: Colors.white,
-                                    ),
-                                
+                                    'assets/icons/search.png',
+                                    height: 30,
+                                    width: 30,
+                                    color: Colors.white,
+                                  ),
                                 ))
                           ],
                         )
@@ -293,17 +291,22 @@ class DepositedHelpTravel extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25.0)),
               contentPadding: EdgeInsets.all(0.0),
               titlePadding: EdgeInsets.zero,
-              scrollable: true,
-              content: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: IconButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        icon: Icon(Icons.highlight_off)),
+              scrollable: false,
+              content: Container(
+                width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            icon: Icon(Icons.highlight_off)),
+                      ),
+                      Detail(listData: data, isModal: true),
+                    ],
                   ),
-                  Detail(listData: data, isModal: true),
-                ],
+                ),
               ));
         });
   }

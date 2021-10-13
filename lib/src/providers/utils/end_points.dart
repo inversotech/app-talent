@@ -98,5 +98,5 @@ final Map endPoints = {
         apiUrl + 'benefits/licenses-permits/process-licencia-permiso',
     'valid-license-permit': apiUrl + 'benefits/licenses-permits/valid-perm-lic',
     'holiday': apiUrl + 'benefits/holidays',
-  },
+  }
 };
