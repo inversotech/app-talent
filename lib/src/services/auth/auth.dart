@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:upn_financiero_mobil/enviroment/enviroment.dart';
+import 'package:upn_financiero_mobil/src/models/general/action.dart';
+import 'package:upn_financiero_mobil/src/models/general/menu.dart';
 import 'package:upn_financiero_mobil/src/models/response.dart';
 import 'package:upn_financiero_mobil/src/providers/user_preferences/user_preferences.dart';
 import 'package:upn_financiero_mobil/src/providers/utils/end_points.dart';
@@ -28,7 +31,7 @@ class AuthService {
           storage.write(
               key: 'access_token',
               value: parseResp.data!['access_token'].toString());
-               await userInfo();
+          await userInfo();
         } else {
           toast.ToastCustom().danger(
               message: parseResp.message.isNotEmpty
@@ -102,11 +105,18 @@ class AuthService {
   }
 
   Future<ApiResponse> userInfo() async {
+    Map<String, String> params = {
+      'codigo_padre': codeModule,
+      'id_tipoplataforma': '2'
+    };
     final response = await ApiRestService.post(
-        endPoint: endPoints['oauth']['user-info'], body: {});
+        endPoint: endPoints['oauth']['user-info'], body: params);
     if (response.success) {
       final prefs = new UserPreferences();
       final user = response.data!['user'] as Map<String, dynamic>;
+      List<dynamic> jsonList = response.data['menu'] != null
+          ? response.data['menu'] as List<dynamic>
+          : [];
       prefs.idPerson = int.parse(user['id_persona'].toString());
       prefs.nroDocument = user['num_documento'].toString();
       prefs.fullnamePerson = user['user_name'].toString();
@@ -115,7 +125,29 @@ class AuthService {
       prefs.idDeparment = user['departament_id'].toString();
       prefs.photoUrl = user['foto'].toString();
       prefs.idWorker = int.parse(user['id_trabajador'].toString());
+      if (jsonList.isNotEmpty) {
+        List<Menu> list =
+            jsonList.map((jsonElement) => Menu.fromJson(jsonElement)).toList();
+        prefs.menu = list;
+      } else {
+        prefs.menu = [];
+      }
     }
     return response;
+  }
+
+  Future<List<ActionModule>> getActionsByModule(Map<String, String> params) async {
+    final response = await ApiRestService.getWithParams(
+        endPoint: endPoints['comun']['actions-by-module'], body: params);
+    if (response.success) {
+      List<dynamic> jsonList = response.data as List;
+
+       List<ActionModule> list = jsonList
+          .map((jsonElement) => ActionModule.fromJson(jsonElement))
+          .toList(); 
+      return list;
+    } else {
+      return [];
+    }
   }
 }

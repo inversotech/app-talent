@@ -9,6 +9,7 @@ export 'general/year.dart';
 export 'general/month.dart';
 export 'general/recognition.dart';
 export 'general/ticket_payment.dart';
+export 'general/action.dart';
 export 'assistance/assistance_summary.dart';
 export 'assistance/assistance_summary_detail.dart';
 export 'assistance/marking.dart';

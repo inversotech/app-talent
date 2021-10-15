@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:upn_financiero_mobil/src/constants/colors.dart';
+import 'package:upn_financiero_mobil/src/models/general/menu.dart';
 import 'package:upn_financiero_mobil/src/pages/account_status/account_status_page.dart';
 import 'package:upn_financiero_mobil/src/pages/home/home_page.dart';
 import 'package:upn_financiero_mobil/src/pages/quiz/quiz_page.dart';
@@ -43,6 +44,32 @@ class AppScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserPreferences userPreferences = UserPreferences();
+    List<Widget> tabs = [];
+    List<Menu> menu = userPreferences.menu??[];
+    int index = 0;
+    menu.forEach((element) {
+      tabs.add(Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: initialIndex == index ? Colors.white : Colors.transparent),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Wrap(
+              direction: Axis.vertical,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Image.asset(element.icon.toString(),
+                    height: 30.0,
+                    fit: BoxFit.cover,
+                    color: initialIndex == index
+                        ? ColorsApp.primary
+                        : Colors.white),
+                Text(element.title.toString())
+              ]),
+        ),
+      ));
+      index++;
+    });
     String fullname = '';
     if (userPreferences.fullnamePerson != null) {
       final split = userPreferences.fullnamePerson.toString().split(' ');
@@ -58,7 +85,7 @@ class AppScreen extends StatelessWidget {
       ),
       child: DefaultTabController(
         initialIndex: initialIndex,
-        length: 3,
+        length: tabs.length,
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
@@ -183,76 +210,7 @@ class AppScreen extends StatelessWidget {
                     }
                   },
                   labelPadding: EdgeInsets.symmetric(vertical: 8.0),
-                  tabs: [
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: initialIndex == 0
-                              ? Colors.white
-                              : Colors.transparent),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Wrap(
-                            direction: Axis.vertical,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Image.asset('assets/icons/assistance.png',
-                                  height: 30.0,
-                                  fit: BoxFit.cover,
-                                  color: initialIndex == 0
-                                      ? ColorsApp.primary
-                                      : Colors.white),
-                              Text('Asistencia')
-                            ]),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: initialIndex == 1
-                            ? Colors.white
-                            : Colors.transparent,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Wrap(
-                            direction: Axis.vertical,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Image.asset('assets/icons/account_status.png',
-                                  height: 30.0,
-                                  fit: BoxFit.cover,
-                                  color: initialIndex == 1
-                                      ? ColorsApp.primary
-                                      : Colors.white),
-                              Text('E. Cuenta')
-                            ]),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: initialIndex == 2
-                            ? Colors.white
-                            : Colors.transparent,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Wrap(
-                            direction: Axis.vertical,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Image.asset('assets/icons/account_status.png',
-                                  height: 30.0,
-                                  fit: BoxFit.cover,
-                                  color: initialIndex == 2
-                                      ? ColorsApp.primary
-                                      : Colors.white),
-                              Text('Seg. COVID')
-                            ]),
-                      ),
-                    ),
-                  ],
+                  tabs: tabs,
                 )
               : null,
           bottomSheet: bottomSheet != null ? bottomSheet : null,

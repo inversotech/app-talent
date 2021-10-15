@@ -6,10 +6,11 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:upn_financiero_mobil/src/constants/colors.dart';
 import 'package:upn_financiero_mobil/src/models/general/date_model.dart';
 import 'package:upn_financiero_mobil/src/models/models.dart'
-    show PaginationModel, Person, Survey;
+    show ActionModule, PaginationModel, Person, Survey;
 import 'package:upn_financiero_mobil/src/pages/quiz/components/quiz_detail.dart';
 import 'package:upn_financiero_mobil/src/providers/user_preferences/user_preferences.dart';
 import 'package:upn_financiero_mobil/src/providers/utils/functions/capitalize.dart';
+import 'package:upn_financiero_mobil/src/services/auth/auth.dart';
 import 'package:upn_financiero_mobil/src/services/general/person_service.dart';
 import 'package:upn_financiero_mobil/src/services/quiz/quiz_service.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/app_screen.dart';
@@ -42,11 +43,14 @@ class _QuizPageState extends State<QuizPage> {
   bool isSearching = false;
   PaginationModel pagination = new PaginationModel();
   QuizService _quizService = QuizService();
+  AuthService _authService = AuthService();
   PersonService _personService = PersonService();
   UserPreferences _preferences = UserPreferences();
   List<Survey> listData = [];
   String idPerson = '';
   Person _personSelect = new Person();
+  String codeModule = '16500003';
+  List<ActionModule> actions = [];
   @override
   void initState() {
     super.initState();
@@ -80,61 +84,67 @@ class _QuizPageState extends State<QuizPage> {
               centerTitle: false,
               automaticallyImplyLeading: false,
               actions: [
-                Transform.translate(
-                  offset: Offset(-15, -8),
-                  child: Tooltip(
-                    message: 'Nuevo Invitado',
-                    child: IconButton(
-                      iconSize: 30,
-                      onPressed: () async {
-                        final searchResult = await showSearch(
-                          context: context,
-                          delegate: SearchDelgateCustom(
-                              listData: (query) async {
-                                dynamic listPersons = [];
-                                isSearching = true;
-                                Map<String, String> params = {
-                                  'id_entidad':
-                                      _preferences.idEntity.toString(),
-                                  'search': query.toString()
-                                };
-                                listPersons =
-                                    await _personService.getPersonsYear(params);
-                                isSearching = false;
-                                return listPersons;
-                              },
-                              fieldLabel: 'Buscar persona',
-                              nameTitle: 'name',
-                              nameSubTitle: 'doc_number',
-                              nameImg: 'foto_url'),
-                          //query: 'Hola'
-                        );
-                        if (searchResult != null) {
-                          idPerson = searchResult['id'];
-                          _personSelect = Person.fromJson(searchResult);
-                          getListDataInitial();
-                        }
-                      },
-                      icon: Icon(Icons.person_search, color: ColorsApp.primary),
-                    ),
-                  ),
-                ),
-                Transform.translate(
-                  offset: Offset(-15, -8),
-                  child: Tooltip(
-                    message: 'Nuevo Invitado',
-                    child: IconButton(
-                      iconSize: 30,
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FormQuiz()));
-                      },
-                      icon: Icon(Icons.person_add, color: ColorsApp.primary),
-                    ),
-                  ),
-                )
+                actions.where((element) => element.clave == 'search').length > 0
+                    ? Transform.translate(
+                        offset: Offset(-15, -8),
+                        child: Tooltip(
+                          message: 'Nuevo Invitado',
+                          child: IconButton(
+                            iconSize: 30,
+                            onPressed: () async {
+                              final searchResult = await showSearch(
+                                context: context,
+                                delegate: SearchDelgateCustom(
+                                    listData: (query) async {
+                                      dynamic listPersons = [];
+                                      isSearching = true;
+                                      Map<String, String> params = {
+                                        'id_entidad':
+                                            _preferences.idEntity.toString(),
+                                        'search': query.toString()
+                                      };
+                                      listPersons = await _personService
+                                          .getPersonsYear(params);
+                                      isSearching = false;
+                                      return listPersons;
+                                    },
+                                    fieldLabel: 'Buscar persona',
+                                    nameTitle: 'name',
+                                    nameSubTitle: 'doc_number',
+                                    nameImg: 'foto_url'),
+                                //query: 'Hola'
+                              );
+                              if (searchResult != null) {
+                                idPerson = searchResult['id'];
+                                _personSelect = Person.fromJson(searchResult);
+                                getListDataInitial();
+                              }
+                            },
+                            icon: Icon(Icons.person_search,
+                                color: ColorsApp.primary),
+                          ),
+                        ),
+                      )
+                    : Container(),
+                actions.where((element) => element.clave == 'add').length > 0
+                    ? Transform.translate(
+                        offset: Offset(-15, -8),
+                        child: Tooltip(
+                          message: 'Nuevo Invitado',
+                          child: IconButton(
+                            iconSize: 30,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FormQuiz()));
+                            },
+                            icon: Icon(Icons.person_add,
+                                color: ColorsApp.primary),
+                          ),
+                        ),
+                      )
+                    : Container()
               ],
               elevation: 0,
               backgroundColor: Colors.white,
@@ -289,6 +299,11 @@ class _QuizPageState extends State<QuizPage> {
     }
   }
 
+  Future getActions() async {
+    final Map<String, String> params = {'id_modulo': codeModule};
+    actions = await _authService.getActionsByModule(params);
+  }
+
   void getListData(BuildContext builContext) async {
     final Map<String, String> params = {
       'id_persona':
@@ -324,6 +339,7 @@ class _QuizPageState extends State<QuizPage> {
     setState(() {
       loading = true;
     });
+    await getActions();
     await getListMoreData();
     setState(() {
       loading = false;
@@ -361,6 +377,7 @@ class _QuizPageState extends State<QuizPage> {
 
   void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
+    await getActions();
     final Map<String, String> params = {
       'id_persona':
           idPerson.isNotEmpty ? idPerson : _preferences.idPerson.toString(),

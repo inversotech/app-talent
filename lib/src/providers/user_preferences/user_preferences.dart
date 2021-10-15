@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:upn_financiero_mobil/src/models/general/menu.dart';
 
 class UserPreferences {
-  static final UserPreferences _instancia =
-      new UserPreferences._internal();
+  static final UserPreferences _instancia = new UserPreferences._internal();
 
   factory UserPreferences() {
     return _instancia;
@@ -19,7 +21,6 @@ class UserPreferences {
   void clear() {
     this._prefs?.clear();
   }
-
 
   // GET y SET del fullname
   String? get fullnamePerson {
@@ -38,6 +39,7 @@ class UserPreferences {
   set idPerson(int? value) {
     _prefs?.setInt('idPerson', value!);
   }
+
   // GET y SET del idWorker
   int? get idWorker {
     return _prefs?.getInt('idWorker') ?? null;
@@ -46,6 +48,7 @@ class UserPreferences {
   set idWorker(int? value) {
     _prefs?.setInt('idWorker', value!);
   }
+
   // GET y SET del nroDocument
   String? get nroDocument {
     return _prefs?.getString('nroDocument') ?? '';
@@ -63,6 +66,7 @@ class UserPreferences {
   set photoUrl(String? value) {
     _prefs?.setString('photoUrl', value!);
   }
+
   // GET y SET del idEntity
   int? get idEntity {
     return _prefs?.getInt('idEntity') ?? null;
@@ -71,6 +75,7 @@ class UserPreferences {
   set idEntity(int? value) {
     _prefs?.setInt('idEntity', value!);
   }
+
   // GET y SET del nameEntity
   String? get nameEntity {
     return _prefs?.getString('nameEntity') ?? null;
@@ -79,6 +84,7 @@ class UserPreferences {
   set nameEntity(String? value) {
     _prefs?.setString('nameEntity', value!);
   }
+
   // GET y SET del idDeparment
   String? get idDeparment {
     return _prefs?.getString('idDeparment') ?? null;
@@ -87,6 +93,7 @@ class UserPreferences {
   set idDeparment(String? value) {
     _prefs?.setString('idDeparment', value!);
   }
+
   // GET y SET del nomDeparment
   String? get nomDeparment {
     return _prefs?.getString('nomDeparment') ?? null;
@@ -95,7 +102,8 @@ class UserPreferences {
   set nomDeparment(String? value) {
     _prefs?.setString('nomDeparment', value!);
   }
- // GET y SET del admin
+
+  // GET y SET del admin
   String? get admin {
     return _prefs?.getString('admin') ?? null;
   }
@@ -103,5 +111,18 @@ class UserPreferences {
   set admin(String? value) {
     _prefs?.setString('admin', value!);
   }
-  
+
+  // GET y SET del menu
+  List<Menu>? get menu {
+    List<dynamic> jsonList =
+        json.decode(_prefs?.getString('menu') ?? '[]') as List<dynamic>;
+
+    List<Menu> list =
+        jsonList.map((jsonElement) => Menu.fromJson(jsonElement)).toList();
+    return list;
+  }
+
+  set menu(List<Menu>? value) {
+    _prefs?.setString('menu', json.encode(value!.toList()).toString());
+  }
 }

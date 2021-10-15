@@ -20,6 +20,7 @@ final Map endPoints = {
     'type-institution': apiUrl + 'comun/benefits/type-inst-atention',
     'person-signature': apiUrl + 'comun/personal-signature',
     'file-view': apiUrl + 'comun/benefits/file-view',
+    'actions-by-module': apiUrl + 'comun/actions-by-module',
   },
   'assistance': {
     'map-coordinates':

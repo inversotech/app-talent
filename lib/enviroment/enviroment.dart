@@ -4,3 +4,4 @@ final apiUrlLambTalent =
 final apiUrlLocal = 'http://192.168.1.34:5002/api/';
 final apiUrlLocalUpn = 'http://app07.adventistas.pe/lamb-api-talent/public/api/';
 final apiUrl = apiUrlLocalUpn;
+final codeModule = '16500000';
