@@ -14,6 +14,7 @@ import 'package:upn_financiero_mobil/src/services/general/person_service.dart';
 import 'package:upn_financiero_mobil/src/services/quiz/quiz_service.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/app_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:upn_financiero_mobil/src/shared/widgets/loading_indicator.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/search_delegate.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/year_month_datepicker.dart';
 
@@ -212,7 +213,8 @@ class _QuizPageState extends State<QuizPage> {
                   MaterialPageRoute(
                       builder: (context) => QuizDetail(
                             fecha: Jiffy(survey.fecha, 'yyyy-MM-dd')
-                              .format('yyyy-MM-dd').toString(),
+                                .format('yyyy-MM-dd')
+                                .toString(),
                             idPerson: idPerson.isNotEmpty
                                 ? idPerson
                                 : _preferences.idPerson.toString(),
@@ -283,8 +285,39 @@ class _QuizPageState extends State<QuizPage> {
           capitalize(DateFormat.MMMM('es').format(dateResult));
       dateModel.year = int.parse(DateFormat.y().format(dateResult));
       setState(() {});
-      // getListData(context);
+      getListData(context);
     }
+  }
+
+  void getListData(BuildContext builContext) async {
+    final Map<String, String> params = {
+      'id_persona':
+          idPerson.isNotEmpty ? idPerson : _preferences.idPerson.toString(),
+      'id_entidad': _preferences.idEntity.toString(),
+      'id_anho': dateModel.year.toString(),
+      'id_mes': dateModel.month.toString(),
+      'per_page': perPage.toString(),
+      'page': '1'
+    };
+    ShowLoadingIndicator.showLoadingIndicator(
+        context: builContext, onlyLoading: true, opacity: false);
+    pagination = await _quizService.getSurveyAnswers(params);
+    List<dynamic> jsonList =
+        pagination.data == null ? [] : pagination.data as List<dynamic>;
+
+    List<Survey> list =
+        jsonList.map((jsonElement) => Survey.fromJson(jsonElement)).toList();
+    listData = list;
+    if (pagination.total <= perPage) {
+      _refreshController.refreshCompleted();
+      _refreshController.loadNoData();
+    } else {
+      _refreshController.refreshCompleted();
+      _refreshController.loadComplete();
+    }
+    page = 2;
+    Navigator.pop(builContext);
+    setState(() {});
   }
 
   void getListDataInitial() async {
