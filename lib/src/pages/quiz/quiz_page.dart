@@ -51,6 +51,7 @@ class _QuizPageState extends State<QuizPage> {
   Person _personSelect = new Person();
   String codeModule = '16500003';
   List<ActionModule> actions = [];
+  bool activeButtonAddQuiz = false;
   @override
   void initState() {
     super.initState();
@@ -88,7 +89,7 @@ class _QuizPageState extends State<QuizPage> {
                     ? Transform.translate(
                         offset: Offset(-15, -8),
                         child: Tooltip(
-                          message: 'Nuevo Invitado',
+                          message: 'Buscar persona',
                           child: IconButton(
                             iconSize: 30,
                             onPressed: () async {
@@ -117,29 +118,11 @@ class _QuizPageState extends State<QuizPage> {
                               if (searchResult != null) {
                                 idPerson = searchResult['id'];
                                 _personSelect = Person.fromJson(searchResult);
-                                getListDataInitial();
+                                getListDataInitialOtherPerson(
+                                    builContext: context);
                               }
                             },
                             icon: Icon(Icons.person_search,
-                                color: ColorsApp.primary),
-                          ),
-                        ),
-                      )
-                    : Container(),
-                actions.where((element) => element.clave == 'add').length > 0
-                    ? Transform.translate(
-                        offset: Offset(-15, -8),
-                        child: Tooltip(
-                          message: 'Nuevo Invitado',
-                          child: IconButton(
-                            iconSize: 30,
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => FormQuiz()));
-                            },
-                            icon: Icon(Icons.person_add,
                                 color: ColorsApp.primary),
                           ),
                         ),
@@ -167,10 +150,66 @@ class _QuizPageState extends State<QuizPage> {
           ],
         );
       }),
+      floatingActionButton: actions
+                  .where((element) => element.clave == 'add')
+                  .length >
+              0
+          ? TextButton(
+              style: ButtonStyle(
+                alignment: Alignment.center,
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    return ColorsApp.success; // Use the component's default.
+                  },
+                ),
+                shape:
+                    MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                  (Set<MaterialState> states) {
+                    return RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            25)); // Use the component's default.
+                  },
+                ),
+              ),
+              onPressed: () async {
+                final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FormQuiz(idPerson: idPerson)));
+                if (result != null) {
+                  if (result['change'] == 'true' || result['change'] == true) {
+                    setState(() {
+                      loading = true;
+                    });
+                    await getListMoreData();
+                    setState(() {
+                      loading = false;
+                    });
+                  }
+                }
+              },
+              child: Container(
+                width: 180.0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    activeButtonAddQuiz
+                        ? Icon(Icons.person, color: Colors.white)
+                        : Icon(Icons.person_add, color: Colors.white),
+                    Text(
+                      activeButtonAddQuiz
+                          ? 'Realizar encuesta'
+                          : 'Nueva encuesta',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ))
+          : null,
     );
   }
 
-  Container _widgetBody(BoxConstraints constraints, BuildContext context) {
+  Container _widgetBody(BoxConstraints constraints, BuildContext builContext) {
     return Container(
       width: constraints.maxWidth,
       child: Column(
@@ -209,7 +248,11 @@ class _QuizPageState extends State<QuizPage> {
                   onDeleted: () {
                     idPerson = '';
                     _personSelect = Person();
-                    getListDataInitial();
+                    listData = [];
+                    activeButtonAddQuiz = false;
+                    setState(() {
+                    });
+                    getListData(builContext);
                   },
                 )
               : Container(),
@@ -333,6 +376,46 @@ class _QuizPageState extends State<QuizPage> {
     page = 2;
     Navigator.pop(builContext);
     setState(() {});
+  }
+
+  void getListDataInitialOtherPerson(
+      {required BuildContext builContext}) async {
+    final Map<String, String> params = {
+      'id_persona':
+          idPerson.isNotEmpty ? idPerson : _preferences.idPerson.toString(),
+      'id_entidad': _preferences.idEntity.toString(),
+      'id_anho': dateModel.year.toString(),
+      'id_mes': dateModel.month.toString(),
+      'per_page': perPage.toString(),
+      'page': '1'
+    };
+    ShowLoadingIndicator.showLoadingIndicator(
+        context: builContext, onlyLoading: true, opacity: false);
+    pagination = await _quizService.getSurveyAnswers(params);
+    List<dynamic> jsonList =
+        pagination.data == null ? [] : pagination.data as List<dynamic>;
+
+    List<Survey> list =
+        jsonList.map((jsonElement) => Survey.fromJson(jsonElement)).toList();
+    listData = list;
+    if (pagination.total <= perPage) {
+      _refreshController.refreshCompleted();
+      _refreshController.loadNoData();
+    } else {
+      _refreshController.refreshCompleted();
+      _refreshController.loadComplete();
+    }
+    page = 2;
+    Navigator.pop(builContext);
+    setState(() {});
+    final listToday = listData.where((element) =>
+        element.fecha!.day == DateTime.now().day &&
+        element.fecha!.month == DateTime.now().month &&
+        element.fecha!.year == DateTime.now().year);
+    if (listToday.length <= 0) {
+      activeButtonAddQuiz = true;
+      setState(() {});
+    }
   }
 
   void getListDataInitial() async {
