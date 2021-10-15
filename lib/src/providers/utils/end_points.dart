@@ -39,6 +39,7 @@ final Map endPoints = {
     'survey-detail': apiUrl + 'assistance/settings/survey-covid-detail',
     'survey-answer': apiUrl + 'assistance/settings/survey-answer',
     'survey-answer-covid': apiUrl + 'assistance/settings/survey-answer-covid',
+    'survey-answer-covid-detail': apiUrl + 'assistance/settings/survey-answer-covid-detail',
     
   },
   'account-status': {

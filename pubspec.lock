@@ -279,7 +279,7 @@ packages:
       name: google_ml_kit
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.1"
+    version: "0.7.2"
   group_list_view:
     dependency: "direct main"
     description:

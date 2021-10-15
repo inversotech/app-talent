@@ -33,6 +33,7 @@ class ListQuiz extends StatelessWidget {
               itemBuilder: (context, index) {
                 return TextButton(
                   onPressed: () {
+                    onPressed(listData[index]);
                     /*   _showModalDetail(
                         buildContext,
                         listData[index].idSolicJustif.toString(),

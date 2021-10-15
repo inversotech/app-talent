@@ -11,16 +11,16 @@ String personToJson(Person data) => json.encode(data.toJson());
 class Person {
   Person({
     this.docNumber = '',
-    this.entity = 0,
+    this.entity = '',
     this.fotoUrl = '',
-    this.id = 0,
+    this.id = '',
     this.name = '',
   });
 
   String docNumber;
-  int entity;
+  String entity;
   String fotoUrl;
-  int id;
+  String id;
   String name;
 
   factory Person.fromJson(Map<String, dynamic> json) => Person(

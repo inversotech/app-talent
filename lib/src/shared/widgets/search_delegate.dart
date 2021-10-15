@@ -69,9 +69,7 @@ class SearchDelgateCustom extends SearchDelegate {
       return Container();
     }
     return FutureBuilder(
-      future: Future.delayed(const Duration(milliseconds: 500), () {
-        return this.listData(query);
-      }),
+      future: this.listData(query),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           final List list = snapshot.data;

@@ -5,13 +5,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:upn_financiero_mobil/src/constants/colors.dart';
 import 'package:upn_financiero_mobil/src/models/models.dart'
     show ApiResponse, Survey, SurveyAnswer, SurveyItem;
+import 'package:upn_financiero_mobil/src/providers/user_preferences/user_preferences.dart';
 import 'package:upn_financiero_mobil/src/services/quiz/quiz_service.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/app_screen.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/checkbox_app.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/loading_indicator.dart';
 
 class FormQuiz extends StatefulWidget {
-  FormQuiz({Key? key}) : super(key: key);
+  final String idPerson;
+  FormQuiz({Key? key, this.idPerson = ''}) : super(key: key);
 
   @override
   _FormQuizState createState() => _FormQuizState();
@@ -30,9 +32,14 @@ class _FormQuizState extends State<FormQuiz> {
   int id = 1;
   bool saveData = false;
   String messageSave = '';
+  String idPerson = '';
+  double _puntaje = 100.00;
   @override
   void initState() {
     super.initState();
+    if (widget.idPerson.isNotEmpty) {
+      idPerson = widget.idPerson;
+    }
     _getSurveyCovid();
   }
 
@@ -120,12 +127,41 @@ class _FormQuizState extends State<FormQuiz> {
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                  surveyItem.titulo.toString(),
-                                                  style: GoogleFonts.montserrat(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: Colors.white)),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                      surveyItem.titulo
+                                                          .toString(),
+                                                      style: GoogleFonts
+                                                          .montserrat(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color: Colors
+                                                                  .white)),
+                                                  surveyItem.descripcion != null
+                                                      ? Text(
+                                                          '(' +
+                                                              surveyItem
+                                                                  .descripcion
+                                                                  .toString() +
+                                                              ')',
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                                  fontSize:
+                                                                      12.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: Colors
+                                                                      .white))
+                                                      : Container(),
+                                                ],
+                                              ),
                                             )),
                                         surveyItem.tipoComponente == 'INPUT'
                                             ? Padding(
@@ -196,17 +232,57 @@ class _FormQuizState extends State<FormQuiz> {
                   )
                 : saveData
                     ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          SizedBox(height: 100.0),
+                          _puntaje < 100.0
+                              ? Icon(Icons.thumb_down,
+                                  color: ColorsApp.danger, size: 100)
+                              : Icon(Icons.thumb_up,
+                                  color: ColorsApp.success, size: 100),
                           Text(
-                                messageSave.toString(),
-                                style: GoogleFonts.montserrat(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w700,
-                                    color: ColorsApp.success),
+                            messageSave.toString(),
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.montserrat(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w700,
+                                color: ColorsApp.primary),
+                          ),
+                          SizedBox(height: 8.0),
+                          TextButton(
+                              style: ButtonStyle(
+                                alignment: Alignment.center,
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                    return ColorsApp
+                                        .primary; // Use the component's default.
+                                  },
+                                ),
+                                shape: MaterialStateProperty.resolveWith<
+                                    RoundedRectangleBorder>(
+                                  (Set<MaterialState> states) {
+                                    return RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            25)); // Use the component's default.
+                                  },
+                                ),
                               ),
-                              Row(children: [
-                                
-                              ])
+                              onPressed: () {
+                                Navigator.of(buildContext)
+                                    .pop({'change': true});
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.arrow_back, color: Colors.white),
+                                  Text(
+                                    'Regresar',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ))
                         ],
                       )
                     : Container(
@@ -222,8 +298,7 @@ class _FormQuizState extends State<FormQuiz> {
                 child: Container(
                     alignment: Alignment.center,
                     width: constraints.maxWidth,
-                    child: Center(
-                        child: CircularProgressIndicator())))
+                    child: Center(child: CircularProgressIndicator())))
           ]
         ]);
       }),
@@ -232,19 +307,40 @@ class _FormQuizState extends State<FormQuiz> {
 
   Container _createInputItem(BuildContext buildContext, SurveyItem surveyItem,
       SurveyItem parent, int level) {
+    if (surveyItem.valorInicial != null &&
+        surveyItem.valorInicial!.isNotEmpty) {
+      _addAnswer(
+          surveyItem: surveyItem,
+          parent: parent,
+          respuesta: surveyItem.valorInicial.toString(),
+          tipoPreguntaCodigo: surveyItem.tipoPreguntaCodigo.toString(),
+          delete: false);
+    }
     return Container(
       margin: EdgeInsets.symmetric(vertical: 4),
       child: TextFormField(
-        enabled: true,
-        initialValue: '',
+        enabled: surveyItem.valorInicial != null &&
+                surveyItem.valorInicial!.isNotEmpty &&
+                (surveyItem.tipoPreguntaCodigo == 'NOMBRE' ||
+                    surveyItem.tipoPreguntaCodigo == 'APPAT' ||
+                    surveyItem.tipoPreguntaCodigo == 'APMAT' ||
+                    surveyItem.tipoPreguntaCodigo == 'DOC')
+            ? false
+            : true,
+        initialValue: surveyItem.valorInicial ?? '',
         decoration: InputDecoration(
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-          contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-          labelStyle: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w500, color: ColorsApp.primary),
-          labelText: surveyItem.titulo,
-        ),
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            labelStyle: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w500, color: ColorsApp.primary),
+            labelText: surveyItem.titulo,
+            suffixIcon: surveyItem.valorInicial != null &&
+                    surveyItem.valorInicial!.isNotEmpty
+                ? Icon(Icons.check, color: ColorsApp.success)
+                : null),
         style: GoogleFonts.montserrat(
             fontSize: 14.0,
             fontWeight: FontWeight.w500,
@@ -255,6 +351,7 @@ class _FormQuizState extends State<FormQuiz> {
               surveyItem: surveyItem,
               parent: parent,
               respuesta: val,
+              tipoPreguntaCodigo: surveyItem.tipoPreguntaCodigo.toString(),
               delete: val.isEmpty);
         },
         validator: (value) {
@@ -287,11 +384,23 @@ class _FormQuizState extends State<FormQuiz> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
-                      child: Text(surveyItem.titulo.toString(),
-                          style: GoogleFonts.montserrat(
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.w500,
-                              color: ColorsApp.primary)),
+                      child: Wrap(
+                        children: [
+                          Text(surveyItem.titulo.toString(),
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 13.0,
+                                  fontWeight: FontWeight.w500,
+                                  color: ColorsApp.primary)),
+                          surveyItem.descripcion != null
+                              ? Text(
+                                  '(' + surveyItem.descripcion.toString() + ')',
+                                  style: GoogleFonts.montserrat(
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorsApp.primary))
+                              : Container(),
+                        ],
+                      ),
                     ),
                     surveyItem.tipoItemCodigo == 'PR' &&
                             surveyItem.tipoComponente != 'INPUT' &&
@@ -334,7 +443,7 @@ class _FormQuizState extends State<FormQuiz> {
               mainAxisAlignment: surveyItem.childrenAlign == 'BOTTOM_LEFT'
                   ? MainAxisAlignment.start
                   : surveyItem.childrenAlign == 'BOTTOM_RIGHT'
-                      ? MainAxisAlignment.start
+                      ? MainAxisAlignment.end
                       : MainAxisAlignment.center,
               children: _list,
             )
@@ -351,6 +460,23 @@ class _FormQuizState extends State<FormQuiz> {
   }
 
   Widget _widgetAlternative(SurveyItem surveyItem, SurveyItem parent) {
+    if (parent.tipoItemCodigo == 'PR' && parent.tipoComponente != 'INPUT') {
+      if (parent.tipoComponente == 'RADIO' &&
+          parent.valorInicial == surveyItem.idItem) {
+        _addAnswer(
+            surveyItem: surveyItem,
+            parent: parent,
+            tipoPreguntaCodigo: parent.tipoPreguntaCodigo.toString(),
+            deleteAllParent: true);
+      } else if (parent.tipoComponente == 'CHECKBOX' &&
+          surveyItem.valorInicial == surveyItem.idItem) {
+        _addAnswer(
+            surveyItem: surveyItem,
+            parent: parent,
+            tipoPreguntaCodigo: parent.tipoPreguntaCodigo.toString(),
+            deleteAllParent: true);
+      }
+    }
     return parent.tipoComponente == 'RADIO'
         ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -362,14 +488,15 @@ class _FormQuizState extends State<FormQuiz> {
                       color: ColorsApp.primary)),
               Radio<String>(
                 value: surveyItem.idItem.toString(),
-                groupValue: parent.idItemSeleccionado,
+                groupValue: parent.valorInicial,
                 onChanged: (String? value) {
                   setState(() {
-                    parent.idItemSeleccionado = value ?? '';
+                    parent.valorInicial = value ?? '';
                   });
                   _addAnswer(
                       surveyItem: surveyItem,
                       parent: parent,
+                      tipoPreguntaCodigo: parent.tipoPreguntaCodigo.toString(),
                       deleteAllParent: true);
                 },
               )
@@ -384,14 +511,16 @@ class _FormQuizState extends State<FormQuiz> {
                       color: ColorsApp.primary)),
               CheckboxApp(
                   size: 15,
-                  value: surveyItem.idItemSeleccionado != null,
+                  value: surveyItem.valorInicial == 'true',
                   onChanged: (val) {
-                    surveyItem.idItemSeleccionado = val ? 'true' : null;
+                    surveyItem.valorInicial = val ? 'true' : null;
                     if (val) {
                       _addAnswer(
                           surveyItem: surveyItem,
                           parent: parent,
-                          delete: surveyItem.idItemSeleccionado != null);
+                          tipoPreguntaCodigo:
+                              parent.tipoPreguntaCodigo.toString(),
+                          delete: surveyItem.valorInicial == 'true');
                     }
                   })
             ],
@@ -402,8 +531,9 @@ class _FormQuizState extends State<FormQuiz> {
       {required SurveyItem surveyItem,
       required SurveyItem parent,
       String respuesta = '',
-      delete: false,
-      deleteAllParent: false}) {
+      bool delete: false,
+      String tipoPreguntaCodigo: '',
+      bool deleteAllParent: false}) {
     if (deleteAllParent) {
       _surveyAnswers
           .removeWhere((element) => element.idPregunta == parent.idItem);
@@ -412,10 +542,11 @@ class _FormQuizState extends State<FormQuiz> {
           element.idAlternativa == surveyItem.idItem &&
           element.idPregunta == parent.idItem);
     }
-    if (!delete) {
+    if (!delete && surveyItem.idItem != null) {
       _surveyAnswers.add(SurveyAnswer(
           idAlternativa: surveyItem.idItem,
           idPregunta: parent.idItem,
+          tipoPreguntaCodigo: tipoPreguntaCodigo,
           respuesta: respuesta,
           tipo: surveyItem.tipo));
     }
@@ -426,7 +557,8 @@ class _FormQuizState extends State<FormQuiz> {
       loading = true;
     });
     QuizService _quizService = QuizService();
-    ApiResponse _apiResponse = await _quizService.getQuizCovid();
+    Map<String, String> params = {'id_persona': idPerson};
+    ApiResponse _apiResponse = await _quizService.getQuizCovid(params);
     if (_apiResponse.success) {
       _survey = Survey.fromJson(_apiResponse.data);
       _surveyItems = _survey.items ?? [];
@@ -446,14 +578,23 @@ class _FormQuizState extends State<FormQuiz> {
     ShowLoadingIndicator.showLoadingIndicator(
         text: 'Guardando ...', context: buildContext);
     QuizService _quizService = QuizService();
+    UserPreferences userPref = UserPreferences();
     Map<String, String> params = {
+      'id_persona': idPerson,
+      'id_entidad': userPref.idEntity.toString(),
       'id_encuesta': _survey.idEncuesta.toString(),
       'answers': json.encode(_surveyAnswers.toList()).toString()
     };
     ApiResponse _apiResponse = await _quizService.saveAnswers(params);
     if (_apiResponse.success) {
-      messageSave = _apiResponse.message;
+      saveData = true;
+      messageSave = _apiResponse.data['message'].toString();
+      _puntaje = double.parse(_apiResponse.data['puntaje'].toString());
+      setState(() {});
+      Navigator.pop(buildContext);
+      //Navigator.of(buildContext).pop();
+    } else {
+      Navigator.pop(buildContext);
     }
-    Navigator.pop(buildContext);
   }
 }

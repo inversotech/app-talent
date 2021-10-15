@@ -300,6 +300,7 @@ class _AccountStatusPageState extends State<AccountStatusPage> {
     final Map<String, String> params = {
       'id_anho': _dateModel.year.toString(),
       'id_mes': _dateModel.month.toString(),
+      'id_entidad': _userPreferences.idEntity.toString(),
     };
     final listTicketsPayment =
         await _accountStatusService.gePaymentstTicket(params);

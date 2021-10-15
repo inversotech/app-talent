@@ -44,8 +44,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  double _lat = -12.0431800;
-  double _lng = -77.0282400;
+  double _lat = 0;
+  double _lng = 0;
   Location location = new Location();
   List<mpt.LatLng> coordinatesMpt = [];
   List<mp.LatLng> coordinatesMp = [];
@@ -143,7 +143,8 @@ class _HomePageState extends State<HomePage> {
                   )
                 : Container(),
             Padding(
-              padding: const EdgeInsets.only(left: 12.0,right: 12.0,top: 18.0),
+              padding:
+                  const EdgeInsets.only(left: 12.0, right: 12.0, top: 18.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,7 +159,8 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       children: [
                         showButton == '1' && hourMarking.isNotEmpty
-                            ?  Container():SizedBox(height: 35.0),
+                            ? Container()
+                            : SizedBox(height: 35.0),
                         Text(
                           'Asistencia',
                           style: GoogleFonts.montserrat(
@@ -408,6 +410,7 @@ class _HomePageState extends State<HomePage> {
     await location.getLocation().then((res) async {
       _lat = double.parse(res.latitude.toString());
       _lng = double.parse(res.longitude.toString());
+    }).whenComplete(() async {
       Map<String, String> params = {
         'lng': _lng.toString(),
         'lat': _lat.toString(),

@@ -35,7 +35,9 @@ class SurveyItem {
         this.tipo,
         this.tipoComponente,
         this.items,
-        this.idItemSeleccionado
+        this.idItemSeleccionado,
+        this.valorInicial,
+        this.respuesta
     });
 
     String? idItem;
@@ -64,6 +66,8 @@ class SurveyItem {
     String? tipoComponente;
     List<SurveyItem>? items;
     String? idItemSeleccionado;
+    String? valorInicial;
+    String? respuesta;
 
     factory SurveyItem.fromJson(Map<String, dynamic> json) => SurveyItem(
         idItem: json["id_item"] == null ? null : json["id_item"],
@@ -92,7 +96,8 @@ class SurveyItem {
         tipoComponente: json["tipo_componente"] == null ? null : json["tipo_componente"],
         items: json["items"] == null ? [] : (json["items"] as List).map((jsonElement) => SurveyItem.fromJson(jsonElement)).toList(),
         idItemSeleccionado: json["id_item_seleccionado"] == null ? null : json["id_item_seleccionado"],
-
+        valorInicial: json["valor_inicial"] == null ? null : json["valor_inicial"],
+        respuesta: json["respuesta"] == null ? null : json["respuesta"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -122,6 +127,7 @@ class SurveyItem {
         "tipo_componente": tipoComponente == null ? null : tipoComponente,
         "items": items == null ? null : List<dynamic>.from(items!.map((x) => x.toJson())),
         "id_item_seleccionado": idItemSeleccionado == null ? null : idItemSeleccionado,
-
+        "valor_inicial": valorInicial == null ? null : valorInicial,
+        "respuesta": respuesta == null ? null : respuesta,
     };
 }

@@ -1,14 +1,20 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:upn_financiero_mobil/src/constants/colors.dart';
 import 'package:upn_financiero_mobil/src/models/general/date_model.dart';
 import 'package:upn_financiero_mobil/src/models/models.dart'
-    show PaginationModel, Survey;
+    show PaginationModel, Person, Survey;
+import 'package:upn_financiero_mobil/src/pages/quiz/components/quiz_detail.dart';
+import 'package:upn_financiero_mobil/src/providers/user_preferences/user_preferences.dart';
 import 'package:upn_financiero_mobil/src/providers/utils/functions/capitalize.dart';
+import 'package:upn_financiero_mobil/src/services/general/person_service.dart';
 import 'package:upn_financiero_mobil/src/services/quiz/quiz_service.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/app_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:upn_financiero_mobil/src/shared/widgets/search_delegate.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/year_month_datepicker.dart';
 
 import 'components/form_quiz.dart';
@@ -32,9 +38,14 @@ class _QuizPageState extends State<QuizPage> {
   bool loading = false;
   int page = 1;
   int perPage = 10;
+  bool isSearching = false;
   PaginationModel pagination = new PaginationModel();
   QuizService _quizService = QuizService();
+  PersonService _personService = PersonService();
+  UserPreferences _preferences = UserPreferences();
   List<Survey> listData = [];
+  String idPerson = '';
+  Person _personSelect = new Person();
   @override
   void initState() {
     super.initState();
@@ -70,13 +81,57 @@ class _QuizPageState extends State<QuizPage> {
               actions: [
                 Transform.translate(
                   offset: Offset(-15, -8),
-                  child: IconButton(
-                    iconSize: 30,
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => FormQuiz()));
-                    },
-                    icon: Icon(Icons.person_add, color: ColorsApp.primary),
+                  child: Tooltip(
+                    message: 'Nuevo Invitado',
+                    child: IconButton(
+                      iconSize: 30,
+                      onPressed: () async {
+                        final searchResult = await showSearch(
+                          context: context,
+                          delegate: SearchDelgateCustom(
+                              listData: (query) async {
+                                dynamic listPersons = [];
+                                isSearching = true;
+                                Map<String, String> params = {
+                                  'id_entidad':
+                                      _preferences.idEntity.toString(),
+                                  'search': query.toString()
+                                };
+                                listPersons =
+                                    await _personService.getPersonsYear(params);
+                                isSearching = false;
+                                return listPersons;
+                              },
+                              fieldLabel: 'Buscar persona',
+                              nameTitle: 'name',
+                              nameSubTitle: 'doc_number',
+                              nameImg: 'foto_url'),
+                          //query: 'Hola'
+                        );
+                        if (searchResult != null) {
+                          idPerson = searchResult['id'];
+                          _personSelect = Person.fromJson(searchResult);
+                          getListDataInitial();
+                        }
+                      },
+                      icon: Icon(Icons.person_search, color: ColorsApp.primary),
+                    ),
+                  ),
+                ),
+                Transform.translate(
+                  offset: Offset(-15, -8),
+                  child: Tooltip(
+                    message: 'Nuevo Invitado',
+                    child: IconButton(
+                      iconSize: 30,
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FormQuiz()));
+                      },
+                      icon: Icon(Icons.person_add, color: ColorsApp.primary),
+                    ),
                   ),
                 )
               ],
@@ -109,12 +164,61 @@ class _QuizPageState extends State<QuizPage> {
       width: constraints.maxWidth,
       child: Column(
         children: [
+          idPerson.isNotEmpty
+              ? Chip(
+                  avatar: CircleAvatar(
+                    child: _personSelect.fotoUrl.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: _personSelect.fotoUrl,
+                            placeholder: (context, url) => CircleAvatar(
+                              backgroundImage:
+                                  AssetImage('assets/img/user-default.png'),
+                            ),
+                            errorWidget: (context, url, error) {
+                              return CircleAvatar(
+                                  backgroundImage: AssetImage(
+                                      'assets/img/user-default.png'));
+                            },
+                            imageBuilder: (context, imageProvider) =>
+                                CircleAvatar(
+                              backgroundImage: imageProvider,
+                            ),
+                          )
+                        : CircleAvatar(
+                            backgroundImage:
+                                AssetImage('assets/img/user-default.png'),
+                          ),
+                  ),
+                  label: Text(_personSelect.name,
+                      style: GoogleFonts.montserrat(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w500,
+                          color: ColorsApp.primary)),
+                  deleteIcon: Icon(Icons.close),
+                  onDeleted: () {
+                    idPerson = '';
+                    _personSelect = Person();
+                    getListDataInitial();
+                  },
+                )
+              : Container(),
           ListQuiz(
             constraints: constraints,
             listData: listData,
             loading: loading,
-            onPressed: (arguments) {
-              // goToForm(arguments, context);
+            onPressed: (Survey survey) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => QuizDetail(
+                            fecha: Jiffy(survey.fecha, 'yyyy-MM-dd')
+                              .format('yyyy-MM-dd').toString(),
+                            idPerson: idPerson.isNotEmpty
+                                ? idPerson
+                                : _preferences.idPerson.toString(),
+                            idEncuesta: survey.idEncuesta.toString(),
+                            idEntidad: _preferences.idEntity.toString(),
+                          )));
             },
             onChangeList: () {
               // getListData(context);
@@ -191,6 +295,30 @@ class _QuizPageState extends State<QuizPage> {
     setState(() {
       loading = false;
     });
+    final listToday = listData.where((element) =>
+        element.fecha!.day == DateTime.now().day &&
+        element.fecha!.month == DateTime.now().month &&
+        element.fecha!.year == DateTime.now().year);
+    if (listToday.length <= 0) {
+      final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FormQuiz(
+                  idPerson: idPerson.isNotEmpty
+                      ? idPerson
+                      : _preferences.idPerson.toString())));
+      if (result != null) {
+        if (result['change'] == 'true' || result['change'] == true) {
+          setState(() {
+            loading = true;
+          });
+          await getListMoreData();
+          setState(() {
+            loading = false;
+          });
+        }
+      }
+    }
   }
 
   void _onLoading() async {
@@ -201,6 +329,9 @@ class _QuizPageState extends State<QuizPage> {
   void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
     final Map<String, String> params = {
+      'id_persona':
+          idPerson.isNotEmpty ? idPerson : _preferences.idPerson.toString(),
+      'id_entidad': _preferences.idEntity.toString(),
       'id_anho': dateModel.year.toString(),
       'id_mes': dateModel.month.toString(),
       'per_page': perPage.toString(),
@@ -226,6 +357,9 @@ class _QuizPageState extends State<QuizPage> {
 
   Future getListMoreData() async {
     final Map<String, String> params = {
+      'id_persona':
+          idPerson.isNotEmpty ? idPerson : _preferences.idPerson.toString(),
+      'id_entidad': _preferences.idEntity.toString(),
       'id_anho': dateModel.year.toString(),
       'id_mes': dateModel.month.toString(),
       'per_page': perPage.toString(),
