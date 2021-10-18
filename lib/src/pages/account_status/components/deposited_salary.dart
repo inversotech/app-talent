@@ -96,13 +96,19 @@ class DepositedSalary extends StatelessWidget {
     Map data = {};
     if (resp != null) {
       data = resp as Map;
-      if (data.containsKey('total') && data.containsKey('items')) {
+      if (data.containsKey('discounts') && data.containsKey('advancements')) {
+        detail.add({
+          'title': 'Total descuento',
+          'total': data['discounts']['total'],
+          'items': data['discounts']['items']
+        });
         detail.add({
           'title': 'Total adelanto',
-          'total': data['total'],
-          'items': data['items']
+          'total': data['advancements']['total'],
+          'items': data['advancements']['items']
         });
       } else {
+        detail.add({'title': 'Total descuento', 'total': '0', 'items': []});
         detail.add({'title': 'Total adelanto', 'total': '0', 'items': []});
       }
     }
