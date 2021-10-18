@@ -59,7 +59,10 @@ class ListQuiz extends StatelessWidget {
                                             fontWeight: FontWeight.w400,
                                             color: Colors.white,
                                             fontSize: 22.0)),
-                                    backgroundColor: ColorsApp.info,
+                                    backgroundColor:
+                                        listData[index].aprobado == '1'
+                                            ? ColorsApp.success
+                                            : ColorsApp.danger,
                                   ),
                                   SizedBox(width: 8.0),
                                   Flexible(
