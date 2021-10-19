@@ -22,9 +22,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    const String FontNameDefault = 'Montserrat';
     const Body1Style = TextStyle(
-      fontFamily: FontNameDefault,
       fontWeight: FontWeight.w300,
       fontSize: 14.0,
       color: ColorsApp.primary,

@@ -3,7 +3,6 @@ import 'package:upn_financiero_mobil/src/constants/routers_justification.dart';
 import 'package:upn_financiero_mobil/src/constants/routers_license_permit.dart';
 import 'package:upn_financiero_mobil/src/constants/routers_names.dart';
 import 'package:upn_financiero_mobil/src/constants/routers_report.dart';
-import 'package:upn_financiero_mobil/src/pages/auth/face_auth/screens/home.dart';
 import 'package:upn_financiero_mobil/src/pages/auth/login/login.dart';
 import 'package:upn_financiero_mobil/src/pages/pages.dart';
 import 'package:upn_financiero_mobil/src/constants/routers_account_status.dart';
@@ -41,7 +40,6 @@ getRouters() {
   Map<String, Widget Function(BuildContext)> routesApp = {
     RoutesName.check_auth: (BuildContext context) => CheckAuthPage(),
     RoutesName.login: (BuildContext context) => LoginPage(),
-    RoutesName.loginWithFace: (BuildContext context) => MyHomePage()
   };
   routesApp.addAll(getRoutersHome());
   routesApp.addAll(getRoutersAccountStatus());
