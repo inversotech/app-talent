@@ -37,10 +37,8 @@ dependencies:
   shared_preferences: ^2.0.6
   provider: ^5.0.0
   cached_network_image: ^3.1.0
-  google_maps_flutter: ^2.0.6
   location: ^4.3.0
   flutter_secure_storage: ^4.2.1
-  maps_toolkit: ^2.0.0
   group_list_view: ^1.1.1
   syncfusion_flutter_charts: ^19.2.55
   file_picker: ^4.0.0

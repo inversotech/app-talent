@@ -4,9 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as mp;
 import 'package:location/location.dart';
-import 'package:maps_toolkit/maps_toolkit.dart' as mpt;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:upn_financiero_mobil/src/constants/colors.dart';
@@ -44,11 +42,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  double _lat = 0;
-  double _lng = 0;
+  LocationData? currentLocation;
   Location location = new Location();
-  List<mpt.LatLng> coordinatesMpt = [];
-  List<mp.LatLng> coordinatesMp = [];
   MarkingService markingProvider = new MarkingService();
   UserPreferences userPreferences = UserPreferences();
   RefreshController _refreshController =
@@ -391,42 +386,35 @@ class _HomePageState extends State<HomePage> {
 
   Future _verifyButtonAssistance() async {
     // a tener en cuenta el loading button
-    /*  var _serviceEnabled = await location.serviceEnabled();
+    var _serviceEnabled = await location.serviceEnabled();
     if (_serviceEnabled) {
       _serviceEnabled = await location.requestService();
-      if (_serviceEnabled) {
-        return;
-      }
     }
 
     var _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }  */
-
-    await location.getLocation().then((res) async {
-      _lat = double.parse(res.latitude.toString());
-      _lng = double.parse(res.longitude.toString());
-    }).whenComplete(() async {
-      Map<String, String> params = {
-        'lng': _lng.toString(),
-        'lat': _lat.toString(),
-      };
-      final response = await markingProvider.showButtonAssistance(params);
-      if (response.success) {
-        showButton = response.data['show_button'] ?? '0';
-        textButton = response.data['text_button'] ?? '';
-        codeModality = response.data['code_modality'] ?? '';
-        idDescripMarcacion = response.data['id_descrip_marcacion'] ?? '';
-        hourMarking = response.data['fecha_hora'] ?? '';
-        minutosTolerancia = response.data['minutos_tolerancia'] != null
-            ? int.parse(response.data['minutos_tolerancia'].toString())
-            : 0;
-      }
-    });
+    }
+    if (_serviceEnabled && _permissionGranted == PermissionStatus.granted) {
+      currentLocation = await location.getLocation();
+    }
+    Map<String, String> params = {
+      'lng':
+          currentLocation != null ? currentLocation!.longitude.toString() : '0',
+      'lat':
+          currentLocation != null ? currentLocation!.latitude.toString() : '0',
+    };
+    final response = await markingProvider.showButtonAssistance(params);
+    if (response.success) {
+      showButton = response.data['show_button'] ?? '0';
+      textButton = response.data['text_button'] ?? '';
+      codeModality = response.data['code_modality'] ?? '';
+      idDescripMarcacion = response.data['id_descrip_marcacion'] ?? '';
+      hourMarking = response.data['fecha_hora'] ?? '';
+      minutosTolerancia = response.data['minutos_tolerancia'] != null
+          ? int.parse(response.data['minutos_tolerancia'].toString())
+          : 0;
+    }
   }
 
   void goToFormJustification(JustificationModel arguments) async {
@@ -484,46 +472,39 @@ class _HomePageState extends State<HomePage> {
       uuid = iosInfo.identifierForVendor; //UUID for iOS
     }
 
-    /*      var _serviceEnabled = await location.serviceEnabled();
+    var _serviceEnabled = await location.serviceEnabled();
     if (_serviceEnabled) {
       _serviceEnabled = await location.requestService();
-      if (_serviceEnabled) {
-        return;
-      }
     }
 
     var _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }  */
-    await location.getLocation().then((res) async {
-      _lat = double.parse(res.latitude.toString());
-      _lng = double.parse(res.longitude.toString());
-      Map<String, String> params = {
-        'uuid': uuid,
-        'lng': _lng.toString(),
-        'lat': _lat.toString(),
-        'codigo_modalidad': codeModality.toString(),
-        'id_descrip_marcacion': idDescripMarcacion.toString()
-      };
-      final marking = await markingProvider.workerMarking(params);
-      Navigator.pop(context);
-      if (marking.success) {
-        setState(() {
-          loading = true;
-        });
-        await _verifyButtonAssistance();
-        await _getListDataAndChart();
-        setState(() {
-          loading = false;
-        });
-      }
-    }).catchError((val) {
-      Navigator.pop(context);
-    });
+    }
+    if (_serviceEnabled && _permissionGranted == PermissionStatus.granted) {
+      currentLocation = await location.getLocation();
+    }
+    Map<String, String> params = {
+      'uuid': uuid,
+      'lng':
+          currentLocation != null ? currentLocation!.longitude.toString() : '0',
+      'lat':
+          currentLocation != null ? currentLocation!.latitude.toString() : '0',
+      'codigo_modalidad': codeModality.toString(),
+      'id_descrip_marcacion': idDescripMarcacion.toString()
+    };
+    final marking = await markingProvider.workerMarking(params);
+    Navigator.pop(context);
+    if (marking.success) {
+      setState(() {
+        loading = true;
+      });
+      await _verifyButtonAssistance();
+      await _getListDataAndChart();
+      setState(() {
+        loading = false;
+      });
+    }
   }
 
   Future _getListDataAndChart() async {
