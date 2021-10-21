@@ -131,7 +131,7 @@ class _FormJustificationState extends State<FormJustification> {
                                     : 'Actualizar Justificación'
                                 : 'Detalle Justificación',
                             style: GoogleFonts.montserrat(
-                              fontSize: 20.0,
+                                fontSize: 20.0,
                                 fontWeight: FontWeight.w700,
                                 color: ColorsApp.primary),
                           ),
@@ -251,7 +251,7 @@ class _FormJustificationState extends State<FormJustification> {
                           child: Row(
                             children: [
                               Image.asset('assets/icons/save.png',
-                              height: 30, width: 30, color: Colors.white),
+                                  height: 30, width: 30, color: Colors.white),
                               Text(
                                 'actualizar',
                                 style: TextStyle(color: Colors.white),
@@ -297,7 +297,9 @@ class _FormJustificationState extends State<FormJustification> {
                               child: Row(
                                 children: [
                                   Image.asset('assets/icons/save.png',
-                              height: 30, width: 30, color: Colors.white),
+                                      height: 30,
+                                      width: 30,
+                                      color: Colors.white),
                                   Text(
                                     'enviar solicitud',
                                     style: TextStyle(color: Colors.white),
@@ -327,7 +329,11 @@ class _FormJustificationState extends State<FormJustification> {
                 primary: false,
                 itemCount: listMarkingsSelected.length,
                 separatorBuilder: (context, index) {
-                  return Divider(height: 0, color: ColorsApp.primary,thickness: 0,);
+                  return Divider(
+                    height: 0,
+                    color: ColorsApp.primary,
+                    thickness: 0,
+                  );
                 },
                 itemBuilder: (BuildContext context, int index) {
                   MarkingWorkerModel item = listMarkingsSelected[index];
@@ -434,7 +440,7 @@ class _FormJustificationState extends State<FormJustification> {
 
   Color _getColorEnt(MarkingModel item) {
     Color color = ColorsApp.success;
-    if(item.horaEntJust == '1') {
+    if (item.horaEntJust == '1') {
       color = ColorsApp.primary;
     } else if (item.horaEntradaReal == null) {
       color = ColorsApp.danger;
@@ -749,9 +755,9 @@ class _FormJustificationState extends State<FormJustification> {
         onShowPicker: (context, currentValue) async {
           final date = await showDatePicker(
               context: context,
-              firstDate: DateTime(1900),
+              firstDate: DateTime(DateTime.now().year, DateTime.now().month),
               initialDate: currentValue ?? DateTime.now(),
-              lastDate: DateTime(2100));
+              lastDate: DateTime.now());
           if (date != null) {
             return date;
           } else {
