@@ -58,13 +58,13 @@ class _LoginPageState extends State<LoginPage> {
                         _userPasswordWidget(context),
                         SizedBox(height: 20),
                         _submitButton(context),
-                        _resetPasswordButton(),
-                      ],
+/*                         _resetPasswordButton(),
+ */                      ],
                     ),
                 ),
               ),
-              _loginFaceButton()
-            ],
+/*               _loginFaceButton()
+ */            ],
           ),
         ),
       ),

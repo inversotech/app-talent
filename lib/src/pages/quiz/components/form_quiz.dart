@@ -101,57 +101,61 @@ class _FormQuizState extends State<FormQuiz> {
                                     fontWeight: FontWeight.w400,
                                     color: Colors.red)),
                             SizedBox(height: 12.0),
-                            ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                physics: ScrollPhysics(),
-                                primary: false,
-                                itemCount: _surveyItems.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  SurveyItem surveyItem = _surveyItems[index];
-                                  return Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          5), // if you need this
-                                      side: BorderSide(
-                                        color:
-                                            ColorsApp.primary.withOpacity(0.2),
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            width: double.infinity,
-                                            color: ColorsApp.primary,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                      surveyItem.titulo
-                                                          .toString(),
-                                                      style: GoogleFonts
-                                                          .montserrat(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              color: Colors
-                                                                  .white)),
-                                                  surveyItem.descripcion != null
-                                                      ? Text(
-                                                          '(' +
-                                                              surveyItem
-                                                                  .descripcion
-                                                                  .toString() +
-                                                              ')',
+                            _surveyItems.length > 0
+                                ? ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    physics: ScrollPhysics(),
+                                    primary: false,
+                                    itemCount: _surveyItems.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      SurveyItem surveyItem =
+                                          _surveyItems[index];
+                                      return Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              5), // if you need this
+                                          side: BorderSide(
+                                            color: ColorsApp.primary
+                                                .withOpacity(0.2),
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                width: double.infinity,
+                                                color: ColorsApp.primary,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                          surveyItem.titulo
+                                                              .toString(),
                                                           style: GoogleFonts
                                                               .montserrat(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  color: Colors
+                                                                      .white)),
+                                                      surveyItem.descripcion !=
+                                                              null
+                                                          ? Text(
+                                                              '(' +
+                                                                  surveyItem
+                                                                      .descripcion
+                                                                      .toString() +
+                                                                  ')',
+                                                              style: GoogleFonts.montserrat(
                                                                   fontSize:
                                                                       12.0,
                                                                   fontWeight:
@@ -159,34 +163,48 @@ class _FormQuizState extends State<FormQuiz> {
                                                                           .w400,
                                                                   color: Colors
                                                                       .white))
-                                                      : Container(),
-                                                ],
-                                              ),
-                                            )),
-                                        surveyItem.tipoComponente == 'INPUT'
-                                            ? Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8.0),
-                                                child: _createInputItem(
-                                                    buildContext,
-                                                    surveyItem,
-                                                    surveyItem,
-                                                    1))
-                                            : surveyItem.tipoItemCodigo == 'SE'
+                                                          : Container(),
+                                                    ],
+                                                  ),
+                                                )),
+                                            surveyItem.tipoComponente == 'INPUT'
                                                 ? Padding(
                                                     padding: const EdgeInsets
                                                             .symmetric(
                                                         horizontal: 8.0),
-                                                    child: _widgetSurveyItems(
+                                                    child: _createInputItem(
                                                         buildContext,
                                                         surveyItem,
+                                                        surveyItem,
                                                         1))
-                                                : Container(),
-                                      ],
+                                                : surveyItem.tipoItemCodigo ==
+                                                        'SE'
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    8.0),
+                                                        child:
+                                                            _widgetSurveyItems(
+                                                                buildContext,
+                                                                surveyItem,
+                                                                1))
+                                                    : Container(),
+                                          ],
+                                        ),
+                                      );
+                                    })
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                          'No se encontró información para mostrar.',
+                                          style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w400,
+                                              color: ColorsApp.primary)),
                                     ),
-                                  );
-                                })
+                                  )
                           ],
                         ),
                       ),
