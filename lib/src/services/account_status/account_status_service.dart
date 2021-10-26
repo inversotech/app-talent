@@ -1,11 +1,13 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
+import 'package:external_path/external_path.dart' as ep;
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart' as p;
 import 'package:upn_financiero_mobil/src/models/models.dart';
 import 'package:upn_financiero_mobil/src/providers/utils/end_points.dart';
 import 'package:upn_financiero_mobil/src/services/api_rest_service.dart';
+import 'package:upn_financiero_mobil/src/shared/widgets/toast.dart';
 
 class AccountStatusService {
   Future getAccountStatus(String params) async {
@@ -112,11 +114,11 @@ class AccountStatusService {
       return null;
     }
   }
-  Future<List<TicketPaymentModel>> gePaymentstTicket(Map<String, String> params) async {
+
+  Future<List<TicketPaymentModel>> gePaymentstTicket(
+      Map<String, String> params) async {
     final response = await ApiRestService.getWithParams(
-        endPoint: endPoints['workerportal']
-            ['payments-ticket'],
-        body: params);
+        endPoint: endPoints['workerportal']['payments-ticket'], body: params);
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -129,41 +131,50 @@ class AccountStatusService {
     }
   }
 
-  Future<File> createFileOfPdfUrl(String url,String filename) async {
+  Future<File> createFileOfPdfUrl(String url, String filename) async {
     Completer<File> completer = Completer();
     try {
       var request = await HttpClient().getUrl(Uri.parse(url));
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
-      var dir = await getApplicationDocumentsDirectory();
+      var dir = await p.getApplicationDocumentsDirectory();
       File file = File("${dir.path}/$filename");
-
       await file.writeAsBytes(bytes, flush: true);
       completer.complete(file);
     } catch (e) {
-      throw Exception('Error parsing asset file!');
+      ToastCustom().danger(message: 'No se puede ver el archivo', time: 10);
     }
     return completer.future;
   }
 
-   /* Future<File> writeFile(String  url, String filename) async {
-    // storage permission ask
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
+  Future<ApiResponse> downloadFileWithPath(
+      String url, String fileName, Map<String, String> params) async {
+    try {
+      String path = '';
+      if (Platform.isIOS) {
+        final downloadPath = await p.getExternalStorageDirectories(
+            type: p.StorageDirectory.downloads);
+        path = downloadPath![0].path;
+      } else if (Platform.isAndroid) {
+        path = await ep.ExternalPath.getExternalStoragePublicDirectory(
+            ep.ExternalPath.DIRECTORY_DOWNLOADS);
+      }
+      await _startDownload('$path/$fileName', url);
+      final response = await _saveDowloadTicket(params);
+      return response;
+    } catch (e) {
+      return new ApiResponse.fromJsonNull();
     }
-    // the downloads folder path
-    Directory tempDir = await DownloadsPathProvider.downloadsDirectory;
-    String tempPath = tempDir.path;
-    var filePath = tempPath + '/$name';
-    // 
+  }
 
-    // the data
-    var bytes = ByteData.view(data.buffer);
-    final buffer = bytes.buffer;
-    // save the data in the path
-    return File(filePath).writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
-  } */
+  Future<void> _startDownload(String savePath, String _fileUrl) async {
+    final Dio _dio = Dio();
+    await _dio.download(_fileUrl, savePath);
+  }
 
-  
+  Future<ApiResponse> _saveDowloadTicket(Map<String, String> params) async {
+    final response = await ApiRestService.putNotId(
+        endPoint: endPoints['workerportal']['payments-ticket'], body: params);
+    return response;
+  }
 }

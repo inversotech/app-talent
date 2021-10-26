@@ -56,6 +56,8 @@ dependencies:
   image: ^3.0.2
   carousel_slider: ^4.0.0
   google_maps_flutter: ^2.0.11
+  dio: ^4.0.1
+  external_path: ^1.0.1
   
 dev_dependencies:
   flutter_test:
