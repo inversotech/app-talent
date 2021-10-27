@@ -1,6 +1,7 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path/path.dart';
 import 'package:select_form_field/select_form_field.dart';
 import 'package:upn_financiero_mobil/src/constants/colors.dart';
 import 'package:upn_financiero_mobil/src/models/models.dart'
@@ -269,7 +270,7 @@ class _FormLicensePermitState extends State<FormLicensePermit> {
                       children: [
                         TextButton(
                             onPressed: () {
-                              _submit();
+                              _submit(context);
                             },
                             style: ButtonStyle(
                               alignment: Alignment.center,
@@ -1260,7 +1261,7 @@ class _FormLicensePermitState extends State<FormLicensePermit> {
     );
   }
 
-  void _submit() async {
+  void _submit(BuildContext buildContext)async {
     validAdjunto = true;
     validAdjuntoCITT = true;
     validAdjuntoNITT = true;
@@ -1301,12 +1302,12 @@ class _FormLicensePermitState extends State<FormLicensePermit> {
     setState(() {});
     if (!isValid) {
       ToastCustom()
-          .warning(message: 'Corriga los campos marcados de rojo', time: 10);
+          .warningContext(context: buildContext, message: 'Corriga los campos marcados de rojo', time: 8);
       return;
     }
     _formKey.currentState!.save();
     ShowLoadingIndicator.showLoadingIndicator(
-        text: 'Guardando ...', context: context);
+        text: 'Guardando ...', context: buildContext);
     final Map<String, String> params = {
       'id_concepto_perm_lic': _formData.idConceptoPermLic.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
@@ -1342,9 +1343,9 @@ class _FormLicensePermitState extends State<FormLicensePermit> {
     };
     ApiResponse create =
         await licensePermitService.createLicensePermit(params, files);
-    Navigator.pop(context);
+    Navigator.pop(buildContext);
     if (create.success) {
-      Navigator.of(context).pop({'change': true, 'data': null});
+      Navigator.of(buildContext).pop({'change': true, 'data': null});
     }
   }
 

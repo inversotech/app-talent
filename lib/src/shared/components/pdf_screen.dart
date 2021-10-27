@@ -53,15 +53,12 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                           text: 'Descargando ...', context: context);
                       final response =
                           await _accountStatusService.downloadFileWithPath(
-                              widget.urlFile!, widget.titlePdf, params);
+                              widget.urlFile!, widget.titlePdf, params,context);
                       if (response.success) {
-                        ToastCustom().success(
+                        ToastCustom().successContext(
+                          context: context,
                             message: 'Puede ver el archivo en descargas',
-                            time: 10);
-                      } else {
-                        ToastCustom().success(
-                            message: 'No se procedió con la descarga',
-                            time: 10);
+                            time: 8);
                       }
                       Navigator.pop(context);
                     }

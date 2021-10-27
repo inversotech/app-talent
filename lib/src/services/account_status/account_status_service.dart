@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:external_path/external_path.dart' as ep;
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart' as p;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:upn_financiero_mobil/src/models/models.dart';
 import 'package:upn_financiero_mobil/src/providers/utils/end_points.dart';
 import 'package:upn_financiero_mobil/src/services/api_rest_service.dart';
@@ -137,7 +138,7 @@ class AccountStatusService {
       var request = await HttpClient().getUrl(Uri.parse(url));
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
-      var dir = await p.getApplicationDocumentsDirectory();
+      var dir = await p.getTemporaryDirectory();
       File file = File("${dir.path}/$filename");
       await file.writeAsBytes(bytes, flush: true);
       completer.complete(file);
@@ -147,29 +148,44 @@ class AccountStatusService {
     return completer.future;
   }
 
-  Future<ApiResponse> downloadFileWithPath(
-      String url, String fileName, Map<String, String> params) async {
+  Future<ApiResponse> downloadFileWithPath(String url, String fileName,
+      Map<String, String> params, BuildContext context) async {
     try {
       String path = '';
-      if (Platform.isIOS) {
-        final downloadPath = await p.getExternalStorageDirectories(
-            type: p.StorageDirectory.downloads);
-        path = downloadPath![0].path;
-      } else if (Platform.isAndroid) {
-        path = await ep.ExternalPath.getExternalStoragePublicDirectory(
-            ep.ExternalPath.DIRECTORY_DOWNLOADS);
+      final status = await Permission.storage.request();
+      if (status.isGranted && !status.isDenied) {
+        if (Platform.isIOS) {
+          final downloadPath = await p.getExternalStorageDirectories(
+              type: p.StorageDirectory.downloads);
+          path = downloadPath![0].path;
+        } else if (Platform.isAndroid) {
+          path = await ep.ExternalPath.getExternalStoragePublicDirectory(
+              ep.ExternalPath.DIRECTORY_DOWNLOADS);
+        }
+      } else {
+        ToastCustom().dangerContext(
+            context: context,
+            message:
+                'No se otrgó el permiso de acceder a la memoria en esta aplicación.',
+            time: 8);
+        return ApiResponse.fromJsonNull();
       }
       await _startDownload('$path/$fileName', url);
       final response = await _saveDowloadTicket(params);
       return response;
     } catch (e) {
-      return new ApiResponse.fromJsonNull();
+      ToastCustom().dangerContext(
+          context: context, message: 'No se procedió con la descarga', time: 8);
+      return ApiResponse.fromJsonNull();
     }
   }
 
   Future<void> _startDownload(String savePath, String _fileUrl) async {
-    final Dio _dio = Dio();
-    await _dio.download(_fileUrl, savePath);
+    var request = await HttpClient().getUrl(Uri.parse(_fileUrl));
+    var response = await request.close();
+    var bytes = await consolidateHttpClientResponseBytes(response);
+    File file = File(savePath);
+    await file.writeAsBytes(bytes, flush: true);
   }
 
   Future<ApiResponse> _saveDowloadTicket(Map<String, String> params) async {

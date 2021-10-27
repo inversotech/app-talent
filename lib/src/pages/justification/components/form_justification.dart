@@ -150,7 +150,7 @@ class _FormJustificationState extends State<FormJustification> {
                   Column(
                     children: [
                       loadMarking && listSchedule.length > 0
-                          ? _createListMarkings()
+                          ? _createListMarkings(context)
                           : loadMarking && listSchedule.length == 0
                               ? Container(
                                   child: Center(
@@ -226,7 +226,7 @@ class _FormJustificationState extends State<FormJustification> {
                     SizedBox(width: 12.0),
                     TextButton(
                         onPressed: () {
-                          _submit();
+                          _submit(context);
                         },
                         style: ButtonStyle(
                           alignment: Alignment.center,
@@ -271,7 +271,7 @@ class _FormJustificationState extends State<FormJustification> {
                       children: [
                         TextButton(
                             onPressed: () {
-                              _submit();
+                              _submit(context);
                             },
                             style: ButtonStyle(
                               alignment: Alignment.center,
@@ -313,7 +313,7 @@ class _FormJustificationState extends State<FormJustification> {
                 : null);
   }
 
-  Widget _createListMarkings() {
+  Widget _createListMarkings(BuildContext buildContext) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -352,10 +352,11 @@ class _FormJustificationState extends State<FormJustification> {
                                     !item.esSolicitado;
                               });
                             } else {
-                              ToastCustom().warning(
+                              ToastCustom().warningContext(
+                                context: buildContext,
                                   message:
                                       'No se ha definido el tipo marcación',
-                                  time: 10);
+                                  time: 8);
                             }
                           },
                     child: Row(
@@ -382,10 +383,11 @@ class _FormJustificationState extends State<FormJustification> {
                                               .esSolicitado = val;
                                         });
                                       } else {
-                                        ToastCustom().warning(
+                                        ToastCustom().warningContext(
+                                          context: buildContext,
                                             message:
                                                 'No se ha definido el tipo marcación',
-                                            time: 10);
+                                            time: 8);
                                       }
                                     },
                               value: item.esSolicitado,
@@ -886,7 +888,7 @@ class _FormJustificationState extends State<FormJustification> {
     }
   }
 
-  void _submit() async {
+  void _submit(BuildContext buildContext) async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
@@ -897,7 +899,7 @@ class _FormJustificationState extends State<FormJustification> {
         listMarkingsSelected.where((el) => el.esSolicitado == true);
     if (markingsSelected.length > 0) {
       ShowLoadingIndicator.showLoadingIndicator(
-          text: 'Guardando ...', context: context);
+          text: 'Guardando ...', context: buildContext);
       if (_formData.idSolicJustif == null) {
         final Map<String, String> params = {
           'id_motivo_justif': _formData.idMotivoJustif.toString(),
@@ -910,9 +912,9 @@ class _FormJustificationState extends State<FormJustification> {
         };
         ApiResponse create =
             await justificationService.createJustification(params);
-        Navigator.pop(context);
+        Navigator.pop(buildContext);
         if (create.success) {
-          Navigator.of(context).pop({'change': true, 'data': null});
+          Navigator.of(buildContext).pop({'change': true, 'data': null});
         }
       } else {
         final Map<String, String> params = {
@@ -930,14 +932,15 @@ class _FormJustificationState extends State<FormJustification> {
         };
         ApiResponse update = await justificationService.updateJustification(
             params, _formData.idSolicJustif.toString());
-        Navigator.pop(context);
+        Navigator.pop(buildContext);
         if (update.success) {
-          Navigator.of(context).pop({'change': true, 'data': null});
+          Navigator.of(buildContext).pop({'change': true, 'data': null});
         }
       }
     } else {
-      ToastCustom().warning(
-          message: 'Debe seleccionar por lo menos una marcación', time: 10);
+      ToastCustom().warningContext(
+        context: buildContext,
+          message: 'Debe seleccionar por lo menos una marcación', time: 8);
     }
   }
 
@@ -1162,10 +1165,10 @@ class _FormJustificationState extends State<FormJustification> {
             listMarkings[index].fechahoraManual =
                 _getDateMarking(selectData.idDescripMarcacion.toString());
           } else {
-            ToastCustom().warning(message: 'Ya existe', time: 10);
+            ToastCustom().warningContext(context:context,message: 'Ya existe', time: 8);
           }
         } else {
-          ToastCustom().warning(message: 'Ya existe', time: 10);
+          ToastCustom().warningContext(context:context,message: 'Ya existe', time: 8);
         }
         Future.delayed(Duration.zero, () {
           _scrollController.animateTo(

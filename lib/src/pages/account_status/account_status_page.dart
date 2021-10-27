@@ -326,12 +326,12 @@ class _AccountStatusPageState extends State<AccountStatusPage> {
         );
       } else {
         ToastCustom()
-            .warning(message: 'Ocurrió un error al abrir la boleta', time: 10);
+            .warningContext(context: context, message: 'Ocurrió un error al abrir la boleta', time: 8);
       }
     } else if (listTicketsPayment.length == 0) {
-      ToastCustom().warning(
+      ToastCustom().warningContext(context: context,
           message: 'No se encontró boleta del mes ' + _dateModel.nameMonth,
-          time: 10);
+          time: 8);
       setState(() {
         loading = false;
       });
