@@ -22,7 +22,7 @@ class ShowLoadingIndicator {
                     color: onlyLoading ? Colors.transparent : Colors.white,
                     borderRadius: BorderRadius.circular(20)),
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(12.0),
                   child: _loadingIndicator(text, onlyLoading),
                 ),
               ),

@@ -2,15 +2,22 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:upn_financiero_mobil/src/services/account_status/account_status_service.dart';
+import 'package:upn_financiero_mobil/src/shared/widgets/loading_indicator.dart';
+import 'package:upn_financiero_mobil/src/shared/widgets/toast.dart';
 
 class PDFScreen extends StatefulWidget {
+  final String? urlFile;
   final String path;
   final String titlePdf;
+  final String clave;
   final bool showDownload;
 
   PDFScreen(
       {Key? key,
+      this.urlFile,
       required this.path,
+      this.clave = '',
       this.titlePdf = '',
       this.showDownload = false})
       : super(key: key);
@@ -35,7 +42,27 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
           widget.showDownload
               ? IconButton(
                   icon: Icon(Icons.download),
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (widget.urlFile != null) {
+                      AccountStatusService _accountStatusService =
+                          new AccountStatusService();
+                      final Map<String, String> params = {
+                        'p': widget.clave.toString(),
+                      };
+                      ShowLoadingIndicator.showLoadingIndicator(
+                          text: 'Descargando ...', context: context);
+                      final response =
+                          await _accountStatusService.downloadFileWithPath(
+                              widget.urlFile!, widget.titlePdf, params,context);
+                      if (response.success) {
+                        ToastCustom().successContext(
+                          context: context,
+                            message: 'Puede ver el archivo en descargas',
+                            time: 8);
+                      }
+                      Navigator.pop(context);
+                    }
+                  },
                 )
               : Container(),
         ],
@@ -55,7 +82,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                 false, // if set to true the link is handled in flutter
             onRender: (_pages) {
               setState(() {
-                pages = _pages??0;
+                pages = _pages ?? 0;
                 isReady = true;
               });
             },
@@ -80,7 +107,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
             onPageChanged: (int? page, int? total) {
               print('page change: $page/$total');
               setState(() {
-                currentPage = page??0;
+                currentPage = page ?? 0;
               });
             },
           ),

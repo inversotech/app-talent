@@ -189,44 +189,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _resetPasswordButton() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      width: double.infinity,
-      child: TextButton(
-        child: Text(
-          '¿Olvidaste tu contraseña?',
-          style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w300, color: Colors.white, fontSize: 14),
-        ),
-        onPressed: () {},
-      ),
-    );
-  }
-
-  Widget _loginFaceButton() {
-    return Container(
-        alignment: Alignment.bottomCenter,
-        padding: EdgeInsets.only(bottom: 12.0),
-        child: TextButton(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.face, color: Colors.white),
-              Text(
-                'Ingresar con el lector facial',
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white,
-                    fontSize: 14),
-              ),
-            ],
-          ),
-          onPressed: () {},
-        ),
-    
-    );
-  }
 
   void _onSubmit(BuildContext context) async {
     showDialog(
@@ -286,33 +248,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       Navigator.pop(context);
     }
-    // get token oauth lamb
-    /* final resp = await oauthProvider.loginLamb(
-        loginFormModel.username, loginFormModel.password);
-    if (resp.success) {
-      final valid = await oauthProvider.validToken();
-      if (valid.success) {s
-        _loggingIn();
-      } else {
-        Navigator.pop(context);
-      }
-      /* final verifyToken =
-          await userProvider.validToken();
-           print(verifyToken);
-      if (verifyToken) {
-        print(verifyToken); 
-        Navigator.pop(context);*/
 
-      // Navigator.pop(context);
-      // Navigator.pushReplacementNamed(context, 'home');
-      /* } else {
-        // ToastCustom().danger(message: 'Error en servidor de autetificación.');
-        Navigator.pop(context);
-      } */
-    } else {
-      // ToastCustom().danger(message: 'Usuario o contraseña incorrecto !!');
-      Navigator.pop(context);
-    } */
   }
 
   void _clearStorage() {

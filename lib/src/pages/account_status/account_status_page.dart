@@ -1,8 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:upn_financiero_mobil/src/models/models.dart'
-    show DateModel;
+import 'package:upn_financiero_mobil/src/models/models.dart' show DateModel;
 import 'package:upn_financiero_mobil/src/providers/user_preferences/user_preferences.dart';
 import 'package:upn_financiero_mobil/src/providers/utils/functions/capitalize.dart';
 import 'package:upn_financiero_mobil/src/services/account_status/account_status_service.dart';
@@ -305,11 +304,11 @@ class _AccountStatusPageState extends State<AccountStatusPage> {
     final listTicketsPayment =
         await _accountStatusService.gePaymentstTicket(params);
     if (listTicketsPayment.length == 1) {
-      urlBoleta = listTicketsPayment[0].urls.toString() +
-          '?type=S&p=' +
-          listTicketsPayment[0].clave.toString();
+      final fileName = listTicketsPayment[0].archivo;
+      final clave = listTicketsPayment[0].clave.toString();
+      urlBoleta = listTicketsPayment[0].urls.toString() + '?type=S&p=' + clave;
       final file = await _accountStatusService.createFileOfPdfUrl(
-          urlBoleta, listTicketsPayment[0].archivo.toString());
+          urlBoleta, fileName.toString());
       setState(() {
         loading = false;
       });
@@ -318,20 +317,21 @@ class _AccountStatusPageState extends State<AccountStatusPage> {
           context,
           MaterialPageRoute(
             builder: (context) => PDFScreen(
+                clave: clave,
+                urlFile: urlBoleta,
+                showDownload: true,
                 path: file.path,
-                titlePdf: listTicketsPayment[0].mes.toString() +
-                    ' - ' +
-                    listTicketsPayment[0].idAnho.toString()),
+                titlePdf: fileName.toString()),
           ),
         );
       } else {
         ToastCustom()
-            .warning(message: 'Ocurrió un error al abrir la boleta', time: 10);
+            .warningContext(context: context, message: 'Ocurrió un error al abrir la boleta', time: 8);
       }
     } else if (listTicketsPayment.length == 0) {
-      ToastCustom().warning(
+      ToastCustom().warningContext(context: context,
           message: 'No se encontró boleta del mes ' + _dateModel.nameMonth,
-          time: 10);
+          time: 8);
       setState(() {
         loading = false;
       });

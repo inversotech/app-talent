@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:upn_financiero_mobil/src/constants/colors.dart';
 import 'package:upn_financiero_mobil/src/providers/user_preferences/user_preferences.dart';
 import 'package:upn_financiero_mobil/src/constants/routers.dart';
-import 'package:upn_financiero_mobil/src/shared/widgets/app_route_observer.dart';
 import 'package:upn_financiero_mobil/src/theme/custom_theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -42,7 +41,6 @@ class MyApp extends StatelessWidget {
       theme: CustomTheme(
               isDark: false, textTheme: TextTheme(bodyText1: Body1Style))
           .themeData,
-      navigatorObservers: [AppRouteObserver()],
       initialRoute: 'check-auth',
       routes: getRouters(),
     );
