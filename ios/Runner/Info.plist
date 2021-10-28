@@ -57,6 +57,8 @@
 	<string>Can I use the mic please?</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Para registrar la evidencia de tu justificación, permiso o licencia.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Para descargar tus boletas</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
