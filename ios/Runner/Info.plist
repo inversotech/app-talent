@@ -82,5 +82,10 @@
 	<false/>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>Para registrar la evidencia de tu justificación, permiso o licencia.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>https</string>
+	<string>http</string>
+	</array>
 </dict>
 </plist>
