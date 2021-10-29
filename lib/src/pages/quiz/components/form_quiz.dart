@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:upn_financiero_mobil/src/constants/colors.dart';
@@ -10,6 +11,7 @@ import 'package:upn_financiero_mobil/src/services/quiz/quiz_service.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/app_screen.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/checkbox_app.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/loading_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FormQuiz extends StatefulWidget {
   final String idPerson;
@@ -95,11 +97,74 @@ class _FormQuizState extends State<FormQuiz> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(_survey.terminos.toString(),
-                                style: GoogleFonts.montserrat(
-                                    fontSize: 11.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.red)),
+                            _survey.terminos != null
+                                ? Text(_survey.terminos.toString(),
+                                    style: GoogleFonts.montserrat(
+                                        fontSize: 11.0,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.red))
+                                : Container(),
+                            _survey.descripcionLink != null
+                                ? SizedBox(height: 8.0)
+                                : Container(),
+                            RichText(
+                              text: TextSpan(children: [
+                                TextSpan(
+                                  text:
+                                      _survey.descripcionLink.toString() + ' ',
+                                  style: GoogleFonts.montserrat(
+                                      fontSize: 11.0,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black),
+                                ),
+                                TextSpan(
+                                  text: (_survey.nombreLink != null
+                                          ? _survey.nombreLink.toString()
+                                          : '') +
+                                      ' ',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      if (await canLaunch(
+                                          _survey.link.toString())) {
+                                        await launch(_survey.link.toString());
+                                      } else {}
+                                    },
+                                ),
+                                TextSpan(
+                                  text: ' y ',
+                                  style: GoogleFonts.montserrat(
+                                      fontSize: 11.0,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black),
+                                ),
+                                TextSpan(
+                                  text: (_survey.nombreLinkOpcional != null
+                                          ? _survey.nombreLinkOpcional
+                                              .toString()
+                                          : '') +
+                                      ' ',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      if (await canLaunch(
+                                          _survey.linkOpcional.toString())) {
+                                        await launch(_survey.linkOpcional.toString());
+                                      } else {}
+                                    },
+                                ),
+                              ]),
+                            ),
                             SizedBox(height: 12.0),
                             _surveyItems.length > 0
                                 ? ListView.builder(
@@ -321,6 +386,12 @@ class _FormQuizState extends State<FormQuiz> {
         ]);
       }),
     );
+  }
+
+  Future _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    }
   }
 
   Container _createInputItem(BuildContext buildContext, SurveyItem surveyItem,

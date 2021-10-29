@@ -24,7 +24,13 @@ class Survey {
         this.codigo,
         this.items,
         this.fecha,
-        this.aprobado
+        this.aprobado,
+        this.descripcionLink,
+        this.nombreLink,
+        this.link,
+        this.nombreLinkOpcional,
+        this.linkOpcional
+        
     });
 
     String? idEncuesta;
@@ -40,6 +46,11 @@ class Survey {
     List<SurveyItem>? items;
     DateTime? fecha;
     String? aprobado;
+    String? descripcionLink;
+    String? nombreLink;
+    String? link;
+    String? nombreLinkOpcional;
+    String? linkOpcional;
 
     factory Survey.fromJson(Map<String, dynamic> json) => Survey(
         idEncuesta: json["id_encuesta"] == null ? null : json["id_encuesta"],
@@ -56,6 +67,11 @@ class Survey {
           .toList(),
         fecha: json["fecha"] == null ? null : DateTime.parse(json["fecha"]),
         aprobado: json["aprobado"] == null ? '0' : json["aprobado"],
+        descripcionLink: json["descripcion_link"] == null ? null : json["descripcion_link"],
+        nombreLink: json["nombre_link"] == null ? null : json["nombre_link"],
+        link: json["link"] == null ? null : json["link"],
+        nombreLinkOpcional: json["nombre_link_opcional"] == null ? null : json["nombre_link_opcional"],
+        linkOpcional: json["link_opcional"] == null ? null : json["link_opcional"]
     );
 
     Map<String, dynamic> toJson() => {
@@ -72,5 +88,10 @@ class Survey {
         "items": items == null ? null :  List<dynamic>.from(items!.map((x) => x.toJson())),
         "fecha": fecha == null ? null : fecha!.toIso8601String(),
         "aprobado": codigo == null ? '0' : aprobado,
+        "descripcion_link": descripcionLink == null ? null : descripcionLink,
+        "nombre_link": nombreLink == null ? null : nombreLink,
+        "link": link == null ? null : link,
+        "nombre_link_opcional": nombreLinkOpcional == null ? null : nombreLinkOpcional,
+        "link_opcional": linkOpcional == null ? null : linkOpcional
     };
 }
