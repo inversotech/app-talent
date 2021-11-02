@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:external_path/external_path.dart' as ep;
+// import 'package:external_path/external_path.dart' as ep;
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart' as p;
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:upn_financiero_mobil/src/models/models.dart';
 import 'package:upn_financiero_mobil/src/providers/utils/end_points.dart';
 import 'package:upn_financiero_mobil/src/services/api_rest_service.dart';
@@ -150,9 +150,9 @@ class AccountStatusService {
 
   Future<ApiResponse> downloadFileWithPath(String url, String fileName,
       Map<String, String> params, BuildContext context) async {
-    try {
+    /*try {
       String path = '';
-      final status = await Permission.storage.request();
+       final status = await Permission.storage.request();
       if (status.isGranted && !status.isDenied) {
         if (Platform.isIOS) {
           final downloadPath = await p.getExternalStorageDirectories(
@@ -177,7 +177,8 @@ class AccountStatusService {
       ToastCustom().dangerContext(
           context: context, message: 'No se procedió con la descarga', time: 8);
       return ApiResponse.fromJsonNull();
-    }
+    } */
+     return ApiResponse.fromJsonNull();
   }
 
   Future<void> _startDownload(String savePath, String _fileUrl) async {
