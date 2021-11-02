@@ -19,7 +19,7 @@
       </intent>
     </queries>
    <application
-        android:label="upn_financiero_mobil"
+        android:label="Lamb_Talent"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

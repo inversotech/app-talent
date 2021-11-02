@@ -1,4 +1,4 @@
-package com.example.upn_financiero_mobil
+package pe.adventistas.lambtalent
 
 import io.flutter.embedding.android.FlutterActivity
 
