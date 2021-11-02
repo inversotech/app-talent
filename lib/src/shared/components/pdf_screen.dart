@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
@@ -39,7 +40,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
       appBar: AppBar(
         title: Text(widget.titlePdf),
         actions: <Widget>[
-          widget.showDownload
+          widget.showDownload && Platform.isAndroid
               ? IconButton(
                   icon: Icon(Icons.download),
                   onPressed: () async {

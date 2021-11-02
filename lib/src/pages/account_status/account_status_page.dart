@@ -319,7 +319,7 @@ class _AccountStatusPageState extends State<AccountStatusPage> {
             builder: (context) => PDFScreen(
                 clave: clave,
                 urlFile: urlBoleta,
-                showDownload: false,
+                showDownload: true,
                 path: file.path,
                 titlePdf: fileName.toString()),
           ),
