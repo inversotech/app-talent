@@ -89,5 +89,6 @@
 	<array>
 	<string>Para redireccionar a una url https</string>
 	<string>Para redireccionar a una url http</string>
+	</array>
 </dict>
 </plist>
