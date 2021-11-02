@@ -26,6 +26,11 @@
 	<string>All files have been downloaded</string>
 	<key>FDMaximumConcurrentTasks</key>
 	<integer>5</integer>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>https</string>
+		<string>http</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
