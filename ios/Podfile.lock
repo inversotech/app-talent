@@ -48,21 +48,11 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - google_maps_flutter (0.0.1):
-    - Flutter
-    - GoogleMaps
-  - GoogleMaps (5.1.0):
-    - GoogleMaps/Maps (= 5.1.0)
-  - GoogleMaps/Base (5.1.0)
-  - GoogleMaps/Maps (5.1.0):
-    - GoogleMaps/Base
   - image_picker (0.0.1):
     - Flutter
   - location (0.0.1):
     - Flutter
   - path_provider (0.0.1):
-    - Flutter
-  - "permission_handler (5.1.0+2)":
     - Flutter
   - SDWebImage (5.12.0):
     - SDWebImage/Core (= 5.12.0)
@@ -85,11 +75,9 @@ DEPENDENCIES:
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
@@ -99,7 +87,6 @@ SPEC REPOS:
     - DKImagePickerController
     - DKPhotoGallery
     - FMDB
-    - GoogleMaps
     - SDWebImage
     - SwiftyGif
     - Toast
@@ -119,16 +106,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
-  google_maps_flutter:
-    :path: ".symlinks/plugins/google_maps_flutter/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   sqflite:
@@ -147,12 +130,9 @@ SPEC CHECKSUMS:
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  google_maps_flutter: abdb8dee6c52d4be36ad131ee6ebfacd14417c5a
-  GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
   image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   SDWebImage: 4ea20cca2986adc5aacde07aa686742fd4c67a37
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
@@ -160,6 +140,6 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher: b6e016d912f04be9f5bf6e8e82dc599b7ba59649
 
-PODFILE CHECKSUM: 7944b7bbc45036f141f6f34c881b4874f60c4ef3
+PODFILE CHECKSUM: 5b005fe02f3143bc1ee70115f3770345c93c1b49
 
 COCOAPODS: 1.11.2
