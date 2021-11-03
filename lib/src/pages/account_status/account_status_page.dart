@@ -318,8 +318,8 @@ class _AccountStatusPageState extends State<AccountStatusPage> {
           MaterialPageRoute(
             builder: (context) => PDFScreen(
                 clave: clave,
-                urlFile: urlBoleta,
-                showDownload: false,
+                file: file,
+                showDownload: true,
                 path: file.path,
                 titlePdf: fileName.toString()),
           ),
