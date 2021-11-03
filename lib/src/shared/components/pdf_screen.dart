@@ -8,7 +8,7 @@ import 'package:upn_financiero_mobil/src/shared/widgets/loading_indicator.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/toast.dart';
 
 class PDFScreen extends StatefulWidget {
-  final String? urlFile;
+  final File? file;
   final String path;
   final String titlePdf;
   final String clave;
@@ -16,7 +16,7 @@ class PDFScreen extends StatefulWidget {
 
   PDFScreen(
       {Key? key,
-      this.urlFile,
+      this.file,
       required this.path,
       this.clave = '',
       this.titlePdf = '',
@@ -44,7 +44,7 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
               ? IconButton(
                   icon: Icon(Icons.download),
                   onPressed: () async {
-                    if (widget.urlFile != null) {
+                    if (widget.file != null) {
                       AccountStatusService _accountStatusService =
                           new AccountStatusService();
                       final Map<String, String> params = {
@@ -54,11 +54,11 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                           text: 'Descargando ...', context: context);
                       final response =
                           await _accountStatusService.downloadFileWithPath(
-                              widget.urlFile!, widget.titlePdf, params,context);
+                              widget.file!, widget.titlePdf, params,context);
                       if (response.success) {
                         ToastCustom().successContext(
                           context: context,
-                            message: 'Puede ver el archivo en descargas',
+                            message: 'Después de abrir el documento, de click en descargar para guardar en su dispositivo.',
                             time: 8);
                       }
                       Navigator.pop(context);
