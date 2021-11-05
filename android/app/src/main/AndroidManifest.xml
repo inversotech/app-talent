@@ -3,10 +3,11 @@ xmlns:tools="http://schemas.android.com/tools"
     package="pe.adventistas.lambtalent">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <queries>
       <!-- Place inside the <queries> element. -->
       <intent>
@@ -21,7 +22,8 @@ xmlns:tools="http://schemas.android.com/tools"
     </queries>
    <application
         android:label="Lamb_Talent"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:foregroundServiceType="location">
          <provider
                 android:name="androidx.core.content.FileProvider"
                 android:authorities="pe.adventistas.lambtalent.fileProvider"

@@ -388,12 +388,6 @@ class _FormQuizState extends State<FormQuiz> {
     );
   }
 
-  Future _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    }
-  }
-
   Container _createInputItem(BuildContext buildContext, SurveyItem surveyItem,
       SurveyItem parent, int level) {
     if (surveyItem.valorInicial != null &&
