@@ -94,7 +94,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _userPasswordWidget(context) {
-    final node = FocusScope.of(context);
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Form(
@@ -162,7 +161,6 @@ class _LoginPageState extends State<LoginPage> {
                   return null;
                 },
                 onEditingComplete: () {
-                  node.unfocus();
                   _onSubmit(context);
                 },
               ),
