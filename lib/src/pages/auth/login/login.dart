@@ -108,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: InputDecoration(
                   icon: Icon(Icons.person_outlined),
                   labelText: 'Usuario',
+                  hintText: 'Ingrese su usuario',
                   labelStyle: TextStyle(fontWeight: FontWeight.bold),
                   border: InputBorder.none,
                 ),
@@ -133,6 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: InputDecoration(
                   icon: Icon(Icons.lock_outlined),
                   labelText: 'Contraseña',
+                  hintText: 'Ingrese su contraseña',
                   labelStyle: TextStyle(fontWeight: FontWeight.bold),
                   border: InputBorder.none,
                   suffixIcon: IconButton(
