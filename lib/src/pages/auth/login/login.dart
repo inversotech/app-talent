@@ -21,12 +21,18 @@ class _LoginPageState extends State<LoginPage> {
   LoginFormModel loginFormModel = new LoginFormModel();
   final GlobalKey<FormState> _formLoginKey = GlobalKey<FormState>();
   bool obscureText = true;
+  late FocusNode _focusPassword;
   @override
   void initState() {
     super.initState();
+    _focusPassword= FocusNode();
     _clearStorage();
   }
-
+@override
+  void dispose() {
+    _focusPassword.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -119,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                   return null;
                 },
-                onEditingComplete: () => node.nextFocus(),
+                onEditingComplete: () => _focusPassword.requestFocus(),
               ),
             ),
             SizedBox(height: 12.0),
@@ -130,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(15.0)),
               padding: EdgeInsets.all(12.0),
               child: TextFormField(
-                enableInteractiveSelection: false,
+                focusNode: _focusPassword,
                 decoration: InputDecoration(
                   icon: Icon(Icons.lock_outlined),
                   labelText: 'Contraseña',
