@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart' as p;
 import 'package:upn_financiero_mobil/src/models/models.dart';
 import 'package:upn_financiero_mobil/src/providers/utils/end_points.dart';
 import 'package:upn_financiero_mobil/src/services/api_rest_service.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AccountStatusService {
   Future getAccountStatus(String params) async {
@@ -137,8 +137,8 @@ class AccountStatusService {
       var request = await HttpClient().getUrl(Uri.parse(url));
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
-      var dir = await p.getExternalStorageDirectory();
-      File file = File("${dir!.path}/$filename");
+      var dir = await p.getTemporaryDirectory();
+      File file = File("${dir.path}/$filename");
       await file.writeAsBytes(bytes, flush: true);
       completer.complete(file);
     } catch (e) {
@@ -147,22 +147,26 @@ class AccountStatusService {
     return completer.future;
   }
 
-  Future<ApiResponse> downloadFileWithPath(File file, String fileName,
+  Future<ApiResponse> downloadFileWithPath(String urlFile, String fileName,
       Map<String, String> params, BuildContext context) async {
     try {
-      final response = await _saveDowloadTicket(params);
-      await OpenFile.open(file.path);
+      var response = ApiResponse.fromJsonNull();
+      if (await canLaunch(urlFile.toString())) {
+        await launch(
+          urlFile.toString(),
+        );
+      } else {
+        ToastCustom().dangerContext(
+            context: context,
+            message:
+                'No se puede abrir el navegador web o no hay un navegador web instalado',
+            time: 8);
+      }
       return response;
     } catch (e) {
       ToastCustom().dangerContext(
           context: context, message: 'No se procedió con la descarga', time: 8);
       return ApiResponse.fromJsonNull();
     }
-  }
-
-  Future<ApiResponse> _saveDowloadTicket(Map<String, String> params) async {
-    final response = await ApiRestService.putNotId(
-        endPoint: endPoints['workerportal']['payments-ticket'], body: params);
-    return response;
   }
 }

@@ -307,8 +307,11 @@ class _AccountStatusPageState extends State<AccountStatusPage> {
       final fileName = listTicketsPayment[0].archivo;
       final clave = listTicketsPayment[0].clave.toString();
       urlBoleta = listTicketsPayment[0].urls.toString() + '?type=S&p=' + clave;
+      final urlBoletaDownload =
+          listTicketsPayment[0].urlDownload.toString() + '?type=S&p=' + clave;
       final file = await _accountStatusService.createFileOfPdfUrl(
           urlBoleta, fileName.toString());
+      if (!mounted) return;
       setState(() {
         loading = false;
       });
@@ -318,20 +321,24 @@ class _AccountStatusPageState extends State<AccountStatusPage> {
           MaterialPageRoute(
             builder: (context) => PDFScreen(
                 clave: clave,
-                file: file,
+                urlFileDownload: urlBoletaDownload,
                 showDownload: true,
                 path: file.path,
                 titlePdf: fileName.toString()),
           ),
         );
       } else {
-        ToastCustom()
-            .warningContext(context: context, message: 'Ocurrió un error al abrir la boleta', time: 8);
+        ToastCustom().warningContext(
+            context: context,
+            message: 'Ocurrió un error al abrir la boleta',
+            time: 8);
       }
     } else if (listTicketsPayment.length == 0) {
-      ToastCustom().warningContext(context: context,
+      ToastCustom().warningContext(
+          context: context,
           message: 'No se encontró boleta del mes ' + _dateModel.nameMonth,
           time: 8);
+      if (!mounted) return;
       setState(() {
         loading = false;
       });
@@ -445,6 +452,7 @@ class _AccountStatusPageState extends State<AccountStatusPage> {
     });
     await _listDataGeneral();
     await _listDataDetail();
+    if (!mounted) return;
     setState(() {
       loading = false;
     });
@@ -452,6 +460,7 @@ class _AccountStatusPageState extends State<AccountStatusPage> {
 
   void _onRefresh() async {
     await _listDataGeneral();
+    if (!mounted) return;
     // await _listDataDetail();
     _refreshController.refreshCompleted();
     _refreshController.loadNoData();

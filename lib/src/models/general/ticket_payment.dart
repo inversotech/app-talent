@@ -35,6 +35,7 @@ class TicketPaymentModel {
         this.correo,
         this.celular,
         this.urls,
+        this.urlDownload
     });
 
     String? idAnho;
@@ -62,6 +63,7 @@ class TicketPaymentModel {
     String? correo;
     String? celular;
     String? urls;
+    String? urlDownload;
 
     factory TicketPaymentModel.fromJson(Map<String, dynamic> json) => TicketPaymentModel(
         idAnho: json["id_anho"] == null ? null : json["id_anho"],
@@ -89,6 +91,7 @@ class TicketPaymentModel {
         correo: json["correo"] == null ? null : json["correo"],
         celular: json["celular"] == null ? null : json["celular"],
         urls: json["urls"] == null ? null : json["urls"],
+        urlDownload: json["url_download"] == null ? null : json["url_download"]
     );
 
     Map<String, dynamic> toJson() => {
@@ -117,5 +120,6 @@ class TicketPaymentModel {
         "correo": correo == null ? null : correo,
         "celular": celular == null ? null : celular,
         "urls": urls == null ? null : urls,
+        "url_download": urlDownload == null ? null : urlDownload
     };
 }

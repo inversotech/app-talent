@@ -7,6 +7,8 @@ import 'package:upn_financiero_mobil/src/pages/account_status/account_status_pag
 import 'package:upn_financiero_mobil/src/pages/home/home_page.dart';
 import 'package:upn_financiero_mobil/src/pages/quiz/quiz_page.dart';
 import 'package:upn_financiero_mobil/src/providers/user_preferences/user_preferences.dart';
+import 'package:upn_financiero_mobil/src/providers/utils/functions/capitalize.dart';
+import 'package:upn_financiero_mobil/src/shared/components/change_entity.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/widgets.dart';
 
 class AppScreen extends StatelessWidget {
@@ -45,7 +47,7 @@ class AppScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     UserPreferences userPreferences = UserPreferences();
     List<Widget> tabs = [];
-    List<Menu> menu = userPreferences.menu??[];
+    List<Menu> menu = userPreferences.menu ?? [];
     int index = 0;
     menu.forEach((element) {
       tabs.add(Container(
@@ -100,19 +102,86 @@ class AppScreen extends StatelessWidget {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(' '),
+                      Text(''),
                       Padding(
                         padding: const EdgeInsets.only(left: 45),
                         child: Image.asset('assets/icons/logo.png',
-                            height: 40.0, fit: BoxFit.cover),
+                            height: 50.0, fit: BoxFit.cover),
                       ),
+                      /* Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: Column(
+                            children: [
+                              InkWell(
+                                onTap: (){
+                                  showModalChangeEntity(context);
+                                },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                          userPreferences.nameEntity != null
+                                              ? userPreferences.nameEntity
+                                                  .toString()
+                                              : '',
+                                          style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 18.0)),
+                                    ),
+                                    Icon(Icons.arrow_drop_down, size: 30)
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                  userPreferences.nameEntity != null
+                                      ? capitalize(userPreferences.nomDeparment
+                                          .toString())
+                                      : '',
+                                  style: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.0)),
+                              showTitleHeader
+                                  ? Wrap(
+                                      direction: Axis.horizontal,
+                                      alignment: WrapAlignment.center,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      children: [
+                                        DateTime.now().hour > 12
+                                            ? Text('Buenas tardes, ',
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontFamily: 'Montserrat',
+                                                    fontWeight:
+                                                        FontWeight.w400))
+                                            : Text('Buenos días, ',
+                                                style: GoogleFonts.montserrat(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                        Text(fullname + '!',
+                                            style: GoogleFonts.montserrat(
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.w600))
+                                      ],
+                                    )
+                                  : Container(),
+                            ],
+                          ),
+                        ),
+                      ), */
                       IconButton(
                           onPressed: () {
                             Navigator.pushReplacementNamed(context, 'login');
                           },
-                          icon: Icon(Icons.logout))
+                          icon: Icon(Icons.logout)),
                     ],
                   ),
                   showTitleHeader

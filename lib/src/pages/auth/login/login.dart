@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:upn_financiero_mobil/src/constants/colors.dart';
@@ -108,23 +109,29 @@ class _LoginPageState extends State<LoginPage> {
                   border: Border.all(color: Colors.white),
                   borderRadius: BorderRadius.circular(15.0)),
               padding: EdgeInsets.all(12.0),
-              child: TextFormField(
-                autofocus: true,
-                decoration: InputDecoration(
-                  icon: Icon(Icons.person_outlined),
-                  labelText: 'Usuario',
-                  hintText: 'Ingrese su usuario',
-                  labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                  border: InputBorder.none,
+              child: Semantics(
+                child: TextFormField(
+                  keyboardType: TextInputType.visiblePassword,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.person_outlined),
+                    labelText: 'Usuario',
+                    hintText: 'Ingrese su usuario',
+                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                    border: InputBorder.none,
+                  ),
+                  onSaved: (value) => loginFormModel.username = value.toString(),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Usuario requerido.';
+                    }
+                    return null;
+                  },
+                  onEditingComplete: () => _focusPassword.requestFocus(),
                 ),
-                onSaved: (value) => loginFormModel.username = value.toString(),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Usuario requerido.';
-                  }
-                  return null;
-                },
-                onEditingComplete: () => _focusPassword.requestFocus(),
+                label: 'Usuario',
+                enabled: true,
+                hint: 'Ingrese su usuario',
               ),
             ),
             SizedBox(height: 12.0),
@@ -134,35 +141,40 @@ class _LoginPageState extends State<LoginPage> {
                   border: Border.all(color: Colors.white),
                   borderRadius: BorderRadius.circular(15.0)),
               padding: EdgeInsets.all(12.0),
-              child: TextFormField(
-                focusNode: _focusPassword,
-                decoration: InputDecoration(
-                  icon: Icon(Icons.lock_outlined),
-                  labelText: 'Contraseña',
-                  hintText: 'Ingrese su contraseña',
-                  labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                  border: InputBorder.none,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                        obscureText ? Icons.visibility : Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        obscureText = !obscureText;
-                      });
-                    },
+              child: Semantics(
+                child: TextFormField(
+                  focusNode: _focusPassword,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.lock_outlined),
+                    labelText: 'Contraseña',
+                    hintText: 'Ingrese su contraseña',
+                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                    border: InputBorder.none,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                          obscureText ? Icons.visibility : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          obscureText = !obscureText;
+                        });
+                      },
+                    ),
                   ),
+                  obscureText: obscureText,
+                  onSaved: (value) => loginFormModel.password = value.toString(),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Contraseña requerido.';
+                    }
+                    return null;
+                  },
+                  onEditingComplete: () {
+                    _onSubmit(context);
+                  },
                 ),
-                obscureText: obscureText,
-                onSaved: (value) => loginFormModel.password = value.toString(),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Contraseña requerido.';
-                  }
-                  return null;
-                },
-                onEditingComplete: () {
-                  _onSubmit(context);
-                },
+                label: 'Contraseña',
+                enabled: true,
+                hint: 'Ingrese su contraseña'
               ),
             ),
           ],

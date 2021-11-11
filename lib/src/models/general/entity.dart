@@ -10,32 +10,32 @@ String entityToJson(Entity data) => json.encode(data.toJson());
 
 class Entity {
   Entity({
-    this.id = 0,
-    this.idEmpresa = 0,
-    this.idTipoentidad = 0,
-    this.name = '',
-    this.tipo = '',
+    this.estado,
+    this.idEntidad,
+    this.idPersona,
+    this.nombre,
+    this.selection,
   });
 
-  int id;
-  int idEmpresa;
-  int idTipoentidad;
-  String name;
-  String tipo;
+  String? estado;
+  String? idEntidad;
+  String? idPersona;
+  String? nombre;
+  String? selection;
 
   factory Entity.fromJson(Map<String, dynamic> json) => Entity(
-        id: json["id"],
-        idEmpresa: json["id_empresa"],
-        idTipoentidad: json["id_tipoentidad"],
-        name: json["name"],
-        tipo: json["tipo"],
+        estado: json["estado"] == null ? null : json["estado"],
+        idEntidad: json["id_entidad"] == null ? null : json["id_entidad"],
+        idPersona: json["id_persona"] == null ? null : json["id_persona"],
+        nombre: json["nombre"] == null ? null : json["nombre"],
+        selection: json["selection"] == null ? null : json["selection"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "id_empresa": idEmpresa,
-        "id_tipoentidad": idTipoentidad,
-        "name": name,
-        "tipo": tipo,
+        "estado": estado == null ? null : estado,
+        "id_entidad": idEntidad == null ? null : idEntidad,
+        "id_persona": idPersona == null ? null : idPersona,
+        "nombre": nombre == null ? null : nombre,
+        "selection": selection == null ? null : selection,
       };
 }

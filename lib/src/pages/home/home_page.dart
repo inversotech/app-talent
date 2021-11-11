@@ -73,9 +73,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    super.dispose();
     _refreshController.dispose();
     _scrollController.dispose();
+    super.dispose();
   }
 
   Widget build(BuildContext context) {
@@ -135,6 +135,7 @@ class _HomePageState extends State<HomePage> {
                     hourMarking: hourMarking,
                     minutosTolerancia: minutosTolerancia,
                     descripcionMarcacion: textButton,
+                    idDescripcionMarcacion: idDescripMarcacion,
                   )
                 : Container(),
             Padding(
@@ -496,6 +497,7 @@ class _HomePageState extends State<HomePage> {
     final marking = await markingProvider.workerMarking(params);
     Navigator.pop(context);
     if (marking.success) {
+      if (!mounted) return;
       setState(() {
         loading = true;
       });
@@ -558,6 +560,7 @@ class _HomePageState extends State<HomePage> {
     });
     await _verifyButtonAssistance();
     await _getListDataAndChart();
+    if (!mounted) return;
     _refreshController.loadNoData();
     setState(() {
       loading = false;
@@ -567,6 +570,7 @@ class _HomePageState extends State<HomePage> {
   void _onRefresh() async {
     await _verifyButtonAssistance();
     await _getListDataAndChart();
+    if (!mounted) return;
     _refreshController.refreshCompleted();
     _refreshController.loadNoData();
     setState(() {});

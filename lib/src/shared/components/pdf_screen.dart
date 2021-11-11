@@ -1,23 +1,21 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:upn_financiero_mobil/src/services/account_status/account_status_service.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/loading_indicator.dart';
-import 'package:upn_financiero_mobil/src/shared/widgets/toast.dart';
 
 class PDFScreen extends StatefulWidget {
-  final File? file;
   final String path;
+  final String urlFileDownload;
   final String titlePdf;
   final String clave;
   final bool showDownload;
 
   PDFScreen(
       {Key? key,
-      this.file,
       required this.path,
+      this.urlFileDownload='',
       this.clave = '',
       this.titlePdf = '',
       this.showDownload = false})
@@ -40,28 +38,23 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
       appBar: AppBar(
         title: Text(widget.titlePdf),
         actions: <Widget>[
-          widget.showDownload && Platform.isAndroid
+          widget.showDownload && widget.urlFileDownload.isNotEmpty
               ? IconButton(
                   icon: Icon(Icons.download),
                   onPressed: () async {
-                    if (widget.file != null) {
+                    if (widget.urlFileDownload.isNotEmpty) {
                       AccountStatusService _accountStatusService =
                           new AccountStatusService();
                       final Map<String, String> params = {
                         'p': widget.clave.toString(),
                       };
+                         
                       ShowLoadingIndicator.showLoadingIndicator(
                           text: 'Descargando ...', context: context);
-                      final response =
-                          await _accountStatusService.downloadFileWithPath(
-                              widget.file!, widget.titlePdf, params,context);
-                      if (response.success) {
-                        ToastCustom().successContext(
-                          context: context,
-                            message: 'Después de abrir el documento, de click en descargar para guardar en su dispositivo.',
-                            time: 8);
-                      }
+                      await _accountStatusService.downloadFileWithPath(
+                              widget.urlFileDownload, widget.titlePdf, params,context);
                       Navigator.pop(context);
+                     
                     }
                   },
                 )

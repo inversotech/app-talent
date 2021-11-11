@@ -10,12 +10,14 @@ class MarkingWidget extends StatefulWidget {
   final String hourMarking;
   final int minutosTolerancia;
   final String descripcionMarcacion;
+  final String idDescripcionMarcacion;
   const MarkingWidget(
       {Key? key,
       required this.onPressed,
       required this.hourMarking,
       required this.minutosTolerancia,
-      required this.descripcionMarcacion})
+      required this.descripcionMarcacion,
+      required this.idDescripcionMarcacion})
       : super(key: key);
 
   @override
@@ -119,7 +121,10 @@ class _MarkingWidgetState extends State<MarkingWidget> {
         DateTime.parse(Jiffy().format('yyyy-MM-dd HH:mm').toString());
     DateTime timeTolerancia =
         timeMarking.add(Duration(minutes: widget.minutosTolerancia));
-    if (timeTolerancia.isBefore(timeNow) && timeNow.isAfter(timeMarking)) {
+    if (timeTolerancia.isBefore(timeNow) &&
+        timeNow.isAfter(timeMarking) &&
+        (widget.idDescripcionMarcacion == '01' ||
+            widget.idDescripcionMarcacion == '03')) {
       if (timeNow.isAfter(timeTolerancia)) {
         title = '¡Atención!';
         subtitle = 'Falta marcar tu asistencia de ';
@@ -139,7 +144,10 @@ class _MarkingWidgetState extends State<MarkingWidget> {
           DateTime.parse(Jiffy().format('yyyy-MM-dd HH:mm').toString());
       DateTime timeTolerancia =
           timeMarking.add(Duration(minutes: widget.minutosTolerancia));
-      if (timeTolerancia.isBefore(timeNow) && timeNow.isAfter(timeMarking)) {
+      if (timeTolerancia.isBefore(timeNow) &&
+          timeNow.isAfter(timeMarking) &&
+          (widget.idDescripcionMarcacion == '01' ||
+              widget.idDescripcionMarcacion == '03')) {
         if (timeNow.isAfter(timeTolerancia)) {
           title = '¡Atención!';
           subtitle = 'Falta marcar tu asistencia de';

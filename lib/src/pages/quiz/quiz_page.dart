@@ -250,8 +250,7 @@ class _QuizPageState extends State<QuizPage> {
                     _personSelect = Person();
                     listData = [];
                     activeButtonAddQuiz = false;
-                    setState(() {
-                    });
+                    setState(() {});
                     getListData(builContext);
                   },
                 )
@@ -407,6 +406,7 @@ class _QuizPageState extends State<QuizPage> {
     }
     page = 2;
     Navigator.pop(builContext);
+    if (!mounted) return;
     setState(() {});
     final listToday = listData.where((element) =>
         element.fecha!.day == DateTime.now().day &&
@@ -414,6 +414,7 @@ class _QuizPageState extends State<QuizPage> {
         element.fecha!.year == DateTime.now().year);
     if (listToday.length <= 0) {
       activeButtonAddQuiz = true;
+      if (!mounted) return;
       setState(() {});
     }
   }
@@ -424,6 +425,7 @@ class _QuizPageState extends State<QuizPage> {
     });
     await getActions();
     await getListMoreData();
+    if (!mounted) return;
     setState(() {
       loading = false;
     });
@@ -445,6 +447,7 @@ class _QuizPageState extends State<QuizPage> {
             loading = true;
           });
           await getListMoreData();
+          if (!mounted) return;
           setState(() {
             loading = false;
           });
@@ -485,6 +488,7 @@ class _QuizPageState extends State<QuizPage> {
       _refreshController.loadComplete();
     }
     page = 2;
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -514,6 +518,7 @@ class _QuizPageState extends State<QuizPage> {
     } else {
       _refreshController.loadComplete();
     }
+    if (!mounted) return;
     setState(() {});
   }
 }
