@@ -103,20 +103,19 @@ class AppScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text(''),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 45),
-                        child: Image.asset('assets/icons/logo.png',
-                            height: 50.0, fit: BoxFit.cover),
-                      ),
-                      /* Flexible(
+                      Image.asset('assets/icons/logo.png',
+                          height: 40.0, fit: BoxFit.cover),
+                      Flexible(
                         child: Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               InkWell(
-                                onTap: (){
+                                onTap: () {
                                   showModalChangeEntity(context);
                                 },
                                 child: Row(
@@ -139,14 +138,18 @@ class AppScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Text(
-                                  userPreferences.nameEntity != null
-                                      ? capitalize(userPreferences.nomDeparment
-                                          .toString())
-                                      : '',
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14.0)),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                    userPreferences.nameEntity != null
+                                        ? capitalize(userPreferences.nameDeparment
+                                            .toString())
+                                        : '',
+                                        overflow: TextOverflow.fade,
+                                    style: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14.0)),
+                              ),
                               showTitleHeader
                                   ? Wrap(
                                       direction: Axis.horizontal,
@@ -176,7 +179,7 @@ class AppScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                      ), */
+                      ),
                       IconButton(
                           onPressed: () {
                             Navigator.pushReplacementNamed(context, 'login');
@@ -184,37 +187,6 @@ class AppScreen extends StatelessWidget {
                           icon: Icon(Icons.logout)),
                     ],
                   ),
-                  showTitleHeader
-                      ? Text(
-                          userPreferences.nameEntity != null
-                              ? userPreferences.nameEntity.toString()
-                              : '',
-                          style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w500, fontSize: 14.0))
-                      : Container(),
-                  showTitleHeader
-                      ? Wrap(
-                          direction: Axis.horizontal,
-                          alignment: WrapAlignment.center,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            DateTime.now().hour > 12
-                                ? Text('Buenas tardes, ',
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w400))
-                                : Text('Buenos días, ',
-                                    style: GoogleFonts.montserrat(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w400)),
-                            Text(fullname + '!',
-                                style: GoogleFonts.montserrat(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w600))
-                          ],
-                        )
-                      : Container(),
                   SizedBox(height: 12)
                 ],
               ),

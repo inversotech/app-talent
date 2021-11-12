@@ -27,7 +27,7 @@ import 'package:upn_financiero_mobil/src/services/services.dart'
     show AssistanceSummaryService, MarkingService;
 import 'package:intl/intl.dart';
 import 'package:upn_financiero_mobil/src/shared/widgets/widgets.dart'
-    show AppScreen, ShowLoadingIndicator;
+    show AppScreen, ShowLoadingIndicator, ToastCustom;
 
 import 'components/carousel_slider_item.dart';
 import 'components/list_schedule.dart';
@@ -65,6 +65,7 @@ class _HomePageState extends State<HomePage> {
   Map<String, dynamic> chartData = {};
   Map<String, dynamic> dataCarousel = {};
   List<dynamic> series = [];
+  bool isMarking = false;
   @override
   initState() {
     super.initState();
@@ -415,6 +416,12 @@ class _HomePageState extends State<HomePage> {
       minutosTolerancia = response.data['minutos_tolerancia'] != null
           ? int.parse(response.data['minutos_tolerancia'].toString())
           : 0;
+      if (showButton == '3' && !isMarking) {
+        ToastCustom().warningContext(
+            context: context, message: response.message, time: 8);
+      } else {
+        isMarking = false;
+      }
     }
   }
 
@@ -498,6 +505,7 @@ class _HomePageState extends State<HomePage> {
     Navigator.pop(context);
     if (marking.success) {
       if (!mounted) return;
+      isMarking = true;
       setState(() {
         loading = true;
       });

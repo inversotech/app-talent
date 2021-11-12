@@ -26,14 +26,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _focusPassword= FocusNode();
+    _focusPassword = FocusNode();
     _clearStorage();
   }
-@override
+
+  @override
   void dispose() {
     _focusPassword.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,30 +50,23 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.transparent,
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 80),
-                        _logo(),
-                        _title(),
-                        SizedBox(height: 30),
-                        _userPasswordWidget(context),
-                        SizedBox(height: 20),
-                        _submitButton(context),
-/*                         _resetPasswordButton(),
- */                      ],
-                    ),
-                ),
-              ),
-/*               _loginFaceButton()
- */            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                // SizedBox(height: 80),
+                _logo(),
+                _title(),
+                SizedBox(height: 30),
+                _userPasswordWidget(context),
+                SizedBox(height: 20),
+                _submitButton(context),
+          /*                         _resetPasswordButton(),
+           */
+              ],
+            ),
           ),
         ),
       ),
@@ -80,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _logo() {
     return Image.asset('assets/icons/logo.png',
-        height: 50.0, fit: BoxFit.cover);
+        height: 60.0, fit: BoxFit.cover);
   }
 
   Widget _title() {
@@ -120,7 +115,8 @@ class _LoginPageState extends State<LoginPage> {
                     labelStyle: TextStyle(fontWeight: FontWeight.bold),
                     border: InputBorder.none,
                   ),
-                  onSaved: (value) => loginFormModel.username = value.toString(),
+                  onSaved: (value) =>
+                      loginFormModel.username = value.toString(),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Usuario requerido.';
@@ -142,40 +138,41 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(15.0)),
               padding: EdgeInsets.all(12.0),
               child: Semantics(
-                child: TextFormField(
-                  focusNode: _focusPassword,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.lock_outlined),
-                    labelText: 'Contraseña',
-                    hintText: 'Ingrese su contraseña',
-                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                    border: InputBorder.none,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                          obscureText ? Icons.visibility : Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
-                          obscureText = !obscureText;
-                        });
-                      },
+                  child: TextFormField(
+                    focusNode: _focusPassword,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock_outlined),
+                      labelText: 'Contraseña',
+                      hintText: 'Ingrese su contraseña',
+                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                      border: InputBorder.none,
+                      suffixIcon: IconButton(
+                        icon: Icon(obscureText
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () {
+                          setState(() {
+                            obscureText = !obscureText;
+                          });
+                        },
+                      ),
                     ),
+                    obscureText: obscureText,
+                    onSaved: (value) =>
+                        loginFormModel.password = value.toString(),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Contraseña requerido.';
+                      }
+                      return null;
+                    },
+                    onEditingComplete: () {
+                      _onSubmit(context);
+                    },
                   ),
-                  obscureText: obscureText,
-                  onSaved: (value) => loginFormModel.password = value.toString(),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Contraseña requerido.';
-                    }
-                    return null;
-                  },
-                  onEditingComplete: () {
-                    _onSubmit(context);
-                  },
-                ),
-                label: 'Contraseña',
-                enabled: true,
-                hint: 'Ingrese su contraseña'
-              ),
+                  label: 'Contraseña',
+                  enabled: true,
+                  hint: 'Ingrese su contraseña'),
             ),
           ],
         ),
@@ -206,7 +203,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
 
   void _onSubmit(BuildContext context) async {
     showDialog(
@@ -249,6 +245,7 @@ class _LoginPageState extends State<LoginPage> {
     }
     params['serial'] = serial;
     params['isvirtual'] = '';
+    params['device_source'] = 'APP_UPN';
     // print(params);
     final resp = await oauthProvider.loginLamb(params);
     if (resp.success) {
@@ -266,7 +263,6 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       Navigator.pop(context);
     }
-
   }
 
   void _clearStorage() {

@@ -5,6 +5,7 @@ import 'package:upn_financiero_mobil/src/constants/colors.dart';
 import 'package:upn_financiero_mobil/src/models/general/deparment.dart';
 import 'package:upn_financiero_mobil/src/models/general/entity.dart';
 import 'package:upn_financiero_mobil/src/pages/home/home_page.dart';
+import 'package:upn_financiero_mobil/src/providers/user_preferences/user_preferences.dart';
 import 'package:upn_financiero_mobil/src/services/general/deparments_service.dart';
 import 'package:upn_financiero_mobil/src/services/general/entity_service.dart';
 
@@ -29,7 +30,18 @@ class _ChangeEntityState extends State<ChangeEntity> {
   TextEditingController _inputFieldDepto = new TextEditingController();
   EntityService _entityService = EntityService();
   DeparmentsService _deparmentService = DeparmentsService();
+  List<Entity> listEntitiesG = [];
+  List<Deparment> listMyDeptosG = [];
   List<Map<String, dynamic>> listMyDeptos = [];
+  List<Map<String, dynamic>> listMyEntities = [];
+  bool loadingEntities = false;
+  bool loadingDeptos = false;
+  @override
+  void initState() {
+    super.initState();
+    getEntities();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -62,122 +74,112 @@ class _ChangeEntityState extends State<ChangeEntity> {
                           color: ColorsApp.primary,
                           fontSize: 16.0)),
                   SizedBox(height: 24.0),
-                  FutureBuilder(
-                      future: _entityService.getListMyEntities(),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.hasData) {
-                          List<Entity> myEntities = snapshot.data;
-                          List<Map<String, dynamic>> listMyEntities = [];
-                          myEntities.forEach((element) {
-                            listMyEntities.add({
-                              'value': element.idEntidad,
-                              'label': element.nombre,
-                              'icon': null,
-                            });
-                          });
-                          return SelectFormField(
-                            decoration: InputDecoration(
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(50.0)),
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 30.0, vertical: 12.0),
-                                labelText: 'Entidad',
-                                labelStyle: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w500,
-                                    color: ColorsApp.primary),
-                                suffixIcon: Icon(Icons.arrow_drop_down,
-                                    color: ColorsApp.primary)),
-                            type: SelectFormFieldType.dialog,
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w600,
-                                color: ColorsApp.primary),
-                            controller: _inputFieldEntity,
-                            changeIcon: true,
-                            dialogTitle: 'Seleccionar',
-                            dialogCancelBtn: 'Cancelar',
-                            enableSearch: false,
-                            dialogSearchHint: 'Buscar',
-                            items: listMyEntities,
-                            onChanged: (val) async {
-                              listMyDeptos = [];
-                              List<Deparment> list = await _deparmentService
-                                  .getListMyDeparments(
-                                      {'id_entidad': val.toString()});
-                              list.forEach((element) {
-                                listMyDeptos.add({
-                                  'value': element.idDepto,
-                                  'label': element.nombre,
-                                  'icon': null,
-                                });
+                  loadingEntities
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : SelectFormField(
+                          decoration: InputDecoration(
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50.0)),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 30.0, vertical: 12.0),
+                              labelText: 'Entidad',
+                              labelStyle: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w500,
+                                  color: ColorsApp.primary),
+                              suffixIcon: Icon(Icons.arrow_drop_down,
+                                  color: ColorsApp.primary)),
+                          type: SelectFormFieldType.dialog,
+                          style: GoogleFonts.montserrat(
+                              fontWeight: FontWeight.w600,
+                              color: ColorsApp.primary),
+                          controller: _inputFieldEntity,
+                          changeIcon: true,
+                          dialogTitle: 'Seleccionar',
+                          dialogCancelBtn: 'Cancelar',
+                          enableSearch: false,
+                          dialogSearchHint: 'Buscar',
+                          items: listMyEntities,
+                          onChanged: (val) async {
+                            listMyDeptos = [];
+                            loadingDeptos = true;
+                            setState(() {});
+                            List<Deparment> list = await _deparmentService
+                                .getListMyDeparments(
+                                    {'id_entidad': val.toString()});
+                            listMyDeptosG = list;
+                            list.forEach((element) {
+                              listMyDeptos.add({
+                                'value': element.idDepto,
+                                'label': element.nombre,
+                                'icon': null,
                               });
-                              setState(() {});
-                            },
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Campo requerido.';
-                              }
-                              return null;
-                            },
-                          );
-                        } else {
-                          return Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                      }),
+                            });
+                            loadingDeptos = false;
+                            setState(() {});
+                          },
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Campo requerido.';
+                            }
+                            return null;
+                          },
+                        ),
                   SizedBox(height: 16.0),
-                  SelectFormField(
-                    decoration: InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50.0)),
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 12.0),
-                        labelText: 'Departamento',
-                        labelStyle: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w500,
-                            color: ColorsApp.primary),
-                        suffixIcon: Icon(Icons.arrow_drop_down,
-                            color: ColorsApp.primary)),
-                    type: SelectFormFieldType.dialog,
-                    style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w600, color: ColorsApp.primary),
-                    controller: _inputFieldDepto,
-                    changeIcon: true,
-                    dialogTitle: 'Seleccionar',
-                    dialogCancelBtn: 'Cancelar',
-                    enableSearch: false,
-                    dialogSearchHint: 'Buscar',
-                    items: listMyDeptos,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Campo requerido.';
-                      }
-                      return null;
-                    },
-                  ),
+                  loadingDeptos
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : listMyEntities.length > 0
+                          ? SelectFormField(
+                              decoration: InputDecoration(
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(50.0)),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 30.0, vertical: 12.0),
+                                  labelText: 'Departamento',
+                                  labelStyle: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorsApp.primary),
+                                  suffixIcon: Icon(Icons.arrow_drop_down,
+                                      color: ColorsApp.primary)),
+                              type: SelectFormFieldType.dialog,
+                              style: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorsApp.primary),
+                              controller: _inputFieldDepto,
+                              changeIcon: true,
+                              dialogTitle: 'Seleccionar',
+                              dialogCancelBtn: 'Cancelar',
+                              enableSearch: false,
+                              dialogSearchHint: 'Buscar',
+                              items: listMyDeptos,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Campo requerido.';
+                                }
+                                return null;
+                              },
+                            )
+                          : Container(),
                   SizedBox(height: 12.0),
                   Container(
                     alignment: Alignment.center,
                     child: TextButton(
                         onPressed: () {
-                          Future.microtask(() {
-                            Navigator.pushReplacement(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (c, a1, a2) => HomePage(),
-                                  transitionsBuilder: (c, anim, a2, child) =>
-                                      FadeTransition(
-                                          opacity: anim, child: child),
-                                  transitionDuration:
-                                      Duration(milliseconds: 2000),
-                                ));
-                          });
+                          saveNewEntityDepto(context);
                         },
                         style: ButtonStyle(
                           alignment: Alignment.center,
@@ -220,5 +222,49 @@ class _ChangeEntityState extends State<ChangeEntity> {
             ),
           ),
         ));
+  }
+
+  void getEntities() async {
+    setState(() {
+      loadingEntities = true;
+    });
+    final list = await _entityService.getListMyEntities();
+    listMyEntities = [];
+    list.forEach((element) {
+      listMyEntities.add({
+        'value': element.idEntidad,
+        'label': element.nombre,
+        'icon': null,
+      });
+    });
+    listEntitiesG = list;
+    setState(() {
+      loadingEntities = false;
+    });
+  }
+
+  void saveNewEntityDepto(BuildContext buildContext) async {
+    final prefs = new UserPreferences();
+    Entity findEntity = listEntitiesG.firstWhere(
+        (val) => val.idEntidad == _inputFieldEntity.text.toString(),
+        orElse: () => new Entity());
+    Deparment findDepto = listMyDeptosG.firstWhere(
+        (val) => val.idDepto == _inputFieldDepto.text.toString(),
+        orElse: () => new Deparment());
+    prefs.idEntity = int.parse(findEntity.idEntidad.toString());
+    prefs.nameEntity = findEntity.nombre.toString();
+    prefs.idDeparment = findDepto.idDepto.toString();
+    prefs.nameDeparment = findDepto.nombre.toString();
+    prefs.idWorker = int.parse(findEntity.idTrabajador.toString());
+    Future.microtask(() {
+      Navigator.pushReplacement(
+          buildContext,
+          PageRouteBuilder(
+            pageBuilder: (c, a1, a2) => HomePage(),
+            transitionsBuilder: (c, anim, a2, child) =>
+                FadeTransition(opacity: anim, child: child),
+            transitionDuration: Duration(milliseconds: 2000),
+          ));
+    });
   }
 }

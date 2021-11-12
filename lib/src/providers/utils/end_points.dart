@@ -7,8 +7,8 @@ final Map endPoints = {
     'user-info': apiUrl + 'user/info',
   },
   'comun': {
-    'my-entities': apiUrl + 'comun/my-entity-access',
-    'my-deptos': apiUrl + 'comun/my-depto-access',
+    'my-entities': apiUrl + 'comun/my-entities-contract',
+    'my-deptos': apiUrl + 'comun/my-deptos-contract',
     'years': apiUrl + 'comun/years',
     'months': apiUrl + 'comun/months',
     'descriptions-marking': apiUrl + 'comun/assistance/descriptions-marking',

@@ -123,7 +123,7 @@ class AuthService {
       prefs.idEntity = int.parse(user['entity_id'].toString());
       prefs.nameEntity = user['entity_name'].toString();
       prefs.idDeparment = user['departament_id'].toString();
-      prefs.nomDeparment = user['departament_name'].toString();
+      prefs.nameDeparment = user['departament_name'].toString();
       prefs.photoUrl = user['foto'].toString();
       prefs.idWorker = int.parse(user['id_trabajador'].toString());
       if (jsonList.isNotEmpty) {

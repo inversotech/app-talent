@@ -95,12 +95,12 @@ class UserPreferences {
   }
 
   // GET y SET del nomDeparment
-  String? get nomDeparment {
-    return _prefs?.getString('nomDeparment') ?? null;
+  String? get nameDeparment {
+    return _prefs?.getString('nameDeparment') ?? null;
   }
 
-  set nomDeparment(String? value) {
-    _prefs?.setString('nomDeparment', value!);
+  set nameDeparment(String? value) {
+    _prefs?.setString('nameDeparment', value!);
   }
 
   // GET y SET del admin
