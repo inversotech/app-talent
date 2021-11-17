@@ -121,19 +121,20 @@ class _MarkingWidgetState extends State<MarkingWidget> {
         DateTime.parse(Jiffy().format('yyyy-MM-dd HH:mm').toString());
     DateTime timeTolerancia =
         timeMarking.add(Duration(minutes: widget.minutosTolerancia));
-    if (timeTolerancia.isBefore(timeNow) &&
-        timeNow.isAfter(timeMarking) &&
+    bool nowAfterMarking = timeNow.isAfter(timeMarking);
+    bool toleranceAfterNow = timeTolerancia.isAfter(timeNow);
+    if (nowAfterMarking &&
         (widget.idDescripcionMarcacion == '01' ||
             widget.idDescripcionMarcacion == '03')) {
-      if (timeNow.isAfter(timeTolerancia)) {
-        title = '¡Atención!';
-        subtitle = 'Falta marcar tu asistencia de ';
-        colorButton = ColorsApp.danger;
-      } else {
+      if (nowAfterMarking && toleranceAfterNow) {
         title = '¡Apresúrate!';
         subtitle =
             'Estás en el tiempo de telerancia para marcar tu asistencia de';
         colorButton = ColorsApp.warning;
+      } else {
+        title = '¡Atención!';
+        subtitle = 'Falta marcar tu asistencia de ';
+        colorButton = ColorsApp.danger;
       }
     }
     setState(() {});
@@ -144,19 +145,20 @@ class _MarkingWidgetState extends State<MarkingWidget> {
           DateTime.parse(Jiffy().format('yyyy-MM-dd HH:mm').toString());
       DateTime timeTolerancia =
           timeMarking.add(Duration(minutes: widget.minutosTolerancia));
-      if (timeTolerancia.isBefore(timeNow) &&
-          timeNow.isAfter(timeMarking) &&
+      bool nowAfterMarking = timeNow.isAfter(timeMarking);
+      bool toleranceAfterNow = timeTolerancia.isAfter(timeNow);
+      if (nowAfterMarking &&
           (widget.idDescripcionMarcacion == '01' ||
               widget.idDescripcionMarcacion == '03')) {
-        if (timeNow.isAfter(timeTolerancia)) {
-          title = '¡Atención!';
-          subtitle = 'Falta marcar tu asistencia de';
-          colorButton = ColorsApp.danger;
-        } else {
+        if (nowAfterMarking && toleranceAfterNow) {
           title = '¡Apresúrate!';
           subtitle =
-              'Estás en el tiempo de telerancia para marcar tu asistencia de ';
+              'Estás en el tiempo de telerancia para marcar tu asistencia de';
           colorButton = ColorsApp.warning;
+        } else {
+          title = '¡Atención!';
+          subtitle = 'Falta marcar tu asistencia de ';
+          colorButton = ColorsApp.danger;
         }
       }
       setState(() {});

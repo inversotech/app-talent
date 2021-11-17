@@ -22,7 +22,9 @@
    <application
         android:label="Lamb_Talent"
         android:icon="@mipmap/ic_launcher"
-        android:foregroundServiceType="location">
+        android:foregroundServiceType="location"
+        android:allowBackup="false"
+        android:fullBackupContent="false">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
