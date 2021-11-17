@@ -6,5 +6,5 @@ final apiUrlLocalUpn =
     'http://app07.adventistas.pe/lamb-api-talent/public/api/';
 final apiUrlProduccionTemp = 'https://api-talent.adventistas.pe/api/';
 final apiUrlLambProduccion = 'https://api-lamb-talent.upeu.edu.pe/api-talent/api/';
-final apiUrl = apiUrlLocalUpn;
+final apiUrl = apiUrlLambProduccion;
 final codeModule = '16100000';
