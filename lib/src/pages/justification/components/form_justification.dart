@@ -57,6 +57,7 @@ class _FormJustificationState extends State<FormJustification> {
 
   JustificationModel _formData = new JustificationModel();
   JustificationService justificationService = JustificationService();
+  UserPreferences userPreferences = UserPreferences();
   String _evidence = '';
   String _evidenceText = 'Adjuntar evidencia';
   bool loading = false;
@@ -79,6 +80,8 @@ class _FormJustificationState extends State<FormJustification> {
       _getMarkings();
     } else {
       _formData.idEstadoJustif = '01';
+      _formData.idEntidad = userPreferences.idEntity.toString();
+      _formData.idDepto = userPreferences.idDeparment.toString();
     }
     _getDatheader();
   }
@@ -353,7 +356,7 @@ class _FormJustificationState extends State<FormJustification> {
                               });
                             } else {
                               ToastCustom().warningContext(
-                                context: buildContext,
+                                  context: buildContext,
                                   message:
                                       'No se ha definido el tipo marcación',
                                   time: 8);
@@ -384,7 +387,7 @@ class _FormJustificationState extends State<FormJustification> {
                                         });
                                       } else {
                                         ToastCustom().warningContext(
-                                          context: buildContext,
+                                            context: buildContext,
                                             message:
                                                 'No se ha definido el tipo marcación',
                                             time: 8);
@@ -902,6 +905,8 @@ class _FormJustificationState extends State<FormJustification> {
           text: 'Guardando ...', context: buildContext);
       if (_formData.idSolicJustif == null) {
         final Map<String, String> params = {
+          'id_entidad': _formData.idEntidad.toString(),
+          'id_depto': _formData.idDepto.toString(),
           'id_motivo_justif': _formData.idMotivoJustif.toString(),
           'fecha': _formData.fecha.toString(),
           'descripcion': _formData.descripcion.toString(),
@@ -939,8 +944,9 @@ class _FormJustificationState extends State<FormJustification> {
       }
     } else {
       ToastCustom().warningContext(
-        context: buildContext,
-          message: 'Debe seleccionar por lo menos una marcación', time: 8);
+          context: buildContext,
+          message: 'Debe seleccionar por lo menos una marcación',
+          time: 8);
     }
   }
 
@@ -974,6 +980,8 @@ class _FormJustificationState extends State<FormJustification> {
     if (listSchedule.length > 0) {
       scheduleData = listSchedule[0];
       Map<String, String> params = {
+        'id_entidad': _formData.idEntidad.toString(),
+        'id_depto': _formData.idDepto.toString(),
         'fechahora_entrada': listSchedule[0].fechahoraEntrada.toString(),
         'fechahora_salida': listSchedule[0].fechahoraSalida.toString(),
         'id_solic_justif': _formData.idSolicJustif != null
@@ -1165,10 +1173,12 @@ class _FormJustificationState extends State<FormJustification> {
             listMarkings[index].fechahoraManual =
                 _getDateMarking(selectData.idDescripMarcacion.toString());
           } else {
-            ToastCustom().warningContext(context:context,message: 'Ya existe', time: 8);
+            ToastCustom().warningContext(
+                context: context, message: 'Ya existe', time: 8);
           }
         } else {
-          ToastCustom().warningContext(context:context,message: 'Ya existe', time: 8);
+          ToastCustom()
+              .warningContext(context: context, message: 'Ya existe', time: 8);
         }
         Future.delayed(Duration.zero, () {
           _scrollController.animateTo(

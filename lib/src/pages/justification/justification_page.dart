@@ -9,6 +9,7 @@ import 'package:upn_financiero_mobil/src/models/models.dart'
         PaginationModel,
         ProcessJustifcationModel;
 import 'package:upn_financiero_mobil/src/pages/justification/components/list_justificaton.dart';
+import 'package:upn_financiero_mobil/src/providers/user_preferences/user_preferences.dart';
 import 'package:upn_financiero_mobil/src/providers/utils/functions/capitalize.dart';
 import 'package:upn_financiero_mobil/src/shared//widgets/widgets.dart'
     show AppScreen, ShowLoadingIndicator, YearMonthPicker;
@@ -41,6 +42,7 @@ class _JustificationPageState extends State<JustificationPage> {
   ScrollController _scrollController = ScrollController();
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  UserPreferences userPreferences = UserPreferences();
 
   @override
   void initState() {
@@ -131,7 +133,7 @@ class _JustificationPageState extends State<JustificationPage> {
   Container _widgetFilters(BuildContext buildContext) {
     return Container(
         decoration: BoxDecoration(
-            border: Border.all(color: ColorsApp.primary,width: 1.5),
+            border: Border.all(color: ColorsApp.primary, width: 1.5),
             borderRadius: BorderRadius.circular(25.0)),
         child: Column(children: [
           InkWell(
@@ -139,7 +141,8 @@ class _JustificationPageState extends State<JustificationPage> {
                 _selectDate(buildContext);
               },
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 12.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -150,7 +153,9 @@ class _JustificationPageState extends State<JustificationPage> {
                       ),
                       Row(children: [
                         Text(
-                          dateModel.nameMonth + ', ' + dateModel.year.toString(),
+                          dateModel.nameMonth +
+                              ', ' +
+                              dateModel.year.toString(),
                           style: GoogleFonts.montserrat(
                               fontWeight: FontWeight.w500,
                               color: ColorsApp.primary),
@@ -193,7 +198,6 @@ class _JustificationPageState extends State<JustificationPage> {
     }
   }
 
-
   void getDataFilters() async {
     StateJustifService stateJustifService = StateJustifService();
     listStateJustif
@@ -220,6 +224,8 @@ class _JustificationPageState extends State<JustificationPage> {
 
   void getListData(BuildContext builContext) async {
     final Map<String, String> params = {
+      'id_entidad': userPreferences.idEntity.toString(),
+      'id_depto': userPreferences.idDeparment.toString(),
       'id_anho': dateModel.year.toString(),
       'id_mes': dateModel.month.toString(),
       'id_estado_justif': valueStateJustif.toString(),
@@ -249,6 +255,8 @@ class _JustificationPageState extends State<JustificationPage> {
   void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
     final Map<String, String> params = {
+      'id_entidad': userPreferences.idEntity.toString(),
+      'id_depto': userPreferences.idDeparment.toString(),
       'id_anho': dateModel.year.toString(),
       'id_mes': dateModel.month.toString(),
       'id_estado_justif': valueStateJustif.toString(),
@@ -281,6 +289,8 @@ class _JustificationPageState extends State<JustificationPage> {
 
   Future getListMoreData() async {
     final Map<String, String> params = {
+      'id_entidad': userPreferences.idEntity.toString(),
+      'id_depto': userPreferences.idDeparment.toString(),
       'id_anho': dateModel.year.toString(),
       'id_mes': dateModel.month.toString(),
       'id_estado_justif': valueStateJustif.toString(),

@@ -405,6 +405,8 @@ class _HomePageState extends State<HomePage> {
           currentLocation != null ? currentLocation!.longitude.toString() : '0',
       'lat':
           currentLocation != null ? currentLocation!.latitude.toString() : '0',
+      'id_entidad': userPreferences.idEntity.toString(),
+      'id_depto': userPreferences.idDeparment.toString()
     };
     final response = await markingProvider.showButtonAssistance(params);
     if (response.success) {
@@ -499,7 +501,9 @@ class _HomePageState extends State<HomePage> {
       'lat':
           currentLocation != null ? currentLocation!.latitude.toString() : '0',
       'codigo_modalidad': codeModality.toString(),
-      'id_descrip_marcacion': idDescripMarcacion.toString()
+      'id_descrip_marcacion': idDescripMarcacion.toString(),
+      'id_entidad': userPreferences.idEntity.toString(),
+      'id_depto': userPreferences.idDeparment.toString()
     };
     final marking = await markingProvider.workerMarking(params);
     Navigator.pop(context);
