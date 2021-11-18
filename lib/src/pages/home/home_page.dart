@@ -359,8 +359,8 @@ class _HomePageState extends State<HomePage> {
                   _colorAssistance(data.code),
               dataLabelSettings: DataLabelSettings(
                   isVisible: true,
-                  textStyle:
-                      GoogleFonts.montserrat(fontWeight: FontWeight.w400))),
+                  textStyle: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w400))),
         ]);
   }
 
