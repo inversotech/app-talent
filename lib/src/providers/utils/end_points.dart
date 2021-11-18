@@ -9,6 +9,7 @@ final Map endPoints = {
   'comun': {
     'my-entities': apiUrl + 'comun/my-entities-contract',
     'my-deptos': apiUrl + 'comun/my-deptos-contract',
+    'total-entities-deptos': apiUrl + 'comun/total-entities-deptos-contract',
     'years': apiUrl + 'comun/years',
     'months': apiUrl + 'comun/months',
     'descriptions-marking': apiUrl + 'comun/assistance/descriptions-marking',

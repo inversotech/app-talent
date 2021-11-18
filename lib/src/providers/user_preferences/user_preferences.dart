@@ -125,4 +125,23 @@ class UserPreferences {
   set menu(List<Menu>? value) {
     _prefs?.setString('menu', json.encode(value!.toList()).toString());
   }
+
+   // GET y SET del total entities
+  int get cantEntities {
+    return _prefs?.getInt('cantEntities') ?? 0;
+  }
+
+  set cantEntities(int value) {
+    _prefs?.setInt('cantEntities', value);
+  }
+
+   // GET y SET del total deptos
+  int get cantDeptos {
+    return _prefs?.getInt('cantDeptos') ?? 0;
+  }
+
+  set cantDeptos(int value) {
+    _prefs?.setInt('cantDeptos', value);
+  }
+
 }

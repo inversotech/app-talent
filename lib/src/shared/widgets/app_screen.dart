@@ -94,7 +94,7 @@ class AppScreen extends StatelessWidget {
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             elevation: 0,
-            toolbarHeight: showTitleHeader ? 90.0 : null,
+            toolbarHeight: showTitleHeader ? 80.0 : null,
             title: Container(
               width: double.infinity,
               child: Column(
@@ -114,17 +114,71 @@ class AppScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  showModalChangeEntity(context);
-                                },
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Flexible(
+                              showTitleHeader
+                                  ? SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Wrap(
+                                        direction: Axis.horizontal,
+                                        alignment: WrapAlignment.center,
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        children: [
+                                          DateTime.now().hour > 12
+                                              ? Text('Buenas tardes, ',
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      fontFamily: 'Montserrat',
+                                                      fontWeight:
+                                                          FontWeight.w400))
+                                              : Text('Buenos días, ',
+                                                  style: GoogleFonts.montserrat(
+                                                      fontSize: 16.0,
+                                                      fontWeight:
+                                                          FontWeight.w400)),
+                                          Text(fullname + '!',
+                                              style: GoogleFonts.montserrat(
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.w600))
+                                        ],
+                                      ),
+                                    )
+                                  : Container(),
+                              SizedBox(height: 8.0),
+                              userPreferences.cantEntities > 1 ||
+                                      userPreferences.cantDeptos > 1
+                                  ? InkWell(
+                                      onTap: () {
+                                        showModalChangeEntity(context);
+                                      },
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Flexible(
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Text(
+                                                  userPreferences.nameEntity !=
+                                                          null
+                                                      ? userPreferences
+                                                          .nameEntity
+                                                          .toString()
+                                                      : '',
+                                                  style: GoogleFonts.montserrat(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 18.0)),
+                                            ),
+                                          ),
+                                          Icon(Icons.arrow_drop_down, size: 30)
+                                        ],
+                                      ),
+                                    )
+                                  : SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
                                       child: Text(
                                           userPreferences.nameEntity != null
                                               ? userPreferences.nameEntity
@@ -134,46 +188,19 @@ class AppScreen extends StatelessWidget {
                                               fontWeight: FontWeight.w500,
                                               fontSize: 18.0)),
                                     ),
-                                    Icon(Icons.arrow_drop_down, size: 30)
-                                  ],
-                                ),
-                              ),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Text(
-                                    userPreferences.nameEntity != null
-                                        ? capitalize(userPreferences.nameDeparment
-                                            .toString())
-                                        : '',
-                                        overflow: TextOverflow.fade,
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14.0)),
-                              ),
                               showTitleHeader
-                                  ? Wrap(
-                                      direction: Axis.horizontal,
-                                      alignment: WrapAlignment.center,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        DateTime.now().hour > 12
-                                            ? Text('Buenas tardes, ',
-                                                style: TextStyle(
-                                                    fontSize: 16.0,
-                                                    fontFamily: 'Montserrat',
-                                                    fontWeight:
-                                                        FontWeight.w400))
-                                            : Text('Buenos días, ',
-                                                style: GoogleFonts.montserrat(
-                                                    fontSize: 16.0,
-                                                    fontWeight:
-                                                        FontWeight.w400)),
-                                        Text(fullname + '!',
-                                            style: GoogleFonts.montserrat(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.w600))
-                                      ],
+                                  ? SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                          userPreferences.nameEntity != null
+                                              ? capitalize(userPreferences
+                                                  .nameDeparment
+                                                  .toString())
+                                              : '',
+                                          overflow: TextOverflow.fade,
+                                          style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14.0)),
                                     )
                                   : Container(),
                             ],
@@ -187,7 +214,7 @@ class AppScreen extends StatelessWidget {
                           icon: Icon(Icons.logout)),
                     ],
                   ),
-                  SizedBox(height: 12)
+                  SizedBox(height: 10)
                 ],
               ),
             ),

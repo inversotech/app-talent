@@ -134,6 +134,19 @@ class AuthService {
         prefs.menu = [];
       }
     }
+    await totalEntitiesDeptos();
+    return response;
+  }
+
+
+  Future<ApiResponse> totalEntitiesDeptos() async {
+    final response = await ApiRestService.get(
+        endPoint: endPoints['comun']['total-entities-deptos']);
+    if (response.success) {
+      final prefs = new UserPreferences();
+      prefs.cantEntities = int.parse(response.data['entities'].toString());
+      prefs.cantDeptos = int.parse(response.data['deptos'].toString());
+    }
     return response;
   }
 
