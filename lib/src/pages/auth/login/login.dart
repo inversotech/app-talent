@@ -49,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(
+          alignment: Alignment.center,
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
             child: Column(
@@ -63,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                 _userPasswordWidget(context),
                 SizedBox(height: 20),
                 _submitButton(context),
-          /*                         _resetPasswordButton(),
+                /*                         _resetPasswordButton(),
            */
               ],
             ),
