@@ -1,10 +1,10 @@
-final apiUrlLamb = 'https://api-lamb.upeu.edu.pe/';
-final apiUrlLambTalent =
+const apiUrlLamb = 'https://api-lamb.upeu.edu.pe/';
+const apiUrlLambTalent =
     'https://www.upeu.dev/lamb-talent/backs/api-talent/api/';
-final apiUrlLocal = 'http://192.168.1.34:5002/api/';
-final apiUrlLocalUpn =
+const apiUrlLocal = 'http://192.168.1.34:5002/api/';
+const apiUrlLocalUpn =
     'http://app07.adventistas.pe/lamb-api-talent/public/api/';
-final apiUrlProduccionTemp = 'https://api-talent.adventistas.pe/api/';
-final apiUrlLambProduccion = 'https://api-lamb-talent.upeu.edu.pe/api-talent/api/';
-final apiUrl = apiUrlLambProduccion;
-final codeModule = '16100000';
+const apiUrlProduccionTemp = 'https://api-talent.adventistas.pe/api/';
+const apiUrlLambProduccion = 'https://api-lamb-talent.upeu.edu.pe/api-talent/api/';
+const apiUrl = apiUrlLambProduccion;
+const codeModule = '16120100';

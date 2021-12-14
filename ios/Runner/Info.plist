@@ -1,89 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleDisplayName</key>
-	<string>Lamb Talent</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>Lamb Talent</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>FDAllFilesDownloadedMessage</key>
-	<string>All files have been downloaded</string>
-	<key>FDMaximumConcurrentTasks</key>
-	<integer>5</integer>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>Para redireccionar a una url https</string>
-		<string>Para redireccionar a una url http</string>
-	</array>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsArbitraryLoads</key>
+		<key>CFBundleDevelopmentRegion</key>
+		<string>$(DEVELOPMENT_LANGUAGE)</string>
+		<key>CFBundleDisplayName</key>
+		<string>Lamb Talent</string>
+		<key>CFBundleExecutable</key>
+		<string>$(EXECUTABLE_NAME)</string>
+		<key>CFBundleIdentifier</key>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6.0</string>
+		<key>CFBundleName</key>
+		<string>Lamb Talent</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+		<key>CFBundleShortVersionString</key>
+		<string>$(FLUTTER_BUILD_NAME)</string>
+		<key>CFBundleSignature</key>
+		<string>????</string>
+		<key>CFBundleVersion</key>
+		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<key>LSRequiresIPhoneOS</key>
 		<true/>
-		<key>NSAllowsArbitraryLoadsInWebContent</key>
-		<true/>
-		<key>NSExceptionDomains</key>
+		<key>NSAppTransportSecurity</key>
 		<dict>
-			<key>api-lamb-school-financial.upeu.edu.pe</key>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+			<key>NSAllowsArbitraryLoadsInWebContent</key>
+			<true/>
+			<key>NSExceptionDomains</key>
 			<dict>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSTemporaryExceptionMinimumTLSVersion</key>
-				<string>TLSv1.1</string>
+				<key>api-lamb-school-financial.upeu.edu.pe</key>
+				<dict>
+					<key>NSIncludesSubdomains</key>
+					<true/>
+					<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+					<true/>
+					<key>NSTemporaryExceptionMinimumTLSVersion</key>
+					<string>TLSv1.1</string>
+				</dict>
 			</dict>
 		</dict>
+		<key>UILaunchStoryboardName</key>
+		<string>LaunchScreen</string>
+		<key>UIMainStoryboardFile</key>
+		<string>Main</string>
+		<key>UISupportedInterfaceOrientations</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>UISupportedInterfaceOrientations~ipad</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationPortraitUpsideDown</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>UIViewControllerBasedStatusBarAppearance</key>
+		<false/>
+		<key>UIStatusBarHidden</key>
+		<false/>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>La ubicación proporcionada será usada para identificar si te encuentras dentro de tu área laboral.</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>La ubicación proporcionada será usada para identificar si te encuentras dentro de tu área laboral.</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>La ubicación proporcionada será usada para identificar si te encuentras dentro de tu área laboral.</string>
+		<key>UIBackgroundModes</key>
+		<array>
+		<string>Buscar la evidencia en la memoria interna</string>
+		<string>Buscar la evidencia de forma remota</string>
+		</array>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>Para buscar la evidencia de tu justificación, permiso o licencia.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Para registrar la evidencia de tu justificación, permiso o licencia.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Para registrar la evidencia de tu justificación, permiso o licencia.</string>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>Para redireccionar a una url https</string>
+			<string>Para redireccionar a una url http</string>
+		</array>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>Para registrar la evidencia de tu justificación, permiso o licencia.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>La ubicación proporcionada será usada para identificar si te encuentras dentro de tu área laboral.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>La ubicación proporcionada será usada para identificar si te encuentras dentro de tu área laboral.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Can I use the mic please?</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Para buscar la evidencia de tu justificación, permiso o licencia.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Para registrar la evidencia de tu justificación, permiso o licencia.</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
-	<key>UIStatusBarHidden</key>
-	<false/>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-</dict>
 </plist>
