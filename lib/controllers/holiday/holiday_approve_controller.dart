@@ -14,7 +14,7 @@ class HolidayApproveController extends GetxController {
   final userPreferences = UserPreferences();
   List<WorkerHolidayModel> listData = [];
   PaginationModel pagination = PaginationModel();
-  String idEstadoVacTrab = '01';
+  String idEstadoVacTrab = '01,03';
   RxInt selectYear = DateTime.now().year.obs;
   RxBool loadingDataInit = false.obs;
   RxInt page = 1.obs;
