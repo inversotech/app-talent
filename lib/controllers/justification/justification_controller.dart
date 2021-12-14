@@ -74,9 +74,9 @@ class JustificationController extends GetxController {
             element.clave.toString().toUpperCase() == 'APPROVE_JUST_DTH')
         .isNotEmpty;
     if (isDth.value && approve) {
-      valueStateJustif.value = '01';
-    } else if (isJefeArea.value && approve) {
       valueStateJustif.value = '01,02';
+    } else if (isJefeArea.value && approve) {
+      valueStateJustif.value = '01';
     }
   }
 
@@ -134,7 +134,7 @@ class JustificationController extends GetxController {
       'id_depto': userPreferences.idDeparment.toString(),
       'id_anho': dateModel.value.year.toString(),
       'id_mes': dateModel.value.month.toString(),
-      'id_estado_justif': valueStateJustif.toString(),
+      'id_estado_justif_in': valueStateJustif.toString(),
       'per_page': perPage.value.toString(),
       'page': page.value.toString(),
       'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty
@@ -181,7 +181,7 @@ class JustificationController extends GetxController {
       'id_depto': userPreferences.idDeparment.toString(),
       'id_anho': dateModel.value.year.toString(),
       'id_mes': dateModel.value.month.toString(),
-      'id_estado_justif': valueStateJustif.toString(),
+      'id_estado_justif_in': valueStateJustif.toString(),
       'per_page': perPage.toString(),
       'page': '1',
       'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty

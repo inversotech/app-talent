@@ -14,7 +14,7 @@ class HolidayApproveController extends GetxController {
   final userPreferences = UserPreferences();
   List<WorkerHolidayModel> listData = [];
   PaginationModel pagination = PaginationModel();
-
+  String idEstadoVacTrab = '01';
   RxInt selectYear = DateTime.now().year.obs;
   RxBool loadingDataInit = false.obs;
   RxInt page = 1.obs;
@@ -57,6 +57,7 @@ class HolidayApproveController extends GetxController {
       'id_entidad': userPreferences.idEntity.toString(),
       'id_depto': userPreferences.idDeparment.toString(),
       'id_anho': selectYear.value.toString(),
+      'estado': idEstadoVacTrab.toString(),
       'per_page': perPage.value.toString(),
       'page': page.value.toString(),
       'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty
@@ -102,6 +103,7 @@ class HolidayApproveController extends GetxController {
       'id_entidad': userPreferences.idEntity.toString(),
       'id_depto': userPreferences.idDeparment.toString(),
       'id_anho': selectYear.value.toString(),
+      'estado': idEstadoVacTrab.toString(),
       'per_page': perPage.value.toString(),
       'page': '1',
       'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty
@@ -138,6 +140,7 @@ class HolidayApproveController extends GetxController {
       'id_entidad': userPreferences.idEntity.toString(),
       'id_depto': userPreferences.idDeparment.toString(),
       'id_anho': selectYear.value.toString(),
+      'estado': idEstadoVacTrab.toString(),
       'per_page': perPage.value.toString(),
       'page': '1',
       'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty
