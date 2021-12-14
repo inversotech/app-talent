@@ -1,48 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:upn_financiero_mobil/src/constants/colors.dart';
-import 'package:upn_financiero_mobil/src/providers/user_preferences/user_preferences.dart';
-import 'package:upn_financiero_mobil/src/constants/routers.dart';
-import 'package:upn_financiero_mobil/src/theme/custom_theme.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:lamb_talent/ui/custom_theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'core/colors.dart';
+import 'core/routers.dart';
+import 'core/routers_names.dart';
+import 'core/user_preferences.dart';
+
 void main() async {
-  /*  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.dumpErrorToConsole(details);
-    if (kReleaseMode)
-      exit(1);
-  }; */
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = new UserPreferences();
+  await GetStorage.init();
+  final prefs = UserPreferences();
   await prefs.initPrefs();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    const Body1Style = TextStyle(
+    const body1Style = TextStyle(
       fontWeight: FontWeight.w300,
       fontSize: 14.0,
       color: ColorsApp.primary,
     );
-    return MaterialApp(
+    return GetMaterialApp(
       showPerformanceOverlay: false,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('en', 'US'),
-        const Locale('es', 'ES'),
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('es', 'ES'),
       ],
       theme: CustomTheme(
-              isDark: false, textTheme: TextTheme(bodyText1: Body1Style))
+              isDark: false, textTheme: const TextTheme(bodyText1: body1Style))
           .themeData,
-      initialRoute: 'check-auth',
-      routes: getRouters(),
+      initialRoute: RoutesName.checkAuth,
+      getPages: getRouters(),
     );
   }
 }

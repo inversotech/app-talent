@@ -44,7 +44,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-/android/app/lambtalent3
-
-# Android Key Properties
-/android/key.properties
