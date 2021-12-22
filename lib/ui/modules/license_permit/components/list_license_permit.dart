@@ -627,7 +627,12 @@ class ListLicensePermit extends StatelessWidget {
                   controlsBuilder: (BuildContext context,
                       {VoidCallback? onStepContinue,
                       VoidCallback? onStepCancel}) {
-                    return Container();
+                    return Row(
+                      children: [
+                        Container(),
+                        Container(),
+                      ],
+                    );
                   },
                   physics: const ScrollPhysics(),
                   steps: steps,
