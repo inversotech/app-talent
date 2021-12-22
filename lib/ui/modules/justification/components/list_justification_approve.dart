@@ -707,13 +707,11 @@ class ListJustificationApprove extends StatelessWidget {
             child: Column(
               children: [
                 Stepper(
-                  controlsBuilder: (BuildContext context,
-                      {VoidCallback? onStepContinue,
-                      VoidCallback? onStepCancel}) {
+                  controlsBuilder: (BuildContext context, ControlsDetails controls) {
                     return Row(
                       children: [
-                        InkWell(onTap: onStepContinue, child: Container()),
-                        InkWell(onTap: onStepCancel, child: Container()),
+                        InkWell(onTap: controls.onStepContinue, child: Container()),
+                        InkWell(onTap: controls.onStepCancel, child: Container()),
                       ],
                     );
                   },
