@@ -712,8 +712,8 @@ class ListJustificationApprove extends StatelessWidget {
                       VoidCallback? onStepCancel}) {
                     return Row(
                       children: [
-                        Container(),
-                        Container(),
+                        InkWell(onTap: onStepContinue, child: Container()),
+                        InkWell(onTap: onStepCancel, child: Container()),
                       ],
                     );
                   },
