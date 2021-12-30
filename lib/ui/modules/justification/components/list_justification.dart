@@ -16,7 +16,7 @@ import 'package:lamb_talent/shared/components/visor_pdf_img.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:intl/intl.dart';
 
-class ListJustificationApprove extends StatelessWidget {
+class ListJustification extends StatelessWidget {
   final List<JustificationGroup> listData;
   final BoxConstraints constraints;
   final void Function(JustificationModel) onPressed;
@@ -24,7 +24,7 @@ class ListJustificationApprove extends StatelessWidget {
   final bool isJefeArea;
   final bool isDth;
   final bool approve;
-  const ListJustificationApprove(
+  const ListJustification(
       {Key? key,
       required this.listData,
       required this.constraints,

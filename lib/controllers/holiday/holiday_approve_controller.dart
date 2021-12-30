@@ -27,9 +27,13 @@ class HolidayApproveController extends GetxController {
 
   @override
   void onReady() {
-    isDth.value = false;
-    listData = [];
-    getListDataInitial();
+    if (userPreferences.isWorkerChild) {
+      //no ase nada
+    } else {
+      isDth.value = false;
+      listData = [];
+      getListDataInitial();
+    }
     super.onReady();
   }
 
@@ -63,7 +67,8 @@ class HolidayApproveController extends GetxController {
       'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty
           ? userPreferences.idNivelAcceso.toString()
           : '',
-      'restringido': 'S'
+      'restringido': 'S',
+      'is_app': 'S'
     };
     final _holidayService = HolidayService();
     pagination = await _holidayService.getWorkersHoliday(params);
@@ -109,7 +114,8 @@ class HolidayApproveController extends GetxController {
       'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty
           ? userPreferences.idNivelAcceso.toString()
           : '',
-      'restringido': 'S'
+      'restringido': 'S',
+      'is_app': 'S'
     };
     loadingIndicator(onlyLoading: true, opacity: false);
 
@@ -146,7 +152,8 @@ class HolidayApproveController extends GetxController {
       'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty
           ? userPreferences.idNivelAcceso.toString()
           : '',
-      'restringido': 'S'
+      'restringido': 'S',
+      'is_app': 'S'
     };
     final _holidayService = HolidayService();
     pagination = await _holidayService.getWorkersHoliday(params);

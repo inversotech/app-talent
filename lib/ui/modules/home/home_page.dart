@@ -18,7 +18,8 @@ class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
   final controller = Get.put(HomeController());
   @override
-  Widget build(BuildContext context) {
+  // ignore: avoid_renaming_method_parameters
+  Widget build(BuildContext buildContext) {
     return GetBuilder<HomeController>(
       init: HomeController(),
       didUpdateWidget: (_, _stateBuilder) {
@@ -42,7 +43,7 @@ class HomePage extends StatelessWidget {
                     return Column(
                       children: [
                         _widgetAssistance(),
-                        _widgetSlider(constraints),
+                        _widgetSlider(constraints,buildContext),
                       ],
                     );
                   }),
@@ -124,7 +125,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _widgetSlider(BoxConstraints constraints) {
+  Widget _widgetSlider(BoxConstraints constraints,buildContext) {
     return controller.loadingData.value == false
         ? CarouselSlider(
             items: [
@@ -241,7 +242,7 @@ class HomePage extends StatelessWidget {
                     controller.goToHoliday();
                   },
                   onPressedRequest: () async {
-                    controller.fnVacation();
+                    controller.fnVacation(buildContext);
                   },
                   onPressedNotify: () {
                     controller.goToHolidayApprove();

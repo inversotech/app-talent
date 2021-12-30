@@ -50,9 +50,18 @@ class HomeController extends GetxController {
   RxString codeModule = '16120101'.obs;
   RxBool isJefeArea = false.obs;
   RxBool isDth = false.obs;
+  bool isListApprove = false;
   @override
   void onReady() {
-    _listAllData();
+    if ((Get.currentRoute == '/JustificationPage' ||
+            Get.currentRoute == '/LicensePermitPage' ||
+            Get.currentRoute == '/HolidayApprovePage') &&
+        isListApprove) {
+      Get.back();
+      _listAllData();
+    } else {
+      _listAllData();
+    }
     super.onReady();
   }
 
@@ -300,36 +309,76 @@ class HomeController extends GetxController {
   }
 
   void goToJustification() {
+    isListApprove = false;
     Get.to(() => const JustificationPage(), transition: Transition.size);
   }
 
-  void goToJustificationApprove() {
-    Get.to(
+  void goToJustificationApprove() async {
+    isListApprove = true;
+    final result = await Get.to(
         () => const JustificationPage(
               approve: true,
               title: 'Aprobar justificaciones',
             ),
         transition: Transition.size);
+    if (result != null) {
+      if (result['change'] == 'true' || result['change'] == true) {
+        loadingIndicator(onlyLoading: true, opacity: false);
+        await _getListDataAndChart();
+        if (Get.isDialogOpen!) {
+          Get.back();
+        }
+        loadingData.value = true;
+        loadingData.value = false;
+      }
+    }
   }
 
   void goToLicensePermit() {
+    isListApprove = false;
     Get.to(() => const LicensePermitPage(), transition: Transition.size);
   }
 
-  void goToLicensePermitApprove() {
-    Get.to(
+  void goToLicensePermitApprove() async {
+    isListApprove = true;
+    final result = await Get.to(
         () => const LicensePermitPage(
               approve: true,
               title: 'Aprobar permisos y licencias',
             ),
         transition: Transition.size);
+    if (result != null) {
+      if (result['change'] == 'true' || result['change'] == true) {
+        loadingIndicator(onlyLoading: true, opacity: false);
+        await _getListData();
+        if (Get.isDialogOpen!) {
+          Get.back();
+        }
+        loadingData.value = true;
+        loadingData.value = false;
+      }
+    }
   }
 
-  void goToHolidayApprove() {
-    Get.to(() => const HolidayApprovePage(), transition: Transition.size);
+  void goToHolidayApprove() async {
+    isListApprove = true;
+    final result = await Get.to(() => const HolidayApprovePage(),
+        transition: Transition.size);
+    if (result != null) {
+      if (result['change'] == 'true' || result['change'] == true) {
+        loadingIndicator(onlyLoading: true, opacity: false);
+        await _getListData();
+        if (Get.isDialogOpen!) {
+          Get.back();
+        }
+        loadingData.value = true;
+        loadingData.value = false;
+      }
+    }
   }
 
   void goToHoliday() {
+    isListApprove = false;
     Get.to(() => const HolidayPage(), transition: Transition.size);
   }
 
@@ -368,8 +417,32 @@ class HomeController extends GetxController {
   }
 
   Future _getListData() async {
+    final Map<String, String> params = {
+      'id_anho': DateTime.now().year.toString(),
+      'id_mes': DateTime.now().month.toString(),
+      'id_entidad': userPreferences.idEntity.toString(),
+      /* 'id_depto': userPreferences.idDeparment.toString(), */
+      'id_trabajador': userPreferences.idWorker.toString(),
+      'incluir_chart_data': '0',
+      'restringido': 'S',
+      'id_acceso_nivel': userPreferences.idNivelAcceso.toString(),
+      'incluir_cantidad_aprobar':
+          (isDth.value || isJefeArea.value) && !userPreferences.isWorkerChild
+              ? '1'
+              : '0',
+      'id_estado_justif_in': isDth.value
+          ? '01,02'
+          : isJefeArea.value
+              ? '01'
+              : '',
+      'id_estado_lica_perc_in': isDth.value
+          ? '01,02'
+          : isJefeArea.value
+              ? '01'
+              : ''
+    };
     final assistanceSummaryService = AssistanceSummaryService();
-    ApiResponse resp = await assistanceSummaryService.getAssistanceSummary({});
+    ApiResponse resp = await assistanceSummaryService.getAssistanceSummary(params);
     if (resp.success) {
       dataCarousel = resp.data;
     } else {
@@ -377,18 +450,17 @@ class HomeController extends GetxController {
     }
   }
 
-  void fnVacation() async {
+  void fnVacation(BuildContext buildContext) async {
     if (dataCarousel != null && dataCarousel!.containsKey('vacacion')) {
       if (dataCarousel!['vacacion']['codigo'].toString() == '01' ||
           dataCarousel!['vacacion']['codigo'].toString() == '02') {
-        HolidayModel vacacion =
-            dataCarousel!['vacacion']['vacacion'] as HolidayModel;
+        HolidayModel vacacion = HolidayModel.fromJson(dataCarousel!['vacacion']['vacacion']);
         String type = vacacion.inihabilitar == '1'
             ? 'S'
             : vacacion.finhabilitar == '1'
                 ? 'R'
                 : '';
-        bool sign = await showModalSSign(vacacion, type);
+        bool sign = await showModalSSign(vacacion, type,buildContext);
         if (sign) {
           loadingIndicator(onlyLoading: true, opacity: false);
           await _getListDataAndChart();

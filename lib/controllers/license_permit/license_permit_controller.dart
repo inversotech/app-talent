@@ -27,6 +27,7 @@ class LicensePermitController extends GetxController {
       .obs;
   List<LicensePermitGroupModel> listData = [];
   List<StateLicensePermitModel> listStateLicenPer = [];
+    bool changeApprove = false;
   RxString valueStateLicenPer = ''.obs;
   RxBool loadingDataInit = false.obs;
   RxInt page = 1.obs;
@@ -38,8 +39,12 @@ class LicensePermitController extends GetxController {
 
   @override
   void onReady() {
-    initValues();
-    getListDataInitial();
+    if (userPreferences.isWorkerChild && approve) {
+      //no ase nada
+    } else {
+      initValues();
+      getListDataInitial();
+    }
     super.onReady();
   }
 
@@ -234,5 +239,9 @@ class LicensePermitController extends GetxController {
     }
     loadingDataInit.value = false;
     loadingDataInit.value = true;
+  }
+   void goToBack() {
+    final result = {'change': changeApprove, 'data': null};
+    Get.back(result: result);
   }
 }

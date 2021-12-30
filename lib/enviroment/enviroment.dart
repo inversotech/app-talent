@@ -6,5 +6,5 @@ const apiUrlLocalUpn =
     'http://app07.adventistas.pe/lamb-api-talent/public/api/';
 const apiUrlProduccionTemp = 'https://api-talent.adventistas.pe/api/';
 const apiUrlLambProduccion = 'https://api-lamb-talent.upeu.edu.pe/api-talent/api/';
-const apiUrl = apiUrlLambProduccion;
+const apiUrl = apiUrlLocalUpn;
 const codeModule = '16120100';

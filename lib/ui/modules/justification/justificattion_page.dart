@@ -5,7 +5,7 @@ import 'package:lamb_talent/controllers/justification/justification_controller.d
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/shared/components/app_screen.dart';
 
-import 'components/list_justification_approve.dart';
+import 'components/list_justification.dart';
 
 class JustificationPage extends StatelessWidget {
   final bool approve;
@@ -41,9 +41,7 @@ class JustificationPage extends StatelessWidget {
                     leading: Transform.translate(
                       offset: const Offset(-15, -8),
                       child: IconButton(
-                        onPressed: () {
-                          Get.back();
-                        },
+                        onPressed: controller.goToBack,
                         iconSize: 40,
                         icon: const Icon(Icons.chevron_left,
                             color: ColorsApp.primary),
@@ -118,7 +116,7 @@ class JustificationPage extends StatelessWidget {
       child: Column(
         children: [
           controller.loadingDataInit.value
-              ? ListJustificationApprove(
+              ? ListJustification(
                   approve: approve,
                   constraints: constraints,
                   listData: controller.listData,
@@ -126,6 +124,7 @@ class JustificationPage extends StatelessWidget {
                     controller.goToForm(arguments);
                   },
                   onChangeList: () {
+                    controller.changeApprove = true;
                     controller.getListData();
                   },
                   isJefeArea: controller.isJefeArea.value,

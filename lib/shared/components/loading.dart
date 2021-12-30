@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/core/colors.dart';
 
 loadingIndicator(
@@ -36,7 +37,8 @@ Widget _loadingIndicator(String text, bool onlyLoading) {
           mainAxisSize: MainAxisSize.min,
           children: [
             _getLoadingIndicator(onlyLoading),
-            !onlyLoading ? _getText(text) : Container()
+            !onlyLoading ? _getText(text) : Container(),
+            const SizedBox(height: 8)
           ]));
 }
 
@@ -44,15 +46,19 @@ Widget _getLoadingIndicator(bool onlyLoading) {
   return Container(
       color: onlyLoading ? Colors.transparent : null,
       child: CircularProgressIndicator(
-          color: onlyLoading ? ColorsApp.primary : null),
-      width: 32,
-      height: 32);
+          strokeWidth: 5.0, color: onlyLoading ? ColorsApp.primary : null),
+      width: 45,
+      height: 45);
 }
 
 Widget _getText(String displayedText) {
-  return Text(
-    displayedText,
-    style: const TextStyle(fontSize: 14),
-    textAlign: TextAlign.center,
+  return SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child: Text(displayedText,
+        style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+            color: ColorsApp.primary),
+        textAlign: TextAlign.center),
   );
 }

@@ -39,9 +39,7 @@ class LicensePermitPage extends StatelessWidget {
                     leading: Transform.translate(
                       offset: const Offset(-15, -8),
                       child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: controller.goToBack,
                         iconSize: 40,
                         icon: const Icon(Icons.chevron_left,
                             color: ColorsApp.primary),
@@ -128,6 +126,7 @@ class LicensePermitPage extends StatelessWidget {
                   constraints: constraints,
                   listData: controller.listData,
                   onChangeList: () {
+                    controller.changeApprove = true;
                     controller.getListData();
                   },
                   isJefeArea: controller.isJefeArea.value,

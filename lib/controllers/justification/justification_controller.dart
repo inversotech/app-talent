@@ -26,6 +26,7 @@ class JustificationController extends GetxController {
           nameMonth: capitalize(DateFormat.MMMM('es').format(DateTime.now())))
       .obs;
   List<JustificationGroup> listData = [];
+  bool changeApprove = false;
   RxString valueStateJustif = ''.obs;
   RxBool loadingDataInit = false.obs;
   RxInt page = 1.obs;
@@ -37,8 +38,12 @@ class JustificationController extends GetxController {
 
   @override
   void onReady() {
-    initValues();
-    getListDataInitial();
+    if (userPreferences.isWorkerChild && approve) {
+      //no ase nada
+    } else {
+      initValues();
+      getListDataInitial();
+    }
     super.onReady();
   }
 
@@ -243,5 +248,10 @@ class JustificationController extends GetxController {
         getListData();
       }
     }
+  }
+
+  void goToBack() {
+    final result = {'change': changeApprove, 'data': null};
+    Get.back(result: result);
   }
 }

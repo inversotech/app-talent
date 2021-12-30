@@ -149,7 +149,7 @@ class ListHolidayApprove extends StatelessWidget {
       BuildContext buildContext, WorkerHolidayModel data, String idAnho) async {
     final Map<String, String> params = {
       'id_trabajador': data.idTrabajador.toString(),
-      'id_anho': idAnho,
+      'id_anho_periodo': idAnho,
       'id_persona': data.idPersona.toString()
     };
     final _holidayService = HolidayService();
