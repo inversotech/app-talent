@@ -15,7 +15,6 @@ class HolidayApproveController extends GetxController {
   List<WorkerHolidayModel> listData = [];
   PaginationModel pagination = PaginationModel();
   String idEstadoVacTrab = '01,03';
-  RxInt selectYear = DateTime.now().year.obs;
   RxBool loadingDataInit = false.obs;
   RxInt page = 1.obs;
   RxInt perPage = 10.obs;
@@ -60,7 +59,6 @@ class HolidayApproveController extends GetxController {
     final Map<String, String> params = {
       'id_entidad': userPreferences.idEntity.toString(),
       'id_depto': userPreferences.idDeparment.toString(),
-      'id_anho': selectYear.value.toString(),
       'estado': idEstadoVacTrab.toString(),
       'per_page': perPage.value.toString(),
       'page': page.value.toString(),
@@ -107,7 +105,6 @@ class HolidayApproveController extends GetxController {
     final Map<String, String> params = {
       'id_entidad': userPreferences.idEntity.toString(),
       'id_depto': userPreferences.idDeparment.toString(),
-      'id_anho': selectYear.value.toString(),
       'estado': idEstadoVacTrab.toString(),
       'per_page': perPage.value.toString(),
       'page': '1',
@@ -145,7 +142,6 @@ class HolidayApproveController extends GetxController {
     final Map<String, String> params = {
       'id_entidad': userPreferences.idEntity.toString(),
       'id_depto': userPreferences.idDeparment.toString(),
-      'id_anho': selectYear.value.toString(),
       'estado': idEstadoVacTrab.toString(),
       'per_page': perPage.value.toString(),
       'page': '1',

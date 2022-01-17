@@ -44,7 +44,7 @@ class HolidayController extends GetxController {
       'id_trabajador': userPreferences.idWorker != null
           ? userPreferences.idWorker.toString()
           : '',
-      'id_anho_periodo': selectYear.value.toString(),
+      'id_anho': selectYear.value.toString(),
       'id_persona': userPreferences.idPerson != null
           ? userPreferences.idPerson.toString()
           : ''
@@ -84,7 +84,10 @@ class HolidayController extends GetxController {
       'id_trabajador': userPreferences.idWorker != null
           ? userPreferences.idWorker.toString()
           : '',
-      'id_anho_periodo': selectYear.value.toString()
+      'id_anho': selectYear.value.toString(),
+      'id_persona': userPreferences.idPerson != null
+          ? userPreferences.idPerson.toString()
+          : ''
     };
     loadingIndicator(onlyLoading: true, opacity: false);
     final _holidayService = HolidayService();

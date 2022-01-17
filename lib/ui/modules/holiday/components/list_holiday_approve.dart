@@ -10,7 +10,6 @@ import 'package:lamb_talent/resources/services/holiday/holiday_service.dart';
 
 class ListHolidayApprove extends StatelessWidget {
   final List<WorkerHolidayModel> listData;
-  final String idAnho;
   final BoxConstraints constraints;
   final bool isDth;
   final Function(BuildContext context, String text, String idEstado,
@@ -19,7 +18,6 @@ class ListHolidayApprove extends StatelessWidget {
       {Key? key,
       required this.listData,
       required this.constraints,
-      required this.idAnho,
       this.isDth = false,
       required this.changeRequestStatus})
       : super(key: key);
@@ -37,7 +35,7 @@ class ListHolidayApprove extends StatelessWidget {
             final data = listData[index];
             return TextButton(
               onPressed: () async {
-                showModalDetail(buildContext, data, idAnho);
+                showModalDetail(buildContext, data);
               },
               child: Container(
                 alignment: Alignment.centerLeft,
@@ -146,10 +144,10 @@ class ListHolidayApprove extends StatelessWidget {
   }
 
   void showModalDetail(
-      BuildContext buildContext, WorkerHolidayModel data, String idAnho) async {
+      BuildContext buildContext, WorkerHolidayModel data) async {
     final Map<String, String> params = {
       'id_trabajador': data.idTrabajador.toString(),
-      'id_anho_periodo': idAnho,
+      'id_periodo_vac_trab': data.idPeriodoVacTrab.toString(),
       'id_persona': data.idPersona.toString()
     };
     final _holidayService = HolidayService();
