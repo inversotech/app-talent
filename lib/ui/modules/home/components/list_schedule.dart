@@ -4,13 +4,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
+import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/models.dart';
 import 'package:lamb_talent/resources/services/justification/justification_service.dart';
 
 void showModalSchedule(DateTime fecha) async {
   JustificationService justificationService = JustificationService();
+  final userPreferences = UserPreferences();
   Map<String, String> params = {
     'fecha': DateFormat('y-MM-dd').format(fecha),
+    'id_trabajador': userPreferences.idWorker.toString(),
+    'id_entidad': userPreferences.idEntity.toString()
+    // 'id_depto': userPreferences.idDeparment.toString()
   };
   final styleTitle = GoogleFonts.montserrat(
       fontWeight: FontWeight.w600, color: ColorsApp.primary, fontSize: 13.0);

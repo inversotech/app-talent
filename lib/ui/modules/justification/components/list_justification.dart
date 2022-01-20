@@ -67,6 +67,7 @@ class ListJustification extends StatelessWidget {
                         onPressed: () {
                           _showModalDetail(
                               buildContext,
+                              item.idTrabajador.toString(),
                               item.idSolicJustif.toString(),
                               item.idEstadoJustif.toString(),
                               approve);
@@ -255,8 +256,8 @@ class ListJustification extends StatelessWidget {
     }
   }
 
-  void _showModalDetail(BuildContext buildContext, String id, String idEstado,
-      bool approve) async {
+  void _showModalDetail(BuildContext buildContext, String idTrabajador,
+      String id, String idEstado, bool approve) async {
     final pref = UserPreferences();
     await showDialog(
         context: buildContext,
@@ -473,7 +474,7 @@ class ListJustification extends StatelessWidget {
                               ),
                               onPressed: () {
                                 _showModalAnularRefuse(
-                                    context, id, '00', 'Anular');
+                                    context, idTrabajador, id, '00', 'Anular');
                               },
                             ),
                           )
@@ -510,8 +511,8 @@ class ListJustification extends StatelessWidget {
                                         fontWeight: FontWeight.bold)),
                               ),
                               onPressed: () {
-                                _showModalAnularRefuse(
-                                    context, id, '04', 'Rechazar');
+                                _showModalAnularRefuse(context, idTrabajador,
+                                    id, '04', 'Rechazar');
                               },
                             ),
                           )
@@ -554,7 +555,8 @@ class ListJustification extends StatelessWidget {
                                         fontWeight: FontWeight.bold)),
                               ),
                               onPressed: () {
-                                _showModalApprove(context, id, idEstado);
+                                _showModalApprove(
+                                    context, idTrabajador, id, idEstado);
                               },
                             ),
                           )
@@ -707,11 +709,14 @@ class ListJustification extends StatelessWidget {
             child: Column(
               children: [
                 Stepper(
-                  controlsBuilder: (BuildContext context, ControlsDetails controls) {
+                  controlsBuilder:
+                      (BuildContext context, ControlsDetails controls) {
                     return Row(
                       children: [
-                        InkWell(onTap: controls.onStepContinue, child: Container()),
-                        InkWell(onTap: controls.onStepCancel, child: Container()),
+                        InkWell(
+                            onTap: controls.onStepContinue, child: Container()),
+                        InkWell(
+                            onTap: controls.onStepCancel, child: Container()),
                       ],
                     );
                   },
@@ -725,8 +730,8 @@ class ListJustification extends StatelessWidget {
         : Container();
   }
 
-  void _showModalApprove(
-      BuildContext context, String id, String idEstado) async {
+  void _showModalApprove(BuildContext context, String idTrabajador, String id,
+      String idEstado) async {
     await showDialog(
         context: context,
         barrierDismissible: false,
@@ -815,6 +820,7 @@ class ListJustification extends StatelessWidget {
                   changeRequestStatus(
                       '',
                       context,
+                      idTrabajador,
                       id,
                       idEstado == '01' && isJefeArea
                           ? '02'
@@ -828,8 +834,8 @@ class ListJustification extends StatelessWidget {
         });
   }
 
-  void _showModalAnularRefuse(
-      BuildContext context, String id, String idEstado, String text) async {
+  void _showModalAnularRefuse(BuildContext context, String idTrabajador,
+      String id, String idEstado, String text) async {
     await showDialog(
         context: context,
         barrierDismissible: false,
@@ -917,6 +923,7 @@ class ListJustification extends StatelessWidget {
                           ? _inputFieldCtrl.value.text
                           : '',
                       context,
+                      idTrabajador,
                       id,
                       idEstado);
                 },
@@ -926,12 +933,11 @@ class ListJustification extends StatelessWidget {
         });
   }
 
-  void changeRequestStatus(
-      String text, BuildContext context, String id, String idEstado) async {
+  void changeRequestStatus(String text, BuildContext context,
+      String idTrabajador, String id, String idEstado) async {
     final justificationService = JustificationService();
-    final userPreferences = UserPreferences();
     Map<String, String> params = {
-      'id_trabajador': userPreferences.idWorker.toString(),
+      'id_trabajador': idTrabajador.toString(),
       'id_solic_justif': id,
       'id_estado_justif': idEstado,
       'comentario': text
