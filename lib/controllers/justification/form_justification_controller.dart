@@ -138,9 +138,6 @@ class FormJustificationController extends GetxController {
       }
       final _markingService = MarkingService();
       PaginationModel pagination = await _markingService.assistMarkings(params);
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
       List<dynamic> jsonList =
           pagination.data == null ? [] : pagination.data as List<dynamic>;
 
@@ -250,6 +247,12 @@ class FormJustificationController extends GetxController {
       scrollController.animateTo(scrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
     });
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
     loadMarking.value = false;
     loadMarking.value = true;
   }

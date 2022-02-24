@@ -4,14 +4,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/core/colors.dart';
 
 loadingIndicator(
-    {bool opacity = true, bool onlyLoading = true, String text = ''}) async {
-  Get.dialog(_showLoadingIndicator(onlyLoading, text),
+    {bool opacity = true,
+    bool onlyLoading = true,
+    String text = '',
+    Color colorLoading = ColorsApp.primary}) async {
+  Get.dialog(_showLoadingIndicator(onlyLoading, text, colorLoading),
       barrierDismissible: false,
       barrierColor:
           onlyLoading && !opacity ? Colors.transparent : Colors.black45);
 }
 
-Widget _showLoadingIndicator(bool onlyLoading, String text) {
+Widget _showLoadingIndicator(
+    bool onlyLoading, String text, Color colorLoading) {
   return WillPopScope(
       onWillPop: () async => true,
       child: Center(
@@ -22,13 +26,13 @@ Widget _showLoadingIndicator(bool onlyLoading, String text) {
               borderRadius: BorderRadius.circular(20)),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
-            child: _loadingIndicator(text, onlyLoading),
+            child: _loadingIndicator(text, onlyLoading, colorLoading),
           ),
         ),
       ));
 }
 
-Widget _loadingIndicator(String text, bool onlyLoading) {
+Widget _loadingIndicator(String text, bool onlyLoading, Color colorLoading) {
   return Container(
       color: onlyLoading ? Colors.transparent : null,
       padding: const EdgeInsets.all(16),
@@ -36,29 +40,27 @@ Widget _loadingIndicator(String text, bool onlyLoading) {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _getLoadingIndicator(onlyLoading),
-            !onlyLoading ? _getText(text) : Container(),
+            _getLoadingIndicator(onlyLoading, colorLoading),
+            !onlyLoading ? _getText(text, colorLoading) : Container(),
             const SizedBox(height: 8)
           ]));
 }
 
-Widget _getLoadingIndicator(bool onlyLoading) {
+Widget _getLoadingIndicator(bool onlyLoading, Color colorLoading) {
   return Container(
       color: onlyLoading ? Colors.transparent : null,
       child: CircularProgressIndicator(
-          strokeWidth: 5.0, color: onlyLoading ? ColorsApp.primary : null),
+          strokeWidth: 5.0, color: onlyLoading ? colorLoading : null),
       width: 45,
       height: 45);
 }
 
-Widget _getText(String displayedText) {
+Widget _getText(String displayedText, Color colorLoading) {
   return SingleChildScrollView(
     scrollDirection: Axis.horizontal,
     child: Text(displayedText,
         style: GoogleFonts.montserrat(
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-            color: ColorsApp.primary),
+            fontWeight: FontWeight.w500, fontSize: 14, color: colorLoading),
         textAlign: TextAlign.center),
   );
 }

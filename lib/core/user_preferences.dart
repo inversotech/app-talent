@@ -223,4 +223,13 @@ class UserPreferences {
   set searchPerson(bool value) {
     _prefs?.setBool('searchPerson', value);
   }
+
+   // GET y SET tokenNotify
+  String get tokenNotify {
+    return _prefs?.getString('tokenNotify') ?? '';
+  }
+
+  set tokenNotify(String value) {
+    _prefs?.setString('tokenNotify', value);
+  }
 }

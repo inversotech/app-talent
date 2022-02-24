@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "78971304073",
+    "project_id": "lamb-talent-messenger",
+    "storage_bucket": "lamb-talent-messenger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78971304073:android:c30f148e7719ec3d076e58",
+        "android_client_info": {
+          "package_name": "pe.adventistas.lambtalent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "78971304073-kbnr4foktmk8v71ljjle1bh2cte3ne6s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7Pxx7TMvaWOsmuIaYyV3--5GqReE_4Dk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "78971304073-kbnr4foktmk8v71ljjle1bh2cte3ne6s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

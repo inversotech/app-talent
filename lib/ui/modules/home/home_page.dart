@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -28,7 +29,7 @@ class HomePage extends StatelessWidget {
       builder: (_) {
         return Obx(() => !controller.loadingData.value
             ? AppScreen(
-                initialIndex: 0,
+                codePage: '16120101',
                 principalPage: true,
                 refreshController: controller.refreshController,
                 scrollController: controller.scrollController,
@@ -43,7 +44,7 @@ class HomePage extends StatelessWidget {
                     return Column(
                       children: [
                         _widgetAssistance(),
-                        _widgetSlider(constraints,buildContext),
+                        _widgetSlider(constraints, buildContext),
                       ],
                     );
                   }),
@@ -125,7 +126,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _widgetSlider(BoxConstraints constraints,buildContext) {
+  Widget _widgetSlider(BoxConstraints constraints, buildContext) {
     return controller.loadingData.value == false
         ? CarouselSlider(
             items: [
@@ -237,6 +238,106 @@ class HomePage extends StatelessWidget {
                                 color: Colors.white),
                           )
                   ],
+                  isDetailWidget: true,
+                  detailWidget: List<Widget>.generate(1, (index) {
+                    return controller.dataCarousel != null &&
+                            controller.dataCarousel!.containsKey('vacacion')
+                        ? controller.dataCarousel!['vacacion']
+                                    .containsKey('codigo') &&
+                                controller.dataCarousel!['vacacion']
+                                    .containsKey('vacacion')
+                            ? controller.dataCarousel!['vacacion']['codigo'] ==
+                                        '04' ||
+                                    controller.dataCarousel!['vacacion']
+                                            ['codigo'] ==
+                                        '03'
+                                ? Builder(builder: (context) {
+                                    String _code = controller
+                                        .dataCarousel!['vacacion']['codigo']
+                                        .toString();
+                                    String _text = _code == '04'
+                                        ? ' para salir de vacaciones'
+                                        : ' para regresar de vacaciones';
+                                    int _dateVacation = DateTime.parse(_code ==
+                                                '04'
+                                            ? controller
+                                                .dataCarousel!['vacacion']
+                                                    ['vacacion']['fecha_ini']
+                                                .toString()
+                                            : controller
+                                                .dataCarousel!['vacacion']
+                                                    ['vacacion']['fecha_fin']
+                                                .toString())
+                                        .millisecondsSinceEpoch;
+                                    return _code == '04' || _code == '03'
+                                        ? CountdownTimer(
+                                            endTime: _dateVacation,
+                                            onEnd: () {},
+                                            widgetBuilder: (context, time) {
+                                              String textTime =
+                                                  time!.days.toString() +
+                                                      'd-' +
+                                                      time.hours
+                                                          .toString()
+                                                          .padLeft(2, '0') +
+                                                      'h-' +
+                                                      time.min
+                                                          .toString()
+                                                          .padLeft(2, '0') +
+                                                      'm-' +
+                                                      time.sec
+                                                          .toString()
+                                                          .padLeft(2, '0') +
+                                                      's';
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 16.0, right: 16.0),
+                                                child: RichText(
+                                                  textAlign: TextAlign.center,
+                                                  text: TextSpan(
+                                                    text: 'Te quedan ',
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                            color: ColorsApp
+                                                                .primary,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontSize: 16.0),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                          text: textTime,
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                                  color: ColorsApp
+                                                                      .primary,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  fontSize:
+                                                                      16.0)),
+                                                      TextSpan(
+                                                          text: ' ' + _text,
+                                                          style: GoogleFonts
+                                                              .montserrat(
+                                                                  color: ColorsApp
+                                                                      .primary,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  fontSize:
+                                                                      16.0)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        : Container();
+                                  })
+                                : Container()
+                            : Container()
+                        : Container();
+                  }),
                   constraints: constraints,
                   onPressedList: () {
                     controller.goToHoliday();
@@ -264,56 +365,7 @@ class HomePage extends StatelessWidget {
 
   Widget _createChartPie() {
     return controller.loadingData.value == false
-        ? /* Container(
-            child: AnimatedCircularChart(
-            size: const Size(300.0, 300.0),
-            initialChartData: <CircularStackEntry>[
-              CircularStackEntry(
-                <CircularSegmentEntry>[
-                  CircularSegmentEntry(
-                    0,
-                    Colors.blue[400]!,
-                    rankKey: 'completed',
-                  ),
-                  CircularSegmentEntry(
-                    40,
-                    Colors.blueGrey[600]!,
-                    rankKey: 'remaining',
-                  ),
-                  CircularSegmentEntry(
-                    60,
-                    Colors.red[600]!,
-                    rankKey: 'remaining',
-                  ),
-                ],
-                rankKey: 'progress',
-              ),
-              CircularStackEntry(
-                <CircularSegmentEntry>[
-                  CircularSegmentEntry(
-                    33.40,
-                    Colors.blue[400]!,
-                    rankKey: 'completed1',
-                  ),
-                  CircularSegmentEntry(
-                    66.60,
-                    Colors.blueGrey[600]!,
-                    rankKey: 'remaining1',
-                  ),
-                ],
-                rankKey: 'progress1',
-              ),
-            ],
-            chartType: CircularChartType.Radial,
-            percentageValues: true,
-            holeLabel: '1/3',
-            labelStyle:  TextStyle(
-              color: Colors.blueGrey[600],
-              fontWeight: FontWeight.bold,
-              fontSize: 24.0,
-            ),
-          ) */
-        SfCircularChart(
+        ? SfCircularChart(
             annotations: <CircularChartAnnotation>[
               CircularChartAnnotation(
                 widget: Column(

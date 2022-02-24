@@ -4,10 +4,11 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:lamb_talent/core/routers_names.dart';
+import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/providers/api.provider.dart';
 import 'package:lamb_talent/resources/services/auth/auth_service.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -38,8 +39,9 @@ class LoginController extends GetxController {
       'no_caduca': 'S'
     };
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-
+    final _userPref = UserPreferences();
     String serial = '';
+    OneSignal.shared.setExternalUserId(_userPref.tokenNotify);
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
       params['uuid'] = androidInfo.androidId; //UUID for Android
@@ -47,6 +49,7 @@ class LoginController extends GetxController {
       params['platform'] = Platform.operatingSystem;
       params['version'] = androidInfo.version.release;
       params['manufacturer'] = androidInfo.manufacturer;
+      params['id_app'] = '5';
     } else if (Platform.isIOS) {
       final iosInfo = await deviceInfoPlugin.iosInfo;
       params['uuid'] = iosInfo.identifierForVendor; //UUID for iOS
@@ -54,12 +57,14 @@ class LoginController extends GetxController {
       params['platform'] = Platform.operatingSystem;
       params['version'] = iosInfo.systemVersion;
       params['manufacturer'] = iosInfo.systemName;
+      params['id_app'] = '6';
     }
     params['serial'] = serial;
     params['isvirtual'] = '';
     params['device_source'] = 'APP_UPN';
+    params['token_notify'] = _userPref.tokenNotify;
     loadingIndicator(onlyLoading: true, opacity: false);
-  final _apiProvider = ApiProvider();
+    final _apiProvider = ApiProvider();
     final resp = await _apiProvider.loginLamb(params);
     _apiProvider.dispose();
 
@@ -69,7 +74,9 @@ class LoginController extends GetxController {
         if (Get.isDialogOpen!) {
           Get.back();
         }
-        Get.offAllNamed(RoutesName.home);
+        if (_userPref.menu!.isNotEmpty) {
+          Get.offAllNamed(_userPref.menu![0].url.toString());
+        }
       }
     }
     if (Get.isDialogOpen!) {

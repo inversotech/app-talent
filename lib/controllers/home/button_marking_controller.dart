@@ -10,6 +10,7 @@ class ButtonMarkingController extends GetxController {
   final int minutosTolerancia;
   final String descripcionMarcacion;
   final String idDescripcionMarcacion;
+  Timer? _timer;
   RxString titleMarking = '¡Felicitaciones!'.obs;
   RxString subTitleMarking = 'Estas a tiempo para marcar tu asistencia de'.obs;
   RxString textMarking = Jiffy().format('hh:mm:ss a').obs;
@@ -23,6 +24,18 @@ class ButtonMarkingController extends GetxController {
   void onReady() {
     _timeInterval();
     super.onReady();
+  }
+
+  @override
+  void onClose() {
+    _timer!.cancel();
+    super.onClose();
+  }
+
+  @override
+  void dispose() {
+    _timer!.cancel();
+    super.dispose();
   }
 
   void _timeInterval() {
@@ -46,7 +59,7 @@ class ButtonMarkingController extends GetxController {
         colorButtonMarking = ColorsApp.danger;
       }
     }
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       textMarking.value = Jiffy().format('hh:mm:ss a');
       DateTime timeMarking = DateTime.parse(hourMarking);
       DateTime timeNow =

@@ -21,7 +21,7 @@ class PaginationModel {
         this.perPage,
         this.prevPageUrl,
         this.to,
-        this.total = 0,
+        this.total = 0
     });
 
     int? currentPage;
@@ -38,17 +38,17 @@ class PaginationModel {
     int total = 0;
 
     factory PaginationModel.fromJson(Map<String, dynamic> json) => PaginationModel(
-        currentPage: json["current_page"],
+        currentPage: json["current_page"] ?? 0,
         data: json["data"] == null ? null : List<dynamic>.from(json["data"].map((x) => x)),
         firstPageUrl: json["first_page_url"],
-        from: json["from"],
-        lastPage: json["last_page"],
+        from: json["from"] ?? 0,
+        lastPage: json["last_page"] ?? 0,
         lastPageUrl: json["last_page_url"],
         nextPageUrl: json["next_page_url"],
         path: json["path"],
-        perPage: json["per_page"],
+        perPage: json["per_page"] ?? 0,
         prevPageUrl: json["prev_page_url"],
-        to: json["to"],
+        to: json["to"] ?? 0,
         total: json["total"] ?? 0,
     );
 
@@ -66,4 +66,5 @@ class PaginationModel {
         "to": to,
         "total": total,
     };
+    
 }

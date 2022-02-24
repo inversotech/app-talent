@@ -24,6 +24,7 @@ class FormJustification extends StatelessWidget {
         init: FormJustificationController(arguments: arguments),
         builder: (controller) {
           return AppScreen(
+              codePage: '16120101',
               scrollController: controller.scrollController,
               enablePullDown: false,
               enablePullUp: false,

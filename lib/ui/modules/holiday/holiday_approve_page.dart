@@ -24,7 +24,7 @@ class HolidayApprovePage extends StatelessWidget {
               enablePullUp: true,
               onRefresh: controller.onRefresh,
               onLoading: controller.onLoading,
-              initialIndex: 0,
+              codePage: '16120101',
               child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                 return Column(

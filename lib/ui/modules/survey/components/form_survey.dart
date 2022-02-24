@@ -20,6 +20,7 @@ class FormSurveyPerson extends StatelessWidget {
         init: FormSurveyController(idPerson: idPerson),
         builder: (controller) {
           return AppScreen(
+            codePage: '16120103',
             scrollController: controller.scrollController,
             enablePullDown: false,
             enablePullUp: false,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lamb_talent/resources/services/notification/push_notification_service.dart';
 import 'package:lamb_talent/ui/custom_theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -14,6 +15,8 @@ void main() async {
   await GetStorage.init();
   final prefs = UserPreferences();
   await prefs.initPrefs();
+  await PushNotificationService.initializeAppFirebase();
+  await PushNotificationService.initializeAppOneSingal();
   runApp(const MyApp());
 }
 

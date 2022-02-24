@@ -11,6 +11,7 @@ class ApiProvider extends GetConnect {
   }
 
   Future<ApiResponse> loginLamb(Map<String, String> params) async {
+    httpClient.timeout = const Duration(seconds: 30);
     try {
       var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
 
@@ -73,7 +74,9 @@ class ApiProvider extends GetConnect {
   Future<ApiResponse> postParams(
       {required String endPoint,
       required Map<String, String> params,
-      bool showMessage = true}) async {
+      bool showMessage = true,
+      duration = const Duration(seconds: 8)}) async {
+    httpClient.timeout = duration;
     try {
       final storage = GetStorage();
       final token = storage.read('tokenLamb');

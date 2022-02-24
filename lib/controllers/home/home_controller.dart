@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/resources/services/auth/auth_service.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_approve_page.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_page.dart';
@@ -9,7 +11,6 @@ import 'package:lamb_talent/ui/modules/justification/components/form_justificati
 import 'package:lamb_talent/ui/modules/justification/justificattion_page.dart';
 import 'package:lamb_talent/ui/modules/license_permit/components/form_license_permit.dart';
 import 'package:lamb_talent/ui/modules/license_permit/license_permit_page.dart';
-import 'package:location/location.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:lamb_talent/core/colors.dart';
@@ -22,14 +23,12 @@ import 'package:lamb_talent/shared/components/loading.dart';
 import 'package:lamb_talent/ui/modules/home/components/sign.dart';
 import 'package:lamb_talent/ui/modules/markings/my_markings_page.dart';
 
-class HomeController extends GetxController {
-  final location = Location();
+class HomeController extends GetxController with WidgetsBindingObserver {
   final userPreferences = UserPreferences();
   final scrollController = ScrollController();
   final controllerCarousel = CarouselController();
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
-  LocationData? currentLocation;
   RxString showButton = '0'.obs;
   RxString textButton = ''.obs;
   RxString codeModality = ''.obs;
@@ -47,10 +46,19 @@ class HomeController extends GetxController {
   List<dynamic> series = [];
   RxBool isMarking = false.obs;
 
+  bool openSetting = false;
+  bool openLocation = false;
+
   RxString codeModule = '16120101'.obs;
   RxBool isJefeArea = false.obs;
   RxBool isDth = false.obs;
   bool isListApprove = false;
+  @override
+  void onInit() {
+    WidgetsBinding.instance!.addObserver(this);
+    super.onInit();
+  }
+
   @override
   void onReady() {
     if ((Get.currentRoute == '/JustificationPage' ||
@@ -69,6 +77,7 @@ class HomeController extends GetxController {
   void dispose() {
     refreshController.dispose();
     scrollController.dispose();
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
@@ -76,16 +85,17 @@ class HomeController extends GetxController {
     loadingIndicator(onlyLoading: true, opacity: false);
     await _getActions();
     await _getAccessNivel();
+    await _getListDataAndChart();
     if (!userPreferences.isWorkerChild) {
       await _verifyButtonAssistance();
+    } else {
+      if (Get.isDialogOpen!) {
+        Get.back();
+      }
+      refreshController.loadNoData();
+      loadingData.value = true;
+      loadingData.value = false;
     }
-    await _getListDataAndChart();
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
-    refreshController.loadNoData();
-    loadingData.value = true;
-    loadingData.value = false;
   }
 
   Future _getActions() async {
@@ -120,26 +130,39 @@ class HomeController extends GetxController {
   }
 
   Future _verifyButtonAssistance() async {
-    // a tener en cuenta el loading button
-    var _serviceEnabled = await location.serviceEnabled();
-    if (_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
+    bool serviceEnabled;
+    LocationPermission permission;
+
+// Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await _getButtonAssitance('0', '0', false, false);
+      return;
     }
 
-    var _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        await _getButtonAssitance('0', '0', true, false);
+        return;
+      }
     }
-    if (_serviceEnabled &&
-        (_permissionGranted == PermissionStatus.granted ||
-            _permissionGranted == PermissionStatus.grantedLimited)) {
-      currentLocation = await location.getLocation();
+
+    if (permission == LocationPermission.deniedForever) {
+      await _getButtonAssitance('0', '0', true, false);
+      return;
     }
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    await _getButtonAssitance(position.longitude.toString(),
+        position.latitude.toString(), true, true);
+  }
+
+  Future _getButtonAssitance(String longitude, String latitude,
+      bool serviceEnabled, bool denied) async {
     Map<String, String> params = {
-      'lng':
-          currentLocation != null ? currentLocation!.longitude.toString() : '0',
-      'lat':
-          currentLocation != null ? currentLocation!.latitude.toString() : '0',
+      'lng': longitude,
+      'lat': latitude,
       'id_entidad': userPreferences.idEntity.toString(),
       'id_depto': userPreferences.idDeparment.toString()
     };
@@ -166,6 +189,17 @@ class HomeController extends GetxController {
       } else {
         isMarking.value = false;
       }
+    }
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
+    refreshController.loadNoData();
+    loadingData.value = true;
+    loadingData.value = false;
+    if (codeModality.value == 'TP' && !serviceEnabled) {
+      await _serviceLocationDisable(refreshShowButton: true);
+    } else if (codeModality.value == 'TP' && !denied) {
+      await _serviceLocationDenied(refreshShowButton: true);
     }
   }
 
@@ -232,26 +266,62 @@ class HomeController extends GetxController {
       uuid = iosInfo.identifierForVendor; //UUID for iOS
     }
 
-    var _serviceEnabled = await location.serviceEnabled();
-    if (_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
+    bool serviceEnabled;
+    LocationPermission permission;
+
+// Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      if (codeModality.value == 'TP') {
+        if (Get.isDialogOpen!) {
+          Get.back();
+        }
+        await _serviceLocationDisable(refreshShowButton: false);
+      } else {
+        continuoMarkingAssistance(uuid, '0', '0');
+      }
+      return;
     }
 
-    var _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        if (codeModality.value == 'TP') {
+          if (Get.isDialogOpen!) {
+            Get.back();
+          }
+          await _serviceLocationDenied(refreshShowButton: false);
+        } else {
+          continuoMarkingAssistance(uuid, '0', '0');
+        }
+        return;
+      }
     }
-    if (_serviceEnabled &&
-        (_permissionGranted == PermissionStatus.granted ||
-            _permissionGranted == PermissionStatus.grantedLimited)) {
-      currentLocation = await location.getLocation();
+
+    if (permission == LocationPermission.deniedForever) {
+      if (codeModality.value == 'TP') {
+        if (Get.isDialogOpen!) {
+          Get.back();
+        }
+        await _serviceLocationDenied(refreshShowButton: false);
+      } else {
+        continuoMarkingAssistance(uuid, '0', '0');
+      }
+      return;
     }
+
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    await continuoMarkingAssistance(
+        uuid, position.longitude.toString(), position.latitude.toString());
+  }
+
+  Future continuoMarkingAssistance(
+      String uuid, String longitude, String latitude) async {
     Map<String, String> params = {
       'uuid': uuid,
-      'lng':
-          currentLocation != null ? currentLocation!.longitude.toString() : '0',
-      'lat':
-          currentLocation != null ? currentLocation!.latitude.toString() : '0',
+      'lng': longitude,
+      'lat': latitude,
       'codigo_modalidad': codeModality.toString(),
       'id_descrip_marcacion': idDescripMarcacion.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
@@ -442,7 +512,8 @@ class HomeController extends GetxController {
               : ''
     };
     final assistanceSummaryService = AssistanceSummaryService();
-    ApiResponse resp = await assistanceSummaryService.getAssistanceSummary(params);
+    ApiResponse resp =
+        await assistanceSummaryService.getAssistanceSummary(params);
     if (resp.success) {
       dataCarousel = resp.data;
     } else {
@@ -454,13 +525,14 @@ class HomeController extends GetxController {
     if (dataCarousel != null && dataCarousel!.containsKey('vacacion')) {
       if (dataCarousel!['vacacion']['codigo'].toString() == '01' ||
           dataCarousel!['vacacion']['codigo'].toString() == '02') {
-        HolidayModel vacacion = HolidayModel.fromJson(dataCarousel!['vacacion']['vacacion']);
+        HolidayModel vacacion =
+            HolidayModel.fromJson(dataCarousel!['vacacion']['vacacion']);
         String type = vacacion.inihabilitar == '1'
             ? 'S'
             : vacacion.finhabilitar == '1'
                 ? 'R'
                 : '';
-        bool sign = await showModalSSign(vacacion, type,buildContext);
+        bool sign = await showModalSSign(vacacion, type, buildContext);
         if (sign) {
           loadingIndicator(onlyLoading: true, opacity: false);
           await _getListDataAndChart();
@@ -472,6 +544,145 @@ class HomeController extends GetxController {
           loadingData.value = false;
         }
       }
+    }
+  }
+
+  Future<bool> _serviceLocationDisable({bool refreshShowButton = false}) async {
+    Get.dialog(AlertDialog(
+      title: Center(
+          child: Text('Alerta!',
+              style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w500, color: ColorsApp.primary))),
+      content: Text(
+          'Usted es un trabajador con la modalidad "Trabajo Presencial" es necesario que active y otorgue el permiso de su ubicación para la asistencia',
+          style: GoogleFonts.montserrat(
+              fontWeight: FontWeight.w400, color: ColorsApp.primary)),
+      actions: [
+        TextButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+                return ColorsApp.info; // Use the component's default.
+              },
+            ), shape: MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+              (Set<MaterialState> states) {
+                return RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        25)); // Use the component's default.
+              },
+            )),
+            onPressed: () {
+              Get.back();
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text('Cancelar',
+                  style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w500, color: ColorsApp.primary)),
+            )),
+        TextButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+                return ColorsApp.primary;
+              },
+            ), shape: MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+              (Set<MaterialState> states) {
+                return RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25));
+              },
+            )),
+            onPressed: () async {
+              Get.back();
+              await Geolocator.openLocationSettings();
+              openLocation = refreshShowButton;
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text('Activar mi ubicación',
+                  style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w500, color: ColorsApp.white)),
+            ))
+      ],
+    ));
+    return true;
+  }
+
+  Future<void> _serviceLocationDenied({bool refreshShowButton = false}) async {
+    Get.dialog(
+        AlertDialog(
+          title: Center(
+              child: Text('Alerta!',
+                  style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w500, color: ColorsApp.primary))),
+          content: Text(
+              'Usted es un trabajador con la modalidad "Trabajo Presencial", es necesario que otorgue el permiso de su ubicación para la asistencia',
+              style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w400, color: ColorsApp.primary)),
+          actions: [
+            TextButton(
+                style: ButtonStyle(backgroundColor:
+                    MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    return ColorsApp.info; // Use the component's default.
+                  },
+                ), shape:
+                    MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                  (Set<MaterialState> states) {
+                    return RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            25)); // Use the component's default.
+                  },
+                )),
+                onPressed: () {
+                  Get.back();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text('Cancelar',
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w500,
+                          color: ColorsApp.primary)),
+                )),
+            TextButton(
+                style: ButtonStyle(backgroundColor:
+                    MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    return ColorsApp.primary;
+                  },
+                ), shape:
+                    MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                  (Set<MaterialState> states) {
+                    return RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25));
+                  },
+                )),
+                onPressed: () async {
+                  Get.back();
+                  await Geolocator.openAppSettings();
+                  openSetting = refreshShowButton;
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text('Otorgar permiso',
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w500, color: ColorsApp.white)),
+                ))
+          ],
+        ),
+        barrierDismissible: false);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && openSetting) {
+      openSetting = false;
+      loadingIndicator(onlyLoading: true, opacity: false);
+      _verifyButtonAssistance();
+    } else if (state == AppLifecycleState.resumed && openLocation) {
+      openLocation = false;
+      loadingIndicator(onlyLoading: true, opacity: false);
+      _verifyButtonAssistance();
     }
   }
 }

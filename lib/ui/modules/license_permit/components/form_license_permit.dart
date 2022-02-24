@@ -23,6 +23,7 @@ class FormLicensePermit extends StatelessWidget {
         init: FormLicensePermitController(arguments: arguments),
         builder: (controller) {
           return AppScreen(
+              codePage: '16120101',
               scrollController: controller.scrollController,
               enablePullDown: false,
               enablePullUp: false,

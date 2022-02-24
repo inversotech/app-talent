@@ -6,9 +6,6 @@ import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/general/menu.dart';
 import 'package:lamb_talent/resources/services/general/worker_service.dart';
 import 'package:lamb_talent/shared/components/search_delegate.dart';
-import 'package:lamb_talent/ui/modules/account_status/account_status_page.dart';
-import 'package:lamb_talent/ui/modules/home/home_page.dart';
-import 'package:lamb_talent/ui/modules/survey/survey_page.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'change_entity.dart';
@@ -16,7 +13,7 @@ import 'custom_footer_loading.dart';
 
 class AppScreen extends StatelessWidget {
   final Widget child;
-  final int initialIndex;
+  final String codePage;
   final RefreshController? refreshController;
   final Function()? onRefresh;
   final Function()? onLoading;
@@ -33,7 +30,8 @@ class AppScreen extends StatelessWidget {
 
   final userPreferences = UserPreferences();
   AppScreen(
-      {this.initialIndex = 0,
+      {
+      required this.codePage,
       required this.child,
       this.refreshController,
       this.onRefresh,
@@ -50,14 +48,18 @@ class AppScreen extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+   int initialIndex=0;
     List<Widget> tabs = [];
     List<Menu> menu = userPreferences.menu ?? [];
-    int index = 0;
+    int index=0;
     for (var element in menu) {
+      if(codePage==element.code){
+        initialIndex=index;
+      }
       tabs.add(Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
-            color: initialIndex == index ? Colors.white : Colors.transparent),
+            color: codePage == element.code ? Colors.white : Colors.transparent),
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Wrap(
@@ -67,7 +69,7 @@ class AppScreen extends StatelessWidget {
                 Image.asset(element.icon.toString(),
                     height: 30.0,
                     fit: BoxFit.cover,
-                    color: initialIndex == index
+                    color: codePage == element.code
                         ? ColorsApp.primary
                         : Colors.white),
                 Text(element.title.toString())
@@ -261,17 +263,13 @@ class AppScreen extends StatelessWidget {
                   labelColor: ColorsApp.primary,
                   onTap: (val) {
                     if (val == 0) {
-                      Get.offAll(() => HomePage(),
-                          transition: Transition.size,
-                          duration: const Duration(seconds: 1));
+                      Get.offAllNamed(userPreferences.menu![0].url.toString());
                     } else if (val == 1) {
-                      Get.offAll(() => AccountStatusPage(),
-                          transition: Transition.size,
-                          duration: const Duration(seconds: 1));
+                      Get.offAllNamed(userPreferences.menu![1].url.toString());
                     } else if (val == 2) {
-                      Get.offAll(() => SurveyPage(),
-                          transition: Transition.size,
-                          duration: const Duration(seconds: 1));
+                      Get.offAllNamed(userPreferences.menu![2].url.toString());
+                    } else if (val == 3) {
+                      Get.offAllNamed(userPreferences.menu![3].url.toString());
                     }
                   },
                   labelPadding: const EdgeInsets.symmetric(vertical: 8.0),

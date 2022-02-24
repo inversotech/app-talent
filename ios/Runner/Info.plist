@@ -72,8 +72,8 @@
 		<string>La ubicación proporcionada será usada para identificar si te encuentras dentro de tu área laboral.</string>
 		<key>UIBackgroundModes</key>
 		<array>
-		<string>Buscar la evidencia en la memoria interna</string>
-		<string>Buscar la evidencia de forma remota</string>
+			<string>Buscar la evidencia en la memoria interna</string>
+			<string>Buscar la evidencia de forma remota</string>
 		</array>
 		<key>NSPhotoLibraryAddUsageDescription</key>
 		<string>Para buscar la evidencia de tu justificación, permiso o licencia.</string>
