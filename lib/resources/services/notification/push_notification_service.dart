@@ -3,11 +3,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/routers_names.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/enviroment/enviroment.dart';
-import 'package:lamb_talent/ui/modules/notification/components/album_detail.dart';
 import 'package:lamb_talent/ui/modules/notification/components/event_detail.dart';
-import 'package:lamb_talent/ui/modules/notification/components/notification_detail.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class PushNotificationService {
@@ -15,7 +14,7 @@ class PushNotificationService {
   static String? token;
 
   static Future _backgroudHandler(RemoteMessage message) async {
-    print('onBackground Handler ${message.data}');
+    // print('onBackground Handler ${message.data}');
   }
 
   static Future _onMessageHandler(RemoteMessage message) async {
@@ -45,11 +44,11 @@ class PushNotificationService {
     //Remove this method to stop OneSignal Debugging
     OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 
-    OneSignal.shared.setAppId(apiKeyOneSignal);
+    OneSignal.shared.setAppId(appIdOneSignal);
 // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
-      print("Accepted permission OneSignal: $accepted");
-    });
+    OneSignal.shared
+        .promptUserForPushNotificationPermission()
+        .then((accepted) {});
     OneSignal.shared.setNotificationWillShowInForegroundHandler(
         (OSNotificationReceivedEvent event) {
       // Will be called whenever a notification is received in foreground
@@ -78,32 +77,50 @@ class PushNotificationService {
             duration: const Duration(seconds: 1));
         break;
       case 'msm_album':
-        Get.to(
-            () => AlbumDetail(id: data['id_origen'].toString(), loadBack: true),
-            transition: Transition.size,
-            duration: const Duration(seconds: 1));
+        Get.offAllNamed(RoutesName.notification, arguments: {
+          'id_origen': data['id_origen'].toString(),
+          'origen': data['origen'].toString()
+        });
         break;
       case 'msm_notificacion':
-        Get.to(
-            () => NotificationDetail(
-                id: data['id_origen'].toString(), loadBack: true),
-            transition: Transition.size,
-            duration: const Duration(seconds: 1));
+        Get.offAllNamed(RoutesName.notification, arguments: {
+          'id_origen': data['id_origen'].toString(),
+          'origen': data['origen'].toString()
+        });
+        break;
+      case 'msm_horario':
+        if (Get.currentRoute == '/HomePage') {
+          Get.forceAppUpdate();
+        } else {
+          Get.offAllNamed(RoutesName.home);
+        }
+        break;
+      case 'msm_vacacion':
+        if (Get.currentRoute == '/HomePage') {
+          Get.forceAppUpdate();
+        } else {
+          Get.offAllNamed(RoutesName.home);
+        }
+        break;
+      case 'msm_birthday':
         break;
       default:
     }
   }
 
   static _openNotification(
-      {IconData icon = Icons.notifications,
-      required String title,
+      {required String title,
       required String message,
       required Map<String, dynamic> data}) async {
     Get.snackbar(title, message,
-        icon: Icon(icon),
+        padding: const EdgeInsets.all(8),
+        icon: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset('assets/icon.png'),
+        ),
         duration: const Duration(seconds: 20),
-        colorText: ColorsApp.white,
-        backgroundColor: ColorsApp.control, onTap: (_) {
+        colorText: ColorsApp.primary,
+        backgroundColor: ColorsApp.white, onTap: (_) {
       _openNotificationDetail(data);
     });
   }

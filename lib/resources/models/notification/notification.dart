@@ -12,6 +12,7 @@ class NotificationModel {
     NotificationModel({
         this.idNotificacion,
         this.idEntidad,
+        this.nombreEntidad,
         this.idDepto,
         this.idInstitucion,
         this.idPersona,
@@ -38,6 +39,7 @@ class NotificationModel {
 
     int? idNotificacion;
     String? idEntidad;
+    String? nombreEntidad;
     String? idDepto;
     String? idInstitucion;
     String? idPersona;
@@ -64,6 +66,7 @@ class NotificationModel {
     factory NotificationModel.fromJson(Map<String, dynamic> json) => NotificationModel(
         idNotificacion: json["id_notificacion"],
         idEntidad: json["id_entidad"],
+        nombreEntidad: json["nombre_entidad"],
         idDepto: json["id_depto"],
         idInstitucion: json["id_institucion"],
         idPersona: json["id_persona"],
@@ -91,6 +94,7 @@ class NotificationModel {
     Map<String, dynamic> toJson() => {
         "id_notificacion": idNotificacion,
         "id_entidad": idEntidad,
+        "nombre_entidad": nombreEntidad,
         "id_depto": idDepto,
         "id_institucion": idInstitucion,
         "id_persona": idPersona,

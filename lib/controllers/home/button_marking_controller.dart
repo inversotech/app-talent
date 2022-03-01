@@ -11,8 +11,7 @@ class ButtonMarkingController extends GetxController {
   final String descripcionMarcacion;
   final String idDescripcionMarcacion;
   Timer? _timer;
-  RxString titleMarking = '¡Felicitaciones!'.obs;
-  RxString subTitleMarking = 'Estas a tiempo para marcar tu asistencia de'.obs;
+  RxString subTitleMarking = 'Ya puedes marcar tu asistencia'.obs;
   RxString textMarking = Jiffy().format('hh:mm:ss a').obs;
   Color colorButtonMarking = ColorsApp.success;
   ButtonMarkingController(
@@ -22,6 +21,13 @@ class ButtonMarkingController extends GetxController {
       required this.idDescripcionMarcacion});
   @override
   void onReady() {
+    if(idDescripcionMarcacion=='02'){
+      subTitleMarking = 'Es hora de almorzar, ya puedes marcar tu salida'.obs;
+    }else if(idDescripcionMarcacion=='03'){
+      subTitleMarking = 'Ya puedes marcar tu retorno'.obs;
+    }else if(idDescripcionMarcacion=='04'){
+      subTitleMarking = 'Es momento de ir a casa, ya puedes marcar tu salida'.obs;
+    }
     _timeInterval();
     super.onReady();
   }
@@ -47,15 +53,23 @@ class ButtonMarkingController extends GetxController {
     RxBool nowAfterMarking = timeNow.isAfter(timeMarking).obs;
     RxBool toleranceAfterNow = timeTolerancia.isAfter(timeNow).obs;
     if (nowAfterMarking.value &&
-        (idDescripcionMarcacion == '01' || idDescripcionMarcacion == '03')) {
+        idDescripcionMarcacion == '01') {
       if (nowAfterMarking.value && toleranceAfterNow.value) {
-        titleMarking = '¡Apresúrate!'.obs;
         subTitleMarking =
-            'Estás en el tiempo de telerancia para marcar tu asistencia de'.obs;
+            'Upps estás un poco tarde, pero aún puedes marcar'.obs;
         colorButtonMarking = ColorsApp.warning;
       } else {
-        titleMarking = '¡Atención!'.obs;
-        subTitleMarking = 'Falta marcar tu asistencia de '.obs;
+        subTitleMarking = 'Upps estás tarde, pero puedes marcar'.obs;
+        colorButtonMarking = ColorsApp.danger;
+      }
+    }
+    if (nowAfterMarking.value && idDescripcionMarcacion == '03') {
+      if (nowAfterMarking.value && toleranceAfterNow.value) {
+        subTitleMarking =
+            'Upps estás un poco tarde, pero aún puedes marcar tu retorno'.obs;
+        colorButtonMarking = ColorsApp.warning;
+      } else {
+        subTitleMarking = 'Upps estás tarde, pero puedes marcar tu retorno'.obs;
         colorButtonMarking = ColorsApp.danger;
       }
     }
@@ -69,16 +83,25 @@ class ButtonMarkingController extends GetxController {
       RxBool nowAfterMarking = timeNow.isAfter(timeMarking).obs;
       RxBool toleranceAfterNow = timeTolerancia.isAfter(timeNow).obs;
       if (nowAfterMarking.value &&
-          (idDescripcionMarcacion == '01' || idDescripcionMarcacion == '03')) {
+          idDescripcionMarcacion == '01') {
         if (nowAfterMarking.value && toleranceAfterNow.value) {
-          titleMarking = '¡Apresúrate!'.obs;
           subTitleMarking =
-              'Estás en el tiempo de telerancia para marcar tu asistencia de'
+              'Upps estás un poco tarde, pero aún puedes marcar'
                   .obs;
           colorButtonMarking = ColorsApp.warning;
         } else {
-          titleMarking = '¡Atención!'.obs;
-          subTitleMarking = 'Falta marcar tu asistencia de '.obs;
+          subTitleMarking = 'Upps estás tarde, pero puedes marcar'.obs;
+          colorButtonMarking = ColorsApp.danger;
+        }
+      }
+      if (nowAfterMarking.value && idDescripcionMarcacion == '03') {
+        if (nowAfterMarking.value && toleranceAfterNow.value) {
+          subTitleMarking =
+              'Upps estás un poco tarde, pero aún puedes marcar tu retorno'
+                  .obs;
+          colorButtonMarking = ColorsApp.warning;
+        } else {
+          subTitleMarking = 'Upps estás tarde, pero puedes marcar tu retorno'.obs;
           colorButtonMarking = ColorsApp.danger;
         }
       }

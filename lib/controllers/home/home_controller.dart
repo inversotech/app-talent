@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_controller.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -89,12 +89,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (!userPreferences.isWorkerChild) {
       await _verifyButtonAssistance();
     } else {
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
       refreshController.loadNoData();
       loadingData.value = true;
       loadingData.value = false;
+      if (Get.isDialogOpen!) {
+        Get.back();
+      }
     }
   }
 
@@ -190,12 +190,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         isMarking.value = false;
       }
     }
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
     refreshController.loadNoData();
     loadingData.value = true;
     loadingData.value = false;
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
     if (codeModality.value == 'TP' && !serviceEnabled) {
       await _serviceLocationDisable(refreshShowButton: true);
     } else if (codeModality.value == 'TP' && !denied) {
@@ -260,10 +260,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     String uuid = '';
     if (GetPlatform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
-      uuid = androidInfo.androidId; //UUID for Android
+      uuid = androidInfo.androidId!; //UUID for Android
     } else if (GetPlatform.isIOS) {
       final iosInfo = await deviceInfoPlugin.iosInfo;
-      uuid = iosInfo.identifierForVendor; //UUID for iOS
+      uuid = iosInfo.identifierForVendor!; //UUID for iOS
     }
 
     bool serviceEnabled;
@@ -311,7 +311,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       return;
     }
 
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     await continuoMarkingAssistance(
         uuid, position.longitude.toString(), position.latitude.toString());
   }
@@ -395,11 +395,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       if (result['change'] == 'true' || result['change'] == true) {
         loadingIndicator(onlyLoading: true, opacity: false);
         await _getListDataAndChart();
+        loadingData.value = true;
+        loadingData.value = false;
         if (Get.isDialogOpen!) {
           Get.back();
         }
-        loadingData.value = true;
-        loadingData.value = false;
       }
     }
   }
@@ -421,11 +421,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       if (result['change'] == 'true' || result['change'] == true) {
         loadingIndicator(onlyLoading: true, opacity: false);
         await _getListData();
+        loadingData.value = true;
+        loadingData.value = false;
         if (Get.isDialogOpen!) {
           Get.back();
         }
-        loadingData.value = true;
-        loadingData.value = false;
       }
     }
   }
@@ -438,11 +438,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       if (result['change'] == 'true' || result['change'] == true) {
         loadingIndicator(onlyLoading: true, opacity: false);
         await _getListData();
+        loadingData.value = true;
+        loadingData.value = false;
         if (Get.isDialogOpen!) {
           Get.back();
         }
-        loadingData.value = true;
-        loadingData.value = false;
       }
     }
   }
@@ -460,11 +460,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       if (result['change'] == 'true' || result['change'] == true) {
         loadingIndicator(onlyLoading: true, opacity: false);
         await _getListData();
+        loadingData.value = true;
+        loadingData.value = false;
         if (Get.isDialogOpen!) {
           Get.back();
         }
-        loadingData.value = true;
-        loadingData.value = false;
       }
     }
   }
@@ -477,11 +477,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       if (result['change'] == 'true' || result['change'] == true) {
         loadingIndicator(onlyLoading: true, opacity: false);
         await _getListData();
+        loadingData.value = true;
+        loadingData.value = false;
         if (Get.isDialogOpen!) {
           Get.back();
         }
-        loadingData.value = true;
-        loadingData.value = false;
       }
     }
   }

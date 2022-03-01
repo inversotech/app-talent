@@ -151,6 +151,25 @@ class ApiProvider extends GetConnect {
     }
   }
 
+  Future<ApiResponse> deleteId(
+      {required String endPoint,
+      required String id,
+      bool showMessage = true}) async {
+    try {
+      final storage = GetStorage();
+      final token = storage.read('tokenLamb');
+      final headers = {'Authorization': token.toString()};
+      final response = await delete(endPoint + '/' + id, headers: headers);
+      return returnResponseOrThrowException(
+          response.statusCode, response.body, showMessage);
+    } catch (e) {
+      print(e);
+      _showDialog('danger',
+          'Ocurrió un error al realizar la petición, intente nuevamente.');
+      return ApiResponse.fromJsonNull();
+    }
+  }
+
   static ApiResponse _parseJsonResponse(response) {
     try {
       final resp = response != null

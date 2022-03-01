@@ -10,6 +10,7 @@ import 'package:lamb_talent/resources/models/general/action.dart';
 import 'package:lamb_talent/resources/models/general/menu.dart';
 import 'package:lamb_talent/resources/models/response.dart';
 import 'package:lamb_talent/resources/providers/api.provider.dart';
+import 'package:lamb_talent/resources/services/notification/notification_service.dart';
 
 class AuthService {
   Future<ApiResponse> userInfo() async {
@@ -59,6 +60,7 @@ class AuthService {
       }
 
       await totalEntitiesDeptos();
+      await getTotalNoLeidos();
     }
     return response;
   }
@@ -114,5 +116,19 @@ class AuthService {
         endPoint: endPoints['comun']['change-entity-depto'], params: params);
     _apiProvider.dispose();
     return response;
+  }
+
+  Future getTotalNoLeidos() async {
+    final prefs = UserPreferences();
+    final Map<String, String> params = {
+      'id_entidad': prefs.idEntity != null ? prefs.idEntity.toString() : '',
+      'id_persona': prefs.idPerson != null ? prefs.idPerson.toString() : '',
+      'code_fcm_app': codeFcmApp.toString(),
+    };
+    final _notificationService = NotificationService();
+    final resp = await _notificationService.totalNoLeidos(params);
+    if (resp.success) {
+      prefs.cantNotify = int.parse(resp.data.toString());
+    }
   }
 }

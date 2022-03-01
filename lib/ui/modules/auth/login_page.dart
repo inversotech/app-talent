@@ -10,17 +10,16 @@ class LoginPage extends StatelessWidget {
   final controller = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [ColorsApp.primary, ColorsApp.primaryVariant],
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [ColorsApp.primary, ColorsApp.primaryVariant],
+          ),
         ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Container(
+        child: Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
@@ -75,7 +74,7 @@ class LoginPage extends StatelessWidget {
                           color: Colors.white,
                           border: Border.all(color: Colors.white),
                           borderRadius: BorderRadius.circular(15.0)),
-                      padding:  const EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.all(12.0),
                       child: Semantics(
                         child: TextFormField(
                           controller: controller.username,

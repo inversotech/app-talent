@@ -265,6 +265,7 @@ class NotificationDetail extends StatelessWidget {
   }
 }
 
+// ignore: unused_element
 class _ControlsOverlay extends StatelessWidget {
   const _ControlsOverlay({Key? key, required this.controller})
       : super(key: key);

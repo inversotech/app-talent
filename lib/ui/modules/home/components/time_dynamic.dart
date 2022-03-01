@@ -34,39 +34,33 @@ class MarkingWidget extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(25)),
               ),
               color: ColorsApp.info,
-              child: Column(
-                children: [
-                  Text(controller.titleMarking.value,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    Text(
+                      controller.subTitleMarking.value,
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary)),
-                  const SizedBox(height: 4.0),
-                  Text(
-                    controller.subTitleMarking.value +
-                        ' ' +
-                        (descripcionMarcacion.isNotEmpty
-                            ? descripcionMarcacion.toLowerCase()
-                            : ''),
-                    style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w400, color: ColorsApp.primary),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 4.0),
-                  Text(controller.textMarking.value.toLowerCase(),
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w600,
-                          color: controller.colorButtonMarking,
-                          fontSize: 22.0)),
-                  _buttonAssistanceMarking(),
-                ],
+                          color: ColorsApp.primary,
+                          fontSize: 16.0),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 2.0),
+                    Text(controller.textMarking.value.toLowerCase(),
+                        style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w600,
+                            color: controller.colorButtonMarking,
+                            fontSize: 22.0)),
+                    _buttonAssistanceMarking(),
+                  ],
+                ),
               )))),
     );
   }
 
-  Container _buttonAssistanceMarking() {
-    return Container(
-        padding: const EdgeInsets.all(12.0),
-        child: TextButton(
+  Widget _buttonAssistanceMarking() {
+    return TextButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith<Color>(
               (Set<MaterialState> states) {
@@ -86,7 +80,7 @@ class MarkingWidget extends StatelessWidget {
             children: [
               const Icon(Icons.check_box_outlined, color: Colors.white),
               Text(
-                'marcar asistencia',
+                descripcionMarcacion.toLowerCase(),
                 style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w400, color: Colors.white),
               ),
@@ -95,6 +89,6 @@ class MarkingWidget extends StatelessWidget {
           onPressed: () {
             onPressed();
           },
-        ));
+        );
   }
 }

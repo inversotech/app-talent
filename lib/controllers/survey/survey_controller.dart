@@ -214,9 +214,6 @@ class SurveyController extends GetxController {
       refreshController.loadComplete();
     }
     page.value = 2;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
     final listToday = listData.where((element) =>
         element.fecha!.day == DateTime.now().day &&
         element.fecha!.month == DateTime.now().month &&
@@ -226,6 +223,9 @@ class SurveyController extends GetxController {
     }
     loadingDataInit.value = false;
     loadingDataInit.value = true;
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
   }
 
   void selectDate() async {
@@ -270,11 +270,11 @@ class SurveyController extends GetxController {
       refreshController.loadComplete();
     }
     page.value = 2;
+    loadingDataInit.value = false;
+    loadingDataInit.value = true;
     if (Get.isDialogOpen!) {
       Get.back();
     }
-    loadingDataInit.value = false;
-    loadingDataInit.value = true;
   }
 
   void goToDetail(Survey survey) {

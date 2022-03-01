@@ -23,8 +23,21 @@ class EventDetailController extends GetxController {
   RxBool loadingData = true.obs;
   @override
   void onReady() {
+    if (event.idEvento == null) {
+      loadingIndicator(
+          onlyLoading: true, opacity: false, colorLoading: ColorsApp.white);
+    } else {
+      loadingIndicator(onlyLoading: true, opacity: false);
+    }
     _listAllData();
     super.onReady();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    refreshController.dispose();
+    super.dispose();
   }
 
   void onRefresh() async {
@@ -37,14 +50,13 @@ class EventDetailController extends GetxController {
   }
 
   void _listAllData() async {
-    loadingIndicator(onlyLoading: true, opacity: false);
     await _getEvent();
     await _listGroups();
     refreshController.loadNoData();
+    loadingData.value = false;
     if (Get.isDialogOpen!) {
       Get.back();
     }
-    loadingData.value = false;
   }
 
   Future _getEvent() async {

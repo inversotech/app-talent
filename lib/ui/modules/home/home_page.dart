@@ -37,18 +37,18 @@ class HomePage extends StatelessWidget {
                 enablePullUp: false,
                 showTabs: true,
                 onRefresh: controller.onRefresh,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  child: LayoutBuilder(builder:
-                      (BuildContext context, BoxConstraints constraints) {
-                    return Column(
-                      children: [
-                        _widgetAssistance(),
-                        _widgetSlider(constraints, buildContext),
-                      ],
-                    );
-                  }),
-                ),
+                leftBeforeBackground: 0,
+                rightBeforeBackground: 0,
+                bottomBeforeBackground: 0,
+                child: LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints constraints) {
+                  return Column(
+                    children: [
+                      _widgetAssistance(),
+                      _widgetSlider(constraints, buildContext),
+                    ],
+                  );
+                }),
               )
             : Container());
       },

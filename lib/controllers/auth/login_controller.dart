@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -44,19 +44,19 @@ class LoginController extends GetxController {
     OneSignal.shared.setExternalUserId(_userPref.tokenNotify);
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
-      params['uuid'] = androidInfo.androidId; //UUID for Android
-      params['model'] = androidInfo.model;
+      params['uuid'] = androidInfo.androidId!; //UUID for Android
+      params['model'] = androidInfo.model!;
       params['platform'] = Platform.operatingSystem;
-      params['version'] = androidInfo.version.release;
-      params['manufacturer'] = androidInfo.manufacturer;
+      params['version'] = androidInfo.version.release!;
+      params['manufacturer'] = androidInfo.manufacturer!;
       params['id_app'] = '5';
     } else if (Platform.isIOS) {
       final iosInfo = await deviceInfoPlugin.iosInfo;
-      params['uuid'] = iosInfo.identifierForVendor; //UUID for iOS
-      params['model'] = iosInfo.model;
+      params['uuid'] = iosInfo.identifierForVendor!; //UUID for iOS
+      params['model'] = iosInfo.model!;
       params['platform'] = Platform.operatingSystem;
-      params['version'] = iosInfo.systemVersion;
-      params['manufacturer'] = iosInfo.systemName;
+      params['version'] = iosInfo.systemVersion!;
+      params['manufacturer'] = iosInfo.systemName!;
       params['id_app'] = '6';
     }
     params['serial'] = serial;

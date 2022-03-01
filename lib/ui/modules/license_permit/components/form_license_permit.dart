@@ -130,95 +130,96 @@ class FormLicensePermit extends StatelessWidget {
                       )
                     : Container());
               }),
-              bottomSheet: Container(
-                color: ColorsApp.primaryVariant,
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: controller.formData.value.idLicenciaPermiso != null &&
-                        controller.formData.value.idEstadoLicaPer == '01'
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                              onPressed: () {},
-                              style: ButtonStyle(
-                                alignment: Alignment.center,
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    return ColorsApp
-                                        .danger; // Use the component's default.
-                                  },
-                                ),
-                                shape: MaterialStateProperty.resolveWith<
-                                    RoundedRectangleBorder>(
-                                  (Set<MaterialState> states) {
-                                    return RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            25)); // Use the component's default.
-                                  },
-                                ),
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Row(
-                                  children: const [
-                                    Icon(Icons.save_alt_outlined,
-                                        color: Colors.white),
-                                    Text(
-                                      'anular',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ))
-                        ],
-                      )
-                    : controller.formData.value.idLicenciaPermiso == null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    controller.submit();
-                                  },
-                                  style: ButtonStyle(
-                                    alignment: Alignment.center,
-                                    backgroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                      (Set<MaterialState> states) {
-                                        return ColorsApp
-                                            .success; // Use the component's default.
-                                      },
-                                    ),
-                                    shape: MaterialStateProperty.resolveWith<
-                                        RoundedRectangleBorder>(
-                                      (Set<MaterialState> states) {
-                                        return RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                25)); // Use the component's default.
-                                      },
-                                    ),
+              floatingActionButton: Container(
+                padding: const EdgeInsets.only(left: 32.0),
+                child: SingleChildScrollView(
+                  child: controller.formData.value.idLicenciaPermiso != null &&
+                          controller.formData.value.idEstadoLicaPer == '01'
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+                                  alignment: Alignment.center,
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      return ColorsApp
+                                          .danger; // Use the component's default.
+                                    },
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: Row(
-                                      children: [
-                                        Image.asset('assets/icons/save.png',
-                                            height: 30,
-                                            width: 30,
-                                            color: Colors.white),
-                                        const Text(
-                                          'enviar solicitud',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
+                                  shape: MaterialStateProperty.resolveWith<
+                                      RoundedRectangleBorder>(
+                                    (Set<MaterialState> states) {
+                                      return RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              25)); // Use the component's default.
+                                    },
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Row(
+                                    children: const [
+                                      Icon(Icons.save_alt_outlined,
+                                          color: Colors.white),
+                                      Text(
+                                        'anular',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                          ],
+                        )
+                      : controller.formData.value.idLicenciaPermiso == null
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      controller.submit();
+                                    },
+                                    style: ButtonStyle(
+                                      alignment: Alignment.center,
+                                      backgroundColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                          return ColorsApp
+                                              .success; // Use the component's default.
+                                        },
+                                      ),
+                                      shape: MaterialStateProperty.resolveWith<
+                                          RoundedRectangleBorder>(
+                                        (Set<MaterialState> states) {
+                                          return RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(
+                                                  25)); // Use the component's default.
+                                        },
+                                      ),
                                     ),
-                                  ))
-                            ],
-                          )
-                        : Container(),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: Row(
+                                        children: [
+                                          Image.asset('assets/icons/save.png',
+                                              height: 30,
+                                              width: 30,
+                                              color: Colors.white),
+                                          const Text(
+                                            'enviar solicitud',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ))
+                              ],
+                            )
+                          : Container(),
+                ),
               ));
         });
   }
@@ -380,9 +381,9 @@ class FormLicensePermit extends StatelessWidget {
 
             controller.showCodeCITT.value = false;
             controller.showCodeNitt.value = false;
-            
-          controller.loadingData.value = true;
-          controller.loadingData.value = false;
+
+            controller.loadingData.value = true;
+            controller.loadingData.value = false;
           }
         },
         onSaved: (val) =>
@@ -529,7 +530,7 @@ class FormLicensePermit extends StatelessWidget {
               }
             }
           }
-          
+
           controller.loadingData.value = true;
           controller.loadingData.value = false;
         },
@@ -626,7 +627,7 @@ class FormLicensePermit extends StatelessWidget {
               controller.validLicensePermit();
             }
           }
-          
+
           controller.loadingData.value = true;
           controller.loadingData.value = false;
         },
@@ -693,7 +694,7 @@ class FormLicensePermit extends StatelessWidget {
             controller.formData.value.horas = DateFormat('HH:mm:ss')
                 .format(format.parse(differenceHour.toString()));
           }
-          
+
           controller.loadingData.value = true;
           controller.loadingData.value = false;
         },
@@ -760,7 +761,7 @@ class FormLicensePermit extends StatelessWidget {
             controller.formData.value.horas = DateFormat('HH:mm:ss')
                 .format(format.parse(differenceHour.toString()));
           }
-          
+
           controller.loadingData.value = true;
           controller.loadingData.value = false;
           //controller.formData.value.horas =
@@ -871,7 +872,7 @@ class FormLicensePermit extends StatelessWidget {
               controller.showCodeNitt.value = true;
             }
           }
-          
+
           controller.loadingData.value = true;
           controller.loadingData.value = false;
         },

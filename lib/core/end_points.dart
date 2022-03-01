@@ -109,7 +109,7 @@ final Map endPoints = {
     'pro-holiday': apiUrl + 'benefits/holidays/pro-holidays'
   },
   'messenger': {
-    'notification-event-album': apiUrlMessenger + 'report/notification-event-album',
+    'notification-event-album': apiUrlMessenger + 'report/show-notification-event-album',
     'notifications': apiUrlMessenger + 'notifications/notifications',
     'events': apiUrlMessenger + 'events/events',
     'albums': apiUrlMessenger + 'albums/albums',
@@ -117,5 +117,6 @@ final Map endPoints = {
     'relation-person': apiUrlMessenger + 'groups/relacion-personas',
     'like': apiUrlMessenger + 'red/likes',
     'comment': apiUrlMessenger + 'red/comentarios',
+    'total-no-leidos': apiUrlMessenger + 'report/total-no-leidos',
   }
 };

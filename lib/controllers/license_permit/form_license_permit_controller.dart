@@ -101,11 +101,11 @@ class FormLicensePermitController extends GetxController {
 
     final _licensePermitService = LicensePermitService();
     listTypeLicensePermit = await _licensePermitService.getTypeLicensePermit();
+    loadingData.value = true;
+    loadingData.value = false;
     if (Get.isDialogOpen!) {
       Get.back();
     }
-    loadingData.value = true;
-    loadingData.value = false;
   }
 
   void cleanConcept() {
@@ -195,12 +195,12 @@ class FormLicensePermitController extends GetxController {
     listTypeConceptLicensePermit =
         await _licensePermitService.getTypeConceptLicensePermit(params);
 
+    loadingData.value = true;
+    loadingData.value = false;
     if (Get.isDialogOpen!) {
       Get.back();
     }
 
-    loadingData.value = true;
-    loadingData.value = false;
   }
 
   void cleanTypeInstitution() {
@@ -224,12 +224,13 @@ class FormLicensePermitController extends GetxController {
     loadingIndicator(onlyLoading: true, opacity: false);
     final _licensePermitService = LicensePermitService();
     listTypeInstitution = await _licensePermitService.getTypeInstitution();
+ 
+    loadingData.value = true;
+    loadingData.value = false;   
     if (Get.isDialogOpen!) {
       Get.back();
     }
 
-    loadingData.value = true;
-    loadingData.value = false;
   }
 
   void validLicensePermit() async {
@@ -278,12 +279,13 @@ class FormLicensePermitController extends GetxController {
           ? int.parse(listValidLicensePermit[0].maxDiasAnho.toString())
           : 0;
     }
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+   
 
     loadingData.value = true;
     loadingData.value = false;
+     if (Get.isDialogOpen!) {
+      Get.back();
+    }
   }
 
   void submit() async {

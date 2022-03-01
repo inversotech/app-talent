@@ -8,7 +8,6 @@ import 'package:lamb_talent/resources/services/account_status/account_status_ser
 
 import 'detail.dart';
 
-
 class DepositedSalary extends StatelessWidget {
   final dynamic data;
   final Function(bool) onChange;
@@ -56,8 +55,8 @@ class DepositedSalary extends StatelessWidget {
   }
 
   void _getItemsIncome(BuildContext buildContext) async {
-    final _accountStatusService =  AccountStatusService();
-    final _userPreferences =  UserPreferences();
+    final _accountStatusService = AccountStatusService();
+    final _userPreferences = UserPreferences();
     final Map<String, String> params = {
       'id_entidad': _userPreferences.idEntity.toString(),
       'id_anho': dateModel.year.toString(),
@@ -131,10 +130,10 @@ class DepositedSalary extends StatelessWidget {
               contentPadding: const EdgeInsets.all(0.0),
               titlePadding: EdgeInsets.zero,
               scrollable: false,
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                child:  Column(
+              content: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                  child: Column(
                     children: [
                       Container(
                         alignment: Alignment.centerRight,
@@ -152,7 +151,7 @@ class DepositedSalary extends StatelessWidget {
 }
 
 class CreateCardItem extends StatelessWidget {
-  final format = NumberFormat.currency(symbol: 'S/. ');
+  final format = NumberFormat.currency(symbol: 'S/. ', locale: 'en_US');
   final String title;
   final String amount;
   final Color color;
@@ -236,7 +235,7 @@ class CreateCardItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset('assets/icons/search.png',
-                  height: 30, width: 30, color: Colors.white),
+                          height: 30, width: 30, color: Colors.white),
                       Text('Ver detalle',
                           style: GoogleFonts.montserrat(
                               fontWeight: FontWeight.w500,

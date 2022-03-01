@@ -180,6 +180,8 @@ class AccountStatusController extends GetxController {
         break;
       default:
     }
+    loadingData.value = true;
+    loadingData.value = false;
     loadingDetail.value = true;
     loadingDetail.value = false;
   }

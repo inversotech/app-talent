@@ -25,361 +25,365 @@ class FormSurveyPerson extends StatelessWidget {
             enablePullDown: false,
             enablePullUp: false,
             showTitleHeader: false,
+            paddingTop: 4,
+            paddingLeft: 4,
+            paddingRight: 4,
             child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
               return Obx(() => !controller.loadingData.value
-                  ? Form(
-                      key: controller.formKey,
-                      child: controller.survey.idEncuesta != null &&
-                              !controller.saveData.value
-                          ? Column(
-                              children: [
-                                AppBar(
-                                    centerTitle: true,
-                                    leading: Transform.translate(
-                                      offset: const Offset(-15, -4),
-                                      child: IconButton(
-                                        onPressed: () {
-                                          controller.goToBack(false);
-                                        },
-                                        iconSize: 40,
-                                        icon: const Icon(Icons.chevron_left,
-                                            color: ColorsApp.primary,
-                                            size: 30.0),
+                  ?  Form(
+                        key: controller.formKey,
+                        child: controller.survey.idEncuesta != null &&
+                                !controller.saveData.value
+                            ? Column(
+                                children: [
+                                  AppBar(
+                                      centerTitle: true,
+                                      leading: Transform.translate(
+                                        offset: const Offset(-15, -4),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            controller.goToBack(false);
+                                          },
+                                          iconSize: 40,
+                                          icon: const Icon(Icons.chevron_left,
+                                              color: ColorsApp.primary,
+                                              size: 30.0),
+                                        ),
                                       ),
-                                    ),
-                                    elevation: 0,
-                                    backgroundColor: Colors.white,
-                                    toolbarHeight: 40.0,
-                                    title: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                          controller.survey.nombre.toString(),
-                                          style: GoogleFonts.montserrat(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.w700,
-                                              color: ColorsApp.primary),
-                                        ))),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      controller.survey.terminos != null
-                                          ? Text(
-                                              controller.survey.terminos
-                                                  .toString(),
+                                      elevation: 0,
+                                      backgroundColor: Colors.white,
+                                      toolbarHeight: 40.0,
+                                      title: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: Text(
+                                            controller.survey.nombre.toString(),
+                                            style: GoogleFonts.montserrat(
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.w700,
+                                                color: ColorsApp.primary),
+                                          ))),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        controller.survey.terminos != null
+                                            ? Text(
+                                                controller.survey.terminos
+                                                    .toString(),
+                                                style: GoogleFonts.montserrat(
+                                                    fontSize: 11.0,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.red))
+                                            : Container(),
+                                        controller.survey.descripcionLink != null
+                                            ? const SizedBox(height: 8.0)
+                                            : Container(),
+                                        RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                              text: controller
+                                                      .survey.descripcionLink
+                                                      .toString() +
+                                                  ' ',
                                               style: GoogleFonts.montserrat(
                                                   fontSize: 11.0,
                                                   fontWeight: FontWeight.w400,
-                                                  color: Colors.red))
-                                          : Container(),
-                                      controller.survey.descripcionLink != null
-                                          ? const SizedBox(height: 8.0)
-                                          : Container(),
-                                      RichText(
-                                        text: TextSpan(children: [
-                                          TextSpan(
-                                            text: controller
-                                                    .survey.descripcionLink
-                                                    .toString() +
-                                                ' ',
-                                            style: GoogleFonts.montserrat(
-                                                fontSize: 11.0,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.black),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                (controller.survey.nombreLink !=
-                                                            null
-                                                        ? controller
-                                                            .survey.nombreLink
-                                                            .toString()
-                                                        : '') +
-                                                    ' ',
-                                            style: const TextStyle(
-                                              color: Colors.blue,
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 11,
+                                                  color: Colors.black),
                                             ),
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () async {
-                                                if (await canLaunch(controller
-                                                    .survey.link
-                                                    .toString())) {
-                                                  await launch(controller
+                                            TextSpan(
+                                              text:
+                                                  (controller.survey.nombreLink !=
+                                                              null
+                                                          ? controller
+                                                              .survey.nombreLink
+                                                              .toString()
+                                                          : '') +
+                                                      ' ',
+                                              style: const TextStyle(
+                                                color: Colors.blue,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 11,
+                                              ),
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () async {
+                                                  if (await canLaunch(controller
                                                       .survey.link
-                                                      .toString());
-                                                } else {}
-                                              },
-                                          ),
-                                          TextSpan(
-                                            text: ' y ',
-                                            style: GoogleFonts.montserrat(
-                                                fontSize: 11.0,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.black),
-                                          ),
-                                          TextSpan(
-                                            text: (controller.survey
-                                                            .nombreLinkOpcional !=
-                                                        null
-                                                    ? controller.survey
-                                                        .nombreLinkOpcional
-                                                        .toString()
-                                                    : '') +
-                                                ' ',
-                                            style: const TextStyle(
-                                              color: Colors.blue,
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 11,
+                                                      .toString())) {
+                                                    await launch(controller
+                                                        .survey.link
+                                                        .toString());
+                                                  } else {}
+                                                },
                                             ),
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () async {
-                                                if (await canLaunch(controller
-                                                    .survey.linkOpcional
-                                                    .toString())) {
-                                                  await launch(controller
+                                            TextSpan(
+                                              text: ' y ',
+                                              style: GoogleFonts.montserrat(
+                                                  fontSize: 11.0,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.black),
+                                            ),
+                                            TextSpan(
+                                              text: (controller.survey
+                                                              .nombreLinkOpcional !=
+                                                          null
+                                                      ? controller.survey
+                                                          .nombreLinkOpcional
+                                                          .toString()
+                                                      : '') +
+                                                  ' ',
+                                              style: const TextStyle(
+                                                color: Colors.blue,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 11,
+                                              ),
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () async {
+                                                  if (await canLaunch(controller
                                                       .survey.linkOpcional
-                                                      .toString());
-                                                } else {}
+                                                      .toString())) {
+                                                    await launch(controller
+                                                        .survey.linkOpcional
+                                                        .toString());
+                                                  } else {}
+                                                },
+                                            ),
+                                          ]),
+                                        ),
+                                        const SizedBox(height: 12.0),
+                                        controller.surveyItems.isNotEmpty
+                                            ? ListView.builder(
+                                                scrollDirection: Axis.vertical,
+                                                shrinkWrap: true,
+                                                physics: const ScrollPhysics(),
+                                                primary: false,
+                                                itemCount:
+                                                    controller.surveyItems.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  final surveyItem = controller
+                                                      .surveyItems[index];
+                                                  return Card(
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5), // if you need this
+                                                      side: BorderSide(
+                                                        color: ColorsApp.primary
+                                                            .withOpacity(0.2),
+                                                        width: 1,
+                                                      ),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                            width:
+                                                                double.infinity,
+                                                            color:
+                                                                ColorsApp.primary,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                      surveyItem
+                                                                          .titulo
+                                                                          .toString(),
+                                                                      style: GoogleFonts.montserrat(
+                                                                          fontWeight:
+                                                                              FontWeight
+                                                                                  .w500,
+                                                                          color: Colors
+                                                                              .white)),
+                                                                  surveyItem.descripcion !=
+                                                                          null
+                                                                      ? Text(
+                                                                          '(' +
+                                                                              surveyItem.descripcion
+                                                                                  .toString() +
+                                                                              ')',
+                                                                          style: GoogleFonts.montserrat(
+                                                                              fontSize:
+                                                                                  12.0,
+                                                                              fontWeight:
+                                                                                  FontWeight.w400,
+                                                                              color: Colors.white))
+                                                                      : Container(),
+                                                                ],
+                                                              ),
+                                                            )),
+                                                        surveyItem.tipoComponente ==
+                                                                'INPUT'
+                                                            ? Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        8.0),
+                                                                child: _createInputItem(
+                                                                    surveyItem,
+                                                                    surveyItem,
+                                                                    1,
+                                                                    controller))
+                                                            : surveyItem.tipoItemCodigo ==
+                                                                    'SE'
+                                                                ? Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                        horizontal:
+                                                                            8.0),
+                                                                    child: _widgetSurveyItems(
+                                                                        surveyItem,
+                                                                        1,
+                                                                        controller))
+                                                                : Container(),
+                                                      ],
+                                                    ),
+                                                  );
+                                                })
+                                            : Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Center(
+                                                  child: Text(
+                                                      'No se encontró información para mostrar.',
+                                                      style:
+                                                          GoogleFonts.montserrat(
+                                                              fontWeight:
+                                                                  FontWeight.w400,
+                                                              color: ColorsApp
+                                                                  .primary)),
+                                                ),
+                                              )
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                      width: 200,
+                                      alignment: Alignment.center,
+                                      child: TextButton(
+                                          style: ButtonStyle(
+                                            alignment: Alignment.center,
+                                            backgroundColor: MaterialStateProperty
+                                                .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                                return ColorsApp
+                                                    .success; // Use the component's default.
                                               },
-                                          ),
-                                        ]),
-                                      ),
-                                      const SizedBox(height: 12.0),
-                                      controller.surveyItems.isNotEmpty
-                                          ? ListView.builder(
-                                              scrollDirection: Axis.vertical,
-                                              shrinkWrap: true,
-                                              physics: const ScrollPhysics(),
-                                              primary: false,
-                                              itemCount:
-                                                  controller.surveyItems.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                final surveyItem = controller
-                                                    .surveyItems[index];
-                                                return Card(
-                                                  shape: RoundedRectangleBorder(
+                                            ),
+                                            shape:
+                                                MaterialStateProperty.resolveWith<
+                                                    RoundedRectangleBorder>(
+                                              (Set<MaterialState> states) {
+                                                return RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            5), // if you need this
-                                                    side: BorderSide(
-                                                      color: ColorsApp.primary
-                                                          .withOpacity(0.2),
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                  child: Column(
-                                                    children: [
-                                                      Container(
-                                                          width:
-                                                              double.infinity,
-                                                          color:
-                                                              ColorsApp.primary,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text(
-                                                                    surveyItem
-                                                                        .titulo
-                                                                        .toString(),
-                                                                    style: GoogleFonts.montserrat(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w500,
-                                                                        color: Colors
-                                                                            .white)),
-                                                                surveyItem.descripcion !=
-                                                                        null
-                                                                    ? Text(
-                                                                        '(' +
-                                                                            surveyItem.descripcion
-                                                                                .toString() +
-                                                                            ')',
-                                                                        style: GoogleFonts.montserrat(
-                                                                            fontSize:
-                                                                                12.0,
-                                                                            fontWeight:
-                                                                                FontWeight.w400,
-                                                                            color: Colors.white))
-                                                                    : Container(),
-                                                              ],
-                                                            ),
-                                                          )),
-                                                      surveyItem.tipoComponente ==
-                                                              'INPUT'
-                                                          ? Padding(
-                                                              padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      8.0),
-                                                              child: _createInputItem(
-                                                                  surveyItem,
-                                                                  surveyItem,
-                                                                  1,
-                                                                  controller))
-                                                          : surveyItem.tipoItemCodigo ==
-                                                                  'SE'
-                                                              ? Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                      horizontal:
-                                                                          8.0),
-                                                                  child: _widgetSurveyItems(
-                                                                      surveyItem,
-                                                                      1,
-                                                                      controller))
-                                                              : Container(),
-                                                    ],
-                                                  ),
-                                                );
-                                              })
-                                          : Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Center(
-                                                child: Text(
-                                                    'No se encontró información para mostrar.',
-                                                    style:
-                                                        GoogleFonts.montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color: ColorsApp
-                                                                .primary)),
+                                                            25)); // Use the component's default.
+                                              },
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            controller
+                                                .saveSurveyAnswers(buildContext);
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Image.asset('assets/icons/save.png',
+                                                  height: 30,
+                                                  width: 30,
+                                                  color: Colors.white),
+                                              const Text(
+                                                'Guardar encuesta',
+                                                style: TextStyle(
+                                                    color: Colors.white),
                                               ),
-                                            )
+                                            ],
+                                          )))
+                                ],
+                              )
+                            : controller.saveData.value
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      const SizedBox(height: 100.0),
+                                      controller.puntaje.value < 100.0
+                                          ? const Icon(Icons.thumb_down,
+                                              color: ColorsApp.danger, size: 100)
+                                          : const Icon(Icons.thumb_up,
+                                              color: ColorsApp.success,
+                                              size: 100),
+                                      Text(
+                                        controller.messageSave.value.toString(),
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.w700,
+                                            color: ColorsApp.primary),
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      TextButton(
+                                          style: ButtonStyle(
+                                            alignment: Alignment.center,
+                                            backgroundColor: MaterialStateProperty
+                                                .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                                return ColorsApp
+                                                    .primary; // Use the component's default.
+                                              },
+                                            ),
+                                            shape:
+                                                MaterialStateProperty.resolveWith<
+                                                    RoundedRectangleBorder>(
+                                              (Set<MaterialState> states) {
+                                                return RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)); // Use the component's default.
+                                              },
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            controller.goToBack(true);
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
+                                              Icon(Icons.arrow_back,
+                                                  color: Colors.white),
+                                              Text(
+                                                'Regresar',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ))
                                     ],
+                                  )
+                                : Container(
+                                    height: 200,
                                   ),
-                                ),
-                                Container(
-                                    width: 200,
-                                    alignment: Alignment.center,
-                                    child: TextButton(
-                                        style: ButtonStyle(
-                                          alignment: Alignment.center,
-                                          backgroundColor: MaterialStateProperty
-                                              .resolveWith<Color>(
-                                            (Set<MaterialState> states) {
-                                              return ColorsApp
-                                                  .success; // Use the component's default.
-                                            },
-                                          ),
-                                          shape:
-                                              MaterialStateProperty.resolveWith<
-                                                  RoundedRectangleBorder>(
-                                            (Set<MaterialState> states) {
-                                              return RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25)); // Use the component's default.
-                                            },
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          controller
-                                              .saveSurveyAnswers(buildContext);
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Image.asset('assets/icons/save.png',
-                                                height: 30,
-                                                width: 30,
-                                                color: Colors.white),
-                                            const Text(
-                                              'Guardar encuesta',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        )))
-                              ],
-                            )
-                          : controller.saveData.value
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const SizedBox(height: 100.0),
-                                    controller.puntaje.value < 100.0
-                                        ? const Icon(Icons.thumb_down,
-                                            color: ColorsApp.danger, size: 100)
-                                        : const Icon(Icons.thumb_up,
-                                            color: ColorsApp.success,
-                                            size: 100),
-                                    Text(
-                                      controller.messageSave.value.toString(),
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.montserrat(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.w700,
-                                          color: ColorsApp.primary),
-                                    ),
-                                    const SizedBox(height: 8.0),
-                                    TextButton(
-                                        style: ButtonStyle(
-                                          alignment: Alignment.center,
-                                          backgroundColor: MaterialStateProperty
-                                              .resolveWith<Color>(
-                                            (Set<MaterialState> states) {
-                                              return ColorsApp
-                                                  .primary; // Use the component's default.
-                                            },
-                                          ),
-                                          shape:
-                                              MaterialStateProperty.resolveWith<
-                                                  RoundedRectangleBorder>(
-                                            (Set<MaterialState> states) {
-                                              return RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25)); // Use the component's default.
-                                            },
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          controller.goToBack(true);
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: const [
-                                            Icon(Icons.arrow_back,
-                                                color: Colors.white),
-                                            Text(
-                                              'Regresar',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ))
-                                  ],
-                                )
-                              : Container(
-                                  height: 200,
-                                ),
-                    )
+                      )
+                  
                   : Container());
             }),
           );

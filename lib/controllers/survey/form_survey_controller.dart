@@ -46,11 +46,11 @@ class FormSurveyController extends GetxController {
       survey = Survey.fromJson(_apiResponse.data);
       surveyItems = survey.items ?? [];
     }
+    loadingData.value = true;
+    loadingData.value = false;
     if (Get.isDialogOpen!) {
       Get.back();
     }
-    loadingData.value = true;
-    loadingData.value = false;
   }
 
   void addAnswer(
@@ -100,11 +100,11 @@ class FormSurveyController extends GetxController {
       messageSave.value = _apiResponse.data['message'].toString();
       puntaje.value = double.parse(_apiResponse.data['puntaje'].toString());
     }
+    loadingData.value = true;
+    loadingData.value = false;
     if (Get.isDialogOpen!) {
       Get.back();
     }
-    loadingData.value = true;
-    loadingData.value = false;
   }
 
   void goToBack(bool change) {

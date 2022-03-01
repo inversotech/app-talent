@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get/get.dart';
 import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/core/routers_names.dart';
@@ -26,12 +26,12 @@ class VerifyAutheticationController extends GetxController {
       Map<String, String> params = {'token_notify': _userPref.tokenNotify};
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfoPlugin.androidInfo;
-        params['model'] = androidInfo.model;
+        params['model'] = androidInfo.model!;
         params['platform'] = Platform.operatingSystem;
         params['id_app'] = '5';
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfoPlugin.iosInfo;
-        params['model'] = iosInfo.model;
+        params['model'] = iosInfo.model!;
         params['platform'] = Platform.operatingSystem;
         params['id_app'] = '6';
       }

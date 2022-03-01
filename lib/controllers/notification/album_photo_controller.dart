@@ -5,8 +5,4 @@ class AlbumPhotoController extends GetxController {
 
   RxBool clickPage = true.obs;
   RxBool loadingData = true.obs;
-  @override
-  void onReady() {
-    super.onReady();
-  }
 }

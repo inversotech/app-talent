@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+
 NotificationGeneralModel notificationModelFromJson(String str) => NotificationGeneralModel.fromJson(json.decode(str));
 
 String notificationModelToJson(NotificationGeneralModel data) => json.encode(data.toJson());
@@ -13,6 +15,8 @@ class NotificationGeneralModel {
         this.codigo,
         this.id,
         this.idPersona,
+        this.idEntidad,
+        this.nombreEntidad,
         this.mensaje,
         this.descripcion,
         this.direccion,
@@ -28,14 +32,20 @@ class NotificationGeneralModel {
         this.addVideo,
         this.videoUrl,
         this.imagenUrl,
+        this.like=false,
+        this.countLikes,
+        this.countComentarios,
         this.estado,
         this.grupos,
-        this.fotos
+        this.fotos,
+        this.globalKey
     });
 
     String? codigo;
     String? id;
     String? idPersona;
+    String? idEntidad;
+    String? nombreEntidad;
     String? mensaje;
     String? descripcion;
     String? direccion;
@@ -51,14 +61,20 @@ class NotificationGeneralModel {
     String? addVideo;
     String? videoUrl;
     String? imagenUrl;
+    bool like;
+    int? countLikes;
+    int? countComentarios;
     String? estado;
     List<Grupo>? grupos;
     List<Foto>? fotos;
+    GlobalKey? globalKey;
 
     factory NotificationGeneralModel.fromJson(Map<String, dynamic> json) => NotificationGeneralModel(
         codigo: json["codigo"],
         id: json["id"],
         idPersona: json["id_persona"],
+        idEntidad: json["id_entidad"],
+        nombreEntidad: json["nombre_entidad"],
         mensaje: json["mensaje"],
         descripcion: json["descripcion"],
         direccion: json["direccion"],
@@ -74,6 +90,9 @@ class NotificationGeneralModel {
         addVideo: json["add_video"],
         videoUrl: json["video_url"],
         imagenUrl: json["imagen_url"],
+        like: json["like"] == null ? false : json["like"].toString().toLowerCase() == 'true',
+        countLikes: json["count_likes"] == null ? 0 : int.parse(json["count_likes"].toString()),
+        countComentarios: json["count_comentarios"] == null ? 0 : int.parse(json["count_comentarios"].toString()),
         estado: json["estado"],
         grupos: json["grupos"] == null ? [] : (json["grupos"] as List).map((jsonElement) => Grupo.fromJson(jsonElement))
           .toList(),
@@ -85,6 +104,8 @@ class NotificationGeneralModel {
         "codigo": codigo,
         "id": id,
         "id_persona": idPersona,
+        "id_entidad": idEntidad,
+        "nombre_entidad": nombreEntidad,
         "mensaje": mensaje,
         "descripcion": descripcion,
         "direccion": direccion,
@@ -100,6 +121,9 @@ class NotificationGeneralModel {
         "add_video": addVideo,
         "video_url": videoUrl,
         "imagen_url": imagenUrl,
+        "like": like,
+        "count_likes": countLikes,
+        "count_comentarios": countComentarios,
         "estado": estado,
         "grupos": grupos == null ? null :  List<dynamic>.from(grupos!.map((x) => x.toJson())),
         "fotos": fotos == null ? null : List<dynamic>.from(fotos!.map((x) => x.toJson())),

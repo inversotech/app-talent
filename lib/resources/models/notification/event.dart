@@ -12,6 +12,7 @@ class EventModel {
     EventModel({
         this.idEvento,
         this.idEntidad,
+        this.nombreEntidad,
         this.idDepto,
         this.idInstitucion,
         this.idPersona,
@@ -20,6 +21,11 @@ class EventModel {
         this.fechaFin,
         this.lugar,
         this.informacion,
+        this.addLink,
+        this.link,
+        this.addVideo,
+        this.videoUrl,
+        this.addArchivo,
         this.archivoUrl,
         this.archivoName,
         this.imagenUrl,
@@ -40,6 +46,7 @@ class EventModel {
 
     int? idEvento;
     String? idEntidad;
+    String? nombreEntidad;
     String? idDepto;
     String? idInstitucion;
     String? idPersona;
@@ -48,6 +55,11 @@ class EventModel {
     DateTime? fechaFin;
     String? lugar;
     String? informacion;
+    String? addLink;
+    String? link;
+    String? addVideo;
+    String? videoUrl;
+    String? addArchivo;
     String? archivoUrl;
     String? archivoName;
     String? imagenUrl;
@@ -68,6 +80,7 @@ class EventModel {
     factory EventModel.fromJson(Map<String, dynamic> json) => EventModel(
         idEvento: json["id_evento"],
         idEntidad: json["id_entidad"],
+        nombreEntidad: json["nombre_entidad"],
         idDepto: json["id_depto"],
         idInstitucion: json["id_institucion"],
         idPersona: json["id_persona"],
@@ -76,6 +89,11 @@ class EventModel {
         fechaFin: json["fecha_fin"] == null ? null : DateTime.parse(json["fecha_fin"]),
         lugar: json["lugar"],
         informacion: json["informacion"],
+        addLink: json["add_link"],
+        link: json["link"],
+        addVideo: json["add_video"],
+        videoUrl: json["video_url"],
+        addArchivo: json["add_archivo"],
         archivoUrl: json["archivo_url"],
         archivoName: json["archivo_name"],
         imagenUrl: json["imagen_url"],
@@ -97,6 +115,7 @@ class EventModel {
     Map<String, dynamic> toJson() => {
         "id_evento": idEvento,
         "id_entidad": idEntidad,
+        "nombre_entidad": nombreEntidad,
         "id_depto": idDepto,
         "id_institucion": idInstitucion,
         "id_persona": idPersona,
@@ -105,6 +124,11 @@ class EventModel {
         "fecha_fin": fechaFin == null ? null : fechaFin!.toIso8601String(),
         "lugar": lugar,
         "informacion": informacion,
+        "add_link": addLink,
+        "link": link,
+        "add_video": addVideo,
+        "video_url": videoUrl,
+        "add_archivo": addArchivo,
         "archivo_url": archivoUrl,
         "archivo_name": archivoName,
         "imagen_url": imagenUrl,

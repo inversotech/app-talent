@@ -8,9 +8,8 @@ import 'package:lamb_talent/shared/components/app_screen.dart';
 import 'components/list_notification.dart';
 
 class NotificationPage extends StatelessWidget {
-  NotificationPage({Key? key}) : super(key: key);
-
   final controller = Get.put(NotificationController());
+  NotificationPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetBuilder<NotificationController>(
@@ -19,38 +18,44 @@ class NotificationPage extends StatelessWidget {
           _stateBuilder.controller!.onInit();
         },
         builder: (_) {
-          return AppScreen(
-            codePage: '16120104',
-            principalPage: true,
-            refreshController: controller.refreshController,
-            scrollController: controller.scrollController,
-            enablePullDown: true,
-            enablePullUp: false,
-            showTabs: true,
-            onRefresh: controller.onRefresh,
-            child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-              return Obx(() => Column(
+          return Obx(() => controller.loadingData.value
+              ? AppScreen(
+                  codePage: '16120104',
+                  principalPage: true,
+                  refreshController: controller.refreshController,
+                  scrollController: controller.scrollController,
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  showTabs: true,
+                  onRefresh: controller.onRefresh,
+                  onLoading: controller.onLoading,
+                  colorLoading: ColorsApp.white,
+                  child: Column(
                     children: [
-                      controller.loadingData.value &&
-                              controller.listData.isNotEmpty
+                      controller.listData.isNotEmpty
                           ? ListNotification(
-                              constraints: constraints,
                               listData: controller.listData,
                               onPressed: (arguments) {
                                 controller.goToDetail(arguments);
                               },
-                              onPressedLike: (arguments) {
-                                controller.fnSaveLike(arguments);
+                              onPressedLike: (arguments, index) {
+                                controller.fnSaveLike(arguments, index);
                               },
-                              onPressedComment: (arguments) {
-                                controller.goToComents(arguments);
+                              onPressedComment:
+                                  (arguments, autofocus, indexOrigen) {
+                                controller.goToComents(
+                                    arguments, autofocus, indexOrigen);
                               },
                               onPressedShare: (arguments) {
                                 controller.shareFileImage(arguments);
+                              },
+                              onPressedLink: (link) {
+                                controller.goToLinkUrl(link);
+                              },
+                              onPressedPhoto: (photo) {
+                                controller.showPhoto(photo);
                               })
-                          : controller.loadingData.value &&
-                                  controller.listData.isEmpty
+                          : controller.listData.isEmpty && controller.finishConsults
                               ? Container(
                                   padding: const EdgeInsets.only(top: 40.0),
                                   child: Center(
@@ -66,9 +71,8 @@ class NotificationPage extends StatelessWidget {
                                 )
                               : Container(),
                     ],
-                  ));
-            }),
-          );
+                  ))
+              : Container());
         });
   }
 }

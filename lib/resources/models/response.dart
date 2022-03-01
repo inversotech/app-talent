@@ -59,13 +59,13 @@ class Meta {
   int total;
 
   factory Meta.fromJson(Map<String, dynamic> json) => Meta(
-        currentPage: json["current_page"] ?? 0,
-        from: json["from"] ?? 0,
-        lastPage: json["last_page"] ?? 0,
+        currentPage: int.parse((json["current_page"] ?? 0).toString()),
+        from: int.parse((json["from"] ?? 0).toString()),
+        lastPage: int.parse((json["last_page"] ?? 0).toString()),
         path: json["path"] ?? '',
-        perPage: json["per_page"] ?? 0,
-        to: json["to"] ?? 0,
-        total: json["total"] ?? 0,
+        perPage: int.parse((json["per_page"] ?? 0).toString()),
+        to: int.parse((json["to"] ?? 0).toString()),
+        total: int.parse((json["total"] ?? 0).toString()),
       );
 
   Map<String, dynamic> toJson() => {

@@ -112,4 +112,32 @@ class NotificationService {
     _apiProvider.dispose();
     return response;
   }
+
+  Future<ApiResponse> getComments(Map<String, String> params) async {
+    final _apiProvider = ApiProvider();
+    final response = await _apiProvider.getWithParams(
+        endPoint: endPoints['messenger']['comment'], params: params);
+    _apiProvider.dispose();
+    return response;
+  }
+
+  Future<ApiResponse> deleteComment(String idComment) async {
+    final _apiProvider = ApiProvider();
+    final response = await _apiProvider.deleteId(
+        endPoint: endPoints['messenger']['comment'],
+        id: idComment,
+        showMessage: false);
+    _apiProvider.dispose();
+    return response;
+  }
+
+  
+  Future<ApiResponse> totalNoLeidos(Map<String, String> params) async {
+    final _apiProvider = ApiProvider();
+    final response = await _apiProvider.getWithParams(
+        endPoint: endPoints['messenger']['total-no-leidos'],
+        params: params);
+    _apiProvider.dispose();
+    return response;
+  }
 }

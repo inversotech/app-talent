@@ -6,7 +6,7 @@ import 'package:lamb_talent/resources/models/notification/album.dart';
 import 'package:lamb_talent/resources/models/notification/group.dart';
 import 'package:lamb_talent/resources/services/notification/notification_service.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
-import 'package:lamb_talent/ui/modules/notification/components/show_album_photo.dart';
+import 'package:lamb_talent/ui/modules/notification/components/show_photo.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class AlbumDetailController extends GetxController {
@@ -83,7 +83,7 @@ class AlbumDetailController extends GetxController {
   }
 
   showPhoto(String imageUrl) {
-    Get.to(() => ShowAlbumPhoto(imageUrl: imageUrl),
+    Get.to(() => ShowPhoto(imageUrl: imageUrl),
         transition: Transition.size, duration: const Duration(seconds: 1));
   }
 }

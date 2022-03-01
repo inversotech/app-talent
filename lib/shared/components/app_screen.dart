@@ -22,16 +22,25 @@ class AppScreen extends StatelessWidget {
   final bool enablePullUp;
   final bool showTabs;
   final bool principalPage;
+  final bool showSearchPerson;
   final Widget? floatingActionButton;
   final Widget? bottomSheet;
   final bool showTitleHeader;
+  final double leftBeforeBackground;
+  final double rightBeforeBackground;
+  final double bottomBeforeBackground;
+  final double paddingLeft;
+  final double paddingRight;
+  final double paddingTop;
+  final double paddingBottom;
+  final Color colorLoading;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  final Color backgroundColor;
 
   final userPreferences = UserPreferences();
   AppScreen(
-      {
-      required this.codePage,
+      {required this.codePage,
       required this.child,
       this.refreshController,
       this.onRefresh,
@@ -42,38 +51,88 @@ class AppScreen extends StatelessWidget {
       this.showTabs = false,
       this.principalPage = false,
       this.showTitleHeader = true,
+      this.showSearchPerson = true,
       this.floatingActionButton,
       this.bottomSheet,
+      this.leftBeforeBackground = 4,
+      this.rightBeforeBackground = 4,
+      this.bottomBeforeBackground = 4,
+      this.paddingLeft = 12,
+      this.paddingRight = 12,
+      this.paddingTop = 8,
+      this.paddingBottom = 8,
+      this.backgroundColor = ColorsApp.white,
+      this.colorLoading = ColorsApp.primary,
       Key? key})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-   int initialIndex=0;
+    int initialIndex = 0;
     List<Widget> tabs = [];
     List<Menu> menu = userPreferences.menu ?? [];
-    int index=0;
+    int index = 0;
     for (var element in menu) {
-      if(codePage==element.code){
-        initialIndex=index;
+      if (codePage == element.code) {
+        initialIndex = index;
       }
       tabs.add(Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
-            color: codePage == element.code ? Colors.white : Colors.transparent),
+            color:
+                codePage == element.code ? Colors.white : Colors.transparent),
         child: Padding(
           padding: const EdgeInsets.all(4.0),
-          child: Wrap(
-              direction: Axis.vertical,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Image.asset(element.icon.toString(),
-                    height: 30.0,
-                    fit: BoxFit.cover,
-                    color: codePage == element.code
-                        ? ColorsApp.primary
-                        : Colors.white),
-                Text(element.title.toString())
-              ]),
+          child: element.code == '16120104' && userPreferences.cantNotify>0
+              ? Stack(
+                  children: [
+                    Wrap(
+                        direction: Axis.vertical,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Image.asset(element.icon.toString(),
+                              height: 30.0,
+                              fit: BoxFit.cover,
+                              color: codePage == element.code
+                                  ? ColorsApp.primary
+                                  : Colors.white),
+                          Text(element.title.toString())
+                        ]),
+                    Positioned(
+                        top: 0.0,
+                        left: 0.0,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: ColorsApp.danger,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 12,
+                            minHeight: 12,
+                          ),
+                          child: Text(
+                            userPreferences.cantNotify.toString(),
+                            style: GoogleFonts.montserrat(
+                                color: ColorsApp.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                        ))
+                  ],
+                )
+              : Wrap(
+                  direction: Axis.vertical,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                      Image.asset(element.icon.toString(),
+                          height: 30.0,
+                          fit: BoxFit.cover,
+                          color: codePage == element.code
+                              ? ColorsApp.primary
+                              : Colors.white),
+                      Text(element.title.toString())
+                    ]),
         ),
       ));
       index++;
@@ -87,197 +146,213 @@ class AppScreen extends StatelessWidget {
         fullname = userPreferences.fullnamePerson.toString();
       }
     }
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [ColorsApp.primary, ColorsApp.primaryVariant],
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [ColorsApp.primary, ColorsApp.primaryVariant],
+          ),
         ),
-      ),
-      child: DefaultTabController(
-        initialIndex: initialIndex,
-        length: tabs.length,
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
+        child: DefaultTabController(
+          initialIndex: initialIndex,
+          length: tabs.length,
+          child: Scaffold(
             backgroundColor: Colors.transparent,
-            automaticallyImplyLeading: false,
-            elevation: 0,
-            toolbarHeight: showTitleHeader ? 80.0 : null,
-            title: SizedBox(
-              width: double.infinity,
-              child: Stack(
-                children: [
-                  Positioned(
-                      top: 5,
-                      left: 0,
-                      child: userPreferences.cantEntities > 1 ||
-                              userPreferences.cantDeptos > 1
-                          ? InkWell(
-                              onTap: () {
-                                showModalChangeEntity(context);
-                              },
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Flexible(
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Text(
-                                          userPreferences.nameEntity != null
-                                              ? userPreferences.nameEntity
-                                                  .toString()
-                                              : '',
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18.0)),
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              toolbarHeight: showTitleHeader ? 80.0 : null,
+              title: SizedBox(
+                width: double.infinity,
+                child: Stack(
+                  children: [
+                    Positioned(
+                        top: 5,
+                        left: 0,
+                        child: userPreferences.cantEntities > 1 ||
+                                userPreferences.cantDeptos > 1
+                            ? InkWell(
+                                onTap: () {
+                                  showModalChangeEntity(context);
+                                },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Text(
+                                            userPreferences.nameEntity != null
+                                                ? userPreferences.nameEntity
+                                                    .toString()
+                                                : '',
+                                            style: GoogleFonts.montserrat(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 18.0)),
+                                      ),
                                     ),
-                                  ),
-                                  const Icon(Icons.arrow_drop_down, size: 30)
-                                ],
-                              ),
-                            )
-                          : SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Text(
-                                  userPreferences.nameEntity != null
-                                      ? userPreferences.nameEntity.toString()
-                                      : '',
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18.0)),
-                            )),
-                  Center(
-                      child: Column(
-                    children: [
-                      Image.asset('assets/icons/logo.png',
-                          height: 40.0, fit: BoxFit.cover),
-                      showTitleHeader
-                          ? SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Wrap(
-                                direction: Axis.horizontal,
-                                alignment: WrapAlignment.center,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  !userPreferences.isWorkerChild
-                                      ? DateTime.now().hour > 12
-                                          ? const Text('Buenas tardes, ',
-                                              style: TextStyle(
-                                                  fontSize: 16.0,
-                                                  fontFamily: 'Montserrat',
-                                                  fontWeight: FontWeight.w400))
-                                          : Text('Buenos días, ',
-                                              style: GoogleFonts.montserrat(
-                                                  fontSize: 16.0,
-                                                  fontWeight: FontWeight.w400))
-                                      : Container(),
-                                  Text(fullname,
-                                      style: GoogleFonts.montserrat(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600))
-                                ],
-                              ),
-                            )
-                          : Container(),
-                    ],
-                  )),
-                  Positioned(
-                      top: -10,
-                      right: 0,
-                      child: Row(
-                        children: [
-                          userPreferences.searchPerson
-                              ? IconButton(
-                                  onPressed: () {
-                                    _searchWorker(context);
-                                  },
-                                  icon: const Icon(Icons.person_search))
-                              : Container(),
-                          !userPreferences.isWorkerChild
-                              ? IconButton(
-                                  onPressed: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, 'login');
-                                  },
-                                  icon: const Icon(Icons.logout))
-                              : IconButton(
-                                  onPressed: () {
-                                    _backToHome();
-                                  },
-                                  icon: const Icon(Icons.home)),
-                        ],
-                      )),
-                  const SizedBox(height: 10)
-                ],
+                                    const Icon(Icons.arrow_drop_down, size: 30)
+                                  ],
+                                ),
+                              )
+                            : SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                    userPreferences.nameEntity != null
+                                        ? userPreferences.nameEntity.toString()
+                                        : '',
+                                    style: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18.0)),
+                              )),
+                    Center(
+                        child: Column(
+                      children: [
+                        Image.asset('assets/icons/logo.png',
+                            height: 40.0, fit: BoxFit.cover),
+                        showTitleHeader
+                            ? SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Wrap(
+                                  direction: Axis.horizontal,
+                                  alignment: WrapAlignment.center,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    !userPreferences.isWorkerChild
+                                        ? DateTime.now().hour > 12
+                                            ? const Text('Buenas tardes, ',
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontFamily: 'Montserrat',
+                                                    fontWeight: FontWeight.w400))
+                                            : Text('Buenos días, ',
+                                                style: GoogleFonts.montserrat(
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.w400))
+                                        : Container(),
+                                    Text(fullname,
+                                        style: GoogleFonts.montserrat(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w600))
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    )),
+                    Positioned(
+                        top: -10,
+                        right: 0,
+                        child: Row(
+                          children: [
+                            userPreferences.searchPerson && showSearchPerson
+                                ? IconButton(
+                                    onPressed: () {
+                                      _searchWorker(context);
+                                    },
+                                    icon: const Icon(Icons.person_search))
+                                : Container(),
+                            !userPreferences.isWorkerChild
+                                ? IconButton(
+                                    onPressed: () {
+                                      Navigator.pushReplacementNamed(
+                                          context, 'login');
+                                    },
+                                    icon: const Icon(Icons.logout))
+                                : IconButton(
+                                    onPressed: () {
+                                      _backToHome();
+                                    },
+                                    icon: const Icon(Icons.home)),
+                          ],
+                        )),
+                    const SizedBox(height: 10)
+                  ],
+                ),
               ),
             ),
+            body: !principalPage
+                ? Container(
+                    padding: EdgeInsets.only(
+                        left: leftBeforeBackground,
+                        right: rightBeforeBackground,
+                        top: 0,
+                        bottom: bottomBeforeBackground),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: Container(
+                          color: backgroundColor,
+                          padding: EdgeInsets.only(
+                              left: paddingLeft,
+                              right: paddingRight,
+                              top: 0,
+                              bottom: paddingBottom),
+                          child: SmartRefresher(
+                              enablePullDown: enablePullDown,
+                              enablePullUp: enablePullUp,
+                              controller: refreshController != null
+                                  ? refreshController!
+                                  : _refreshController,
+                              onRefresh: enablePullDown ? onRefresh : null,
+                              onLoading: enablePullUp ? onLoading : null,
+                              scrollDirection: Axis.vertical,
+                              header: const WaterDropMaterialHeader(),
+                              footer:
+                                  CustomFooterLoading(colorLoading: colorLoading),
+                              scrollController: scrollController,
+                              physics: const ScrollPhysics(),
+                              child: SingleChildScrollView(
+                                  child: Padding(
+                                padding: EdgeInsets.only(top: paddingTop),
+                                child: child,
+                              )))),
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: SmartRefresher(
+                        enablePullDown: enablePullDown,
+                        enablePullUp: enablePullUp,
+                        controller: refreshController != null
+                            ? refreshController!
+                            : _refreshController,
+                        onRefresh: enablePullDown ? onRefresh : null,
+                        onLoading: enablePullUp ? onLoading : null,
+                        scrollDirection: Axis.vertical,
+                        header: const WaterDropMaterialHeader(),
+                        footer: CustomFooterLoading(colorLoading: colorLoading),
+                        scrollController: scrollController,
+                        physics: const ScrollPhysics(),
+                        child: SingleChildScrollView(child: child)),
+                  ),
+            bottomNavigationBar: showTabs
+                ? TabBar(
+                    unselectedLabelColor: Colors.white,
+                    labelColor: ColorsApp.primary,
+                    onTap: (val) {
+                      if (val == 0) {
+                        Get.offAllNamed(userPreferences.menu![0].url.toString());
+                      } else if (val == 1) {
+                        Get.offAllNamed(userPreferences.menu![1].url.toString());
+                      } else if (val == 2) {
+                        Get.offAllNamed(userPreferences.menu![2].url.toString());
+                      } else if (val == 3) {
+                        Get.offAllNamed(userPreferences.menu![3].url.toString());
+                      }
+                    },
+                    labelPadding: const EdgeInsets.symmetric(vertical: 8.0),
+                    tabs: tabs,
+                  )
+                : null,
+            bottomSheet: bottomSheet,
+            floatingActionButton: floatingActionButton,
           ),
-          body: !principalPage
-              ? Card(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: LayoutBuilder(builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      return SmartRefresher(
-                          enablePullDown: enablePullDown,
-                          enablePullUp: enablePullUp,
-                          controller: refreshController != null
-                              ? refreshController!
-                              : _refreshController,
-                          onRefresh: enablePullDown ? onRefresh : null,
-                          onLoading: enablePullUp ? onLoading : null,
-                          scrollDirection: Axis.vertical,
-                          header: const WaterDropMaterialHeader(),
-                          footer: const CustomFooterLoading(),
-                          scrollController: scrollController,
-                          physics: const ScrollPhysics(),
-                          child: SingleChildScrollView(child: child));
-                    }),
-                  ),
-                )
-              : SmartRefresher(
-                  enablePullDown: enablePullDown,
-                  enablePullUp: enablePullUp,
-                  controller: refreshController != null
-                      ? refreshController!
-                      : _refreshController,
-                  onRefresh: enablePullDown ? onRefresh : null,
-                  onLoading: enablePullUp ? onLoading : null,
-                  scrollDirection: Axis.vertical,
-                  header: const WaterDropMaterialHeader(),
-                  footer: const CustomFooterLoading(),
-                  scrollController: scrollController,
-                  physics: const ScrollPhysics(),
-                  child: SingleChildScrollView(child: child)),
-          bottomNavigationBar: showTabs
-              ? TabBar(
-                  unselectedLabelColor: Colors.white,
-                  labelColor: ColorsApp.primary,
-                  onTap: (val) {
-                    if (val == 0) {
-                      Get.offAllNamed(userPreferences.menu![0].url.toString());
-                    } else if (val == 1) {
-                      Get.offAllNamed(userPreferences.menu![1].url.toString());
-                    } else if (val == 2) {
-                      Get.offAllNamed(userPreferences.menu![2].url.toString());
-                    } else if (val == 3) {
-                      Get.offAllNamed(userPreferences.menu![3].url.toString());
-                    }
-                  },
-                  labelPadding: const EdgeInsets.symmetric(vertical: 8.0),
-                  tabs: tabs,
-                )
-              : null,
-          bottomSheet: bottomSheet,
-          floatingActionButton: floatingActionButton,
         ),
       ),
     );
@@ -324,7 +399,8 @@ class AppScreen extends StatelessWidget {
       userPreferences.idDeparment = searchResult['id_depto'].toString(); */
       userPreferences.idPerson =
           int.parse(searchResult['id_persona'].toString());
-      userPreferences.fullnamePerson = searchResult['nombreapellido'].toString();
+      userPreferences.fullnamePerson =
+          searchResult['nombreapellido'].toString();
       Get.forceAppUpdate();
     }
   }

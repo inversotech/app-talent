@@ -211,11 +211,11 @@ class MarkingController extends GetxController {
       refreshController.loadComplete();
     }
     page.value = 2;
+    loadingDataInit.value = false;
+    loadingDataInit.value = true;
     if (Get.isDialogOpen!) {
       Get.back();
     }
-    loadingDataInit.value = false;
-    loadingDataInit.value = true;
   }
 
   Future getListMoreData() async {
