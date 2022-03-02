@@ -129,6 +129,8 @@ class AuthService {
     final resp = await _notificationService.totalNoLeidos(params);
     if (resp.success) {
       prefs.cantNotify = int.parse(resp.data.toString());
+    } else {
+      prefs.cantNotify = 0;
     }
   }
 }

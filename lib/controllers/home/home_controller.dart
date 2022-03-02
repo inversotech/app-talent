@@ -139,7 +139,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       await _getButtonAssitance('0', '0', false, false);
       return;
     }
-
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -148,12 +147,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         return;
       }
     }
-
     if (permission == LocationPermission.deniedForever) {
       await _getButtonAssitance('0', '0', true, false);
       return;
     }
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
     await _getButtonAssitance(position.longitude.toString(),
         position.latitude.toString(), true, true);
   }
@@ -168,7 +167,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     };
 
     final _markingService = MarkingService();
+
     final response = await _markingService.showButtonAssistance(params);
+
     if (response.success) {
       showButton.value = response.data['show_button'] ?? '0';
       textButton.value = response.data['text_button'] ?? '';
@@ -190,6 +191,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         isMarking.value = false;
       }
     }
+
     refreshController.loadNoData();
     loadingData.value = true;
     loadingData.value = false;
@@ -311,7 +313,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       return;
     }
 
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best);
     await continuoMarkingAssistance(
         uuid, position.longitude.toString(), position.latitude.toString());
   }
