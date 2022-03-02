@@ -87,6 +87,7 @@ class CommentController extends GetxController {
   Future getListMoreData() async {
     final Map<String, String> params = {
       'origen': origen,
+      'id_persona_like': userPref.idPerson.toString(),
       'id_origen': idOrigen,
       'id_parent': idParent,
       'per_page': perPage.value.toString(),
@@ -118,6 +119,7 @@ class CommentController extends GetxController {
     final Map<String, String> params = {
       'origen': origen,
       'id_origen': idOrigen,
+      'id_persona_like': userPref.idPerson.toString(),
       'id_parent': idParent,
       'per_page': perPage.value.toString(),
       'page': '1'
@@ -214,6 +216,7 @@ class CommentController extends GetxController {
     int perPage = 5;
     final Map<String, String> params = {
       'origen': 'msm_comentario',
+      'id_persona_like': userPref.idPerson.toString(),
       'id_origen': item.idComentario.toString(),
       'per_page': perPage.toString(),
       'page': item.page.toString()

@@ -17,6 +17,7 @@ class EventDetailController extends GetxController {
   final refreshController = RefreshController(initialRefresh: false);
   EventModel event = EventModel();
   List<GroupModel> listGroups = [];
+  final userPreferences = UserPreferences();
   String origen = 'msm_evento';
 
   RxBool buttonAssitance = false.obs;
