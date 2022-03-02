@@ -10,5 +10,5 @@ class ColorsApp {
   static const Color secondary = Color(0xffF5DBDE);
   static const Color primary = Color(0xff17233C);
   static const Color primaryVariant = Color(0xff374961);
-  static const Color basic = Color(0xffBBDECC);
+  static const Color basic = Color(0xffBBDECC);ss
 }
