@@ -62,11 +62,11 @@ class HolidayController extends GetxController {
       idEstadoVacTrab.value = element.idEstadoVacTrab.toString();
       idPeriodoVacTrab.value = element.idPeriodoVacTrab.toString();
     }
+    loadingDataInit.value = false;
+    loadingDataInit.value = true;
     if (Get.isDialogOpen!) {
       Get.back();
     }
-    loadingDataInit.value = false;
-    loadingDataInit.value = true;
   }
 
   Future getActions() async {
@@ -100,11 +100,11 @@ class HolidayController extends GetxController {
       idEstadoVacTrab.value = element.idEstadoVacTrab.toString();
       idPeriodoVacTrab.value = element.idPeriodoVacTrab.toString();
     }
+    loadingDataInit.value = false;
+    loadingDataInit.value = true;
     if (Get.isDialogOpen!) {
       Get.back();
     }
-    loadingDataInit.value = false;
-    loadingDataInit.value = true;
   }
 
   void changeRequestStatus(

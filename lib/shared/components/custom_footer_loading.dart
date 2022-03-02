@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lamb_talent/core/colors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class CustomFooterLoading extends StatelessWidget {
-  const CustomFooterLoading({Key? key}) : super(key: key);
+  final Color colorLoading;
+  CustomFooterLoading({Key? key, this.colorLoading = ColorsApp.primary})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,13 +13,22 @@ class CustomFooterLoading extends StatelessWidget {
       builder: (BuildContext context, LoadStatus? status) {
         Widget body;
         if (status == LoadStatus.idle) {
-          body = const Text("Jale hacia arriba");
+          body = Text(
+            "Jale hacia arriba",
+            style: TextStyle(color: colorLoading),
+          );
         } else if (status == LoadStatus.loading) {
-          body = const CircularProgressIndicator();
+          body = CircularProgressIndicator(color: colorLoading);
         } else if (status == LoadStatus.failed) {
-          body = const Text("Error de carga. Haga clic en reintentar.");
+          body = Text(
+            "Error de carga. Haga clic en reintentar.",
+            style: TextStyle(color: colorLoading),
+          );
         } else if (status == LoadStatus.canLoading) {
-          body = const Text("Suelte para cargar más");
+          body = Text(
+            "Suelte para cargar más",
+            style: TextStyle(color: colorLoading),
+          );
         } else {
           body = const Text("");
         }

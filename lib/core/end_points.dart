@@ -107,5 +107,16 @@ final Map endPoints = {
     'valid-license-permit': apiUrl + 'benefits/licenses-permits/valid-perm-lic',
     'holiday': apiUrl + 'benefits/holidays',
     'pro-holiday': apiUrl + 'benefits/holidays/pro-holidays'
+  },
+  'messenger': {
+    'notification-event-album': apiUrlMessenger + 'report/show-notification-event-album',
+    'notifications': apiUrlMessenger + 'notifications/notifications',
+    'events': apiUrlMessenger + 'events/events',
+    'albums': apiUrlMessenger + 'albums/albums',
+    'groups': apiUrlMessenger + 'groups/relacion-groups/to-relacion',
+    'relation-person': apiUrlMessenger + 'groups/relacion-personas',
+    'like': apiUrlMessenger + 'red/likes',
+    'comment': apiUrlMessenger + 'red/comentarios',
+    'total-no-leidos': apiUrlMessenger + 'report/total-no-leidos',
   }
 };

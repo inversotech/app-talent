@@ -49,6 +49,7 @@ class _DetailSurveyState extends State<DetailSurvey> {
   @override
   Widget build(BuildContext buildContext) {
     return AppScreen(
+      codePage: '16120103',
       scrollController: _scrollController,
       enablePullDown: false,
       enablePullUp: false,

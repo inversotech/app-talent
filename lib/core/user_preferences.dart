@@ -223,4 +223,23 @@ class UserPreferences {
   set searchPerson(bool value) {
     _prefs?.setBool('searchPerson', value);
   }
+
+   // GET y SET tokenNotify
+  String get tokenNotify {
+    return _prefs?.getString('tokenNotify') ?? '';
+  }
+
+  set tokenNotify(String value) {
+    _prefs?.setString('tokenNotify', value);
+  }
+
+      // GET y SET cantNotify
+  int get cantNotify {
+    return _prefs?.getInt('cantNotify') ?? 0;
+  }
+
+  set cantNotify(int value) {
+    _prefs?.setInt('cantNotify', value);
+  }
+
 }

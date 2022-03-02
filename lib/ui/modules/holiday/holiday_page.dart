@@ -18,6 +18,7 @@ class HolidayPage extends StatelessWidget {
         },
         builder: (controller) {
           return AppScreen(
+              codePage: '16120101',
               refreshController: controller.refreshController,
               scrollController: controller.scrollController,
               enablePullDown: false,

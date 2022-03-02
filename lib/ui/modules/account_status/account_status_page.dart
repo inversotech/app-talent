@@ -24,7 +24,7 @@ class AccountStatusPage extends StatelessWidget {
         builder: (_) {
           return Obx(() => !controller.loadingData.value
               ? AppScreen(
-                  initialIndex: 1,
+                  codePage: '16120102',
                   principalPage: true,
                   refreshController: controller.refreshController,
                   scrollController: controller.scrollController,

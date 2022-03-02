@@ -25,7 +25,7 @@ class SurveyPage extends StatelessWidget {
         builder: (_) {
           return Obx(() => controller.loadingDataInit.value
               ? AppScreen(
-                  initialIndex: 2,
+                  codePage: '16120103',
                   refreshController: controller.refreshController,
                   scrollController: controller.scrollController,
                   enablePullDown: true,

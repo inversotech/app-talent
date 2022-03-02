@@ -25,7 +25,7 @@ class MyMarkingsPage extends StatelessWidget {
             enablePullUp: true,
             onRefresh: controller.onRefresh,
             onLoading: controller.onLoading,
-            initialIndex: 0,
+            codePage: '16120101',
             showTabs: true,
             child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {

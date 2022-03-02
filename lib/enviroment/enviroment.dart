@@ -6,5 +6,10 @@ const apiUrlLocalUpn =
     'http://app07.adventistas.pe/lamb-api-talent/public/api/';
 const apiUrlProduccionTemp = 'https://api-talent.adventistas.pe/api/';
 const apiUrlLambProduccion = 'https://api-lamb-talent.upeu.edu.pe/api-talent/api/';
+const apiUrlLocalMessenger = 'https://app07.adventistas.pe/lamb-school-messenger-api/public/api/';
+const apiUrlMessengerProduccion = 'https://api-lamb-school-messenger.upeu.edu.pe/api/';
 const apiUrl = apiUrlLambProduccion;
+const apiUrlMessenger = apiUrlMessengerProduccion;
 const codeModule = '16120100';
+const codeFcmApp = 'lamb-talent';
+const appIdOneSignal='1110e1d3-ffcc-4bd9-8564-46771cbf77d9';

@@ -9,7 +9,7 @@ import 'package:lamb_talent/resources/services/account_status/account_status_ser
 import 'detail.dart';
 
 class DepositedHelpTravel extends StatelessWidget {
-  final format = NumberFormat.currency(symbol: 'S/. ');
+  final format = NumberFormat.currency(symbol: 'S/. ', locale: 'en_US');
   final String title;
   final dynamic data;
   final Function(bool) onChange;

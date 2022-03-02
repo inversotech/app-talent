@@ -15,6 +15,7 @@ class Menu {
         this.url,
         this.type,
         this.priority,
+        this.code,
         this.children,
     });
 
@@ -23,6 +24,7 @@ class Menu {
     String? url;
     String? type;
     String? priority;
+    String? code;
     List<Menu>? children;
 
     factory Menu.fromJson(Map<String, dynamic> json) => Menu(
@@ -31,6 +33,7 @@ class Menu {
         url: json["url"],
         type: json["type"],
         priority: json["priority"],
+        code: json["code"],
         children: json["children"] == null ? [] : List<Menu>.from(json["children"].map((x) => Menu.fromJson(x))),
     );
 
@@ -40,6 +43,7 @@ class Menu {
         "url": url,
         "type": type,
         "priority": priority,
+        "code": code,
         "children": children == null ? [] : List<dynamic>.from(children!.map((x) => x.toJson())),
     };
 }

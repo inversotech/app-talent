@@ -6,7 +6,7 @@ import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
 
 class Detail extends StatelessWidget {
-  final format = NumberFormat.currency(symbol: 'S/. ');
+  final format = NumberFormat.currency(symbol: 'S/. ', locale: 'en_US');
   final List listData;
   final String? title;
   final bool isModal;

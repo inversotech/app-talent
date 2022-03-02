@@ -5,7 +5,7 @@ import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/resources/models/general/date_model.dart';
 
 class CarouselSliderItem extends StatelessWidget {
-  final format = NumberFormat.currency(symbol: 'S/. ');
+  final format = NumberFormat.currency(symbol: 'S/. ', locale: 'en_US');
   final String title;
   final String? titleContinue;
   final String amount;
@@ -25,7 +25,7 @@ class CarouselSliderItem extends StatelessWidget {
       required this.indexItem,
       required this.itemCount,
       required this.dateModel,
-      this.showBoleta=false})
+      this.showBoleta = false})
       : super(key: key);
 
   @override
@@ -68,24 +68,28 @@ class CarouselSliderItem extends StatelessWidget {
                                     fontSize: 20.0)),
                           ],
                         ),
-                        showBoleta?InkWell(
-                          onTap: () {
-                            onPressed();
-                          },
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset('assets/icons/pdf.png',
-                                    height: 25,
-                                    width: 25,
-                                    color: ColorsApp.primary),
-                                Text('Ver boleta',style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w400,
-                                    color: ColorsApp.primary,
-                                    fontSize: 14.0))
-                              ]),
-                        ):Container(),
+                        showBoleta
+                            ? InkWell(
+                                onTap: () {
+                                  onPressed();
+                                },
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Image.asset('assets/icons/pdf.png',
+                                          height: 25,
+                                          width: 25,
+                                          color: ColorsApp.primary),
+                                      Text('Ver boleta',
+                                          style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w400,
+                                              color: ColorsApp.primary,
+                                              fontSize: 14.0))
+                                    ]),
+                              )
+                            : Container(),
                       ],
                     ),
                     const SizedBox(height: 12.0),
@@ -116,7 +120,7 @@ class CarouselSliderItem extends StatelessWidget {
   Container _widgetFilters(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            border: Border.all(color: ColorsApp.primary,width: 1.8),
+            border: Border.all(color: ColorsApp.primary, width: 1.8),
             borderRadius: BorderRadius.circular(25.0)),
         child: Column(
           children: [
@@ -125,7 +129,7 @@ class CarouselSliderItem extends StatelessWidget {
                   onPressedDate();
                 },
                 child: Padding(
-                   padding: const EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                       vertical: 4.0, horizontal: 12.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,

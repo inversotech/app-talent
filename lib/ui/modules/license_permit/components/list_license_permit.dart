@@ -741,7 +741,7 @@ class ListLicensePermit extends StatelessWidget {
                       id,
                       idEstado == '01' && isJefeArea
                           ? '02'
-                          : idEstado == '02' && isJefeArea
+                          : idEstado == '02' && isDth
                               ? '03'
                               : idEstado);
                 },

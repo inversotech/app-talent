@@ -9,6 +9,8 @@ class CarouselSliderItem extends StatelessWidget {
   final Function()? onPressedNotify;
   final String title;
   final List<dynamic>? detail;
+  final List<Widget>? detailWidget;
+  final bool isDetailWidget;
   final int indexItem;
   final int itemCount;
   final int cantidadAprobar;
@@ -24,9 +26,11 @@ class CarouselSliderItem extends StatelessWidget {
       required this.itemCount,
       required this.cantidadAprobar,
       required this.textButton,
+      this.detailWidget,
       this.onPressedRequest,
       this.onPressedNotify,
-      this.showButtonRequest = true})
+      this.showButtonRequest = true,
+      this.isDetailWidget = false})
       : super(key: key);
 
   @override
@@ -74,38 +78,41 @@ class CarouselSliderItem extends StatelessWidget {
                       ),
                       const SizedBox(height: 8.0),
                       Column(
-                          children: List<Widget>.generate(
-                              detail != null ? detail!.length : 0, (index) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              detail![index]['cantidad']
-                                      .toString()
-                                      .padLeft(2, '0') +
-                                  ' ',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20.0,
-                                  color: ColorsApp.primary),
-                            ),
-                            Text(
-                              detail![index]['nombre'].toString() + ' hasta ',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16.0,
-                                  color: ColorsApp.primary),
-                            ),
-                            Text(
-                              'hoy',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16.0,
-                                  color: ColorsApp.primary),
-                            ),
-                          ],
-                        );
-                      })),
+                          children: isDetailWidget
+                              ? detailWidget!
+                              : List<Widget>.generate(
+                                  detail != null ? detail!.length : 0, (index) {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        detail![index]['cantidad']
+                                                .toString()
+                                                .padLeft(2, '0') +
+                                            ' ',
+                                        style: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 20.0,
+                                            color: ColorsApp.primary),
+                                      ),
+                                      Text(
+                                        detail![index]['nombre'].toString() +
+                                            ' hasta ',
+                                        style: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16.0,
+                                            color: ColorsApp.primary),
+                                      ),
+                                      Text(
+                                        'hoy',
+                                        style: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16.0,
+                                            color: ColorsApp.primary),
+                                      ),
+                                    ],
+                                  );
+                                })),
                     ],
                   ),
                 ),
@@ -156,7 +163,7 @@ class CarouselSliderItem extends StatelessWidget {
                               ),
                               child: Text(
                                 cantidadAprobar.toString(),
-                                style:  GoogleFonts.montserrat(
+                                style: GoogleFonts.montserrat(
                                   color: ColorsApp.white,
                                   fontSize: 12,
                                 ),

@@ -138,9 +138,6 @@ class FormJustificationController extends GetxController {
       }
       final _markingService = MarkingService();
       PaginationModel pagination = await _markingService.assistMarkings(params);
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
       List<dynamic> jsonList =
           pagination.data == null ? [] : pagination.data as List<dynamic>;
 
@@ -252,6 +249,12 @@ class FormJustificationController extends GetxController {
     });
     loadMarking.value = false;
     loadMarking.value = true;
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
   }
 
   Color _getColorEnt(MarkingModel item) {

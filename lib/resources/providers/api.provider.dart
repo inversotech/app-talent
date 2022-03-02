@@ -11,6 +11,7 @@ class ApiProvider extends GetConnect {
   }
 
   Future<ApiResponse> loginLamb(Map<String, String> params) async {
+    httpClient.timeout = const Duration(seconds: 30);
     try {
       var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
 
@@ -73,7 +74,9 @@ class ApiProvider extends GetConnect {
   Future<ApiResponse> postParams(
       {required String endPoint,
       required Map<String, String> params,
-      bool showMessage = true}) async {
+      bool showMessage = true,
+      duration = const Duration(seconds: 8)}) async {
+    httpClient.timeout = duration;
     try {
       final storage = GetStorage();
       final token = storage.read('tokenLamb');
@@ -138,6 +141,25 @@ class ApiProvider extends GetConnect {
       final token = storage.read('tokenLamb');
       final headers = {'Authorization': token.toString()};
       final response = await put(endPoint, params, headers: headers);
+      return returnResponseOrThrowException(
+          response.statusCode, response.body, showMessage);
+    } catch (e) {
+      print(e);
+      _showDialog('danger',
+          'Ocurrió un error al realizar la petición, intente nuevamente.');
+      return ApiResponse.fromJsonNull();
+    }
+  }
+
+  Future<ApiResponse> deleteId(
+      {required String endPoint,
+      required String id,
+      bool showMessage = true}) async {
+    try {
+      final storage = GetStorage();
+      final token = storage.read('tokenLamb');
+      final headers = {'Authorization': token.toString()};
+      final response = await delete(endPoint + '/' + id, headers: headers);
       return returnResponseOrThrowException(
           response.statusCode, response.body, showMessage);
     } catch (e) {

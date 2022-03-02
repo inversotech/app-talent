@@ -209,7 +209,7 @@ class ListMarking extends StatelessWidget {
               Text(
                 capitalize(DateFormat.MMMM('es').format(fecha)) +
                     ', ' +
-                    Jiffy(fecha, 'dd/MM/yyyy').format('yy'),
+                    Jiffy(fecha, 'dd/MM/yyyy').format('yyyy'),
                 style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w400,
                     color: ColorsApp.primary,
