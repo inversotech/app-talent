@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lamb_talent/controllers/notification/comment_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/notification/comment.dart';
 import 'package:lamb_talent/shared/components/app_screen.dart';
 
@@ -88,98 +89,109 @@ class Comment extends StatelessWidget {
                     ],
                   )
                 : Container()),
-            bottomSheet: Container(
-              padding: const EdgeInsets.only(bottom: 8),
-              color: ColorsApp.primaryVariant,
-              child: Container(
-                color: ColorsApp.primaryVariant,
-                padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                child: Container(
-                  color: ColorsApp.white,
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(
-                      left: 8.0, right: 8.0, bottom: 12.0, top: 12.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Obx(
-                        () => controller.answerParent.value
-                            ? Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 8.0, left: 8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Flexible(
-                                        child: Text(
-                                            'Responder a ' +
+            bottomSheet: !controller.userPref.isWorkerChild
+                ? Container(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    color: ColorsApp.primaryVariant,
+                    child: Container(
+                      color: ColorsApp.primaryVariant,
+                      padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                      child: Container(
+                        color: ColorsApp.white,
+                        width: double.infinity,
+                        padding: const EdgeInsets.only(
+                            left: 8.0, right: 8.0, bottom: 12.0, top: 12.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Obx(
+                              () => controller.answerParent.value
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 8.0, left: 8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Flexible(
+                                              child: Text(
+                                                  'Responder a ' +
+                                                      controller
+                                                          .answerUserParent
+                                                          .value,
+                                                  style: GoogleFonts.montserrat(
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color:
+                                                          ColorsApp.control))),
+                                          IconButton(
+                                              icon: const Icon(Icons.close,
+                                                  color: Colors.black),
+                                              onPressed: () {
                                                 controller
-                                                    .answerUserParent.value,
-                                            style: GoogleFonts.montserrat(
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: ColorsApp.control))),
-                                    IconButton(
-                                        icon: const Icon(Icons.close,
-                                            color: Colors.black),
-                                        onPressed: () {
-                                          controller.fnCloseAnswerParent();
-                                        })
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                      ),
-                      TextFormField(
-                        textAlignVertical: TextAlignVertical.center,
-                        controller: controller.mensaje,
-                        autofocus: focusState,
-                        focusNode: controller.focusNode,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0)),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 30.0, vertical: 8.0),
-                            alignLabelWithHint: true,
-                            icon: controller.userPref.photoUrl!.isNotEmpty
-                                ? SizedBox(
-                                    width: 35,
-                                    height: 35,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: CachedNetworkImage(
-                                        fit: BoxFit.cover,
-                                        imageUrl: controller.userPref.photoUrl
-                                            .toString(),
-                                        placeholder: (context, url) =>
-                                            const Icon(Icons.person),
-                                        errorWidget: (context, url, error) {
-                                          return const Icon(Icons.person);
-                                        },
+                                                    .fnCloseAnswerParent();
+                                              })
+                                        ],
                                       ),
-                                    ))
-                                : const Icon(Icons.person),
-                            labelStyle: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w500,
-                                color: ColorsApp.primary),
-                            labelText: 'Escribir comentario',
-                            hintText: 'Escribir comentario...',
-                            floatingLabelBehavior: FloatingLabelBehavior.never),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w500,
-                            color: ColorsApp.primary),
-                        onEditingComplete: () {
-                          controller.fnSaveComment(
-                              controller.idOrigen.toString(), 0);
-                        },
+                                    )
+                                  : Container(),
+                            ),
+                            TextFormField(
+                              textAlignVertical: TextAlignVertical.center,
+                              controller: controller.mensaje,
+                              autofocus: focusState,
+                              focusNode: controller.focusNode,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(50.0)),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 30.0, vertical: 8.0),
+                                  alignLabelWithHint: true,
+                                  icon: controller.userPref.photoUrl!.isNotEmpty
+                                      ? SizedBox(
+                                          width: 35,
+                                          height: 35,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            child: CachedNetworkImage(
+                                              fit: BoxFit.cover,
+                                              imageUrl: controller
+                                                  .userPref.photoUrl
+                                                  .toString(),
+                                              placeholder: (context, url) =>
+                                                  const Icon(Icons.person),
+                                              errorWidget:
+                                                  (context, url, error) {
+                                                return const Icon(Icons.person);
+                                              },
+                                            ),
+                                          ))
+                                      : const Icon(Icons.person),
+                                  labelStyle: GoogleFonts.montserrat(
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorsApp.primary),
+                                  labelText: 'Escribir comentario',
+                                  hintText: 'Escribir comentario...',
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.never),
+                              style: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w500,
+                                  color: ColorsApp.primary),
+                              onEditingComplete: () {
+                                controller.fnSaveComment(
+                                    controller.idOrigen.toString(), 0);
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                    ),
+                  )
+                : null,
           );
         });
   }
@@ -198,7 +210,9 @@ class Comment extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     backgroundColor: item.pressDelete ? ColorsApp.info : null),
                 onLongPress: () {
-                  controller.fnPressDelete(item, index, 0, false);
+                  if (!controller.userPref.isWorkerChild) {
+                    controller.fnPressDelete(item, index, 0, false);
+                  }
                 },
                 onPressed: () {},
                 child: Row(
@@ -256,13 +270,19 @@ class Comment extends StatelessWidget {
                                     ? LikeComment(
                                         comment: item,
                                         onPressedLike: (val) {
-                                          controller.fnPressLikeComment(
-                                              item, index, 0, false);
+                                          if (!controller
+                                              .userPref.isWorkerChild) {
+                                            controller.fnPressLikeComment(
+                                                item, index, 0, false);
+                                          }
                                         })
                                     : IconButton(
                                         onPressed: () {
-                                          controller.fnPressDeleteComment(
-                                              item, index, 0, false);
+                                          if (!controller
+                                              .userPref.isWorkerChild) {
+                                            controller.fnPressDeleteComment(
+                                                item, index, 0, false);
+                                          }
                                         },
                                         icon: const Icon(Icons.delete,
                                             color: ColorsApp.danger),
@@ -270,8 +290,11 @@ class Comment extends StatelessWidget {
                                 item.pressDelete
                                     ? IconButton(
                                         onPressed: () {
-                                          controller.fnPressClose(
-                                              item, index, 0, false);
+                                          if (!controller
+                                              .userPref.isWorkerChild) {
+                                            controller.fnPressClose(
+                                                item, index, 0, false);
+                                          }
                                         },
                                         icon: const Icon(Icons.close,
                                             color: Colors.black))
@@ -315,7 +338,9 @@ class Comment extends StatelessWidget {
                                       padding: const EdgeInsets.all(4.0),
                                     ),
                                     onPressed: () {
-                                      controller.fnAnswerParent(item, index);
+                                      if (!controller.userPref.isWorkerChild) {
+                                        controller.fnAnswerParent(item, index);
+                                      }
                                     },
                                     child: Text('Responder',
                                         style: GoogleFonts.montserrat(
@@ -411,7 +436,9 @@ class Comment extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     backgroundColor: item.pressDelete ? ColorsApp.info : null),
                 onLongPress: () {
-                  controller.fnPressDelete(item, indexParent, index, true);
+                  if (!controller.userPref.isWorkerChild) {
+                    controller.fnPressDelete(item, indexParent, index, true);
+                  }
                 },
                 onPressed: () {},
                 child: Row(
@@ -469,13 +496,19 @@ class Comment extends StatelessWidget {
                                     ? LikeComment(
                                         comment: item,
                                         onPressedLike: (val) {
-                                          controller.fnPressLikeComment(
-                                              item, indexParent, index, true);
+                                          if (!controller
+                                              .userPref.isWorkerChild) {
+                                            controller.fnPressLikeComment(
+                                                item, indexParent, index, true);
+                                          }
                                         })
                                     : IconButton(
                                         onPressed: () {
-                                          controller.fnPressDeleteComment(
-                                              item, indexParent, index, true);
+                                          if (!controller
+                                              .userPref.isWorkerChild) {
+                                            controller.fnPressDeleteComment(
+                                                item, indexParent, index, true);
+                                          }
                                         },
                                         icon: const Icon(Icons.delete,
                                             color: ColorsApp.danger),
@@ -483,8 +516,11 @@ class Comment extends StatelessWidget {
                                 item.pressDelete
                                     ? IconButton(
                                         onPressed: () {
-                                          controller.fnPressClose(
-                                              item, indexParent, index, true);
+                                          if (!controller
+                                              .userPref.isWorkerChild) {
+                                            controller.fnPressClose(
+                                                item, indexParent, index, true);
+                                          }
                                         },
                                         icon: const Icon(Icons.close,
                                             color: Colors.black))
@@ -560,14 +596,17 @@ class _LikeCommentState extends State<LikeComment> {
     super.initState();
   }
 
+  final userPref = UserPreferences();
   @override
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: () {
-          widget.onPressedLike(commentData);
-          setState(() {
-            commentData.like = !commentData.like;
-          });
+          if (!userPref.isWorkerChild) {
+            widget.onPressedLike(commentData);
+            setState(() {
+              commentData.like = !commentData.like;
+            });
+          }
         },
         icon: commentData.like
             ? const Icon(Icons.favorite, color: ColorsApp.danger)

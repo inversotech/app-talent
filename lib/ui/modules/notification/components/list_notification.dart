@@ -6,6 +6,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
+import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/notification/notification_general.dart';
 import 'package:lamb_talent/shared/components/expanded_text.dart';
 
@@ -593,14 +594,17 @@ class _LikeAlbumState extends State<LikeAlbum> {
     super.initState();
   }
 
+  final userPreferences = UserPreferences();
   @override
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: () {
-          widget.onPressedLike(albumData);
-          setState(() {
-            albumData.like = !albumData.like;
-          });
+          if (!userPreferences.isWorkerChild) {
+            widget.onPressedLike(albumData);
+            setState(() {
+              albumData.like = !albumData.like;
+            });
+          }
         },
         icon: albumData.like
             ? const Icon(Icons.favorite, color: ColorsApp.danger, size: 30)

@@ -39,7 +39,9 @@ class NotificationPage extends StatelessWidget {
                                 controller.goToDetail(arguments);
                               },
                               onPressedLike: (arguments, index) {
-                                controller.fnSaveLike(arguments, index);
+                                if (!controller.userPreferences.isWorkerChild) {
+                                  controller.fnSaveLike(arguments, index);
+                                }
                               },
                               onPressedComment:
                                   (arguments, autofocus, indexOrigen) {
@@ -55,7 +57,8 @@ class NotificationPage extends StatelessWidget {
                               onPressedPhoto: (photo) {
                                 controller.showPhoto(photo);
                               })
-                          : controller.listData.isEmpty && controller.finishConsults
+                          : controller.listData.isEmpty &&
+                                  controller.finishConsults
                               ? Container(
                                   padding: const EdgeInsets.only(top: 40.0),
                                   child: Center(

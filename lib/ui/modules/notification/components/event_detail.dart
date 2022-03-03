@@ -62,7 +62,8 @@ class EventDetail extends StatelessWidget {
                     )
                   : Container());
             }),
-            floatingActionButton: Obx(() => controller.buttonAssitance.value
+            floatingActionButton: Obx(() => controller.buttonAssitance.value &&
+                    !controller.userPreferences.isWorkerChild
                 ? Container(
                     width: 120,
                     alignment: Alignment.bottomRight,

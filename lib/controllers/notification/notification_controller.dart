@@ -7,6 +7,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:lamb_talent/resources/services/auth/auth_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_plus/share_plus.dart';
@@ -41,6 +42,7 @@ class NotificationController extends GetxController {
   RxInt page = 1.obs;
   bool finishLoad = false;
   bool finishConsults = false;
+  RxString codeModule = '16120104'.obs;
 
   @override
   void onInit() {
@@ -63,6 +65,7 @@ class NotificationController extends GetxController {
   }
 
   void initValues() {
+    userPreferences.searchPerson = false;
     page.value = 1;
     perPage.value = 5;
     listData = [];
@@ -85,11 +88,12 @@ class NotificationController extends GetxController {
       loadingIndicator(onlyLoading: true, opacity: false);
     }
     await Jiffy.locale("es");
+    await _getAccessNivel();
     await getListMoreData();
     finishConsults = true;
     loadingData.value = false;
     loadingData.value = true;
-    if (!finishLoad && origen.isNotEmpty) {
+    if (!finishLoad && origen.isNotEmpty && !userPreferences.isWorkerChild) {
       await fnCheckIfNotificationArrived();
       loadingData.value = false;
       loadingData.value = true;
@@ -113,6 +117,23 @@ class NotificationController extends GetxController {
     }
     if (Get.isDialogOpen!) {
       Get.back();
+    }
+  }
+
+  Future _getAccessNivel() async {
+    final Map<String, String> params = {
+      'codigo_acceso': codeModule.value.toString()
+    };
+    final _authService = AuthService();
+    final resp = await _authService.getAccessNivel(params);
+    userPreferences.idNivelAcceso = resp.accesoNivel!.idAccesoNivel != null
+        ? resp.accesoNivel!.idAccesoNivel.toString()
+        : '';
+    if (resp.accesoNivel!.idTipoNivelVista != null &&
+        resp.accesoNivel!.idTipoNivelVista != '5') {
+      userPreferences.searchPerson = true;
+    } else {
+      userPreferences.searchPerson = false;
     }
   }
 
@@ -208,6 +229,9 @@ class NotificationController extends GetxController {
       'id_persona': userPreferences.idPerson != null
           ? userPreferences.idPerson.toString()
           : '',
+      'id_persona_like': userPreferences.idPerson != null
+          ? userPreferences.idPerson.toString()
+          : '',
       'code_fcm_app': codeFcmApp.toString(),
       'per_page': perPage.value.toString(),
       'page': page.value.toString()
@@ -258,6 +282,9 @@ class NotificationController extends GetxController {
           ? userPreferences.idEntity.toString()
           : '',
       'id_persona': userPreferences.idPerson != null
+          ? userPreferences.idPerson.toString()
+          : '',
+      'id_persona_like': userPreferences.idPerson != null
           ? userPreferences.idPerson.toString()
           : '',
       'code_fcm_app': codeFcmApp.toString(),

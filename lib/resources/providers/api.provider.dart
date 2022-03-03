@@ -8,6 +8,7 @@ class ApiProvider extends GetConnect {
   @override
   void onInit() {
     httpClient.maxRedirects = 1;
+    httpClient.timeout = const Duration(seconds: 20);
   }
 
   Future<ApiResponse> loginLamb(Map<String, String> params) async {
