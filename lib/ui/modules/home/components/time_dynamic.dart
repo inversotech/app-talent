@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/controllers/home/button_marking_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/functions/capitalize.dart';
 
 class MarkingWidget extends StatelessWidget {
   final Function() onPressed;
@@ -80,7 +81,7 @@ class MarkingWidget extends StatelessWidget {
             children: [
               const Icon(Icons.check_box_outlined, color: Colors.white),
               Text(
-                descripcionMarcacion.toLowerCase(),
+                capitalize(descripcionMarcacion.toLowerCase()),
                 style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w400, color: Colors.white),
               ),

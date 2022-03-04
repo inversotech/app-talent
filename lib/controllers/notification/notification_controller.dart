@@ -90,6 +90,10 @@ class NotificationController extends GetxController {
     await Jiffy.locale("es");
     await _getAccessNivel();
     await getListMoreData();
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
+    loadingIndicator(onlyLoading: true, opacity: false);
     finishConsults = true;
     loadingData.value = false;
     loadingData.value = true;

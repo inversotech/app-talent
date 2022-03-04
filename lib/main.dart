@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
               isDark: false, textTheme: const TextTheme(bodyText1: body1Style))
           .themeData,
       initialRoute: RoutesName.checkAuth,
+      transitionDuration: const Duration(seconds: 0),
       getPages: getRouters(),
     );
   }
