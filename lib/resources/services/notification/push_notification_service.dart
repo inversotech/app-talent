@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lamb_talent/core/colors.dart';
@@ -42,8 +43,9 @@ class PushNotificationService {
 
   static Future initializeAppOneSingal() async {
     //Remove this method to stop OneSignal Debugging
-    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
-
+    if (kDebugMode) {
+      OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+    }
     OneSignal.shared.setAppId(appIdOneSignal);
 // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
     OneSignal.shared

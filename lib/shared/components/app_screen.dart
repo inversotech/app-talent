@@ -82,7 +82,7 @@ class AppScreen extends StatelessWidget {
                 codePage == element.code ? Colors.white : Colors.transparent),
         child: Padding(
           padding: const EdgeInsets.all(4.0),
-          child: element.code == '16120104' && userPreferences.cantNotify>0
+          child: element.code == '16120104' && userPreferences.cantNotify > 0
               ? Stack(
                   children: [
                     Wrap(
@@ -230,11 +230,13 @@ class AppScreen extends StatelessWidget {
                                                 style: TextStyle(
                                                     fontSize: 16.0,
                                                     fontFamily: 'Montserrat',
-                                                    fontWeight: FontWeight.w400))
+                                                    fontWeight:
+                                                        FontWeight.w400))
                                             : Text('Buenos días, ',
                                                 style: GoogleFonts.montserrat(
                                                     fontSize: 16.0,
-                                                    fontWeight: FontWeight.w400))
+                                                    fontWeight:
+                                                        FontWeight.w400))
                                         : Container(),
                                     Text(fullname,
                                         style: GoogleFonts.montserrat(
@@ -303,8 +305,8 @@ class AppScreen extends StatelessWidget {
                               onLoading: enablePullUp ? onLoading : null,
                               scrollDirection: Axis.vertical,
                               header: const WaterDropMaterialHeader(),
-                              footer:
-                                  CustomFooterLoading(colorLoading: colorLoading),
+                              footer: CustomFooterLoading(
+                                  colorLoading: colorLoading),
                               scrollController: scrollController,
                               physics: const ScrollPhysics(),
                               child: SingleChildScrollView(
@@ -337,13 +339,17 @@ class AppScreen extends StatelessWidget {
                     labelColor: ColorsApp.primary,
                     onTap: (val) {
                       if (val == 0) {
-                        Get.offAllNamed(userPreferences.menu![0].url.toString());
+                        Get.offAllNamed(
+                            userPreferences.menu![0].url.toString());
                       } else if (val == 1) {
-                        Get.offAllNamed(userPreferences.menu![1].url.toString());
+                        Get.offAllNamed(
+                            userPreferences.menu![1].url.toString());
                       } else if (val == 2) {
-                        Get.offAllNamed(userPreferences.menu![2].url.toString());
+                        Get.offAllNamed(
+                            userPreferences.menu![2].url.toString());
                       } else if (val == 3) {
-                        Get.offAllNamed(userPreferences.menu![3].url.toString());
+                        Get.offAllNamed(
+                            userPreferences.menu![3].url.toString());
                       }
                     },
                     labelPadding: const EdgeInsets.symmetric(vertical: 8.0),

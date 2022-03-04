@@ -8,7 +8,6 @@ class ApiProvider extends GetConnect {
   @override
   void onInit() {
     httpClient.maxRedirects = 1;
-    httpClient.timeout = const Duration(seconds: 20);
   }
 
   Future<ApiResponse> loginLamb(Map<String, String> params) async {
@@ -39,6 +38,7 @@ class ApiProvider extends GetConnect {
 
   Future<ApiResponse> getAll({required String endPoint}) async {
     try {
+      httpClient.timeout = const Duration(seconds: 30);
       final storage = GetStorage();
       final token = storage.read('tokenLamb');
       final headers = {'Authorization': token.toString()};
@@ -58,6 +58,7 @@ class ApiProvider extends GetConnect {
     required Map<String, String> params,
   }) async {
     try {
+      httpClient.timeout = const Duration(seconds: 30);
       final storage = GetStorage();
       final token = storage.read('tokenLamb');
       final headers = {'Authorization': token.toString()};
@@ -79,6 +80,7 @@ class ApiProvider extends GetConnect {
       duration = const Duration(seconds: 8)}) async {
     httpClient.timeout = duration;
     try {
+      httpClient.timeout = const Duration(seconds: 30);
       final storage = GetStorage();
       final token = storage.read('tokenLamb');
       final headers = {'Authorization': token.toString()};
@@ -98,6 +100,7 @@ class ApiProvider extends GetConnect {
       required FormData formData,
       bool showMessage = true}) async {
     try {
+      httpClient.timeout = const Duration(seconds: 30);
       final storage = GetStorage();
       final token = storage.read('tokenLamb');
       final headers = {'Authorization': token.toString()};
@@ -119,6 +122,7 @@ class ApiProvider extends GetConnect {
       required String id,
       bool showMessage = true}) async {
     try {
+      httpClient.timeout = const Duration(seconds: 30);
       final storage = GetStorage();
       final token = storage.read('tokenLamb');
       final headers = {'Authorization': token.toString()};
@@ -138,6 +142,7 @@ class ApiProvider extends GetConnect {
       required Map<String, String> params,
       bool showMessage = true}) async {
     try {
+      httpClient.timeout = const Duration(seconds: 30);
       final storage = GetStorage();
       final token = storage.read('tokenLamb');
       final headers = {'Authorization': token.toString()};
@@ -157,6 +162,7 @@ class ApiProvider extends GetConnect {
       required String id,
       bool showMessage = true}) async {
     try {
+      httpClient.timeout = const Duration(seconds: 30);
       final storage = GetStorage();
       final token = storage.read('tokenLamb');
       final headers = {'Authorization': token.toString()};
