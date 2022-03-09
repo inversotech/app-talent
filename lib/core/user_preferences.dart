@@ -84,6 +84,7 @@ class UserPreferences {
   set nroDocumentFather(String? value) {
     _prefs?.setString('nroDocumentFather', value!);
   }
+
   // GET y SET del nroDocument
   String? get nroDocument {
     return _prefs?.getString('nroDocument') ?? '';
@@ -215,7 +216,7 @@ class UserPreferences {
     _prefs?.setString('idNivelAcceso', value);
   }
 
-    // GET y SET searchPerson
+  // GET y SET searchPerson
   bool get searchPerson {
     return _prefs?.getBool('searchPerson') ?? false;
   }
@@ -224,7 +225,7 @@ class UserPreferences {
     _prefs?.setBool('searchPerson', value);
   }
 
-   // GET y SET tokenNotify
+  // GET y SET tokenNotify
   String get tokenNotify {
     return _prefs?.getString('tokenNotify') ?? '';
   }
@@ -233,7 +234,7 @@ class UserPreferences {
     _prefs?.setString('tokenNotify', value);
   }
 
-      // GET y SET cantNotify
+  // GET y SET cantNotify
   int get cantNotify {
     return _prefs?.getInt('cantNotify') ?? 0;
   }
@@ -242,4 +243,30 @@ class UserPreferences {
     _prefs?.setInt('cantNotify', value);
   }
 
+  // GET y SET optionLocation
+  String get optionLocation {
+    return _prefs?.getString('optionLocation') ?? '1'; //1 is not get location, 2 is get location, '3' is new get location
+  }
+
+  set optionLocation(String value) {
+    _prefs?.setString('optionLocation', value);
+  }
+
+  // GET y SET latitude
+  double get latitude {
+    return _prefs?.getDouble('latitude') ?? 0.0;
+  }
+
+  set latitude(double value) {
+    _prefs?.setDouble('latitude', value);
+  }
+
+  // GET y SET longitude
+  double get longitude {
+    return _prefs?.getDouble('longitude') ?? 0.0;
+  }
+
+  set longitude(double value) {
+    _prefs?.setDouble('longitude', value);
+  }
 }

@@ -1,14 +1,12 @@
-const apiUrlLamb = 'https://api-lamb.upeu.edu.pe/';
-const apiUrlLambTalent =
+const apiUrlLambProduccion = 'https://api-lamb.upeu.edu.pe/';
+const apiUrlLambTalentDev =
     'https://www.upeu.dev/lamb-talent/backs/api-talent/api/';
-const apiUrlLocal = 'http://192.168.1.34:5002/api/';
-const apiUrlLocalUpn =
+const apiUrlLambTalenLocal =
     'http://app07.adventistas.pe/lamb-api-talent/public/api/';
-const apiUrlProduccionTemp = 'https://api-talent.adventistas.pe/api/';
-const apiUrlLambProduccion = 'https://api-lamb-talent.upeu.edu.pe/api-talent/api/';
-const apiUrlLocalMessenger = 'https://app07.adventistas.pe/lamb-school-messenger-api/public/api/';
+const apiUrlLambTalentProduccion = 'https://api-lamb-talent.upeu.edu.pe/api-talent/api/';
+const apiUrlMessengerLocal = 'https://app07.adventistas.pe/lamb-school-messenger-api/public/api/';
 const apiUrlMessengerProduccion = 'https://api-lamb-school-messenger.upeu.edu.pe/api/';
-const apiUrl = apiUrlLambProduccion;
+const apiUrl = apiUrlLambTalentProduccion;
 const apiUrlMessenger = apiUrlMessengerProduccion;
 const codeModule = '16120100';
 const codeFcmApp = 'lamb-talent';
