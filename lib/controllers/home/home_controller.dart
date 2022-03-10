@@ -371,6 +371,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (marking.success) {
       isMarking.value = true;
       loadingIndicator(onlyLoading: true, opacity: false);
+      showButton.value = '0';
+      loadingData.value = true;
+      loadingData.value = false;
       userPreferences.optionLocation == '2';
       await _getInfoAssistance();
       if (Get.isDialogOpen!) {
