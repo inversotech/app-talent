@@ -11,8 +11,8 @@ class LocationUser {
     userPreferences.optionLocation = '1';
     _serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!_serviceEnabled) {
-      userPreferences.latitude = 0.0;
-      userPreferences.longitude = 0.0;
+      userPreferences.latitude = '';
+      userPreferences.longitude = '';
       userPreferences.optionLocation = '2';
       return;
     }
@@ -20,22 +20,22 @@ class LocationUser {
     if (_permission == LocationPermission.denied) {
       _permission = await Geolocator.requestPermission();
       if (_permission == LocationPermission.denied) {
-        userPreferences.latitude = 0.0;
-        userPreferences.longitude = 0.0;
+        userPreferences.latitude = '';
+        userPreferences.longitude = '';
         userPreferences.optionLocation = '2';
         return;
       }
     }
     if (_permission != LocationPermission.always &&
         _permission != LocationPermission.whileInUse) {
-      userPreferences.latitude = 0.0;
-      userPreferences.longitude = 0.0;
+      userPreferences.latitude = '';
+      userPreferences.longitude = '';
       userPreferences.optionLocation = '2';
       return;
     }
     final _position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    userPreferences.latitude = _position.latitude;
-    userPreferences.longitude = _position.longitude;
+    userPreferences.latitude = _position.latitude.toString();
+    userPreferences.longitude = _position.longitude.toString();
     userPreferences.optionLocation = '2';
     Timer? timePeriodic;
     timePeriodic = Timer.periodic(const Duration(minutes: 3), (timer) {

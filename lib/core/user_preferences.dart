@@ -253,20 +253,20 @@ class UserPreferences {
   }
 
   // GET y SET latitude
-  double get latitude {
-    return _prefs?.getDouble('latitude') ?? 0.0;
+  String get latitude {
+    return _prefs?.getString('latitude') ?? '';
   }
 
-  set latitude(double value) {
-    _prefs?.setDouble('latitude', value);
+  set latitude(String value) {
+    _prefs?.setString('latitude', value);
   }
 
   // GET y SET longitude
-  double get longitude {
-    return _prefs?.getDouble('longitude') ?? 0.0;
+  String get longitude {
+    return _prefs?.getString('longitude') ?? '';
   }
 
-  set longitude(double value) {
-    _prefs?.setDouble('longitude', value);
+  set longitude(String value) {
+    _prefs?.setString('longitude', value);
   }
 }
