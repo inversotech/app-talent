@@ -44,3 +44,8 @@ target 'OneSignalNotificationServiceExtension' do
   use_frameworks!
   pod 'OneSignalXCFramework', '>= 3.4.3', '< 4.0'
 end
+
+target 'ImageNotification' do
+  use_frameworks!
+  pod 'Firebase/Messaging'
+end
