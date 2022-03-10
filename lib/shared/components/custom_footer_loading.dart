@@ -4,7 +4,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class CustomFooterLoading extends StatelessWidget {
   final Color colorLoading;
-  CustomFooterLoading({Key? key, this.colorLoading = ColorsApp.primary})
+  const CustomFooterLoading({Key? key, this.colorLoading = ColorsApp.primary})
       : super(key: key);
 
   @override

@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lamb_talent/resources/services/auth/auth_service.dart';
+import 'package:lamb_talent/core/location_user.dart';
+import 'package:lamb_talent/resources/models/general/acceso_nivel_user.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_approve_page.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_page.dart';
 import 'package:lamb_talent/ui/modules/justification/components/form_justification.dart';
@@ -50,8 +53,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   bool openLocation = false;
 
   RxString codeModule = '16120101'.obs;
-  RxBool isJefeArea = false.obs;
-  RxBool isDth = false.obs;
   bool isListApprove = false;
   @override
   void onInit() {
@@ -82,83 +83,37 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   void _listAllData() async {
+    if (userPreferences.optionLocation == '3') {
+      LocationUser().initLocationUser();
+    }
     loadingIndicator(onlyLoading: true, opacity: false);
-    await _getActions();
-    await _getAccessNivel();
-    await _getListDataAndChart();
-    if (!userPreferences.isWorkerChild) {
-      await _verifyButtonAssistance();
-    } else {
-      refreshController.loadNoData();
-      loadingData.value = true;
-      loadingData.value = false;
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
-    }
-  }
-
-  Future _getActions() async {
-    final Map<String, String> params = {'id_modulo': codeModule.value};
-    final _authService = AuthService();
-    final actions = await _authService.getActionsByModule(params);
-    isJefeArea.value = actions
-        .where((element) =>
-            element.clave.toString().toUpperCase() == 'APPROVE_JUST_AREA')
-        .isNotEmpty;
-    isDth.value = actions
-        .where((element) =>
-            element.clave.toString().toUpperCase() == 'APPROVE_JUST_DTH')
-        .isNotEmpty;
-  }
-
-  Future _getAccessNivel() async {
-    final Map<String, String> params = {
-      'codigo_acceso': codeModule.value.toString()
-    };
-    final _authService = AuthService();
-    final resp = await _authService.getAccessNivel(params);
-    userPreferences.idNivelAcceso = resp.accesoNivel!.idAccesoNivel != null
-        ? resp.accesoNivel!.idAccesoNivel.toString()
-        : '';
-    if (resp.accesoNivel!.idTipoNivelVista != null &&
-        resp.accesoNivel!.idTipoNivelVista != '5') {
-      userPreferences.searchPerson = true;
-    } else {
-      userPreferences.searchPerson = false;
-    }
+    await _getInfoAssistance();
+    refreshController.loadNoData();
+    loadingData.value = true;
+    loadingData.value = false;
   }
 
   Future _verifyButtonAssistance() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-// Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      await _getButtonAssitance('0', '0', false, false);
-      return;
+    if (Get.isDialogOpen!) {
+      Get.back();
     }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        await _getButtonAssitance('0', '0', true, false);
-        return;
-      }
+    loadingIndicator(onlyLoading: true, opacity: false);
+    Timer? timePeriodic;
+    if (userPreferences.optionLocation == '2') {
+      await _getButtonAssitance(userPreferences.longitude.toString(),
+          userPreferences.latitude.toString());
+    } else {
+      timePeriodic = Timer.periodic(const Duration(seconds: 1), (timer) async {
+        if (userPreferences.optionLocation == '2') {
+          timePeriodic!.cancel();
+          await _getButtonAssitance(userPreferences.longitude.toString(),
+              userPreferences.latitude.toString());
+        }
+      });
     }
-    if (permission == LocationPermission.deniedForever) {
-      await _getButtonAssitance('0', '0', true, false);
-      return;
-    }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
-    await _getButtonAssitance(position.longitude.toString(),
-        position.latitude.toString(), true, true);
   }
 
-  Future _getButtonAssitance(String longitude, String latitude,
-      bool serviceEnabled, bool denied) async {
+  Future _getButtonAssitance(String longitude, String latitude) async {
     Map<String, String> params = {
       'lng': longitude,
       'lat': latitude,
@@ -198,57 +153,154 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (Get.isDialogOpen!) {
       Get.back();
     }
-    if (codeModality.value == 'TP' && !serviceEnabled) {
+    final _serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    final _permission = await Geolocator.checkPermission();
+    if (codeModality.value == 'TP' && !_serviceEnabled) {
       await _serviceLocationDisable(refreshShowButton: true);
-    } else if (codeModality.value == 'TP' && !denied) {
+    } else if (codeModality.value == 'TP' &&
+        (_permission != LocationPermission.always &&
+            _permission != LocationPermission.whileInUse)) {
       await _serviceLocationDenied(refreshShowButton: true);
     }
   }
 
-  Future _getListDataAndChart() async {
+  Future _getInfoAssistance() async {
     final Map<String, String> params = {
       'id_anho': DateTime.now().year.toString(),
       'id_mes': DateTime.now().month.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
       /* 'id_depto': userPreferences.idDeparment.toString(), */
       'id_trabajador': userPreferences.idWorker.toString(),
-      'incluir_chart_data': '1',
-      'restringido': 'S',
-      'id_acceso_nivel': userPreferences.idNivelAcceso.toString(),
-      'incluir_cantidad_aprobar':
-          (isDth.value || isJefeArea.value) && !userPreferences.isWorkerChild
-              ? '1'
-              : '0',
-      'id_estado_justif_in': isDth.value
-          ? '01,02'
-          : isJefeArea.value
-              ? '01'
-              : '',
-      'id_estado_lica_perc_in': isDth.value
-          ? '01,02'
-          : isJefeArea.value
-              ? '01'
-              : ''
+      'codigo_modulo': codeModule.value,
+      'lng': userPreferences.longitude.toString(),
+      'lat': userPreferences.latitude.toString(),
+      'include_show_button': userPreferences.isWorkerChild ? '0' : '1',
+      'include_actions': '0',
+      'include_access_level': '1'
     };
+    print('latitude:' + userPreferences.latitude.toString());
+    print('longitude:' + userPreferences.longitude.toString());
     final assistanceSummaryService = AssistanceSummaryService();
-    final resp = await assistanceSummaryService.getAssistanceSummary(params);
-    if (resp.success) {
-      dataCarousel = resp.data;
-      if (dataCarousel != null && dataCarousel!.containsKey('chart_data')) {
-        List<dynamic> jsonList = resp.data['chart_data'] as List;
-        List<AssistanceSummaryModel> list = jsonList
-            .map((jsonElement) => AssistanceSummaryModel.fromJson(jsonElement))
-            .toList();
-        listData = list;
+    Timer? timePeriodic;
+    if (userPreferences.optionLocation == '2') {
+      final resp = await assistanceSummaryService.getInfoAssistance(params);
+      if (resp.success) {
+        final dataResponse = resp.data;
+        if (dataResponse != null) {
+          await _parseDataAssistance(dataResponse);
+        }
+      } else {
+        if (Get.isDialogOpen!) {
+          Get.back();
+        }
+        loadingData.value = true;
+        loadingData.value = false;
+      }
+    } else {
+      timePeriodic = Timer.periodic(const Duration(seconds: 1), (timer) async {
+        if (userPreferences.optionLocation == '2') {
+          timePeriodic!.cancel();
+          if (Get.isDialogOpen!) {
+            Get.back();
+          }
+          loadingIndicator(onlyLoading: true, opacity: false);
+          final resp = await assistanceSummaryService.getInfoAssistance(params);
+          if (resp.success) {
+            final dataResponse = resp.data;
+            if (dataResponse != null) {
+              await _parseDataAssistance(dataResponse);
+            }
+          } else {
+            if (Get.isDialogOpen!) {
+              Get.back();
+            }
+            loadingData.value = true;
+            loadingData.value = false;
+          }
+        }
+      });
+    }
+  }
+
+  Future _parseDataAssistance(Map<String, dynamic> dataResponse) async {
+    if (dataResponse.containsKey('access_level')) {
+      final accessLevel =
+          AccesoNivelUser.fromJson(dataResponse['access_level'] ?? '');
+      userPreferences.idNivelAcceso =
+          accessLevel.accesoNivel!.idAccesoNivel != null
+              ? accessLevel.accesoNivel!.idAccesoNivel.toString()
+              : '';
+      if (accessLevel.accesoNivel!.idTipoNivelVista != null &&
+          accessLevel.accesoNivel!.idTipoNivelVista != '5') {
+        userPreferences.searchPerson = true;
+      } else {
+        userPreferences.searchPerson = false;
+      }
+      loadingData.value = true;
+      loadingData.value = false;
+    }
+    if (dataResponse.containsKey('chart_data')) {
+      List<dynamic> jsonList = dataResponse['chart_data'] as List;
+      List<AssistanceSummaryModel> list = jsonList
+          .map((jsonElement) => AssistanceSummaryModel.fromJson(jsonElement))
+          .toList();
+      listData = list;
+      loadingData.value = true;
+      loadingData.value = false;
+    }
+    if (dataResponse.containsKey('slider_data')) {
+      dataCarousel = dataResponse['slider_data'];
+      loadingData.value = true;
+      loadingData.value = false;
+    }
+    if (dataResponse.containsKey('button_marking') &&
+        !userPreferences.isWorkerChild) {
+      showButton.value = dataResponse['button_marking']['show_button'] ?? '0';
+      textButton.value = dataResponse['button_marking']['text_button'] ?? '';
+      codeModality.value =
+          dataResponse['button_marking']['code_modality'] ?? '';
+      idDescripMarcacion.value =
+          dataResponse['button_marking']['id_descrip_marcacion'] ?? '';
+      hourMarking.value = dataResponse['button_marking']['fecha_hora'] ?? '';
+      minutosTolerancia.value = dataResponse['button_marking']
+                  ['minutos_tolerancia'] !=
+              null
+          ? int.parse(
+              dataResponse['button_marking']['minutos_tolerancia'].toString())
+          : 0;
+      if (showButton.value == '3' && !isMarking.value) {
+        if (Get.isDialogOpen!) {
+          Get.back();
+        }
+        Get.snackbar('Mensaje:', dataResponse['button_marking']['message'],
+            duration: const Duration(seconds: 8),
+            colorText: ColorsApp.white,
+            backgroundColor: ColorsApp.warning);
+      } else {
+        isMarking.value = false;
+      }
+      loadingData.value = true;
+      loadingData.value = false;
+      if (Get.isDialogOpen!) {
+        Get.back();
+      }
+      final _serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      final _permission = await Geolocator.checkPermission();
+      print('codeModality.value:' + codeModality.value.toString());
+      print('_serviceEnabled:' + _serviceEnabled.toString());
+      print('_permission:' + _permission.toString());
+      if (codeModality.value == 'TP' && !_serviceEnabled) {
+        await _serviceLocationDisable(refreshShowButton: true);
+      } else if (codeModality.value == 'TP' &&
+          (_permission != LocationPermission.always &&
+              _permission != LocationPermission.whileInUse)) {
+        await _serviceLocationDenied(refreshShowButton: true);
       }
     }
   }
 
   void onRefresh() async {
-    if (!userPreferences.isWorkerChild) {
-      await _verifyButtonAssistance();
-    }
-    await _getListDataAndChart();
+    await _getInfoAssistance();
     refreshController.refreshCompleted();
     refreshController.loadNoData();
     loadingData.value = true;
@@ -268,12 +320,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       uuid = iosInfo.identifierForVendor!; //UUID for iOS
     }
 
-    bool serviceEnabled;
-    LocationPermission permission;
-
-// Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
+    final _serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!_serviceEnabled) {
       if (codeModality.value == 'TP') {
         if (Get.isDialogOpen!) {
           Get.back();
@@ -285,38 +333,22 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       return;
     }
 
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        if (codeModality.value == 'TP') {
-          if (Get.isDialogOpen!) {
-            Get.back();
-          }
-          await _serviceLocationDenied(refreshShowButton: false);
-        } else {
-          continuoMarkingAssistance(uuid, '0', '0');
-        }
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
+    final _permission = await Geolocator.checkPermission();
+    if ((_permission != LocationPermission.always &&
+        _permission != LocationPermission.whileInUse)) {
       if (codeModality.value == 'TP') {
         if (Get.isDialogOpen!) {
           Get.back();
         }
-        await _serviceLocationDenied(refreshShowButton: false);
+        await _serviceLocationDisable(refreshShowButton: false);
       } else {
         continuoMarkingAssistance(uuid, '0', '0');
       }
       return;
     }
 
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best);
-    await continuoMarkingAssistance(
-        uuid, position.longitude.toString(), position.latitude.toString());
+    await continuoMarkingAssistance(uuid, userPreferences.longitude.toString(),
+        userPreferences.latitude.toString());
   }
 
   Future continuoMarkingAssistance(
@@ -339,13 +371,16 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (marking.success) {
       isMarking.value = true;
       loadingIndicator(onlyLoading: true, opacity: false);
-      if (!userPreferences.isWorkerChild) {
-        await _verifyButtonAssistance();
-      }
-      await _getListDataAndChart();
+      showButton.value = '0';
+      loadingData.value = true;
+      loadingData.value = false;
+      userPreferences.optionLocation == '2';
+      await _getInfoAssistance();
       if (Get.isDialogOpen!) {
         Get.back();
       }
+      loadingData.value = true;
+      loadingData.value = false;
     }
     loadingData.value = true;
     loadingData.value = false;
@@ -397,7 +432,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (result != null) {
       if (result['change'] == 'true' || result['change'] == true) {
         loadingIndicator(onlyLoading: true, opacity: false);
-        await _getListDataAndChart();
+        await _getListData();
         loadingData.value = true;
         loadingData.value = false;
         if (Get.isDialogOpen!) {
@@ -496,31 +531,20 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       'id_entidad': userPreferences.idEntity.toString(),
       /* 'id_depto': userPreferences.idDeparment.toString(), */
       'id_trabajador': userPreferences.idWorker.toString(),
-      'incluir_chart_data': '0',
-      'restringido': 'S',
-      'id_acceso_nivel': userPreferences.idNivelAcceso.toString(),
-      'incluir_cantidad_aprobar':
-          (isDth.value || isJefeArea.value) && !userPreferences.isWorkerChild
-              ? '1'
-              : '0',
-      'id_estado_justif_in': isDth.value
-          ? '01,02'
-          : isJefeArea.value
-              ? '01'
-              : '',
-      'id_estado_lica_perc_in': isDth.value
-          ? '01,02'
-          : isJefeArea.value
-              ? '01'
-              : ''
+      'codigo_modulo': codeModule.value,
+      'lng': userPreferences.longitude.toString(),
+      'lat': userPreferences.latitude.toString(),
+      'include_show_button': '0',
+      'include_actions': '0',
+      'include_access_level': '0'
     };
     final assistanceSummaryService = AssistanceSummaryService();
-    ApiResponse resp =
-        await assistanceSummaryService.getAssistanceSummary(params);
+    final resp = await assistanceSummaryService.getInfoAssistance(params);
     if (resp.success) {
-      dataCarousel = resp.data;
-    } else {
-      dataCarousel = {};
+      final dataResponse = resp.data;
+      if (dataResponse != null) {
+        await _parseDataAssistance(dataResponse);
+      }
     }
   }
 
@@ -538,7 +562,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         bool sign = await showModalSSign(vacacion, type, buildContext);
         if (sign) {
           loadingIndicator(onlyLoading: true, opacity: false);
-          await _getListDataAndChart();
+          await _getListData();
           if (Get.isDialogOpen!) {
             Get.back();
           }
@@ -679,10 +703,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed && openSetting) {
+      LocationUser().initLocationUser();
       openSetting = false;
       loadingIndicator(onlyLoading: true, opacity: false);
       _verifyButtonAssistance();
     } else if (state == AppLifecycleState.resumed && openLocation) {
+      LocationUser().initLocationUser();
       openLocation = false;
       loadingIndicator(onlyLoading: true, opacity: false);
       _verifyButtonAssistance();

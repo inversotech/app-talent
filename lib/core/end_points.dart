@@ -87,7 +87,9 @@ final Map endPoints = {
     'monthly-assistance-summary-chart':
         apiUrl + 'report/assistance/monthly-assistance-summary-chart',
     'monthly-assistance-summary':
-        apiUrl + 'report/assistance/monthly-assistance-summary'
+        apiUrl + 'report/assistance/monthly-assistance-summary',
+    'info-assistance':
+        apiUrl + 'report/assistance/info-assistance-mobile'
   },
   'justification': {
     'request': apiUrl + 'assistance/justification/request',

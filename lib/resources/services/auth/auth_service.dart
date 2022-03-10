@@ -60,7 +60,7 @@ class AuthService {
       }
 
       await totalEntitiesDeptos();
-      await getTotalNoLeidos();
+      // await getTotalNoLeidos();
     }
     return response;
   }
