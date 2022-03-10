@@ -188,9 +188,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         final dataResponse = resp.data;
         if (dataResponse != null) {
           await _parseDataAssistance(dataResponse);
-          if (Get.isDialogOpen!) {
-            Get.back();
-          }
         }
       } else {
         if (Get.isDialogOpen!) {
@@ -289,6 +286,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       }
       final _serviceEnabled = await Geolocator.isLocationServiceEnabled();
       final _permission = await Geolocator.checkPermission();
+      print('codeModality.value:' + codeModality.value.toString());
+      print('_serviceEnabled:' + _serviceEnabled.toString());
+      print('_permission:' + _permission.toString());
       if (codeModality.value == 'TP' && !_serviceEnabled) {
         await _serviceLocationDisable(refreshShowButton: true);
       } else if (codeModality.value == 'TP' &&
