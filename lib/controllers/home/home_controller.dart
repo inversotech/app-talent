@@ -178,6 +178,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       'include_actions': '0',
       'include_access_level': '1'
     };
+    print('latitude:' + userPreferences.latitude.toString());
+    print('longitude:' + userPreferences.longitude.toString());
     final assistanceSummaryService = AssistanceSummaryService();
     Timer? timePeriodic;
     if (userPreferences.optionLocation == '2') {

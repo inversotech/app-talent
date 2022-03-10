@@ -33,7 +33,7 @@ class LocationUser {
       userPreferences.optionLocation = '2';
       return;
     }
-    final _position = await Geolocator.getCurrentPosition();
+    final _position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     userPreferences.latitude = _position.latitude;
     userPreferences.longitude = _position.longitude;
     userPreferences.optionLocation = '2';
