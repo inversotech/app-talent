@@ -36,6 +36,8 @@ class LocationUser {
     final _position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     userPreferences.latitude = _position.latitude.toString();
     userPreferences.longitude = _position.longitude.toString();
+    print('latitude:' + _position.latitude.toString());
+    print('longitude:' + _position.longitude.toString());
     userPreferences.optionLocation = '2';
     Timer? timePeriodic;
     timePeriodic = Timer.periodic(const Duration(minutes: 3), (timer) {

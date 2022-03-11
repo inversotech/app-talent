@@ -182,7 +182,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     print('longitude:' + userPreferences.longitude.toString());
     final assistanceSummaryService = AssistanceSummaryService();
     Timer? timePeriodic;
-    if (userPreferences.optionLocation == '2') {
+    if (userPreferences.optionLocation == '2' ||
+        userPreferences.isWorkerChild) {
       final resp = await assistanceSummaryService.getInfoAssistance(params);
       if (resp.success) {
         final dataResponse = resp.data;
@@ -295,6 +296,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           (_permission != LocationPermission.always &&
               _permission != LocationPermission.whileInUse)) {
         await _serviceLocationDenied(refreshShowButton: true);
+      }
+    } else {
+      if (Get.isDialogOpen!) {
+        Get.back();
       }
     }
   }
