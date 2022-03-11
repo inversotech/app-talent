@@ -263,6 +263,7 @@ class AppScreen extends StatelessWidget {
                             !userPreferences.isWorkerChild
                                 ? IconButton(
                                     onPressed: () {
+                                      userPreferences.clear();
                                       Navigator.pushReplacementNamed(
                                           context, 'login');
                                     },
@@ -419,6 +420,13 @@ class AppScreen extends StatelessWidget {
     userPreferences.nroDocument = userPreferences.nroDocumentFather;
     userPreferences.idWorker = userPreferences.idWorkerFather;
     userPreferences.fullnamePerson = userPreferences.fullnamePersonFather;
+    // reset data father
+    userPreferences.idEntityFather = 0;
+    userPreferences.idDeparmentFathher = '';
+    userPreferences.idPersonFather = 0;
+    userPreferences.nroDocumentFather = '';
+    userPreferences.idWorkerFather = 0;
+    userPreferences.fullnamePersonFather = '';
     Get.forceAppUpdate();
   }
 }
