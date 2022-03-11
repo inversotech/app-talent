@@ -22,6 +22,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FDAllFilesDownloadedMessage</key>
+	<string>All files have been downloaded</string>
+	<key>FDMaximumConcurrentTasks</key>
+	<integer>5</integer>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>Para redireccionar a una url https</string>
@@ -50,20 +54,16 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Para registrar la evidencia de tu justificación, permiso o licencia.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>La ubicación proporcionada será usada para identificar si te encuentras dentro de tu área laboral.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>La ubicación proporcionada será usada para identificar si te encuentras dentro de tu área laboral.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>La ubicación proporcionada será usada para identificar si te encuentras dentro de tu área laboral.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Can I use the mic please?</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Para buscar la evidencia de tu justificación, permiso o licencia.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Para registrar la evidencia de tu justificación, permiso o licencia.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
