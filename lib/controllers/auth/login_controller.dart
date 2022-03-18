@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lamb_talent/core/location_user.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/providers/api.provider.dart';
 import 'package:lamb_talent/resources/services/auth/auth_service.dart';
@@ -33,6 +34,7 @@ class LoginController extends GetxController {
   }
 
   void loginLamb(BuildContext buildContext) async {
+    LocationUser().initLocationUser();
     Map<String, String> params = {
       'username': username.text.toString(),
       'password': password.text.toString(),

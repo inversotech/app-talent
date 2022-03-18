@@ -114,11 +114,16 @@ class EventDetail extends StatelessWidget {
         children: [
           controller.event.imagenUrl!.isNotEmpty &&
                   !controller.event.imagenUrl!.contains('empty')
-              ? CachedNetworkImage(
-                  imageUrl: controller.event.imagenUrl.toString(),
-                  placeholder: (context, url) => Container(),
-                  errorWidget: (context, url, error) {
-                    return Container();
+              ? GestureDetector(
+                  child: CachedNetworkImage(
+                    imageUrl: controller.event.imagenUrl.toString(),
+                    placeholder: (context, url) => Container(),
+                    errorWidget: (context, url, error) {
+                      return Container();
+                    },
+                  ),
+                  onTap: () {
+                    controller.showPhoto(controller.event.imagenUrl.toString());
                   },
                 )
               : Container(),

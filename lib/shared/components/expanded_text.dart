@@ -79,15 +79,21 @@ class ExpandableTextState extends State<ExpandableText> {
         ));
         endIndex = textPainter.getOffsetBefore(pos.offset)!;
         TextSpan textSpan;
+        int indexHeader = widget.textHeader.length;
+        if (endIndex > widget.text.length) {
+          indexHeader = endIndex - widget.text.length;
+          endIndex = widget.text.length;
+        }
         if (textPainter.didExceedMaxLines) {
           textSpan = TextSpan(
-            text: widget.textHeader,
+            text: _readMore
+                ? widget.textHeader.substring(0, indexHeader)
+                : widget.textHeader,
             style: widget.styleTextHeader,
             children: <TextSpan>[
               TextSpan(
                 text: _readMore
-                    ? widget.text
-                        .substring(0, endIndex - widget.textHeader.length)
+                    ? widget.text.substring(0, endIndex)
                     : widget.text,
                 style: widget.style,
                 children: <TextSpan>[link],

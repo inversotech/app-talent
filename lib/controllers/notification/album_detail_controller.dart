@@ -84,6 +84,6 @@ class AlbumDetailController extends GetxController {
 
   showPhoto(String imageUrl) {
     Get.to(() => ShowPhoto(imageUrl: imageUrl),
-        transition: Transition.size, duration: const Duration(seconds: 1));
+        transition: Transition.size, duration: const Duration(seconds: 0));
   }
 }

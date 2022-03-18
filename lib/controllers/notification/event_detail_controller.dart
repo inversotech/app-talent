@@ -7,6 +7,7 @@ import 'package:lamb_talent/resources/models/notification/event.dart';
 import 'package:lamb_talent/resources/models/notification/group.dart';
 import 'package:lamb_talent/resources/services/notification/notification_service.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
+import 'package:lamb_talent/ui/modules/notification/components/show_photo.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -138,5 +139,10 @@ class EventDetailController extends GetxController {
     } else {
       Get.back();
     }
+  }
+
+  showPhoto(String imageUrl) {
+    Get.to(() => ShowPhoto(imageUrl: imageUrl),
+        transition: Transition.size, duration: const Duration(seconds: 0));
   }
 }

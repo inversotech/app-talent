@@ -245,7 +245,7 @@ class UserPreferences {
 
   // GET y SET optionLocation
   String get optionLocation {
-    return _prefs?.getString('optionLocation') ?? '1'; //1 is not get location, 2 is get location, '3' is new get location
+    return _prefs?.getString('optionLocation') ?? '2'; //1 is not get location, 2 is get location, '3' is new get location
   }
 
   set optionLocation(String value) {

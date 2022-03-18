@@ -183,6 +183,25 @@ class ListNotification extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          item.imagenUrl!.isNotEmpty && !item.imagenUrl!.contains('empty')
+              ? SizedBox(
+                  width: double.infinity,
+                  height: 200,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25)),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      imageUrl: item.imagenUrl.toString(),
+                      placeholder: (context, url) => Container(),
+                      errorWidget: (context, url, error) {
+                        return Container();
+                      },
+                    ),
+                  ),
+                )
+              : Container(),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -351,11 +370,13 @@ class ListNotification extends StatelessWidget {
       width: double.infinity,
       child: Column(
         children: [
-          CardPhotos(
-              photos: item.fotos!,
-              onPressedPhoto: (photo) {
-                onPressedPhoto(photo);
-              }),
+          item.fotos!.isNotEmpty
+              ? CardPhotos(
+                  photos: item.fotos!,
+                  onPressedPhoto: (photo) {
+                    onPressedPhoto(photo);
+                  })
+              : Container(),
           Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: Column(
@@ -402,12 +423,16 @@ class ListNotification extends StatelessWidget {
                               fontWeight: FontWeight.w600, fontSize: 14.0)),
                       const SizedBox(height: 4.0),
                       ExpandableText(
-                        textHeader: item.nombreEntidad.toString() + ' ',
+                        textHeader: item.nombreEntidad.toString() +
+                            (item.mensaje!.isNotEmpty
+                                ? (' | ' + item.mensaje.toString())
+                                : '') +
+                            ' ',
                         styleTextHeader: GoogleFonts.montserrat(
                             color: ColorsApp.primary,
                             fontWeight: FontWeight.w600,
                             fontSize: 14.0),
-                        text: item.mensaje.toString(),
+                        text: item.descripcion.toString(),
                         style: GoogleFonts.montserrat(
                             color: ColorsApp.primary,
                             fontWeight: FontWeight.w400,
