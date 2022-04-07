@@ -144,9 +144,12 @@ class MarkingController extends GetxController {
     }
     final markingService = MarkingService();
     pagination = await markingService.assistMarkings(params);
-    List<dynamic> jsonList =
-        pagination.data == null ? [] : pagination.data as List<dynamic>;
-
+   List<dynamic> jsonList;
+    if (pagination.data == null || pagination.data.runtimeType == String) {
+      jsonList = [];
+    } else {
+      jsonList = pagination.data as List<dynamic>;
+    }
     List<MarkingModel> list = jsonList
         .map((jsonElement) => MarkingModel.fromJson(jsonElement))
         .toList();

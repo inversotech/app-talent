@@ -8,7 +8,7 @@ class LicensePermitService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['benefits']['license-permit'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       PaginationModel pagination = PaginationModel.fromJson(
           response.data.containsKey('items') ? response.data['items'] : []);
@@ -22,7 +22,7 @@ class LicensePermitService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['benefits']['license-permit-detail'] + '/' + id);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -33,7 +33,7 @@ class LicensePermitService {
         endPoint: endPoints['benefits']['license-permit'],
         id: id,
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -41,7 +41,7 @@ class LicensePermitService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['comun']['type-licen-per']);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -59,7 +59,7 @@ class LicensePermitService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['comun']['type-concept-licen-per'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -77,7 +77,7 @@ class LicensePermitService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['comun']['type-institution']);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -95,7 +95,7 @@ class LicensePermitService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['benefits']['process-license-permit'] + '/' + id);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -114,7 +114,7 @@ class LicensePermitService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['benefits']['valid-license-permit'],
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -133,7 +133,7 @@ class LicensePermitService {
         endPoint: endPoints['workerportal']['license-permit'],
         formData: formData,
         showMessage: false);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -141,7 +141,7 @@ class LicensePermitService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['comun']['file-view'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 }

@@ -196,9 +196,12 @@ class JustificationController extends GetxController {
     };
     final justificationService = JustificationService();
     pagination = await justificationService.getJustifications(params);
-    List<dynamic> jsonList =
-        pagination.data == null ? [] : pagination.data as List<dynamic>;
-
+    List<dynamic> jsonList;
+    if (pagination.data == null || pagination.data.runtimeType == String) {
+      jsonList = [];
+    } else {
+      jsonList = pagination.data as List<dynamic>;
+    }
     List<JustificationModel> list = jsonList
         .map((jsonElement) => JustificationModel.fromJson(jsonElement))
         .toList();

@@ -9,7 +9,7 @@ class GraphicsService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-graphics'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -22,7 +22,7 @@ class GraphicsService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-graphics-detail'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data['data'];
     } else {

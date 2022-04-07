@@ -41,9 +41,8 @@ class VerifyAutheticationController extends GetxController {
       final response = await _apiProvider.postParams(
           endPoint: endPoints['oauth']['valid-tokens-oauth'],
           params: params,
-          showMessage: false,
-          duration: const Duration(seconds: 30));
-      _apiProvider.dispose();
+          showMessage: false);
+      //_apiProvider.dispose();
       if (response.success) {
         final resp = await _authService.userInfo();
         if (resp.success) {

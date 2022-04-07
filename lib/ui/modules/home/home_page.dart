@@ -274,21 +274,29 @@ class HomePage extends StatelessWidget {
                                             endTime: _dateVacation,
                                             onEnd: () {},
                                             widgetBuilder: (context, time) {
-                                              String textTime =
-                                                  time!.days.toString() +
-                                                      'd-' +
-                                                      time.hours
-                                                          .toString()
-                                                          .padLeft(2, '0') +
-                                                      'h-' +
-                                                      time.min
-                                                          .toString()
-                                                          .padLeft(2, '0') +
-                                                      'm-' +
-                                                      time.sec
-                                                          .toString()
-                                                          .padLeft(2, '0') +
-                                                      's';
+                                              String textTime = (time!.days !=
+                                                          null
+                                                      ? time.days.toString() +
+                                                          'd-'
+                                                      : '') +
+                                                  (time.hours != null
+                                                      ? time.hours
+                                                              .toString()
+                                                              .padLeft(2, '0') +
+                                                          'h-'
+                                                      : '') +
+                                                  (time.min != null
+                                                      ? time.min
+                                                              .toString()
+                                                              .padLeft(2, '0') +
+                                                          'm-'
+                                                      : '') +
+                                                  (time.sec != null
+                                                      ? time.sec
+                                                              .toString()
+                                                              .padLeft(2, '0') +
+                                                          's'
+                                                      : '00s');
                                               return Padding(
                                                 padding: const EdgeInsets.only(
                                                     left: 16.0, right: 16.0),

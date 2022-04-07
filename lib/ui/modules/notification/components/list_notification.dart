@@ -19,6 +19,8 @@ class ListNotification extends StatelessWidget {
   final Function(NotificationGeneralModel) onPressedShare;
   final Function(String) onPressedLink;
   final Function(String) onPressedPhoto;
+  final Function(List<String>, int) onPressedPhotos;
+  final Function(NotificationGeneralModel) onPressedLikes;
   const ListNotification(
       {Key? key,
       required this.listData,
@@ -27,7 +29,9 @@ class ListNotification extends StatelessWidget {
       required this.onPressedComment,
       required this.onPressedShare,
       required this.onPressedLink,
-      required this.onPressedPhoto})
+      required this.onPressedPhoto,
+      required this.onPressedPhotos,
+      required this.onPressedLikes})
       : super(key: key);
 
   @override
@@ -373,8 +377,8 @@ class ListNotification extends StatelessWidget {
           item.fotos!.isNotEmpty
               ? CardPhotos(
                   photos: item.fotos!,
-                  onPressedPhoto: (photo) {
-                    onPressedPhoto(photo);
+                  onPressedPhoto: (photo, index) {
+                    onPressedPhotos(photo, index);
                   })
               : Container(),
           Padding(
@@ -414,13 +418,18 @@ class ListNotification extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                          item.countLikes.toString() +
-                              (item.countLikes! > 1
-                                  ? ' Me gustas'
-                                  : ' Me gusta'),
-                          style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w600, fontSize: 14.0)),
+                      GestureDetector(
+                        child: Text(
+                            item.countLikes.toString() +
+                                (item.countLikes! > 1
+                                    ? ' Me gustas'
+                                    : ' Me gusta'),
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w600, fontSize: 14.0)),
+                        onTap: () {
+                          onPressedLikes(item);
+                        },
+                      ),
                       const SizedBox(height: 4.0),
                       ExpandableText(
                         textHeader: item.nombreEntidad.toString() +
@@ -490,7 +499,7 @@ class ListNotification extends StatelessWidget {
 // ignore: must_be_immutable
 class CardPhotos extends StatefulWidget {
   List<Foto> photos;
-  Function(String) onPressedPhoto;
+  Function(List<String>, int) onPressedPhoto;
   CardPhotos({Key? key, required this.photos, required this.onPressedPhoto})
       : super(key: key);
 
@@ -532,7 +541,11 @@ class _CardPhotosState extends State<CardPhotos> {
                                 ),
                                 onTap: () {
                                   widget.onPressedPhoto(
-                                      photo.imagenUrl.toString());
+                                      widget.photos
+                                          .map((e) =>
+                                              (e.imagenUrl ?? '').toString())
+                                          .toList(),
+                                      indexItem);
                                 },
                               )
                             : Image.asset('assets/img/image-default.png');

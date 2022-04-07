@@ -150,9 +150,12 @@ class LicensePermitController extends GetxController {
     final _licensePermitService = LicensePermitService();
     pagination = await _licensePermitService.getLicensesPermits(params);
 
-    List<dynamic> jsonList =
-        pagination.data == null ? [] : pagination.data as List<dynamic>;
-
+    List<dynamic> jsonList;
+    if (pagination.data == null || pagination.data.runtimeType == String) {
+      jsonList = [];
+    } else {
+      jsonList = pagination.data as List<dynamic>;
+    }
     List<LicensePermitModel> list = jsonList
         .map((jsonElement) => LicensePermitModel.fromJson(jsonElement))
         .toList();

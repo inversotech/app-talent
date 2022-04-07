@@ -23,7 +23,7 @@ class AuthService {
         endPoint: endPoints['oauth']['user-info'],
         params: params,
         showMessage: false);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     final prefs = UserPreferences();
     if (response.success) {
       final user = response.data!['user'] as Map<String, dynamic>;
@@ -69,7 +69,7 @@ class AuthService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['comun']['total-entities-deptos']);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       final prefs = UserPreferences();
       prefs.cantEntities = int.parse(response.data['entities'].toString());
@@ -83,7 +83,7 @@ class AuthService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['comun']['actions-by-module'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -101,7 +101,7 @@ class AuthService {
       final _apiProvider = ApiProvider();
       final resp = await _apiProvider.getWithParams(
           endPoint: endPoints['comun']['acceso-nivel'], params: params);
-      _apiProvider.dispose();
+      //_apiProvider.dispose();
       final response = AccesoNivelUser.fromJson(resp.data ?? '');
       return response;
     } catch (e) {
@@ -114,7 +114,7 @@ class AuthService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.postParams(
         endPoint: endPoints['comun']['change-entity-depto'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 

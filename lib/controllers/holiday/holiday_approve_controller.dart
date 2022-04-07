@@ -153,9 +153,12 @@ class HolidayApproveController extends GetxController {
     };
     final _holidayService = HolidayService();
     pagination = await _holidayService.getWorkersHoliday(params);
-    List<dynamic> jsonList =
-        pagination.data == null ? [] : pagination.data as List<dynamic>;
-
+    List<dynamic> jsonList;
+    if (pagination.data == null || pagination.data.runtimeType == String) {
+      jsonList = [];
+    } else {
+      jsonList = pagination.data as List<dynamic>;
+    }
     List<WorkerHolidayModel> list = jsonList
         .map((jsonElement) => WorkerHolidayModel.fromJson(jsonElement))
         .toList();

@@ -8,7 +8,7 @@ class HolidayService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['benefits']['pro-holiday'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       PaginationModel pagination = PaginationModel.fromJson(
           response.data.containsKey('items') ? response.data['items'] : []);
@@ -22,7 +22,7 @@ class HolidayService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['workerportal']['holiday'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -44,7 +44,7 @@ class HolidayService {
             iRrolVacacion +
             '/confirmacion',
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -56,7 +56,7 @@ class HolidayService {
             '/update-vacacion',
         id: id,
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 }

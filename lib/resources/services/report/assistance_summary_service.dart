@@ -10,7 +10,7 @@ class AssistanceSummaryService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['report']['monthly-assistance-summary-chart'],
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -28,7 +28,7 @@ class AssistanceSummaryService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['report']['monthly-assistance-summary'],
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -38,7 +38,6 @@ class AssistanceSummaryService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['report']['info-assistance'],
         params: params);
-    _apiProvider.dispose();
     return response;
   }
 }

@@ -18,7 +18,7 @@ class AccountStatusService {
       final response = await _apiProvider.getAll(
           endPoint:
               endPoints['account-status']['account-status'] + '/' + params);
-      _apiProvider.dispose();
+      //_apiProvider.dispose();
       if (response.success) {
         return response.data;
       } else {
@@ -34,7 +34,7 @@ class AccountStatusService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-items'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -47,7 +47,7 @@ class AccountStatusService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-items-incomes'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -60,7 +60,7 @@ class AccountStatusService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-items-discounts'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -73,7 +73,7 @@ class AccountStatusService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-helps-incomes'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -86,7 +86,7 @@ class AccountStatusService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-helps-discounts'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -99,7 +99,7 @@ class AccountStatusService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-travels-incomes'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -113,7 +113,7 @@ class AccountStatusService {
         endPoint: endPoints['account-status']
             ['account-status-travels-discounts'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -127,7 +127,7 @@ class AccountStatusService {
         endPoint: endPoints['account-status']
             ['account-status-personal-agreement-detail'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -140,7 +140,7 @@ class AccountStatusService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['workerportal']['payments-ticket'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
