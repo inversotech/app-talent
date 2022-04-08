@@ -68,7 +68,7 @@ class LoginController extends GetxController {
     loadingIndicator(onlyLoading: true, opacity: false);
     final _apiProvider = ApiProvider();
     final resp = await _apiProvider.loginLamb(params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
 
     if (resp.success) {
       final resp = await _authService.userInfo();

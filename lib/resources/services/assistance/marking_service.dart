@@ -9,7 +9,7 @@ class MarkingService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['assistance']['map-coordinates']);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -18,7 +18,7 @@ class MarkingService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['assistance']['show-button-assistance'],
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -28,7 +28,7 @@ class MarkingService {
         endPoint: endPoints['assistance']['worker-marking'],
         params: params,
         showMessage: true);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -36,7 +36,7 @@ class MarkingService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['assistance']['assist-markings'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       PaginationModel pagination = PaginationModel.fromJson(response.data);
       return pagination;
@@ -50,7 +50,7 @@ class MarkingService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['assistance']['markings-ini'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 

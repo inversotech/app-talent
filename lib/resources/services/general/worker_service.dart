@@ -8,7 +8,7 @@ class WorkerService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['comun']['my-workers'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       PaginationModel pagination = PaginationModel.fromJson(response.data);
       return pagination;

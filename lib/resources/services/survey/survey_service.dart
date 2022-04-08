@@ -10,7 +10,7 @@ class SurveyService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['assistance']['survey-detail'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -18,7 +18,7 @@ class SurveyService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['assistance']['survey-answer-covid-detail'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -28,7 +28,7 @@ class SurveyService {
         endPoint: endPoints['assistance']['survey-answer'],
         params: params,
         showMessage: false);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -36,7 +36,7 @@ class SurveyService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['assistance']['survey-answer-covid'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       PaginationModel pagination = PaginationModel.fromJson(response.data);
       return pagination;

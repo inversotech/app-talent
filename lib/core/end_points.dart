@@ -119,6 +119,7 @@ final Map endPoints = {
     'relation-person': apiUrlMessenger + 'groups/relacion-personas',
     'like': apiUrlMessenger + 'red/likes',
     'comment': apiUrlMessenger + 'red/comentarios',
+    'likes': apiUrlMessenger + 'red/likes',
     'total-no-leidos': apiUrlMessenger + 'report/total-no-leidos',
   }
 };

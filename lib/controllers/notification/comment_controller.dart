@@ -95,8 +95,12 @@ class CommentController extends GetxController {
     };
     final _notificationService = NotificationService();
     pagination = await _notificationService.getComments(params);
-    List<dynamic> jsonList =
-        pagination.data == null ? [] : pagination.data as dynamic;
+     List<dynamic> jsonList;
+    if (pagination.data == null || pagination.data.runtimeType == String) {
+      jsonList = [];
+    } else {
+      jsonList = pagination.data as dynamic;
+    }
     if (jsonList.isNotEmpty) {
       List<CommentModel> list = jsonList
           .map((jsonElement) => CommentModel.fromJson(jsonElement))
@@ -126,9 +130,12 @@ class CommentController extends GetxController {
     };
     final _notificationService = NotificationService();
     pagination = await _notificationService.getComments(params);
-    List<dynamic> jsonList =
-        pagination.data == null ? [] : pagination.data as List<dynamic>;
-
+   List<dynamic> jsonList;
+    if (pagination.data == null || pagination.data.runtimeType == String) {
+      jsonList = [];
+    } else {
+      jsonList = pagination.data as List<dynamic>;
+    }
     List<CommentModel> list = jsonList
         .map((jsonElement) => CommentModel.fromJson(jsonElement))
         .toList();

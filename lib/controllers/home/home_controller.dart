@@ -178,8 +178,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       'include_actions': '0',
       'include_access_level': '1'
     };
-    print('latitude:' + userPreferences.latitude.toString());
-    print('longitude:' + userPreferences.longitude.toString());
+   // print('latitude:' + userPreferences.latitude.toString());
+   // print('longitude:' + userPreferences.longitude.toString());
     final assistanceSummaryService = AssistanceSummaryService();
     Timer? timePeriodic;
     if (userPreferences.optionLocation == '2' ||
@@ -287,9 +287,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       }
       final _serviceEnabled = await Geolocator.isLocationServiceEnabled();
       final _permission = await Geolocator.checkPermission();
-      print('codeModality.value:' + codeModality.value.toString());
-      print('_serviceEnabled:' + _serviceEnabled.toString());
-      print('_permission:' + _permission.toString());
+      // print('codeModality.value:' + codeModality.value.toString());
+      // print('_serviceEnabled:' + _serviceEnabled.toString());
+      // print('_permission:' + _permission.toString());
       if (codeModality.value == 'TP' && !_serviceEnabled) {
         await _serviceLocationDisable(refreshShowButton: true);
       } else if (codeModality.value == 'TP' &&

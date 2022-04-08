@@ -48,6 +48,9 @@ class NotificationPage extends StatelessWidget {
                                 controller.goToComents(
                                     arguments, autofocus, indexOrigen);
                               },
+                              onPressedLikes: (arguments) {
+                                controller.goToLikes(arguments);
+                              },
                               onPressedShare: (arguments) {
                                 controller.shareFileImage(arguments);
                               },
@@ -56,6 +59,8 @@ class NotificationPage extends StatelessWidget {
                               },
                               onPressedPhoto: (photo) {
                                 controller.showPhoto(photo);
+                              }, onPressedPhotos: (photos,index) {
+                                controller.showPhotos(photos,index);
                               })
                           : controller.listData.isEmpty &&
                                   controller.finishConsults

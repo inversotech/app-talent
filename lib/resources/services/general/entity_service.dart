@@ -8,7 +8,7 @@ class EntityService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['comun']['my-entities']);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 

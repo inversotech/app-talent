@@ -10,7 +10,7 @@ class NotificationService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['messenger']['notification-event-album'],
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -18,7 +18,7 @@ class NotificationService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['messenger']['notifications'] + '/' + id);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -26,7 +26,7 @@ class NotificationService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['messenger']['events'] + '/' + id);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -34,7 +34,7 @@ class NotificationService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['messenger']['albums'] + '/' + id);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -42,7 +42,7 @@ class NotificationService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['messenger']['groups'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -68,7 +68,7 @@ class NotificationService {
             idPersona,
         params: params,
         showMessage: false);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -83,7 +83,7 @@ class NotificationService {
             idOrigen +
             '/' +
             idPersona);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       RelationPersonModel pagination =
           RelationPersonModel.fromJson(response.data);
@@ -99,7 +99,7 @@ class NotificationService {
         endPoint: endPoints['messenger']['like'],
         params: params,
         showMessage: false);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -109,7 +109,7 @@ class NotificationService {
         endPoint: endPoints['messenger']['comment'],
         params: params,
         showMessage: false);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -117,7 +117,15 @@ class NotificationService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['messenger']['comment'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
+    return response;
+  }
+
+  Future<ApiResponse> getLikes(Map<String, String> params) async {
+    final _apiProvider = ApiProvider();
+    final response = await _apiProvider.getWithParams(
+        endPoint: endPoints['messenger']['likes'], params: params);
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -127,7 +135,7 @@ class NotificationService {
         endPoint: endPoints['messenger']['comment'],
         id: idComment,
         showMessage: false);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -137,7 +145,7 @@ class NotificationService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['messenger']['total-no-leidos'],
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 }

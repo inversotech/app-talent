@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lamb_talent/resources/services/auth/auth_service.dart';
+import 'package:lamb_talent/ui/modules/notification/components/likes.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_plus/share_plus.dart';
@@ -242,8 +243,12 @@ class NotificationController extends GetxController {
     };
     final _notificationService = NotificationService();
     pagination = await _notificationService.getNotifications(params);
-    List<dynamic> jsonList =
-        pagination.data == null ? [] : pagination.data as dynamic;
+    List<dynamic> jsonList;
+    if (pagination.data == null || pagination.data.runtimeType == String) {
+      jsonList = [];
+    } else {
+      jsonList = pagination.data as dynamic;
+    }
     if (jsonList.isNotEmpty) {
       List<NotificationGeneralModel> list = jsonList
           .map((jsonElement) => NotificationGeneralModel.fromJson(jsonElement))
@@ -297,9 +302,12 @@ class NotificationController extends GetxController {
     };
     final _notificationService = NotificationService();
     pagination = await _notificationService.getNotifications(params);
-    List<dynamic> jsonList =
-        pagination.data == null ? [] : pagination.data as List<dynamic>;
-
+   List<dynamic> jsonList;
+    if (pagination.data == null || pagination.data.runtimeType == String) {
+      jsonList = [];
+    } else {
+      jsonList = pagination.data as List<dynamic>;
+    }
     List<NotificationGeneralModel> list = jsonList
         .map((jsonElement) => NotificationGeneralModel.fromJson(jsonElement))
         .toList();
@@ -376,6 +384,11 @@ class NotificationController extends GetxController {
     loadingData.value = true;
   }
 
+  goToLikes(NotificationGeneralModel item) async {
+    Get.to(() =>
+        Likes(origen: item.codigo.toString(), idOrigen: item.id.toString()));
+  }
+
   shareFileImage(NotificationGeneralModel item) async {
     loadingIndicator(onlyLoading: true, opacity: false);
     List<String> listPaths = [];
@@ -419,6 +432,11 @@ class NotificationController extends GetxController {
 
   showPhoto(String imageUrl) {
     Get.to(() => ShowPhoto(imageUrl: imageUrl),
+        transition: Transition.size, duration: const Duration(seconds: 0));
+  }
+
+  showPhotos(List<String> photos, int index) {
+    Get.to(() => ShowPhoto(isMultiple: true, photos: photos, indexStart: index),
         transition: Transition.size, duration: const Duration(seconds: 0));
   }
 }

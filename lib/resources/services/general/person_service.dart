@@ -6,7 +6,7 @@ class PersonService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['comun']['person-signature'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {

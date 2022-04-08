@@ -10,7 +10,7 @@ class DeparmentsService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['deparments-items'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -23,7 +23,7 @@ class DeparmentsService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['deparments-items-detail'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -36,7 +36,7 @@ class DeparmentsService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['comun']['my-deptos'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 

@@ -391,21 +391,7 @@ class Comment extends StatelessWidget {
                     )
                   : Container(),
             ]);
-          }))
-          /* ListView.separated(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            physics: const ScrollPhysics(),
-            primary: false,
-            itemBuilder: (context, index) {
-             
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const SizedBox(height: 16.0);
-            },
-            itemCount: controller.listData.length), */
-          );
+          })));
     } else {
       return Padding(
         padding: const EdgeInsets.all(8.0),

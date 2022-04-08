@@ -1,10 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ShowPhoto extends StatelessWidget {
   final String imageUrl;
-  const ShowPhoto({Key? key, required this.imageUrl}) : super(key: key);
+  final bool isMultiple;
+  final List<String>? photos;
+  final int indexStart;
+  const ShowPhoto(
+      {Key? key,
+      this.imageUrl = '',
+      this.isMultiple = false,
+      this.photos,
+      this.indexStart = 0})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +24,56 @@ class ShowPhoto extends StatelessWidget {
       body: Stack(
         children: [
           Center(
-            child: CachedNetworkImage(
-              fit: BoxFit.contain,
-              imageUrl: imageUrl.toString(),
-              placeholder: (context, url) => const Image(
-                image: AssetImage('assets/img/image-default.png'),
-              ),
-              errorWidget: (context, url, error) {
-                return const Image(
-                    image: AssetImage('assets/image/user-default.png'));
-              },
-            ),
+            child: !isMultiple
+                ? CachedNetworkImage(
+                    fit: BoxFit.contain,
+                    imageUrl: imageUrl.toString(),
+                    placeholder: (context, url) => const Image(
+                      image: AssetImage('assets/img/image-default.png'),
+                    ),
+                    imageBuilder: (context, imageProvider) =>
+                        PhotoView(imageProvider: imageProvider),
+                    errorWidget: (context, url, error) {
+                      return const Image(
+                          image: AssetImage('assets/img/image-default.png'));
+                    },
+                  )
+                : CarouselSlider(
+                    items: List.generate(
+                        photos!.length,
+                        (indexItem) => Builder(builder: (context) {
+                              String photo = photos![indexItem];
+                              return photo.isNotEmpty &&
+                                      !photo.contains('empty')
+                                  ? CachedNetworkImage(
+                                      fit: BoxFit.contain,
+                                      imageUrl: photo.toString(),
+                                      placeholder: (context, url) =>
+                                          const Image(
+                                        image: AssetImage(
+                                            'assets/img/image-default.png'),
+                                      ),
+                                      imageBuilder: (context, imageProvider) =>
+                                          PhotoView(
+                                              imageProvider: imageProvider),
+                                      errorWidget: (context, url, error) {
+                                        return const Image(
+                                            image: AssetImage(
+                                                'assets/img/image-default.png'));
+                                      },
+                                    )
+                                  : Image.asset('assets/img/image-default.png');
+                            })),
+                    options: CarouselOptions(
+                        height: double.infinity,
+                        enlargeCenterPage: false,
+                        viewportFraction: 1,
+                        initialPage: indexStart,
+                        enableInfiniteScroll: false,
+                        reverse: false,
+                        autoPlay: false,
+                        scrollDirection: Axis.horizontal),
+                  ),
           ),
           Positioned(
               top: 40,

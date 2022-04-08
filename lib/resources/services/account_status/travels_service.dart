@@ -6,7 +6,7 @@ class TravelsService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['travels-data'], params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {
@@ -19,7 +19,7 @@ class TravelsService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['account-status']['travels-data-detail'],
         params: entity);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       return response.data;
     } else {

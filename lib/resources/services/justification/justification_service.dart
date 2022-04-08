@@ -8,7 +8,7 @@ class JustificationService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['assistance']['request-by-worker'], params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       PaginationModel pagination = PaginationModel.fromJson(response.data);
       return pagination;
@@ -21,7 +21,7 @@ class JustificationService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['justification']['request'] + '/' + id);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -29,7 +29,7 @@ class JustificationService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['assistance']['justification-reason']);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -48,7 +48,7 @@ class JustificationService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['assistance']['schedule-worker-by-date'],
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -67,7 +67,7 @@ class JustificationService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['assistance']['marking-worker-by-date'],
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -84,7 +84,7 @@ class JustificationService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['justification']['request-markings'] + '/' + id);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -101,7 +101,7 @@ class JustificationService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['comun']['descriptions-marking']);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
@@ -120,7 +120,7 @@ class JustificationService {
         endPoint: endPoints['assistance']['justification'],
         formData: formData,
         showMessage: false);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -130,7 +130,7 @@ class JustificationService {
         endPoint: endPoints['assistance']['justification'] + '/' + id,
         formData: formData,
         showMessage: false);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -139,7 +139,7 @@ class JustificationService {
     final response = await _apiProvider.postParams(
         endPoint: endPoints['justification']['request'] + '/change-status',
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -148,7 +148,7 @@ class JustificationService {
     final response = await _apiProvider.getWithParams(
         endPoint: endPoints['assistance']['justification'] + '/get-file',
         params: params);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     return response;
   }
 
@@ -157,7 +157,7 @@ class JustificationService {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getAll(
         endPoint: endPoints['assistance']['justification'] + '/process/' + id);
-    _apiProvider.dispose();
+    //_apiProvider.dispose();
     if (response.success) {
       List<dynamic> jsonList = response.data as List;
 
