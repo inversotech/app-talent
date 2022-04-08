@@ -119,7 +119,7 @@ class Likes extends StatelessWidget {
               children: List.generate(controller.listData.length, (index) {
             final item = controller.listData[index];
             return Padding(
-              padding: const EdgeInsets.only(bottom:8.0),
+              padding: const EdgeInsets.only(bottom:12.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
