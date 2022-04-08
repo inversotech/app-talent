@@ -20,7 +20,7 @@ class LikesController extends GetxController {
   List<RelationPersonModel> listData = [];
   ApiResponse pagination = ApiResponse(success: true, data: {}, message: '');
   RxBool loadingData = false.obs;
-  RxInt perPage = 5.obs;
+  RxInt perPage = 10.obs;
   RxInt page = 1.obs;
 
   @override
@@ -32,7 +32,7 @@ class LikesController extends GetxController {
 
   void initValues() {
     page.value = 1;
-    perPage.value = 10;
+    perPage.value = 20;
     listData = [];
   }
 
