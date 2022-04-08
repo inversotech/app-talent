@@ -118,33 +118,36 @@ class Likes extends StatelessWidget {
           child: Column(
               children: List.generate(controller.listData.length, (index) {
             final item = controller.listData[index];
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                    width: 35,
-                    height: 35,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: item.personaAvatar.toString(),
-                        placeholder: (context, url) => const Icon(Icons.person),
-                        errorWidget: (context, url, error) {
-                          return const Icon(Icons.person);
-                        },
-                      ),
-                    )),
-                Flexible(
-                  child: Padding(
-                      padding: const EdgeInsets.only(left: 12.0, right: 8.0),
-                      child: Text(item.personaFullname.toString() + ' ',
-                          style: GoogleFonts.montserrat(
-                              color: ColorsApp.primary,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16.0))),
-                )
-              ],
+            return Padding(
+              padding: const EdgeInsets.only(bottom:8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      width: 35,
+                      height: 35,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: item.personaAvatar.toString(),
+                          placeholder: (context, url) => const Icon(Icons.person),
+                          errorWidget: (context, url, error) {
+                            return const Icon(Icons.person);
+                          },
+                        ),
+                      )),
+                  Flexible(
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 12.0, right: 8.0),
+                        child: Text(item.personaFullname.toString() + ' ',
+                            style: GoogleFonts.montserrat(
+                                color: ColorsApp.primary,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.0))),
+                  )
+                ],
+              ),
             );
           })));
     } else {
