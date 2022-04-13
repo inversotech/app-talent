@@ -45,19 +45,14 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                   icon: const Icon(Icons.download),
                   onPressed: () async {
                     if (widget.urlFileDownload.isNotEmpty) {
-                      final _accountStatusService =
-                           AccountStatusService();
+                      final _accountStatusService = AccountStatusService();
                       final Map<String, String> params = {
                         'p': widget.clave.toString(),
                       };
-
                       loadingIndicator(
                           onlyLoading: true, text: 'Descargando ...');
-                      await _accountStatusService.downloadFileWithPath(
-                          widget.urlFileDownload,
-                          widget.titlePdf,
-                          params,
-                          context);
+                      await _accountStatusService.saveDownloadPaymentTicket(
+                          widget.urlFileDownload, widget.titlePdf, params);
                       Navigator.pop(context);
                     }
                   },

@@ -6,6 +6,7 @@ import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/general/date_model.dart';
+import 'package:lamb_talent/resources/models/general/file.dart';
 import 'package:lamb_talent/resources/services/account_status/account_status_service.dart';
 import 'package:lamb_talent/resources/services/auth/auth_service.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
@@ -203,41 +204,38 @@ class AccountStatusController extends GetxController {
 
   Future getTicketPayment() async {
     loadingIndicator(onlyLoading: true, opacity: true);
+    String type = userPreferences.isWorkerChild ? 'N' : 'S';
     final Map<String, String> params = {
       'id_persona': userPreferences.idPerson.toString(),
       'id_anho': dateModel.value.year.toString(),
       'id_mes': dateModel.value.month.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
+      'type': type
     };
     final _accountStatusService = AccountStatusService();
-    final listTicketsPayment =
-        await _accountStatusService.gePaymentstTicket(params);
-    if (listTicketsPayment.length == 1) {
-      final type = userPreferences.isWorkerChild ? 'N' : 'S';
-      final fileName = listTicketsPayment[0].archivo;
-      final clave = listTicketsPayment[0].clave.toString();
-      urlBoleta.value = listTicketsPayment[0].urls.toString() +
-          '?type=' +
-          type +
-          '&p=' +
-          clave;
-      final urlBoletaDownload = listTicketsPayment[0].urlDownload.toString() +
-          '?type=' +
-          type +
-          '&p=' +
-          clave;
+    FileModel ticketPayment =
+        await _accountStatusService.gePaymentstTicketMonth(params);
+    if (ticketPayment.file.isNotEmpty) {
+      String fileName = ticketPayment.fileName.isNotEmpty
+          ? ticketPayment.fileName
+          : dateModel.value.month.toString() +
+              '-' +
+              dateModel.value.year.toString() +
+              ' ' +
+              userPreferences.nameEntity.toString() +
+              '.pdf';
       final file = await _accountStatusService.createFileOfPdfUrl(
-          urlBoleta.value, fileName.toString());
+          ticketPayment.file, fileName);
       if (Get.isDialogOpen!) {
         Get.back();
       }
       if (file.path.isNotEmpty) {
         Get.to(() => PDFScreen(
-            clave: clave,
-            urlFileDownload: urlBoletaDownload,
+            clave: ticketPayment.clave,
+            urlFileDownload: ticketPayment.file,
             showDownload: true,
             path: file.path,
-            titlePdf: fileName.toString()));
+            titlePdf: fileName));
       } else {
         if (Get.isDialogOpen!) {
           Get.back();
@@ -247,7 +245,7 @@ class AccountStatusController extends GetxController {
             colorText: ColorsApp.white,
             backgroundColor: ColorsApp.danger);
       }
-    } else if (listTicketsPayment.isEmpty) {
+    } else if (ticketPayment.file.isEmpty) {
       if (Get.isDialogOpen!) {
         Get.back();
       }

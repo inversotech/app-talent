@@ -7,7 +7,6 @@ export 'account_status_model.dart';
 export 'response.dart';
 export 'general/year.dart';
 export 'general/month.dart';
-export 'general/ticket_payment.dart';
 export 'general/action.dart';
 export 'assistance/assistance_summary.dart';
 export 'assistance/assistance_summary_detail.dart';

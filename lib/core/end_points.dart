@@ -1,5 +1,3 @@
-
-
 import 'package:lamb_talent/enviroment/enviroment.dart';
 
 final Map endPoints = {
@@ -24,7 +22,7 @@ final Map endPoints = {
     'person-signature': apiUrl + 'comun/personal-signature',
     'file-view': apiUrl + 'comun/benefits/file-view',
     'actions-by-module': apiUrl + 'comun/actions-by-module',
-    'acceso-nivel' : apiUrl + 'comun/acceso-nivel',
+    'acceso-nivel': apiUrl + 'comun/acceso-nivel',
     'my-workers': apiUrl + 'comun/contract/search-worker-access',
     'change-entity-depto': apiUrl + 'comun/change-entity-depto'
   },
@@ -46,8 +44,8 @@ final Map endPoints = {
     'survey-detail': apiUrl + 'assistance/settings/survey-covid-detail',
     'survey-answer': apiUrl + 'assistance/settings/survey-answer',
     'survey-answer-covid': apiUrl + 'assistance/settings/survey-answer-covid',
-    'survey-answer-covid-detail': apiUrl + 'assistance/settings/survey-answer-covid-detail',
-    
+    'survey-answer-covid-detail':
+        apiUrl + 'assistance/settings/survey-answer-covid-detail',
   },
   'account-status': {
     'entity-type': apiUrl + 'report/account-status/entity-type/',
@@ -88,8 +86,7 @@ final Map endPoints = {
         apiUrl + 'report/assistance/monthly-assistance-summary-chart',
     'monthly-assistance-summary':
         apiUrl + 'report/assistance/monthly-assistance-summary',
-    'info-assistance':
-        apiUrl + 'report/assistance/info-assistance-mobile'
+    'info-assistance': apiUrl + 'report/assistance/info-assistance-mobile'
   },
   'justification': {
     'request': apiUrl + 'assistance/justification/request',
@@ -98,6 +95,10 @@ final Map endPoints = {
   'workerportal': {
     'license-permit': apiUrl + 'workerportal/lisenses/licences-permits',
     'holiday': apiUrl + 'workerportal/holidays/anho-programing-holidays',
+    'payments-ticket-month': apiUrl +
+        'workerportal/lambFinancial-payments/payments-ticket-month-pdf',
+    'payments-ticket-month-download': apiUrl +
+        'workerportal/lambFinancial-payments/payments-ticket-month-download-pdf',
     'payments-ticket':
         apiUrl + 'workerportal/lambFinancial-payments/payments-ticket'
   },
@@ -111,7 +112,8 @@ final Map endPoints = {
     'pro-holiday': apiUrl + 'benefits/holidays/pro-holidays'
   },
   'messenger': {
-    'notification-event-album': apiUrlMessenger + 'report/show-notification-event-album',
+    'notification-event-album':
+        apiUrlMessenger + 'report/show-notification-event-album',
     'notifications': apiUrlMessenger + 'notifications/notifications',
     'events': apiUrlMessenger + 'events/events',
     'albums': apiUrlMessenger + 'albums/albums',
