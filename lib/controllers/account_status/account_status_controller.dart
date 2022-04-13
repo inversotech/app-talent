@@ -250,7 +250,7 @@ class AccountStatusController extends GetxController {
         Get.back();
       }
       Get.snackbar('Mensaje:',
-          'No se encontró boleta del mes ' + dateModel.value.nameMonth,
+          'No se encontró boleta del mes de ' + dateModel.value.nameMonth+', '+ dateModel.value.year.toString(),
           duration: const Duration(seconds: 8),
           colorText: ColorsApp.white,
           backgroundColor: ColorsApp.danger);
