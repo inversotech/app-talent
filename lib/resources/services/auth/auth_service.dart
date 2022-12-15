@@ -16,7 +16,7 @@ class AuthService {
   Future<ApiResponse> userInfo() async {
     final _apiProvider = ApiProvider();
     Map<String, String> params = {
-      'codigo_padre': codeModule,
+      'codigo_padre': Env.api.codeModule,
       'id_tipoplataforma': '2'
     };
     final response = await _apiProvider.postParams(
@@ -123,7 +123,7 @@ class AuthService {
     final Map<String, String> params = {
       'id_entidad': prefs.idEntity != null ? prefs.idEntity.toString() : '',
       'id_persona': prefs.idPerson != null ? prefs.idPerson.toString() : '',
-      'code_fcm_app': codeFcmApp.toString(),
+      'code_fcm_app': Env.api.codeFcmApp,
     };
     final _notificationService = NotificationService();
     final resp = await _notificationService.totalNoLeidos(params);

@@ -46,7 +46,7 @@ class PushNotificationService {
     if (kDebugMode) {
       OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
     }
-    OneSignal.shared.setAppId(appIdOneSignal);
+    OneSignal.shared.setAppId(Env.api.appIdOneSignal);
 // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
     OneSignal.shared
         .promptUserForPushNotificationPermission()

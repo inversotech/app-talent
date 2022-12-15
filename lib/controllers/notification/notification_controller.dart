@@ -237,7 +237,7 @@ class NotificationController extends GetxController {
       'id_persona_like': userPreferences.idPerson != null
           ? userPreferences.idPerson.toString()
           : '',
-      'code_fcm_app': codeFcmApp.toString(),
+      'code_fcm_app': Env.api.codeFcmApp,
       'per_page': perPage.value.toString(),
       'page': page.value.toString()
     };
@@ -275,7 +275,7 @@ class NotificationController extends GetxController {
       'id_persona': userPreferences.idPerson != null
           ? userPreferences.idPerson.toString()
           : '',
-      'code_fcm_app': codeFcmApp.toString(),
+      'code_fcm_app': Env.api.codeFcmApp,
     };
     final _notificationService = NotificationService();
     final resp = await _notificationService.totalNoLeidos(params);
@@ -296,7 +296,7 @@ class NotificationController extends GetxController {
       'id_persona_like': userPreferences.idPerson != null
           ? userPreferences.idPerson.toString()
           : '',
-      'code_fcm_app': codeFcmApp.toString(),
+      'code_fcm_app': Env.api.codeFcmApp,
       'per_page': perPage.value.toString(),
       'page': '1'
     };

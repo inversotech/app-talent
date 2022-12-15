@@ -1,10 +1,7 @@
-const apiUrlLambTalenLocal =
-    'http://app07.adventistas.pe/lamb-api-talent/public/api/';
-const apiUrlLambTalentProduction = 'https://api-lamb-talent.upeu.edu.pe/api-talent/api/';
-const apiUrlMessengerLocal = 'https://app07.adventistas.pe/lamb-school-messenger-api/public/api/';
-const apiUrlMessengerProduction = 'https://api-lamb-school-messenger.upeu.edu.pe/api/';
-const apiUrl = apiUrlLambTalentProduction;
-const apiUrlMessenger = apiUrlMessengerProduction;
-const codeModule = '16120100';
-const codeFcmApp = 'lamb-talent';
-const appIdOneSignal='1110e1d3-ffcc-4bd9-8564-46771cbf77d9';
+import 'package:flutter/foundation.dart';
+import 'package:lamb_talent/enviroment/models.dart';
+import 'package:lamb_talent/enviroment/vhosts.dart';
+
+class Env {
+  static VHost api = kDebugMode ? Api().apiDev : Api().apiProd;
+}
