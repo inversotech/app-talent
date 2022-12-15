@@ -48,7 +48,7 @@ class CarouselSliderItem extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  height: 115,
+                  height: 125,
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius:

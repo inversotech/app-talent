@@ -10,6 +10,7 @@ import 'package:lamb_talent/core/location_user.dart';
 import 'package:lamb_talent/resources/models/general/acceso_nivel_user.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_approve_page.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_page.dart';
+import 'package:lamb_talent/ui/modules/home/components/view_qr.dart';
 import 'package:lamb_talent/ui/modules/justification/components/form_justification.dart';
 import 'package:lamb_talent/ui/modules/justification/justificattion_page.dart';
 import 'package:lamb_talent/ui/modules/license_permit/components/form_license_permit.dart';
@@ -54,6 +55,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   RxString codeModule = '16120101'.obs;
   bool isListApprove = false;
+
+  RxString numDocument = ''.obs;
+  RxString numDocQr = ''.obs;
+
   @override
   void onInit() {
     WidgetsBinding.instance!.addObserver(this);
@@ -178,8 +183,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       'include_actions': '0',
       'include_access_level': '1'
     };
-   // print('latitude:' + userPreferences.latitude.toString());
-   // print('longitude:' + userPreferences.longitude.toString());
+    // print('latitude:' + userPreferences.latitude.toString());
+    // print('longitude:' + userPreferences.longitude.toString());
     final assistanceSummaryService = AssistanceSummaryService();
     Timer? timePeriodic;
     if (userPreferences.optionLocation == '2' ||
@@ -415,6 +420,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   void fnShowModalSchedule() {
     showModalSchedule(DateTime.now());
+  }
+
+  void fnShowModalQr() {
+    numDocument.value = userPreferences.nroDocument.toString();
+    numDocQr.value = userPreferences.nroDocument.toString();
+    showModalQr();
   }
 
   void goToMarkings() {

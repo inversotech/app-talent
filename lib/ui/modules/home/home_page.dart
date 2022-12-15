@@ -83,37 +83,77 @@ class HomePage extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.only(left: 12.0, right: 12.0, top: 18.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
                   children: [
-                    InkWell(
-                        onTap: () {
-                          controller.fnShowModalSchedule();
-                        },
-                        child: Image.asset('assets/icons/datetime.png',
-                            height: 35, width: 35, color: ColorsApp.primary)),
-                    Flexible(
-                      child: Column(
-                        children: [
-                          controller.showButton.value == '1' &&
-                                  controller.hourMarking.isNotEmpty
-                              ? Container()
-                              : const SizedBox(height: 35.0),
-                          Text(
-                            'Asistencia',
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w600, fontSize: 25.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InkWell(
+                            onTap: () {
+                              controller.fnShowModalSchedule();
+                            },
+                            child: Image.asset('assets/icons/datetime.png',
+                                height: 35,
+                                width: 35,
+                                color: ColorsApp.primary)),
+                        InkWell(
+                            onTap: () {
+                              controller.fnShowModalQr();
+                            },
+                            child: Text(
+                              'Ver QR',
+                              style: GoogleFonts.montserrat(
+                                  fontWeight: FontWeight.w400, fontSize: 18.0),
+                            )
+
+                            /* const Icon(
+                              Icons.qr_code,
+                              size: 26,
+                            ) */
+                            ),
+                        /* Flexible(
+                          child: Column(
+                            children: [
+                              /*        controller.showButton.value == '1' &&
+                                      controller.hourMarking.isNotEmpty
+                                  ? Container()
+                                  : const SizedBox(height: 35.0), */
+                              SizedBox(height: 5.0),
+                              InkWell(
+                                  onTap: () {
+                                    controller.fnShowModalQr();
+                                  },
+                                  child: const Icon(
+                                    Icons.qr_code,
+                                    size: 26,
+                                  )),
+                              SizedBox(height: 10.0),
+                              Text(
+                                'Asistencia',
+                                style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25.0),
+                              ),
+                            ],
                           ),
-                        ],
+                        ), */
+                        InkWell(
+                            onTap: () {
+                              controller.goToMarkings();
+                            },
+                            child: const Icon(Icons.format_list_numbered,
+                                size: 30)),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Text(
+                        'Asistencia',
+                        style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w600, fontSize: 25.0),
                       ),
                     ),
-                    InkWell(
-                        onTap: () {
-                          controller.goToMarkings();
-                        },
-                        child:
-                            const Icon(Icons.format_list_numbered, size: 30)),
                   ],
                 ),
               ),
@@ -359,7 +399,7 @@ class HomePage extends StatelessWidget {
             ],
             carouselController: controller.controllerCarousel,
             options: CarouselOptions(
-              height: 175,
+              height: 186,
               viewportFraction: 1,
               initialPage: 0,
               enableInfiniteScroll: true,

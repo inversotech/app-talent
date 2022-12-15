@@ -22,7 +22,7 @@ class UserPreferences {
     _prefs?.clear();
   }
 
-  // GET y SET del fullnamePersonFather
+  // GET y SET del fullnamePersonFather aqui estan los datos del que se logeo.
   String? get fullnamePersonFather {
     return _prefs?.getString('fullnamePersonFather');
   }
@@ -245,7 +245,8 @@ class UserPreferences {
 
   // GET y SET optionLocation
   String get optionLocation {
-    return _prefs?.getString('optionLocation') ?? '2'; //1 is not get location, 2 is get location, '3' is new get location
+    return _prefs?.getString('optionLocation') ??
+        '2'; //1 is not get location, 2 is get location, '3' is new get location
   }
 
   set optionLocation(String value) {
