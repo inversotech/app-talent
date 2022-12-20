@@ -9,14 +9,19 @@ final Map endPoints = {
   'comun': {
     'my-entities': Env.api.apiTalent + 'comun/my-entities-contract',
     'my-deptos': Env.api.apiTalent + 'comun/my-deptos-contract',
-    'total-entities-deptos': Env.api.apiTalent + 'comun/total-entities-deptos-contract',
+    'total-entities-deptos':
+        Env.api.apiTalent + 'comun/total-entities-deptos-contract',
     'years': Env.api.apiTalent + 'comun/years',
     'months': Env.api.apiTalent + 'comun/months',
-    'descriptions-marking': Env.api.apiTalent + 'comun/assistance/descriptions-marking',
-    'justification-status': Env.api.apiTalent + 'comun/assistance/justification-status',
-    'license-permit-status': Env.api.apiTalent + 'comun/benefits/estado-lica-per',
+    'descriptions-marking':
+        Env.api.apiTalent + 'comun/assistance/descriptions-marking',
+    'justification-status':
+        Env.api.apiTalent + 'comun/assistance/justification-status',
+    'license-permit-status':
+        Env.api.apiTalent + 'comun/benefits/estado-lica-per',
     'type-licen-per': Env.api.apiTalent + 'comun/benefits/tipo-perm-lic',
-    'type-concept-licen-per': Env.api.apiTalent + 'comun/benefits/type-concept-permlic',
+    'type-concept-licen-per':
+        Env.api.apiTalent + 'comun/benefits/type-concept-permlic',
     'my-areas': Env.api.apiTalent + 'comun/search-my-area-access',
     'type-institution': Env.api.apiTalent + 'comun/benefits/type-inst-atention',
     'person-signature': Env.api.apiTalent + 'comun/personal-signature',
@@ -31,19 +36,25 @@ final Map endPoints = {
         Env.api.apiTalent + 'assistance/assistance/map-coordinates-by-worker',
     'show-button-assistance':
         Env.api.apiTalent + 'assistance/assistance/show-button-assistance',
-    'worker-marking': Env.api.apiTalent + 'assistance/assistance/worker-marking-mobile',
-    'justification-reason': Env.api.apiTalent + 'assistance/settings/justification-reason',
-    'request-by-worker': Env.api.apiTalent + 'assistance/justification/request-by-worker',
+    'worker-marking':
+        Env.api.apiTalent + 'assistance/assistance/worker-marking-mobile',
+    'justification-reason':
+        Env.api.apiTalent + 'assistance/settings/justification-reason',
+    'request-by-worker':
+        Env.api.apiTalent + 'assistance/justification/request-by-worker',
     'justification': Env.api.apiTalent + 'assistance/justification/request',
     'schedule-worker-by-date':
         Env.api.apiTalent + 'assistance/justification/schedule-worker-by-date',
     'marking-worker-by-date':
         Env.api.apiTalent + 'assistance/justification/marking-worker-by-date',
-    'assist-markings': Env.api.apiTalent + 'assistance/assistance/assist-markings',
+    'assist-markings':
+        Env.api.apiTalent + 'assistance/assistance/assist-markings',
     'markings-ini': Env.api.apiTalent + 'assistance/assistance/markings-ini',
-    'survey-detail': Env.api.apiTalent + 'assistance/settings/survey-covid-detail',
+    'survey-detail':
+        Env.api.apiTalent + 'assistance/settings/survey-covid-detail',
     'survey-answer': Env.api.apiTalent + 'assistance/settings/survey-answer',
-    'survey-answer-covid': Env.api.apiTalent + 'assistance/settings/survey-answer-covid',
+    'survey-answer-covid':
+        Env.api.apiTalent + 'assistance/settings/survey-answer-covid',
     'survey-answer-covid-detail':
         Env.api.apiTalent + 'assistance/settings/survey-answer-covid-detail',
   },
@@ -51,7 +62,8 @@ final Map endPoints = {
     'entity-type': Env.api.apiTalent + 'report/account-status/entity-type/',
     'person-year': Env.api.apiTalent + 'report/account-status/person-year/',
     //account-status
-    'account-status': Env.api.apiTalent + 'report/account-status/procedure/spc_2_sta_data',
+    'account-status':
+        Env.api.apiTalent + 'report/account-status/procedure/spc_2_sta_data',
     'account-status-items':
         Env.api.apiTalent + 'report/account-status/account-status-items',
     'account-status-items-incomes':
@@ -69,45 +81,53 @@ final Map endPoints = {
     'account-status-personal-agreement-detail':
         Env.api.apiTalent + 'report/account-status/account-status-details',
     //deparments
-    'deparments-items': Env.api.apiTalent + 'report/account-status/departments-items',
+    'deparments-items':
+        Env.api.apiTalent + 'report/account-status/departments-items',
     'deparments-items-detail':
         Env.api.apiTalent + 'report/account-status/departments-items-detail',
     //travels
     'travels-data': Env.api.apiTalent + 'report/account-status/travels-data',
-    'travels-data-detail': Env.api.apiTalent + 'report/account-status/travels-data-detail',
+    'travels-data-detail':
+        Env.api.apiTalent + 'report/account-status/travels-data-detail',
     //graphics
-    'account-status-graphics':
-        Env.api.apiTalent + 'report/account-status/financial-data-graph-options',
+    'account-status-graphics': Env.api.apiTalent +
+        'report/account-status/financial-data-graph-options',
     'account-status-graphics-detail':
         Env.api.apiTalent + 'report/account-status/financial-data-graph',
   },
   'report': {
-    'monthly-assistance-summary-chart':
-        Env.api.apiTalent + 'report/assistance/monthly-assistance-summary-chart',
+    'monthly-assistance-summary-chart': Env.api.apiTalent +
+        'report/assistance/monthly-assistance-summary-chart',
     'monthly-assistance-summary':
         Env.api.apiTalent + 'report/assistance/monthly-assistance-summary',
-    'info-assistance': Env.api.apiTalent + 'report/assistance/info-assistance-mobile'
+    'info-assistance':
+        Env.api.apiTalent + 'report/assistance/info-assistance-mobile'
   },
   'justification': {
     'request': Env.api.apiTalent + 'assistance/justification/request',
-    'request-markings': Env.api.apiTalent + 'assistance/justification/request/markings',
+    'request-markings':
+        Env.api.apiTalent + 'assistance/justification/request/markings',
   },
   'workerportal': {
-    'license-permit': Env.api.apiTalent + 'workerportal/lisenses/licences-permits',
-    'holiday': Env.api.apiTalent + 'workerportal/holidays/anho-programing-holidays',
+    'license-permit':
+        Env.api.apiTalent + 'workerportal/lisenses/licences-permits',
+    'holiday':
+        Env.api.apiTalent + 'workerportal/holidays/anho-programing-holidays',
     'payments-ticket-month': Env.api.apiTalent +
         'workerportal/lambFinancial-payments/payments-ticket-month-pdf',
     'payments-ticket-month-download': Env.api.apiTalent +
         'workerportal/lambFinancial-payments/payments-ticket-month-download-pdf',
-    'payments-ticket':
-        Env.api.apiTalent + 'workerportal/lambFinancial-payments/payments-ticket'
+    'payments-ticket': Env.api.apiTalent +
+        'workerportal/lambFinancial-payments/payments-ticket'
   },
   'benefits': {
     'license-permit': Env.api.apiTalent + 'benefits/licenses-permits/licenses',
-    'license-permit-detail': Env.api.apiTalent + 'benefits/licenses-permits/det-perm-lic',
-    'process-license-permit':
-        Env.api.apiTalent + 'benefits/licenses-permits/process-licencia-permiso',
-    'valid-license-permit': Env.api.apiTalent + 'benefits/licenses-permits/valid-perm-lic',
+    'license-permit-detail':
+        Env.api.apiTalent + 'benefits/licenses-permits/det-perm-lic',
+    'process-license-permit': Env.api.apiTalent +
+        'benefits/licenses-permits/process-licencia-permiso',
+    'valid-license-permit':
+        Env.api.apiTalent + 'benefits/licenses-permits/valid-perm-lic',
     'holiday': Env.api.apiTalent + 'benefits/holidays',
     'pro-holiday': Env.api.apiTalent + 'benefits/holidays/pro-holidays'
   },
@@ -123,5 +143,6 @@ final Map endPoints = {
     'comment': Env.api.apiMessenger + 'red/comentarios',
     'likes': Env.api.apiMessenger + 'red/likes',
     'total-no-leidos': Env.api.apiMessenger + 'report/total-no-leidos',
+    'storage': Env.api.apiMessengerShell + 'storage',
   }
 };

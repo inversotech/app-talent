@@ -1,19 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/controllers/notification/event_detail_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
+import 'package:lamb_talent/enviroment/enviroment.dart';
 import 'package:lamb_talent/shared/components/app_screen.dart';
 import 'package:lamb_talent/shared/components/expanded_text.dart';
 
 class EventDetail extends StatelessWidget {
   final String id;
   final bool loadBack;
-  const EventDetail({Key? key, required this.id, this.loadBack = false})
+  final String token;
+  const EventDetail(
+      {Key? key, required this.id, this.loadBack = false, required this.token})
       : super(key: key);
 
   @override
@@ -38,30 +42,6 @@ class EventDetail extends StatelessWidget {
             paddingRight: 4,
             paddingTop: 4,
             backgroundColor: Colors.transparent,
-            child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-              return Obx(() => !controller.loadingData.value
-                  ? Column(
-                      children: [
-                        Container(
-                          color: Colors.white,
-                          alignment: Alignment.center,
-                          child: GestureDetector(
-                            onTap: () {
-                              controller.goToBack(loadBack);
-                            },
-                            child: const Icon(Icons.chevron_left,
-                                color: ColorsApp.primary, size: 40),
-                          ),
-                        ),
-                        _cardEventPrincipal(controller),
-                        const SizedBox(height: 4.0),
-                        _cardEventDetail(controller),
-                        const SizedBox(height: 50.0)
-                      ],
-                    )
-                  : Container());
-            }),
             floatingActionButton: Obx(() => controller.buttonAssitance.value &&
                     !controller.userPreferences.isWorkerChild
                 ? Container(
@@ -103,6 +83,30 @@ class EventDetail extends StatelessWidget {
                         )),
                   )
                 : Container()),
+            child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+              return Obx(() => !controller.loadingData.value
+                  ? Column(
+                      children: [
+                        Container(
+                          color: Colors.white,
+                          alignment: Alignment.center,
+                          child: GestureDetector(
+                            onTap: () {
+                              controller.goToBack(loadBack);
+                            },
+                            child: const Icon(Icons.chevron_left,
+                                color: ColorsApp.primary, size: 40),
+                          ),
+                        ),
+                        _cardEventPrincipal(controller),
+                        const SizedBox(height: 4.0),
+                        _cardEventDetail(controller),
+                        const SizedBox(height: 50.0)
+                      ],
+                    )
+                  : Container());
+            }),
           );
         });
   }
@@ -115,13 +119,24 @@ class EventDetail extends StatelessWidget {
           controller.event.imagenUrl!.isNotEmpty &&
                   !controller.event.imagenUrl!.contains('empty')
               ? GestureDetector(
-                  child: CachedNetworkImage(
-                    imageUrl: controller.event.imagenUrl.toString(),
-                    placeholder: (context, url) => Container(),
-                    errorWidget: (context, url, error) {
-                      return Container();
-                    },
-                  ),
+                  child: controller.event.imagenUrl!.contains('http')
+                      ? CachedNetworkImage(
+                          imageUrl: controller.event.imagenUrl.toString(),
+                          placeholder: (context, url) => Container(),
+                          errorWidget: (context, url, error) {
+                            return Container();
+                          },
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: Env.api.apiMessengerShell.toString() +
+                              'storage/file?fileName='.toString() +
+                              controller.event.imagenUrl.toString(),
+                          httpHeaders: {'Authorization': token},
+                          placeholder: (context, url) => Container(),
+                          errorWidget: (context, url, error) {
+                            return Container();
+                          },
+                        ),
                   onTap: () {
                     controller.showPhoto(controller.event.imagenUrl.toString());
                   },
@@ -149,20 +164,7 @@ class EventDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          capitalize(DateFormat.EEEE('es')
-                                  .format(controller.event.fechaInicio!)
-                                  .substring(0, 3)) +
-                              ', ' +
-                              DateFormat.d('es')
-                                  .format(controller.event.fechaInicio!) +
-                              ' de ' +
-                              capitalize(DateFormat.MMM('es')
-                                  .format(controller.event.fechaInicio!)) +
-                              ' a las ' +
-                              Jiffy(controller.event.fechaInicio.toString(),
-                                      'yyyy-MM-dd HH:mm')
-                                  .format('hh:mm a')
-                                  .toLowerCase(),
+                          '${capitalize(DateFormat.EEEE('es').format(controller.event.fechaInicio!).substring(0, 3))}, ${DateFormat.d('es').format(controller.event.fechaInicio!)} de ${capitalize(DateFormat.MMM('es').format(controller.event.fechaInicio!))} a las ${Jiffy(controller.event.fechaInicio.toString(), 'yyyy-MM-dd HH:mm').format('hh:mm a').toLowerCase()}',
                           style: GoogleFonts.montserrat(
                               fontWeight: FontWeight.w400, fontSize: 14.0)),
                       ExpandableText(

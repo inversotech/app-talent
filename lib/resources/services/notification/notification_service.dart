@@ -139,12 +139,20 @@ class NotificationService {
     return response;
   }
 
-  
   Future<ApiResponse> totalNoLeidos(Map<String, String> params) async {
     final _apiProvider = ApiProvider();
     final response = await _apiProvider.getWithParams(
-        endPoint: endPoints['messenger']['total-no-leidos'],
-        params: params);
+        endPoint: endPoints['messenger']['total-no-leidos'], params: params);
+    //_apiProvider.dispose();
+    return response;
+  }
+
+  Future<ApiResponse> getRouteStorageFile(String route) async {
+    final _apiProvider = ApiProvider();
+    final response = await _apiProvider.getAll(
+        endPoint: endPoints['messenger']['storage'].toString() +
+            '?fileName='.toString() +
+            route.toString());
     //_apiProvider.dispose();
     return response;
   }

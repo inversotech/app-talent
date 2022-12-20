@@ -11,6 +11,7 @@ import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/resources/models/response.dart';
 import 'package:lamb_talent/resources/providers/api.provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class AccountStatusService {
   Future getAccountStatus(String params) async {
@@ -175,8 +176,8 @@ class AccountStatusService {
       Map<String, String> params, BuildContext context) async {
     try {
       var response = ApiResponse.fromJsonNull();
-      if (await canLaunch(urlFile.toString())) {
-        await launch(
+      if (await canLaunchUrlString(urlFile.toString())) {
+        await launchUrlString(
           urlFile.toString(),
         );
       } else {
@@ -203,7 +204,7 @@ class AccountStatusService {
   }
 
   Future<ApiResponse> saveDownloadPaymentTicket(
-      String urlFile,String filename, Map<String, String> params) async {
+      String urlFile, String filename, Map<String, String> params) async {
     final userPreferences = UserPreferences();
     ApiResponse response = ApiResponse.fromJsonNull();
     bool showTicket = false;
@@ -220,12 +221,20 @@ class AccountStatusService {
       showTicket = true;
     }
     if (showTicket) {
-      if (await canLaunch(urlFile.toString())) {
-        await launch(urlFile.toString(), headers: {
+      if (await canLaunchUrlString(urlFile.toString())) {
+        await launchUrlString(
+          urlFile.toString(),
+          webViewConfiguration: WebViewConfiguration(headers: {
+            'Content-Type': 'application/force-download',
+            'Content-Disposition': 'attachment',
+            'filename': filename
+          }),
+/*         headers: {
           'Content-Type': 'application/force-download',
           'Content-Disposition': 'attachment',
           'filename': filename
-        });
+        } */
+        );
       } else {
         if (Get.isDialogOpen!) {
           Get.back();

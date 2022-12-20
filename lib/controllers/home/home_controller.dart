@@ -61,7 +61,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   @override
   void onInit() {
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     super.onInit();
   }
 
@@ -83,7 +83,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   void dispose() {
     refreshController.dispose();
     scrollController.dispose();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -324,7 +324,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     String uuid = '';
     if (GetPlatform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
-      uuid = androidInfo.androidId!; //UUID for Android
+      uuid = androidInfo.id; //UUID for Android reemplaze for pedro
+      //uuid = androidInfo.androidId!; //UUID for Android
     } else if (GetPlatform.isIOS) {
       final iosInfo = await deviceInfoPlugin.iosInfo;
       uuid = iosInfo.identifierForVendor!; //UUID for iOS

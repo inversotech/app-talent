@@ -32,6 +32,8 @@ class ApiProvider extends GetConnect {
           final resp = _parseJsonResponse(response.body);
           if (resp.success) {
             GetStorage storage = GetStorage();
+            await storage.write('usernameLamb', params['username']);
+            await storage.write('passwordLamb', params['password']);
             await storage.write('tokenLamb', resp.data['access_token']);
           } else if (response.status.isUnauthorized) {
             _showDialog('danger', 'Usuario o contraseña incorrectas.');

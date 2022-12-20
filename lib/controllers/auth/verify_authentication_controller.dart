@@ -26,8 +26,9 @@ class VerifyAutheticationController extends GetxController {
       Map<String, String> params = {'token_notify': _userPref.tokenNotify};
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfoPlugin.androidInfo;
-        params['uuid'] = androidInfo.androidId!; //UUID for Android
-        params['model'] = androidInfo.model!;
+        params['uuid'] = androidInfo.id; //UUID for Android by pedro
+        // params['uuid'] = androidInfo.androidId!; //UUID for Android
+        params['model'] = androidInfo.model;
         params['platform'] = Platform.operatingSystem;
         params['id_app'] = '5';
       } else if (Platform.isIOS) {

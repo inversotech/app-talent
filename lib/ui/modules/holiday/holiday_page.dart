@@ -23,6 +23,90 @@ class HolidayPage extends StatelessWidget {
               scrollController: controller.scrollController,
               enablePullDown: false,
               enablePullUp: false,
+              floatingActionButton: Obx(() => controller
+                              .idEstadoVacTrab.value !=
+                          '02' &&
+                      controller.isDth.value &&
+                      controller.listData.isNotEmpty
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2.0),
+                              child: TextButton(
+                                style: ButtonStyle(
+                                  alignment: Alignment.center,
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      return ColorsApp
+                                          .warning; // Use the component's default.
+                                    },
+                                  ),
+                                  shape: MaterialStateProperty.resolveWith<
+                                      RoundedRectangleBorder>(
+                                    (Set<MaterialState> states) {
+                                      return RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              25)); // Use the component's default.
+                                    },
+                                  ),
+                                ),
+                                child: const Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Text('Observar',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                                onPressed: () {
+                                  _showModalAnularRefuse(
+                                      context, '03', 'Observar', controller);
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2.0),
+                              child: TextButton(
+                                style: ButtonStyle(
+                                  alignment: Alignment.center,
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      return ColorsApp
+                                          .success; // Use the component's default.
+                                    },
+                                  ),
+                                  shape: MaterialStateProperty.resolveWith<
+                                      RoundedRectangleBorder>(
+                                    (Set<MaterialState> states) {
+                                      return RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              25)); // Use the component's default.
+                                    },
+                                  ),
+                                ),
+                                child: const Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: Text('Aprobar',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                                onPressed: () {
+                                  _showModalApprove(context, '02', controller);
+                                },
+                              ),
+                            )
+                          ]),
+                    )
+                  : Container()),
               child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                 return Column(
@@ -164,91 +248,7 @@ class HolidayPage extends StatelessWidget {
                         )),
                   ],
                 );
-              }),
-              floatingActionButton: Obx(() => controller
-                              .idEstadoVacTrab.value !=
-                          '02' &&
-                      controller.isDth.value &&
-                      controller.listData.isNotEmpty
-                  ? Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 2.0),
-                              child: TextButton(
-                                style: ButtonStyle(
-                                  alignment: Alignment.center,
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                      return ColorsApp
-                                          .warning; // Use the component's default.
-                                    },
-                                  ),
-                                  shape: MaterialStateProperty.resolveWith<
-                                      RoundedRectangleBorder>(
-                                    (Set<MaterialState> states) {
-                                      return RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              25)); // Use the component's default.
-                                    },
-                                  ),
-                                ),
-                                child: const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Text('Observar',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                onPressed: () {
-                                  _showModalAnularRefuse(
-                                      context, '03', 'Observar', controller);
-                                },
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 2.0),
-                              child: TextButton(
-                                style: ButtonStyle(
-                                  alignment: Alignment.center,
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                      return ColorsApp
-                                          .success; // Use the component's default.
-                                    },
-                                  ),
-                                  shape: MaterialStateProperty.resolveWith<
-                                      RoundedRectangleBorder>(
-                                    (Set<MaterialState> states) {
-                                      return RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              25)); // Use the component's default.
-                                    },
-                                  ),
-                                ),
-                                child: const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Text('Aprobar',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                onPressed: () {
-                                  _showModalApprove(context, '02', controller);
-                                },
-                              ),
-                            )
-                          ]),
-                    )
-                  : Container()));
+              }));
         });
   }
 

@@ -56,9 +56,13 @@ class EventDetailController extends GetxController {
     await _listGroups();
     refreshController.loadNoData();
     loadingData.value = false;
+    print('detalle event');
     if (Get.isDialogOpen!) {
+      print('execute get back');
       Get.back();
     }
+
+    // Get.back();
   }
 
   Future _getEvent() async {
@@ -100,8 +104,20 @@ class EventDetailController extends GetxController {
   }
 
   goToLinkUrl(String link) async {
-    if (await canLaunch(link)) {
-      await launch(link);
+    final notificationService = NotificationService();
+    if (link.contains('http')) {
+      await goToUrl(link);
+    } else {
+      final resp = await notificationService.getRouteStorageFile(link);
+      if (resp.success) {
+        await goToUrl(resp.data);
+      }
+    }
+  }
+
+  goToUrl(String link) async {
+    if (await canLaunchUrl(Uri.parse(link))) {
+      await launchUrl(Uri.parse(link));
     } else {
       Get.snackbar('Mensaje:', 'No se puede ingresar al enlace',
           duration: const Duration(seconds: 8),

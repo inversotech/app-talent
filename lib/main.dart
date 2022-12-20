@@ -37,10 +37,12 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: const [
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
         Locale('en', 'US'),
         Locale('es', 'ES'),
+        Locale('es', 'PE'),
       ],
       theme: CustomTheme(
               isDark: false, textTheme: const TextTheme(bodyText1: body1Style))

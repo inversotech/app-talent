@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
 
 import 'package:carousel_slider/carousel_controller.dart';
@@ -27,6 +28,7 @@ import 'package:lamb_talent/ui/modules/notification/components/comment.dart';
 import 'package:lamb_talent/ui/modules/notification/components/event_detail.dart';
 import 'package:lamb_talent/ui/modules/notification/components/notification_detail.dart';
 import 'package:lamb_talent/ui/modules/notification/components/show_photo.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class NotificationController extends GetxController {
   final refreshController = RefreshController(initialRefresh: false);
@@ -44,6 +46,8 @@ class NotificationController extends GetxController {
   bool finishLoad = false;
   bool finishConsults = false;
   RxString codeModule = '16120104'.obs;
+  final storage = GetStorage();
+  String token = '';
 
   @override
   void onInit() {
@@ -55,7 +59,9 @@ class NotificationController extends GetxController {
           ? Get.arguments['origen'].toString()
           : '';
     }
+
     super.onInit();
+    token = storage.read('tokenLamb');
   }
 
   @override
@@ -302,7 +308,7 @@ class NotificationController extends GetxController {
     };
     final _notificationService = NotificationService();
     pagination = await _notificationService.getNotifications(params);
-   List<dynamic> jsonList;
+    List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
       jsonList = [];
     } else {
@@ -339,8 +345,13 @@ class NotificationController extends GetxController {
   goToDetail(NotificationGeneralModel item) {
     switch (item.codigo) {
       case 'msm_evento':
-        Get.to(() => EventDetail(id: item.id.toString()),
-            transition: Transition.size, duration: const Duration(seconds: 1));
+        Get.to(
+            () => EventDetail(
+                  id: item.id.toString(),
+                  token: token,
+                ),
+            transition: Transition.size,
+            duration: const Duration(seconds: 1));
         break;
       case 'msm_album':
         Get.to(() => AlbumDetail(id: item.id.toString()),
@@ -407,8 +418,20 @@ class NotificationController extends GetxController {
   }
 
   goToLinkUrl(String link) async {
-    if (await canLaunch(link)) {
-      await launch(link);
+    final notificationService = NotificationService();
+    if (link.contains('http')) {
+      await goToUrl(link);
+    } else {
+      final resp = await notificationService.getRouteStorageFile(link);
+      if (resp.success) {
+        await goToUrl(resp.data);
+      }
+    }
+  }
+
+  goToUrl(String link) async {
+    if (await canLaunchUrl(Uri.parse(link))) {
+      await launchUrl(Uri.parse(link));
     } else {
       Get.snackbar('Mensaje:', 'No se puede ingresar al enlace',
           duration: const Duration(seconds: 8),

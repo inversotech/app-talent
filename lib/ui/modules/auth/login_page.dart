@@ -32,6 +32,7 @@ class LoginPage extends StatelessWidget {
                 _title(),
                 const SizedBox(height: 30),
                 _userPasswordWidget(context),
+                _checkWidget(context),
                 const SizedBox(height: 20),
                 _submitButton(context),
               ],
@@ -109,6 +110,9 @@ class LoginPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15.0)),
                       padding: const EdgeInsets.all(12.0),
                       child: Semantics(
+                          label: 'Contraseña',
+                          enabled: true,
+                          hint: 'Ingrese su contraseña',
                           child: Obx(() => TextFormField(
                                 controller: controller.password,
                                 focusNode: controller.focusPassword,
@@ -123,15 +127,31 @@ class LoginPage extends StatelessWidget {
                                 onEditingComplete: () {
                                   controller.loginLamb(buildContext);
                                 },
-                              )),
-                          label: 'Contraseña',
-                          enabled: true,
-                          hint: 'Ingrese su contraseña'),
+                              ))),
                     ),
                   ],
                 ),
               ),
             ));
+  }
+
+  Widget _checkWidget(buildContext) {
+    return Obx(() => CheckboxListTile(
+        // tileColor: ColorsApp.white,
+        controlAffinity: ListTileControlAffinity.leading,
+        title: const Text('Guardar Credenciales',
+            style: TextStyle(color: ColorsApp.white)),
+        value: controller.checkCredencial.value,
+        side: MaterialStateBorderSide.resolveWith((Set<MaterialState> states) {
+          return BorderSide(
+              width: 2.0,
+              style: BorderStyle.solid,
+              color: ColorsApp
+                  .white); // Defer to default value on the theme or widget.
+        }),
+        onChanged: (val) {
+          controller.checkCredencial.value = val!;
+        }));
   }
 
   Widget _submitButton(BuildContext buildContext) {

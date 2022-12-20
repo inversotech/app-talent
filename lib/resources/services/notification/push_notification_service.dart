@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/routers_names.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
@@ -28,6 +29,7 @@ class PushNotificationService {
   }
 
   static Future _onMessageOpenAppHandler(RemoteMessage message) async {
+    print('app second plant');
     _openNotificationDetail(message.data);
   }
 
@@ -71,10 +73,15 @@ class PushNotificationService {
   }
 
   static _openNotificationDetail(Map<String, dynamic> data) async {
+    final storage = GetStorage();
     switch (data['origen'].toString()) {
       case 'msm_evento':
         Get.to(
-            () => EventDetail(id: data['id_origen'].toString(), loadBack: true),
+            () => EventDetail(
+                  id: data['id_origen'].toString(),
+                  loadBack: true,
+                  token: storage.read('tokenLamb'),
+                ),
             transition: Transition.size,
             duration: const Duration(seconds: 1));
         break;

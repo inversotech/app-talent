@@ -33,6 +33,55 @@ class SurveyPage extends StatelessWidget {
                   showTabs: true,
                   onRefresh: controller.onRefresh,
                   onLoading: controller.onLoading,
+                  floatingActionButton: controller.actions
+                              .where((element) =>
+                                  element.clave.toString().toUpperCase() ==
+                                  'ADD')
+                              .isNotEmpty &&
+                          !controller.preferences.isWorkerChild
+                      ? TextButton(
+                          style: ButtonStyle(
+                            alignment: Alignment.center,
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                return ColorsApp
+                                    .success; // Use the component's default.
+                              },
+                            ),
+                            shape: MaterialStateProperty.resolveWith<
+                                RoundedRectangleBorder>(
+                              (Set<MaterialState> states) {
+                                return RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        25)); // Use the component's default.
+                              },
+                            ),
+                          ),
+                          onPressed: () async {
+                            controller
+                                .goToFormSurvey(controller.idPerson.value);
+                          },
+                          child: SizedBox(
+                            width: 200.0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                controller.activeButtonAddQuiz.value
+                                    ? const Icon(Icons.person,
+                                        color: Colors.white)
+                                    : const Icon(Icons.person_add,
+                                        color: Colors.white),
+                                Text(
+                                  controller.activeButtonAddQuiz.value
+                                      ? 'Realizar encuesta'
+                                      : 'Encuestar nueva persona',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ))
+                      : null,
                   child: LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
                     return Column(
@@ -116,9 +165,8 @@ class SurveyPage extends StatelessWidget {
                                               'foto_url':
                                                   searchResult["foto_url"]
                                                       .toString(),
-                                              'id':
-                                                  searchResult["id_persona"]
-                                                      .toString(),
+                                              'id': searchResult["id_persona"]
+                                                  .toString(),
                                               'name':
                                                   searchResult["nombreapellido"]
                                                       .toString(),
@@ -128,7 +176,7 @@ class SurveyPage extends StatelessWidget {
                                           }
                                         },
                                         icon: const Icon(Icons.person_search,
-                                            color: ColorsApp.primary,size: 25),
+                                            color: ColorsApp.primary, size: 25),
                                       ),
                                     ),
                                   )
@@ -155,55 +203,6 @@ class SurveyPage extends StatelessWidget {
                       ],
                     );
                   }),
-                  floatingActionButton: controller.actions
-                              .where((element) =>
-                                  element.clave.toString().toUpperCase() ==
-                                  'ADD')
-                              .isNotEmpty &&
-                          !controller.preferences.isWorkerChild
-                      ? TextButton(
-                          style: ButtonStyle(
-                            alignment: Alignment.center,
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                return ColorsApp
-                                    .success; // Use the component's default.
-                              },
-                            ),
-                            shape: MaterialStateProperty.resolveWith<
-                                RoundedRectangleBorder>(
-                              (Set<MaterialState> states) {
-                                return RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        25)); // Use the component's default.
-                              },
-                            ),
-                          ),
-                          onPressed: () async {
-                            controller
-                                .goToFormSurvey(controller.idPerson.value);
-                          },
-                          child: SizedBox(
-                            width: 200.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                controller.activeButtonAddQuiz.value
-                                    ? const Icon(Icons.person,
-                                        color: Colors.white)
-                                    : const Icon(Icons.person_add,
-                                        color: Colors.white),
-                                Text(
-                                  controller.activeButtonAddQuiz.value
-                                      ? 'Realizar encuesta'
-                                      : 'Encuestar nueva persona',
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ))
-                      : null,
                 )
               : Container());
         });

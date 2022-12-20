@@ -59,9 +59,12 @@ class NotificationPage extends StatelessWidget {
                               },
                               onPressedPhoto: (photo) {
                                 controller.showPhoto(photo);
-                              }, onPressedPhotos: (photos,index) {
-                                controller.showPhotos(photos,index);
-                              })
+                              },
+                              onPressedPhotos: (photos, index) {
+                                controller.showPhotos(photos, index);
+                              },
+                              token: controller.token,
+                            )
                           : controller.listData.isEmpty &&
                                   controller.finishConsults
                               ? Container(

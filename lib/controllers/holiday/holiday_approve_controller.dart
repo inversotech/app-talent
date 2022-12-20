@@ -194,7 +194,7 @@ class HolidayApproveController extends GetxController {
       Get.back();
     }
     if (create.success) {
-      if (Get.isSnackbarOpen!) {
+      if (Get.isSnackbarOpen) {
         Get.back();
       }
       Navigator.pop(buildContext);

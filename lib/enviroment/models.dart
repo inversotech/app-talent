@@ -1,5 +1,6 @@
 class VHost {
   String apiTalent;
+  String apiMessengerShell;
   String apiMessenger;
   String apiTalent2;
   String codeModule;
@@ -8,6 +9,7 @@ class VHost {
 
   VHost(
       {this.apiTalent = '',
+      this.apiMessengerShell = '',
       this.apiMessenger = '',
       this.apiTalent2 = '',
       this.codeModule = '',

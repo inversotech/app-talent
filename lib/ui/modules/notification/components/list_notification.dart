@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
+import 'package:lamb_talent/enviroment/enviroment.dart';
 import 'package:lamb_talent/resources/models/notification/notification_general.dart';
 import 'package:lamb_talent/shared/components/expanded_text.dart';
 
@@ -21,6 +22,7 @@ class ListNotification extends StatelessWidget {
   final Function(String) onPressedPhoto;
   final Function(List<String>, int) onPressedPhotos;
   final Function(NotificationGeneralModel) onPressedLikes;
+  final String token;
   const ListNotification(
       {Key? key,
       required this.listData,
@@ -31,11 +33,14 @@ class ListNotification extends StatelessWidget {
       required this.onPressedLink,
       required this.onPressedPhoto,
       required this.onPressedPhotos,
-      required this.onPressedLikes})
+      required this.onPressedLikes,
+      required this.token})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print('datos token!!!!');
+    print(token);
     if (listData.isNotEmpty) {
       return Padding(
         padding: const EdgeInsets.only(left: 4.0, right: 4.0),
@@ -101,14 +106,26 @@ class ListNotification extends StatelessWidget {
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(25),
                             topRight: Radius.circular(25)),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: item.imagenUrl.toString(),
-                          placeholder: (context, url) => Container(),
-                          errorWidget: (context, url, error) {
-                            return Container();
-                          },
-                        ),
+                        child: item.imagenUrl!.contains('http')
+                            ? CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl: item.imagenUrl.toString(),
+                                placeholder: (context, url) => Container(),
+                                errorWidget: (context, url, error) {
+                                  return Container();
+                                },
+                              )
+                            : CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl: Env.api.apiMessengerShell.toString() +
+                                    'storage/file?fileName='.toString() +
+                                    item.imagenUrl.toString(),
+                                httpHeaders: {'Authorization': token},
+                                placeholder: (context, url) => Container(),
+                                errorWidget: (context, url, error) {
+                                  return Container();
+                                },
+                              ),
                       ),
                     )
                   : Container(),
@@ -135,19 +152,7 @@ class ListNotification extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              capitalize(DateFormat.EEEE('es')
-                                      .format(item.fechaInicio!)
-                                      .substring(0, 3)) +
-                                  ', ' +
-                                  DateFormat.d('es').format(item.fechaInicio!) +
-                                  ' de ' +
-                                  capitalize(DateFormat.MMM('es')
-                                      .format(item.fechaInicio!)) +
-                                  ' a las ' +
-                                  Jiffy(item.fechaInicio.toString(),
-                                          'yyyy-MM-dd HH:mm')
-                                      .format('hh:mm a')
-                                      .toLowerCase(),
+                              '${capitalize(DateFormat.EEEE('es').format(item.fechaInicio!).substring(0, 3))}, ${DateFormat.d('es').format(item.fechaInicio!)} de ${capitalize(DateFormat.MMM('es').format(item.fechaInicio!))} a las ${Jiffy(item.fechaInicio.toString(), 'yyyy-MM-dd HH:mm').format('hh:mm a').toLowerCase()}',
                               style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w400, fontSize: 14.0)),
                           ExpandableText(

@@ -15,6 +15,7 @@ class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final username = TextEditingController();
   final password = TextEditingController();
+  RxBool checkCredencial = false.obs;
   final FocusNode focusPassword = FocusNode();
   final _authService = AuthService();
   RxBool obscureText = true.obs;
@@ -46,11 +47,12 @@ class LoginController extends GetxController {
     OneSignal.shared.setExternalUserId(_userPref.tokenNotify);
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
-      params['uuid'] = androidInfo.androidId!; //UUID for Android
-      params['model'] = androidInfo.model!;
+      params['uuid'] = androidInfo.id; //UUID for Android by pedro
+      // params['uuid'] = androidInfo.androidId!; //UUID for Android
+      params['model'] = androidInfo.model;
       params['platform'] = Platform.operatingSystem;
-      params['version'] = androidInfo.version.release!;
-      params['manufacturer'] = androidInfo.manufacturer!;
+      params['version'] = androidInfo.version.release;
+      params['manufacturer'] = androidInfo.manufacturer;
       params['id_app'] = '5';
     } else if (Platform.isIOS) {
       final iosInfo = await deviceInfoPlugin.iosInfo;
@@ -88,6 +90,8 @@ class LoginController extends GetxController {
 
   void _clearStorage() {
     final storage = GetStorage();
+    storage.remove('usernameLamb');
+    storage.remove('passwordLamb');
     storage.remove('tokenLamb');
   }
 }

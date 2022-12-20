@@ -8,7 +8,7 @@ import 'package:lamb_talent/resources/models/notification/notification.dart';
 import 'package:lamb_talent/resources/services/notification/notification_service.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:video_player/video_player.dart';
 
 class NotificationDetailController extends GetxController {
@@ -105,8 +105,8 @@ class NotificationDetailController extends GetxController {
   }
 
   goToLinkUrl(String link) async {
-    if (await canLaunch(link)) {
-      await launch(link);
+    if (await canLaunchUrlString(link)) {
+      await launchUrlString(link);
     } else {
       Get.snackbar('Mensaje:', 'No se puede ingresar al enlace',
           duration: const Duration(seconds: 8),
