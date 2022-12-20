@@ -89,7 +89,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   void _listAllData() async {
     if (userPreferences.optionLocation == '3') {
-      LocationUser().initLocationUser();
+      // LocationUser().initLocationUser();
     }
     loadingIndicator(onlyLoading: true, opacity: false);
     await _getInfoAssistance();
@@ -720,12 +720,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed && openSetting) {
-      LocationUser().initLocationUser();
+      // LocationUser().initLocationUser();
       openSetting = false;
       loadingIndicator(onlyLoading: true, opacity: false);
       _verifyButtonAssistance();
     } else if (state == AppLifecycleState.resumed && openLocation) {
-      LocationUser().initLocationUser();
+      // LocationUser().initLocationUser();
       openLocation = false;
       loadingIndicator(onlyLoading: true, opacity: false);
       _verifyButtonAssistance();

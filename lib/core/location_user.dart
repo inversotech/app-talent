@@ -37,10 +37,28 @@ class LocationUser {
     userPreferences.latitude = _position.latitude.toString();
     userPreferences.longitude = _position.longitude.toString();
     userPreferences.optionLocation = '2';
-    Timer? timePeriodic;
+    /* Timer? timePeriodic;
     timePeriodic = Timer.periodic(const Duration(minutes: 3), (timer) {
       userPreferences.optionLocation = '3';
       timePeriodic!.cancel();
+    }); */
+    this.changeLocationUser();
+  }
+
+  changeLocationUser() {
+    final userPreferences = UserPreferences();
+    const LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.best,
+      distanceFilter: 5,
+    );
+    Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position? position) {
+      if (position != null) {
+        print(position.latitude);
+        print(position.longitude);
+        userPreferences.latitude = position.latitude.toString();
+        userPreferences.longitude = position.longitude.toString();
+      }
     });
   }
 }

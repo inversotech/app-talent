@@ -6,6 +6,7 @@ import 'package:lamb_talent/ui/custom_theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/colors.dart';
+import 'core/location_user.dart';
 import 'core/routers.dart';
 import 'core/routers_names.dart';
 import 'core/user_preferences.dart';
@@ -17,6 +18,7 @@ void main() async {
   await prefs.initPrefs();
   await PushNotificationService.initializeAppFirebase();
   await PushNotificationService.initializeAppOneSingal();
+  LocationUser().initLocationUser();
   runApp(const MyApp());
 }
 
