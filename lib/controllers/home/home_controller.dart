@@ -138,9 +138,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   void _listAllData() async {
-    if (userPreferences.optionLocation == '3') {
-      // LocationUser().initLocationUser();
-    }
+    /* if (userPreferences.optionLocation == '3') {
+      LocationUser().initLocationUser();
+    } */
     loadingIndicator(onlyLoading: true, opacity: false);
     await _getInfoAssistance();
     refreshController.loadNoData();
@@ -239,8 +239,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     // print('latitude:' + userPreferences.latitude.toString());
     // print('longitude:' + userPreferences.longitude.toString());
     final assistanceSummaryService = AssistanceSummaryService();
-    Timer? timePeriodic;
-    /*  if (userPreferences.optionLocation == '2' ||
+    /*Timer? timePeriodic;
+      if (userPreferences.optionLocation == '2' ||
         userPreferences.isWorkerChild) { */
 
     print('Marking');
@@ -442,7 +442,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       showButton.value = '0';
       loadingData.value = true;
       loadingData.value = false;
-      userPreferences.optionLocation == '2';
+      // userPreferences.optionLocation == '2';
       await _getInfoAssistance();
       if (Get.isDialogOpen!) {
         Get.back();
