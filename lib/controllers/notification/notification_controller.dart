@@ -59,13 +59,12 @@ class NotificationController extends GetxController {
           ? Get.arguments['origen'].toString()
           : '';
     }
-
     super.onInit();
-    token = storage.read('tokenLamb');
   }
 
   @override
   void onReady() {
+    token = storage.read('tokenLamb');
     initValues();
     getListDataInitial();
     super.onReady();
@@ -132,6 +131,12 @@ class NotificationController extends GetxController {
     if (Get.isDialogOpen!) {
       Get.back();
     }
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }    
   }
 
   Future _getAccessNivel() async {
