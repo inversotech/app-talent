@@ -6,6 +6,7 @@ class VHost {
   String codeModule;
   String codeFcmApp;
   String appIdOneSignal;
+  String codeIdLamb;
 
   VHost(
       {this.apiTalent = '',
@@ -14,5 +15,6 @@ class VHost {
       this.apiTalent2 = '',
       this.codeModule = '',
       this.codeFcmApp = '',
-      this.appIdOneSignal = ''});
+      this.appIdOneSignal = '',
+      this.codeIdLamb = ''});
 }

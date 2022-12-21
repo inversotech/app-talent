@@ -10,7 +10,8 @@ class Api {
       apiTalent2: 'http://app07.adventistas.pe/lamb-api-talent-v2/public/api/',
       codeModule: '16120100',
       codeFcmApp: 'lamb-talent',
-      appIdOneSignal: '1110e1d3-ffcc-4bd9-8564-46771cbf77d9');
+      appIdOneSignal: '1110e1d3-ffcc-4bd9-8564-46771cbf77d9',
+      codeIdLamb: 'lamb@20221220');
   VHost apiProd = VHost(
       apiTalent: 'https://api-lamb-talent.upeu.edu.pe/api-talent/api/',
       apiMessengerShell: 'https://api-lamb-school-shell.upeu.edu.pe/api/',
@@ -18,5 +19,6 @@ class Api {
       apiTalent2: 'https://api-lamb-talent.upeu.edu.pe/api-talent-v2/api/',
       codeModule: '16120100',
       codeFcmApp: 'lamb-talent',
-      appIdOneSignal: '1110e1d3-ffcc-4bd9-8564-46771cbf77d9');
+      appIdOneSignal: '1110e1d3-ffcc-4bd9-8564-46771cbf77d9',
+      codeIdLamb: 'lamb@20221220');
 }
