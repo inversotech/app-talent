@@ -88,6 +88,8 @@ class NotificationController extends GetxController {
   }
 
   void getListDataInitial() async {
+    print('ingrese aqui por ser data inicial');
+    print(listData.isEmpty);
     if (listData.isEmpty) {
       loadingIndicator(
           onlyLoading: true, opacity: false, colorLoading: ColorsApp.white);
@@ -97,6 +99,7 @@ class NotificationController extends GetxController {
     await Jiffy.locale("es");
     await _getAccessNivel();
     await getListMoreData();
+    print(Get.isDialogOpen!);
     if (Get.isDialogOpen!) {
       Get.back();
     }
@@ -454,12 +457,15 @@ class NotificationController extends GetxController {
   }
 
   showPhoto(String imageUrl) {
-    Get.to(() => ShowPhoto(imageUrl: imageUrl),
+    Get.to(() => ShowPhoto(imageUrl: imageUrl, token: token),
         transition: Transition.size, duration: const Duration(seconds: 0));
   }
 
   showPhotos(List<String> photos, int index) {
-    Get.to(() => ShowPhoto(isMultiple: true, photos: photos, indexStart: index),
-        transition: Transition.size, duration: const Duration(seconds: 0));
+    Get.to(
+        () => ShowPhoto(
+            isMultiple: true, token: token, photos: photos, indexStart: index),
+        transition: Transition.size,
+        duration: const Duration(seconds: 0));
   }
 }

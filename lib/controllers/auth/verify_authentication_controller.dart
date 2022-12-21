@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/core/routers_names.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
@@ -13,6 +14,7 @@ class VerifyAutheticationController extends GetxController {
   final _authService = AuthService();
   @override
   void onInit() {
+    // _clearStorage();
     _validToken();
     super.onInit();
   }
@@ -59,5 +61,10 @@ class VerifyAutheticationController extends GetxController {
     } else {
       Get.offAllNamed(RoutesName.login);
     }
+  }
+
+  void _clearStorage() {
+    final storage = GetStorage();
+    storage.remove('tokenLamb');
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
@@ -67,6 +68,7 @@ class AppScreen extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final storage = GetStorage();
     int initialIndex = 0;
     List<Widget> tabs = [];
     List<Menu> menu = userPreferences.menu ?? [];
@@ -263,6 +265,9 @@ class AppScreen extends StatelessWidget {
                             !userPreferences.isWorkerChild
                                 ? IconButton(
                                     onPressed: () {
+                                      storage.remove('usernameLamb');
+                                      storage.remove('passwordLamb');
+                                      storage.remove('tokenLamb');
                                       userPreferences.clear();
                                       Navigator.pushReplacementNamed(
                                           context, 'login');

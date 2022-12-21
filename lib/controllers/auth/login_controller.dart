@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:encrypt/encrypt.dart' as pencrypt;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/location_user.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
+import 'package:lamb_talent/enviroment/enviroment.dart';
 import 'package:lamb_talent/resources/providers/api.provider.dart';
 import 'package:lamb_talent/resources/services/auth/auth_service.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
@@ -22,7 +24,9 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     obscureText.value = true;
+
     _clearStorage();
+    _dataUserStorage();
     super.onInit();
   }
 
@@ -69,7 +73,7 @@ class LoginController extends GetxController {
     params['token_notify'] = _userPref.tokenNotify;
     loadingIndicator(onlyLoading: true, opacity: false);
     final _apiProvider = ApiProvider();
-    final resp = await _apiProvider.loginLamb(params);
+    final resp = await _apiProvider.loginLamb(params, checkCredencial.value);
     //_apiProvider.dispose();
 
     if (resp.success) {
@@ -90,8 +94,15 @@ class LoginController extends GetxController {
 
   void _clearStorage() {
     final storage = GetStorage();
-    storage.remove('usernameLamb');
-    storage.remove('passwordLamb');
     storage.remove('tokenLamb');
+  }
+
+  void _dataUserStorage() {
+    final storage = GetStorage();
+    if (storage.read('usernameLamb') != null &&
+        storage.read('usernameLamb') != '') {
+      username.value = TextEditingValue(text: storage.read('usernameLamb'));
+      password.value = TextEditingValue(text: storage.read('passwordLamb'));
+    }
   }
 }

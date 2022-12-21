@@ -1,16 +1,19 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:encrypt/encrypt.dart' as pencrypt;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/end_points.dart';
+import 'package:lamb_talent/enviroment/enviroment.dart';
 import 'package:lamb_talent/resources/models/response.dart';
 
 class ApiProvider extends GetConnect {
-  Future<ApiResponse> loginLamb(Map<String, String> params) async {
+  Future<ApiResponse> loginLamb(
+      Map<String, String> params, bool saveCred) async {
     if (await checkInternet(endPoints['oauth']['login'])) {
       httpClient.maxRedirects = 1;
       httpClient.timeout = const Duration(seconds: 60);
@@ -32,8 +35,18 @@ class ApiProvider extends GetConnect {
           final resp = _parseJsonResponse(response.body);
           if (resp.success) {
             GetStorage storage = GetStorage();
-            await storage.write('usernameLamb', params['username']);
-            await storage.write('passwordLamb', params['password']);
+            print('here');
+            if (saveCred) {
+              print('se va a guardar las credenciales');
+              final usernamelamb = params['username']!;
+              final passwordlamb = params['password']!;
+              print('credenciales');
+              print(usernamelamb);
+              print(passwordlamb);
+              await storage.write('usernameLamb', usernamelamb);
+              await storage.write('passwordLamb', passwordlamb);
+            }
+
             await storage.write('tokenLamb', resp.data['access_token']);
           } else if (response.status.isUnauthorized) {
             _showDialog('danger', 'Usuario o contraseña incorrectas.');
