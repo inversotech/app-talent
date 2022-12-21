@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lamb_talent/core/location_user.dart';
 import 'package:lamb_talent/resources/models/general/acceso_nivel_user.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_approve_page.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_page.dart';
@@ -70,6 +69,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   @override
   void onReady() {
+    changeLocationUser();
     if ((Get.currentRoute == '/JustificationPage' ||
             Get.currentRoute == '/LicensePermitPage' ||
             Get.currentRoute == '/HolidayApprovePage') &&
