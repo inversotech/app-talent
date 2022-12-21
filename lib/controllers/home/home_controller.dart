@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -59,6 +60,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   RxString numDocument = ''.obs;
   RxString numDocQr = ''.obs;
 
+  StreamSubscription<Position>? positionStream;
+
   @override
   void onInit() {
     WidgetsBinding.instance.addObserver(this);
@@ -81,10 +84,57 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    positionStream!.cancel();
     refreshController.dispose();
     scrollController.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  changeLocationUser() {
+    final userPreferences = UserPreferences();
+    late LocationSettings locationSettings;
+
+    if (Platform.isAndroid) {
+      locationSettings = AndroidSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 5,
+        forceLocationManager: true,
+        intervalDuration: const Duration(seconds: 10),
+        /* //(Optional) Set foreground notification config to keep the app alive 
+    //when going to the background
+    foregroundNotificationConfig: const ForegroundNotificationConfig(
+        notificationText:
+        "Example app will continue to receive your location even when you aren't using it",
+        notificationTitle: "Running in Background",
+        enableWakeLock: true,
+    ) */
+      );
+    } else if (Platform.isIOS || Platform.isMacOS) {
+      locationSettings = AppleSettings(
+        accuracy: LocationAccuracy.best,
+        activityType: ActivityType.fitness,
+        distanceFilter: 5,
+        pauseLocationUpdatesAutomatically: true,
+        // Only set to true if our app will be started up in the background.
+        showBackgroundLocationIndicator: false,
+      );
+    } else {
+      locationSettings = const LocationSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 5,
+      );
+    }
+    positionStream =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position? position) {
+      if (position != null) {
+        print(position.latitude);
+        print(position.longitude);
+        userPreferences.latitude = position.latitude.toString();
+        userPreferences.longitude = position.longitude.toString();
+      }
+    });
   }
 
   void _listAllData() async {
@@ -103,11 +153,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       Get.back();
     }
     loadingIndicator(onlyLoading: true, opacity: false);
-    Timer? timePeriodic;
-    if (userPreferences.optionLocation == '2') {
-      await _getButtonAssitance(userPreferences.longitude.toString(),
-          userPreferences.latitude.toString());
-    } else {
+    /* Timer? timePeriodic; */
+    /* if (userPreferences.optionLocation == '2') { */
+    await _getButtonAssitance(userPreferences.longitude.toString(),
+        userPreferences.latitude.toString());
+    /* } else {
       timePeriodic = Timer.periodic(const Duration(seconds: 1), (timer) async {
         if (userPreferences.optionLocation == '2') {
           timePeriodic!.cancel();
@@ -115,10 +165,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               userPreferences.latitude.toString());
         }
       });
-    }
+    } */
   }
 
   Future _getButtonAssitance(String longitude, String latitude) async {
+    print('Marking');
+    print(longitude);
+    print(latitude);
     Map<String, String> params = {
       'lng': longitude,
       'lat': latitude,
@@ -187,22 +240,26 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     // print('longitude:' + userPreferences.longitude.toString());
     final assistanceSummaryService = AssistanceSummaryService();
     Timer? timePeriodic;
-    if (userPreferences.optionLocation == '2' ||
-        userPreferences.isWorkerChild) {
-      final resp = await assistanceSummaryService.getInfoAssistance(params);
-      if (resp.success) {
-        final dataResponse = resp.data;
-        if (dataResponse != null) {
-          await _parseDataAssistance(dataResponse);
-        }
-      } else {
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
-        loadingData.value = true;
-        loadingData.value = false;
+    /*  if (userPreferences.optionLocation == '2' ||
+        userPreferences.isWorkerChild) { */
+
+    print('Marking');
+    print(userPreferences.longitude);
+    print(userPreferences.latitude);
+    final resp = await assistanceSummaryService.getInfoAssistance(params);
+    if (resp.success) {
+      final dataResponse = resp.data;
+      if (dataResponse != null) {
+        await _parseDataAssistance(dataResponse);
       }
     } else {
+      if (Get.isDialogOpen!) {
+        Get.back();
+      }
+      loadingData.value = true;
+      loadingData.value = false;
+    }
+    /* } else {
       timePeriodic = Timer.periodic(const Duration(seconds: 1), (timer) async {
         if (userPreferences.optionLocation == '2') {
           timePeriodic!.cancel();
@@ -225,7 +282,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           }
         }
       });
-    }
+    } */
   }
 
   Future _parseDataAssistance(Map<String, dynamic> dataResponse) async {
