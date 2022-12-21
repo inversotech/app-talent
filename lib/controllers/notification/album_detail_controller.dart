@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/routers_names.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/notification/album.dart';
@@ -17,8 +18,16 @@ class AlbumDetailController extends GetxController {
   AlbumModel album = AlbumModel();
   List<GroupModel> listGroups = [];
   String origen = 'msm_album';
+  final storage = GetStorage();
+  String token = '';
 
   RxBool loadingData = true.obs;
+  @override
+  void onInit() {
+    super.onInit();
+    token = storage.read('tokenLamb');
+  }
+
   @override
   void onReady() {
     _listAllData();
@@ -83,7 +92,7 @@ class AlbumDetailController extends GetxController {
   }
 
   showPhoto(String imageUrl) {
-    Get.to(() => ShowPhoto(imageUrl: imageUrl),
+    Get.to(() => ShowPhoto(imageUrl: imageUrl, token: token),
         transition: Transition.size, duration: const Duration(seconds: 0));
   }
 }

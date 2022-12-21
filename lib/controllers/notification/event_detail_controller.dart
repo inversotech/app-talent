@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/routers_names.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
@@ -20,9 +21,18 @@ class EventDetailController extends GetxController {
   List<GroupModel> listGroups = [];
   final userPreferences = UserPreferences();
   String origen = 'msm_evento';
+  final storage = GetStorage();
+  String token = '';
 
   RxBool buttonAssitance = false.obs;
   RxBool loadingData = true.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    token = storage.read('tokenLamb');
+  }
+
   @override
   void onReady() {
     if (event.idEvento == null) {
@@ -158,7 +168,7 @@ class EventDetailController extends GetxController {
   }
 
   showPhoto(String imageUrl) {
-    Get.to(() => ShowPhoto(imageUrl: imageUrl),
+    Get.to(() => ShowPhoto(imageUrl: imageUrl, token: token),
         transition: Transition.size, duration: const Duration(seconds: 0));
   }
 }

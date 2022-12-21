@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:intl/intl.dart';
+import 'package:lamb_talent/controllers/notification/notification_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
@@ -200,14 +202,26 @@ class ListNotification extends StatelessWidget {
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(25),
                         topRight: Radius.circular(25)),
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl: item.imagenUrl.toString(),
-                      placeholder: (context, url) => Container(),
-                      errorWidget: (context, url, error) {
-                        return Container();
-                      },
-                    ),
+                    child: item.imagenUrl!.contains('http')
+                        ? CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: item.imagenUrl.toString(),
+                            placeholder: (context, url) => Container(),
+                            errorWidget: (context, url, error) {
+                              return Container();
+                            },
+                          )
+                        : CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: Env.api.apiMessengerShell.toString() +
+                                'storage/file?fileName='.toString() +
+                                item.imagenUrl.toString(),
+                            httpHeaders: {'Authorization': token},
+                            placeholder: (context, url) => Container(),
+                            errorWidget: (context, url, error) {
+                              return Container();
+                            },
+                          ),
                   ),
                 )
               : Container(),
@@ -515,6 +529,7 @@ class CardPhotos extends StatefulWidget {
 class _CardPhotosState extends State<CardPhotos> {
   int itemChangePhoto = 1;
   int indexSelect = 0;
+  final controller = Get.put(NotificationController());
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -533,16 +548,36 @@ class _CardPhotosState extends State<CardPhotos> {
                                 child: SizedBox(
                                   width: double.infinity,
                                   height: 200,
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    imageUrl: photo.imagenUrl.toString(),
-                                    placeholder: (context, url) => Image.asset(
-                                        'assets/img/image-default.png'),
-                                    errorWidget: (context, url, error) {
-                                      return Image.asset(
-                                          'assets/img/image-default.png');
-                                    },
-                                  ),
+                                  child: photo.imagenUrl!.contains('http')
+                                      ? CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl: photo.imagenUrl.toString(),
+                                          placeholder: (context, url) =>
+                                              Image.asset(
+                                                  'assets/img/image-default.png'),
+                                          errorWidget: (context, url, error) {
+                                            return Image.asset(
+                                                'assets/img/image-default.png');
+                                          },
+                                        )
+                                      : CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl: Env.api.apiMessengerShell
+                                                  .toString() +
+                                              'storage/file?fileName='
+                                                  .toString() +
+                                              photo.imagenUrl.toString(),
+                                          httpHeaders: {
+                                            'Authorization': controller.token
+                                          },
+                                          placeholder: (context, url) =>
+                                              Image.asset(
+                                                  'assets/img/image-default.png'),
+                                          errorWidget: (context, url, error) {
+                                            return Image.asset(
+                                                'assets/img/image-default.png');
+                                          },
+                                        ),
                                 ),
                                 onTap: () {
                                   widget.onPressedPhoto(
