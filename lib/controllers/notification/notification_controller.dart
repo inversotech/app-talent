@@ -98,9 +98,7 @@ class NotificationController extends GetxController {
     await Jiffy.locale("es");
     await _getAccessNivel();
     await getListMoreData();
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     loadingIndicator(onlyLoading: true, opacity: false);
     finishConsults = true;
     loadingData.value = false;
@@ -109,33 +107,21 @@ class NotificationController extends GetxController {
       await fnCheckIfNotificationArrived();
       loadingData.value = false;
       loadingData.value = true;
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
+      Get.until((route) => !Get.isDialogOpen!);
       loadingIndicator(onlyLoading: true, opacity: false);
       await fnGotoItemScroll();
       finishLoad = true;
       await getTotalNoLeidos();
       loadingData.value = false;
       loadingData.value = true;
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
+      Get.until((route) => !Get.isDialogOpen!);
     } else {
       await getTotalNoLeidos();
       finishConsults = true;
       loadingData.value = false;
       loadingData.value = true;
     }
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   Future _getAccessNivel() async {
@@ -279,7 +265,7 @@ class NotificationController extends GetxController {
     print('value loadding data');
     print(loadingData.value);
     loadingData.value = false;
-    // loadingData.value = true;
+    loadingData.value = true;
   }
 
   Future getTotalNoLeidos() async {
@@ -420,9 +406,7 @@ class NotificationController extends GetxController {
       imgFile.writeAsBytesSync(response.bodyBytes);
       listPaths.add(imgFile.path);
     }
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     Share.shareFiles(listPaths, text: item.mensaje!);
   }
 

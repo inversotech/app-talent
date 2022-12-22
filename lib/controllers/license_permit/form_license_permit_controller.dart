@@ -94,18 +94,14 @@ class FormLicensePermitController extends GetxController {
   }
 
   void _getDatheader() async {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     loadingIndicator(onlyLoading: true, opacity: false);
 
     final _licensePermitService = LicensePermitService();
     listTypeLicensePermit = await _licensePermitService.getTypeLicensePermit();
     loadingData.value = true;
     loadingData.value = false;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   void cleanConcept() {
@@ -184,9 +180,7 @@ class FormLicensePermitController extends GetxController {
   }
 
   void getTypeConLicePer(String idTipoPermLic) async {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     loadingIndicator(onlyLoading: true, opacity: false);
 
     final Map<String, String> params = {'id_tipo_perm_lic': idTipoPermLic};
@@ -197,9 +191,7 @@ class FormLicensePermitController extends GetxController {
 
     loadingData.value = true;
     loadingData.value = false;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
 
   }
 
@@ -218,25 +210,19 @@ class FormLicensePermitController extends GetxController {
   }
 
   void getTypeInstitution() async {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     loadingIndicator(onlyLoading: true, opacity: false);
     final _licensePermitService = LicensePermitService();
     listTypeInstitution = await _licensePermitService.getTypeInstitution();
  
     loadingData.value = true;
     loadingData.value = false;   
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
 
   }
 
   void validLicensePermit() async {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     loadingIndicator(onlyLoading: true, opacity: false);
     final Map<String, String> params = {
       'id_entidad': userPreferences.idEntity.toString(),
@@ -283,9 +269,7 @@ class FormLicensePermitController extends GetxController {
 
     loadingData.value = true;
     loadingData.value = false;
-     if (Get.isDialogOpen!) {
-      Get.back();
-    }
+     Get.until((route) => !Get.isDialogOpen!);
   }
 
   void submit() async {
@@ -394,9 +378,7 @@ class FormLicensePermitController extends GetxController {
     final form = FormData(params);
     final _licensePermitService = LicensePermitService();
     final create = await _licensePermitService.createLicensePermit(form);
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
       Get.back(result: {'change': true, 'data': null});
       Get.snackbar('Mensaje:', create.message.isNotEmpty ? create.message : 'Se guardó correctamente',

@@ -77,17 +77,13 @@ class LoginController extends GetxController {
     if (resp.success) {
       final resp = await _authService.userInfo();
       if (resp.success) {
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
         if (_userPref.menu!.isNotEmpty) {
           Get.offAllNamed(_userPref.menu![0].url.toString());
         }
       }
     }
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   void _clearStorage() {

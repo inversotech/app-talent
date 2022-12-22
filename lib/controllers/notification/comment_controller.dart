@@ -79,9 +79,7 @@ class CommentController extends GetxController {
     await Jiffy.locale("es");
     await getListMoreData();
     loadingData.value = true;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   Future getListMoreData() async {
@@ -193,9 +191,7 @@ class CommentController extends GetxController {
     indexAnswerParent = 0;
     loadingData.value = false;
     loadingData.value = true;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   fnAnswerParent(CommentModel item, int index) {
@@ -246,9 +242,7 @@ class CommentController extends GetxController {
     }
     loadingData.value = false;
     loadingData.value = true;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   fnPressDelete(
@@ -309,9 +303,7 @@ class CommentController extends GetxController {
       }
       loadingData.value = false;
       loadingData.value = true;
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
+      Get.until((route) => !Get.isDialogOpen!);
     }
   }
 
@@ -341,9 +333,7 @@ class CommentController extends GetxController {
   }
 
   goToBack() {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     Get.back();
   }
 }

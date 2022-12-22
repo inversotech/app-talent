@@ -69,9 +69,7 @@ class FormJustificationController extends GetxController {
   }
 
   void _getDatheader() async {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     loadingIndicator(onlyLoading: true, opacity: false);
 
     final justificationService = JustificationService();
@@ -83,9 +81,7 @@ class FormJustificationController extends GetxController {
         'icon': null,
       });
     }
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   void getMarkings() async {
@@ -93,9 +89,7 @@ class FormJustificationController extends GetxController {
       'fecha': DateFormat('y-MM-dd')
           .format(DateTime.parse(formData.value.fecha.toString())),
     };
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     loadingIndicator(onlyLoading: true, opacity: false);
     final justificationService = JustificationService();
     listSchedule = await justificationService.getScheduleWorker(params);
@@ -249,12 +243,8 @@ class FormJustificationController extends GetxController {
     });
     loadMarking.value = false;
     loadMarking.value = true;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   Color _getColorEnt(MarkingModel item) {
@@ -342,9 +332,7 @@ class FormJustificationController extends GetxController {
         File file = File(dir.path + formData.value.evidenciaAdj.toString());
         Uint8List bytes = base64.decode(resp.data);
         await file.writeAsBytes(bytes);
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
         Get.to(() => VisorPdfImgPage(title: 'Evidencia', filePath: file.path));
       }
     } else if (evidence.value.isNotEmpty) {
@@ -441,9 +429,7 @@ class FormJustificationController extends GetxController {
         }
         final form = FormData(params);
         final create = await justificationService.createJustification(form);
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
         if (create.success) {
           Get.back(result: {'change': true, 'data': null});
           Get.snackbar('Mensaje:', create.message,
@@ -471,9 +457,7 @@ class FormJustificationController extends GetxController {
         final form = FormData(params);
         ApiResponse update = await justificationService.updateJustification(
             form, formData.value.idSolicJustif.toString());
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
         if (update.success) {
           Get.back(result: {'change': true, 'data': null});
           Get.snackbar('Mensaje:', update.message,
@@ -502,9 +486,7 @@ class FormJustificationController extends GetxController {
 
     final justificationService = JustificationService();
     ApiResponse create = await justificationService.changeRequestStatus(params);
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
       Get.back();
       Get.back(result: {'change': true, 'data': null});

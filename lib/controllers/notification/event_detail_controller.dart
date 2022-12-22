@@ -67,10 +67,7 @@ class EventDetailController extends GetxController {
     refreshController.loadNoData();
     loadingData.value = false;
     print('detalle event');
-    if (Get.isDialogOpen!) {
-      print('execute get back');
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
 
     // Get.back();
   }
@@ -151,15 +148,11 @@ class EventDetailController extends GetxController {
     if (changeRegister.success) {
       buttonAssitance.value = false;
     }
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   goToBack(bool loadBack) {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     if (loadBack) {
       Get.offAllNamed(RoutesName.notification);
     } else {
