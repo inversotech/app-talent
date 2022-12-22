@@ -92,7 +92,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   changeLocationUser() {
-    final userPreferences = UserPreferences();
     late LocationSettings locationSettings;
 
     if (Platform.isAndroid) {
@@ -129,8 +128,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position? position) {
       if (position != null) {
-        print(position.latitude);
-        print(position.longitude);
         userPreferences.latitude = position.latitude.toString();
         userPreferences.longitude = position.longitude.toString();
       }
@@ -138,9 +135,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   void _listAllData() async {
-    /* if (userPreferences.optionLocation == '3') {
-      LocationUser().initLocationUser();
-    } */
     loadingIndicator(onlyLoading: true, opacity: false);
     await _getInfoAssistance();
     refreshController.loadNoData();
@@ -149,29 +143,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   Future _verifyButtonAssistance() async {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     loadingIndicator(onlyLoading: true, opacity: false);
-    /* Timer? timePeriodic; */
-    /* if (userPreferences.optionLocation == '2') { */
     await _getButtonAssitance(userPreferences.longitude.toString(),
         userPreferences.latitude.toString());
-    /* } else {
-      timePeriodic = Timer.periodic(const Duration(seconds: 1), (timer) async {
-        if (userPreferences.optionLocation == '2') {
-          timePeriodic!.cancel();
-          await _getButtonAssitance(userPreferences.longitude.toString(),
-              userPreferences.latitude.toString());
-        }
-      });
-    } */
   }
 
   Future _getButtonAssitance(String longitude, String latitude) async {
-    print('Marking');
-    print(longitude);
-    print(latitude);
     Map<String, String> params = {
       'lng': longitude,
       'lat': latitude,
@@ -179,9 +157,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       'id_depto': userPreferences.idDeparment.toString()
     };
 
-    final _markingService = MarkingService();
+    final markingService = MarkingService();
 
-    final response = await _markingService.showButtonAssistance(params);
+    final response = await markingService.showButtonAssistance(params);
 
     if (response.success) {
       showButton.value = response.data['show_button'] ?? '0';
@@ -193,9 +171,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           ? int.parse(response.data['minutos_tolerancia'].toString())
           : 0;
       if (showButton.value == '3' && !isMarking.value) {
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:', response.message,
             duration: const Duration(seconds: 8),
             colorText: ColorsApp.white,
@@ -208,16 +184,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     refreshController.loadNoData();
     loadingData.value = true;
     loadingData.value = false;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
-    final _serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    final _permission = await Geolocator.checkPermission();
-    if (codeModality.value == 'TP' && !_serviceEnabled) {
+    Get.until((route) => !Get.isDialogOpen!);
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    final permission = await Geolocator.checkPermission();
+    if (codeModality.value == 'TP' && !serviceEnabled) {
       await _serviceLocationDisable(refreshShowButton: true);
     } else if (codeModality.value == 'TP' &&
-        (_permission != LocationPermission.always &&
-            _permission != LocationPermission.whileInUse)) {
+        (permission != LocationPermission.always &&
+            permission != LocationPermission.whileInUse)) {
       await _serviceLocationDenied(refreshShowButton: true);
     }
   }
@@ -236,16 +210,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       'include_actions': '0',
       'include_access_level': '1'
     };
-    // print('latitude:' + userPreferences.latitude.toString());
-    // print('longitude:' + userPreferences.longitude.toString());
     final assistanceSummaryService = AssistanceSummaryService();
-    /*Timer? timePeriodic;
-      if (userPreferences.optionLocation == '2' ||
-        userPreferences.isWorkerChild) { */
-
-    print('Marking');
-    print(userPreferences.longitude);
-    print(userPreferences.latitude);
     final resp = await assistanceSummaryService.getInfoAssistance(params);
     if (resp.success) {
       final dataResponse = resp.data;
@@ -253,36 +218,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         await _parseDataAssistance(dataResponse);
       }
     } else {
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
+      Get.until((route) => !Get.isDialogOpen!);
       loadingData.value = true;
       loadingData.value = false;
     }
-    /* } else {
-      timePeriodic = Timer.periodic(const Duration(seconds: 1), (timer) async {
-        if (userPreferences.optionLocation == '2') {
-          timePeriodic!.cancel();
-          if (Get.isDialogOpen!) {
-            Get.back();
-          }
-          loadingIndicator(onlyLoading: true, opacity: false);
-          final resp = await assistanceSummaryService.getInfoAssistance(params);
-          if (resp.success) {
-            final dataResponse = resp.data;
-            if (dataResponse != null) {
-              await _parseDataAssistance(dataResponse);
-            }
-          } else {
-            if (Get.isDialogOpen!) {
-              Get.back();
-            }
-            loadingData.value = true;
-            loadingData.value = false;
-          }
-        }
-      });
-    } */
   }
 
   Future _parseDataAssistance(Map<String, dynamic> dataResponse) async {
@@ -332,9 +271,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               dataResponse['button_marking']['minutos_tolerancia'].toString())
           : 0;
       if (showButton.value == '3' && !isMarking.value) {
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:', dataResponse['button_marking']['message'],
             duration: const Duration(seconds: 8),
             colorText: ColorsApp.white,
@@ -344,25 +281,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       }
       loadingData.value = true;
       loadingData.value = false;
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
-      final _serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      final _permission = await Geolocator.checkPermission();
-      // print('codeModality.value:' + codeModality.value.toString());
-      // print('_serviceEnabled:' + _serviceEnabled.toString());
-      // print('_permission:' + _permission.toString());
-      if (codeModality.value == 'TP' && !_serviceEnabled) {
+      Get.until((route) => !Get.isDialogOpen!);
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      final permission = await Geolocator.checkPermission();
+      if (codeModality.value == 'TP' && !serviceEnabled) {
         await _serviceLocationDisable(refreshShowButton: true);
       } else if (codeModality.value == 'TP' &&
-          (_permission != LocationPermission.always &&
-              _permission != LocationPermission.whileInUse)) {
+          (permission != LocationPermission.always &&
+              permission != LocationPermission.whileInUse)) {
         await _serviceLocationDenied(refreshShowButton: true);
       }
     } else {
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
+      Get.until((route) => !Get.isDialogOpen!);
     }
   }
 
@@ -388,12 +318,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       uuid = iosInfo.identifierForVendor!; //UUID for iOS
     }
 
-    final _serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!_serviceEnabled) {
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
       if (codeModality.value == 'TP') {
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
         await _serviceLocationDisable(refreshShowButton: false);
       } else {
         continuoMarkingAssistance(uuid, '0', '0');
@@ -401,20 +329,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       return;
     }
 
-    final _permission = await Geolocator.checkPermission();
-    if ((_permission != LocationPermission.always &&
-        _permission != LocationPermission.whileInUse)) {
+    final permission = await Geolocator.checkPermission();
+    if ((permission != LocationPermission.always &&
+        permission != LocationPermission.whileInUse)) {
       if (codeModality.value == 'TP') {
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
         await _serviceLocationDisable(refreshShowButton: false);
       } else {
         continuoMarkingAssistance(uuid, '0', '0');
       }
       return;
     }
-
+    print('Entra aqui ps');
     await continuoMarkingAssistance(uuid, userPreferences.longitude.toString(),
         userPreferences.latitude.toString());
   }
@@ -431,11 +357,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       'id_depto': userPreferences.idDeparment.toString()
     };
 
-    final _markingService = MarkingService();
-    final marking = await _markingService.workerMarking(params);
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    final markingService = MarkingService();
+    final marking = await markingService.workerMarking(params);
+    Get.until((route) => !Get.isDialogOpen!);
     if (marking.success) {
       isMarking.value = true;
       loadingIndicator(onlyLoading: true, opacity: false);
@@ -444,9 +368,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       loadingData.value = false;
       // userPreferences.optionLocation == '2';
       await _getInfoAssistance();
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
+      print('termina');
+      Get.until((route) => !Get.isDialogOpen!);
       loadingData.value = true;
       loadingData.value = false;
     }
@@ -509,9 +432,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         await _getListData();
         loadingData.value = true;
         loadingData.value = false;
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
       }
     }
   }
@@ -535,9 +456,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         await _getListData();
         loadingData.value = true;
         loadingData.value = false;
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
       }
     }
   }
@@ -552,9 +471,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         await _getListData();
         loadingData.value = true;
         loadingData.value = false;
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
       }
     }
   }
@@ -574,9 +491,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         await _getListData();
         loadingData.value = true;
         loadingData.value = false;
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
       }
     }
   }
@@ -591,9 +506,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         await _getListData();
         loadingData.value = true;
         loadingData.value = false;
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
       }
     }
   }
@@ -637,9 +550,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         if (sign) {
           loadingIndicator(onlyLoading: true, opacity: false);
           await _getListData();
-          if (Get.isDialogOpen!) {
-            Get.back();
-          }
+          Get.until((route) => !Get.isDialogOpen!);
           refreshController.loadNoData();
           loadingData.value = true;
           loadingData.value = false;
