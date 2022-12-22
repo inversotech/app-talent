@@ -60,7 +60,7 @@ class LoginController extends GetxController {
       params['id_app'] = '5';
     } else if (Platform.isIOS) {
       final iosInfo = await deviceInfoPlugin.iosInfo;
-      params['uuid'] = iosInfo.identifierForVendor!; //UUID for iOS
+      params['uuid'] = deviceId; //UUID for iOS
       params['model'] = iosInfo.model!;
       params['platform'] = Platform.operatingSystem;
       params['version'] = iosInfo.systemVersion!;

@@ -15,6 +15,7 @@ import 'package:lamb_talent/ui/modules/justification/components/form_justificati
 import 'package:lamb_talent/ui/modules/justification/justificattion_page.dart';
 import 'package:lamb_talent/ui/modules/license_permit/components/form_license_permit.dart';
 import 'package:lamb_talent/ui/modules/license_permit/license_permit_page.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:lamb_talent/core/colors.dart';
@@ -323,15 +324,15 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     loadingIndicator(onlyLoading: false, text: 'Guardando...');
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
 
-    String uuid = '';
-    if (GetPlatform.isAndroid) {
+    String uuid = await PlatformDeviceId.getDeviceId ?? '';
+    /* if (GetPlatform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
       uuid = androidInfo.id; //UUID for Android reemplaze for pedro
       //uuid = androidInfo.androidId!; //UUID for Android
     } else if (GetPlatform.isIOS) {
       final iosInfo = await deviceInfoPlugin.iosInfo;
       uuid = iosInfo.identifierForVendor!; //UUID for iOS
-    }
+    } */
 
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
