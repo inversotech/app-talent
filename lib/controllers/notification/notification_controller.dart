@@ -87,8 +87,8 @@ class NotificationController extends GetxController {
   }
 
   void getListDataInitial() async {
-    print('ingrese aqui por ser data inicial');
-    print(listData.isEmpty);
+    print('datos list');
+    print(listData);
     if (listData.isEmpty) {
       loadingIndicator(
           onlyLoading: true, opacity: false, colorLoading: ColorsApp.white);
@@ -98,7 +98,6 @@ class NotificationController extends GetxController {
     await Jiffy.locale("es");
     await _getAccessNivel();
     await getListMoreData();
-    print(Get.isDialogOpen!);
     if (Get.isDialogOpen!) {
       Get.back();
     }
@@ -136,7 +135,7 @@ class NotificationController extends GetxController {
     }
     if (Get.isDialogOpen!) {
       Get.back();
-    }    
+    }
   }
 
   Future _getAccessNivel() async {
@@ -277,8 +276,10 @@ class NotificationController extends GetxController {
     } else {
       refreshController.loadComplete();
     }
+    print('value loadding data');
+    print(loadingData.value);
     loadingData.value = false;
-    loadingData.value = true;
+    // loadingData.value = true;
   }
 
   Future getTotalNoLeidos() async {
