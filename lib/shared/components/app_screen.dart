@@ -265,7 +265,8 @@ class AppScreen extends StatelessWidget {
                             !userPreferences.isWorkerChild
                                 ? IconButton(
                                     onPressed: () {
-                                      storage.remove('usernameLamb');
+                                      // storage.remove('saveCredLamb');
+                                      // storage.remove('usernameLamb');
                                       storage.remove('passwordLamb');
                                       storage.remove('tokenLamb');
                                       userPreferences.clear();

@@ -77,6 +77,9 @@ class LoginPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15.0)),
                       padding: const EdgeInsets.all(12.0),
                       child: Semantics(
+                        label: 'Usuario',
+                        enabled: true,
+                        hint: 'Ingrese su usuario',
                         child: TextFormField(
                           controller: controller.username,
                           keyboardType: TextInputType.visiblePassword,
@@ -97,9 +100,6 @@ class LoginPage extends StatelessWidget {
                           onEditingComplete: () =>
                               controller.focusPassword.requestFocus(),
                         ),
-                        label: 'Usuario',
-                        enabled: true,
-                        hint: 'Ingrese su usuario',
                       ),
                     ),
                     const SizedBox(height: 12.0),

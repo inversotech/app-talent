@@ -97,10 +97,8 @@ class LoginController extends GetxController {
 
   void _dataUserStorage() {
     final storage = GetStorage();
-    if (storage.read('usernameLamb') != null &&
-        storage.read('usernameLamb') != '') {
-      username.value = TextEditingValue(text: storage.read('usernameLamb'));
-      password.value = TextEditingValue(text: storage.read('passwordLamb'));
-    }
+    checkCredencial.value = storage.read('saveCredLamb') ?? false;
+    username.value = TextEditingValue(text: storage.read('usernameLamb') ?? '');
+    password.value = TextEditingValue(text: storage.read('passwordLamb') ?? '');
   }
 }

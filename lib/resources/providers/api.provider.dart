@@ -42,8 +42,13 @@ class ApiProvider extends GetConnect {
               print('credenciales');
               print(usernamelamb);
               print(passwordlamb);
+              await storage.write('saveCredLamb', saveCred);
               await storage.write('usernameLamb', usernamelamb);
               await storage.write('passwordLamb', passwordlamb);
+            } else {
+              await storage.write('saveCredLamb', saveCred);
+              await storage.remove('usernameLamb');
+              await storage.remove('passwordLamb');
             }
 
             await storage.write('tokenLamb', resp.data['access_token']);
