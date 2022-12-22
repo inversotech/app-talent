@@ -48,9 +48,7 @@ class FormSurveyController extends GetxController {
     }
     loadingData.value = true;
     loadingData.value = false;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   void addAnswer(
@@ -102,9 +100,7 @@ class FormSurveyController extends GetxController {
     }
     loadingData.value = true;
     loadingData.value = false;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   void goToBack(bool change) {

@@ -41,9 +41,7 @@ class LikesController extends GetxController {
     await Jiffy.locale("es");
     await getListMoreData();
     loadingData.value = true;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   Future getListMoreData() async {
@@ -155,15 +153,11 @@ class LikesController extends GetxController {
 
     loadingData.value = false;
     loadingData.value = true;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   goToBack() {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     Get.back();
   }
 }

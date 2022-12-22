@@ -52,9 +52,7 @@ class AccountStatusController extends GetxController {
     await _getAccessNivel();
     await _listDataGeneral();
     await _listDataDetail();
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     loadingData.value = true;
     loadingData.value = false;
   }
@@ -197,9 +195,7 @@ class AccountStatusController extends GetxController {
   void loadListDetail() async {
     loadingIndicator(onlyLoading: true, opacity: false);
     await _listDataDetail();
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   Future getTicketPayment() async {
@@ -226,9 +222,7 @@ class AccountStatusController extends GetxController {
               '.pdf';
       final file = await _accountStatusService.createFileOfPdfUrl(
           ticketPayment.file, fileName);
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
+      Get.until((route) => !Get.isDialogOpen!);
       if (file.path.isNotEmpty) {
         Get.to(() => PDFScreen(
             clave: ticketPayment.clave,
@@ -237,18 +231,14 @@ class AccountStatusController extends GetxController {
             path: file.path,
             titlePdf: fileName));
       } else {
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:', 'Ocurrió un error al abrir la boleta',
             duration: const Duration(seconds: 8),
             colorText: ColorsApp.white,
             backgroundColor: ColorsApp.danger);
       }
     } else if (ticketPayment.file.isEmpty) {
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
+      Get.until((route) => !Get.isDialogOpen!);
       Get.snackbar('Mensaje:',
           'No se encontró boleta del mes de ' + dateModel.value.nameMonth+', '+ dateModel.value.year.toString(),
           duration: const Duration(seconds: 8),

@@ -193,9 +193,7 @@ class AccountStatusPage extends StatelessWidget {
             if (val) {
               loadingIndicator(onlyLoading: true, opacity: true);
             } else {
-              if (Get.isDialogOpen!) {
-                Get.back();
-              }
+              Get.until((route) => !Get.isDialogOpen!);
             }
           },
         );
@@ -208,9 +206,7 @@ class AccountStatusPage extends StatelessWidget {
             if (val) {
               loadingIndicator(onlyLoading: true, opacity: true);
             } else {
-              if (Get.isDialogOpen!) {
-                Get.back();
-              }
+              Get.until((route) => !Get.isDialogOpen!);
             }
           },
           data: controller.dataDetail,
@@ -225,9 +221,7 @@ class AccountStatusPage extends StatelessWidget {
             if (val) {
               loadingIndicator(onlyLoading: true, opacity: true);
             } else {
-              if (Get.isDialogOpen!) {
-                Get.back();
-              }
+              Get.until((route) => !Get.isDialogOpen!);
             }
           },
           data: controller.dataDetail,

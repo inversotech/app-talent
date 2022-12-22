@@ -48,9 +48,7 @@ class AlbumDetailController extends GetxController {
     await _getAlbum();
     await _listGroups();
     refreshController.loadNoData();
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     loadingData.value = false;
   }
 
@@ -81,9 +79,7 @@ class AlbumDetailController extends GetxController {
   }
 
   goToBack(bool loadBack) {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     if (loadBack) {
       Get.offAllNamed(RoutesName.notification);
     } else {

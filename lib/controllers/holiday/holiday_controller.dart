@@ -64,9 +64,7 @@ class HolidayController extends GetxController {
     }
     loadingDataInit.value = false;
     loadingDataInit.value = true;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   Future getActions() async {
@@ -102,9 +100,7 @@ class HolidayController extends GetxController {
     }
     loadingDataInit.value = false;
     loadingDataInit.value = true;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   void changeRequestStatus(
@@ -118,9 +114,7 @@ class HolidayController extends GetxController {
     loadingIndicator(onlyLoading: false, text: 'Guardando ...');
     final create = await _holidayService.changeStatusHoliday(
         idPeriodoVacTrab.toString(), params);
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
       Navigator.pop(buildContext);
       getListDataInitial();

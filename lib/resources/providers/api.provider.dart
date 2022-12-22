@@ -350,9 +350,7 @@ class ApiProvider extends GetConnect {
       {Icon? icon,
       EdgeInsets? margin,
       SnackPosition position = SnackPosition.TOP}) {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     switch (option) {
       case 'danger':
         Get.snackbar('Mensaje:', message,

@@ -65,9 +65,7 @@ class SurveyController extends GetxController {
     await _getAccessNivel();
     await getActions();
     await getListMoreData();
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     final listToday = listData.where((element) =>
         element.fecha!.day == DateTime.now().day &&
         element.fecha!.month == DateTime.now().month &&
@@ -105,9 +103,7 @@ class SurveyController extends GetxController {
       if (result['change'] == 'true' || result['change'] == true) {
         loadingIndicator(onlyLoading: true, opacity: false);
         await getListMoreData();
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
       }
     }
   }
@@ -226,9 +222,7 @@ class SurveyController extends GetxController {
     }
     loadingDataInit.value = false;
     loadingDataInit.value = true;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   void selectDate() async {
@@ -275,9 +269,7 @@ class SurveyController extends GetxController {
     page.value = 2;
     loadingDataInit.value = false;
     loadingDataInit.value = true;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   void goToDetail(Survey survey) {

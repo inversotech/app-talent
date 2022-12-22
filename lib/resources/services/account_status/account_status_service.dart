@@ -161,9 +161,7 @@ class AccountStatusService {
       await file.writeAsBytes(bytes, flush: true);
       completer.complete(file);
     } catch (e) {
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
+      Get.until((route) => !Get.isDialogOpen!);
       Get.snackbar('Mensaje:', 'No se puede ver el archivo',
           duration: const Duration(seconds: 8),
           colorText: ColorsApp.white,
@@ -181,9 +179,7 @@ class AccountStatusService {
           urlFile.toString(),
         );
       } else {
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:',
             'No se puede abrir el navegador web o no hay un navegador web instalado',
             duration: const Duration(seconds: 8),
@@ -192,9 +188,7 @@ class AccountStatusService {
       }
       return response;
     } catch (e) {
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
+      Get.until((route) => !Get.isDialogOpen!);
       Get.snackbar('Mensaje:', 'No se procedió con la descarga',
           duration: const Duration(seconds: 8),
           colorText: ColorsApp.white,
@@ -236,9 +230,7 @@ class AccountStatusService {
         } */
         );
       } else {
-        if (Get.isDialogOpen!) {
-          Get.back();
-        }
+        Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:',
             'No se puede abrir el navegador web o no hay un navegador web instalado',
             duration: const Duration(seconds: 8),
@@ -246,9 +238,7 @@ class AccountStatusService {
             backgroundColor: ColorsApp.danger);
       }
     } else {
-      if (Get.isDialogOpen!) {
-        Get.back();
-      }
+      Get.until((route) => !Get.isDialogOpen!);
       Get.snackbar('Mensaje:', 'No se procedió con la descarga',
           duration: const Duration(seconds: 8),
           colorText: ColorsApp.white,

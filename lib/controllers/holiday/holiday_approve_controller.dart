@@ -44,15 +44,11 @@ class HolidayApproveController extends GetxController {
   }
 
   void getListDataInitial() async {
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     loadingIndicator(onlyLoading: true, opacity: false);
     await getActions();
     await getListMoreData();
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   Future getListMoreData() async {
@@ -133,9 +129,7 @@ class HolidayApproveController extends GetxController {
     page.value = 2;
     loadingDataInit.value = false;
     loadingDataInit.value = true;
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   void onRefresh() async {
@@ -190,9 +184,7 @@ class HolidayApproveController extends GetxController {
     loadingIndicator(onlyLoading: false, text: 'Guardando ...');
     final create =
         await _holidayService.changeStatusHoliday(idPeriodoVacTrab, params);
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
       if (Get.isSnackbarOpen) {
         Get.back();
