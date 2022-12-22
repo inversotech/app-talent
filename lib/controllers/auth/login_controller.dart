@@ -1,13 +1,11 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:encrypt/encrypt.dart' as pencrypt;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/location_user.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
-import 'package:lamb_talent/enviroment/enviroment.dart';
 import 'package:lamb_talent/resources/providers/api.provider.dart';
 import 'package:lamb_talent/resources/services/auth/auth_service.dart';
 import 'package:lamb_talent/shared/components/loading.dart';

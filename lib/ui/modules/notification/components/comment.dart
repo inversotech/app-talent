@@ -48,47 +48,6 @@ class Comment extends StatelessWidget {
             paddingRight: 0,
             onRefresh: controller.onRefresh,
             onLoading: controller.onLoading,
-            child: Obx(() => controller.loadingData.value
-                ? Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        child: AppBar(
-                          centerTitle: true,
-                          leading: Transform.translate(
-                            offset: const Offset(-15, -8),
-                            child: IconButton(
-                              onPressed: () {
-                                controller.goToBack();
-                              },
-                              iconSize: 40,
-                              icon: const Icon(Icons.chevron_left,
-                                  color: ColorsApp.primary),
-                            ),
-                          ),
-                          elevation: 0,
-                          backgroundColor: Colors.white,
-                          toolbarHeight: 40.0,
-                          title: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              'Comentarios',
-                              style: GoogleFonts.montserrat(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w700,
-                                  color: ColorsApp.primary),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Divider(color: ColorsApp.primary, thickness: 1),
-                      Container(child: _listComments(controller)),
-                      const SizedBox(
-                        height: 80.0,
-                      ),
-                    ],
-                  )
-                : Container()),
             bottomSheet: !controller.userPref.isWorkerChild
                 ? Container(
                     padding: const EdgeInsets.only(bottom: 8),
@@ -116,10 +75,7 @@ class Comment extends StatelessWidget {
                                         children: [
                                           Flexible(
                                               child: Text(
-                                                  'Responder a ' +
-                                                      controller
-                                                          .answerUserParent
-                                                          .value,
+                                                  'Responder a ${controller.answerUserParent.value}',
                                                   style: GoogleFonts.montserrat(
                                                       fontSize: 14.0,
                                                       fontWeight:
@@ -192,6 +148,47 @@ class Comment extends StatelessWidget {
                     ),
                   )
                 : null,
+            child: Obx(() => controller.loadingData.value
+                ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: AppBar(
+                          centerTitle: true,
+                          leading: Transform.translate(
+                            offset: const Offset(-15, -8),
+                            child: IconButton(
+                              onPressed: () {
+                                controller.goToBack();
+                              },
+                              iconSize: 40,
+                              icon: const Icon(Icons.chevron_left,
+                                  color: ColorsApp.primary),
+                            ),
+                          ),
+                          elevation: 0,
+                          backgroundColor: Colors.white,
+                          toolbarHeight: 40.0,
+                          title: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              'Comentarios',
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w700,
+                                  color: ColorsApp.primary),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Divider(color: ColorsApp.primary, thickness: 1),
+                      Container(child: _listComments(controller)),
+                      const SizedBox(
+                        height: 80.0,
+                      ),
+                    ],
+                  )
+                : Container()),
           );
         });
   }

@@ -344,18 +344,20 @@ class AppScreen extends StatelessWidget {
                     unselectedLabelColor: Colors.white,
                     labelColor: ColorsApp.primary,
                     onTap: (val) {
-                      if (val == 0) {
-                        Get.offAllNamed(
-                            userPreferences.menu![0].url.toString());
-                      } else if (val == 1) {
-                        Get.offAllNamed(
-                            userPreferences.menu![1].url.toString());
-                      } else if (val == 2) {
-                        Get.offAllNamed(
-                            userPreferences.menu![2].url.toString());
-                      } else if (val == 3) {
-                        Get.offAllNamed(
-                            userPreferences.menu![3].url.toString());
+                      if (initialIndex != val) {
+                        if (val == 0) {
+                          Get.offAllNamed(
+                              userPreferences.menu![0].url.toString());
+                        } else if (val == 1) {
+                          Get.offAllNamed(
+                              userPreferences.menu![1].url.toString());
+                        } else if (val == 2) {
+                          Get.offAllNamed(
+                              userPreferences.menu![2].url.toString());
+                        } else if (val == 3) {
+                          Get.offAllNamed(
+                              userPreferences.menu![3].url.toString());
+                        }
                       }
                     },
                     labelPadding: const EdgeInsets.symmetric(vertical: 8.0),
