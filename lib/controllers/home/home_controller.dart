@@ -84,23 +84,37 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    positionStream!.cancel();
+    if (positionStream != null) {
+      positionStream!.cancel();
+    }
     refreshController.dispose();
     scrollController.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  changeLocationUser() {
-    late LocationSettings locationSettings;
+  changeLocationUser() async {
+    bool serviceEnabled = true;
+    LocationPermission permission = LocationPermission.denied;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-    if (Platform.isAndroid) {
-      locationSettings = AndroidSettings(
-        accuracy: LocationAccuracy.best,
-        distanceFilter: 5,
-        forceLocationManager: true,
-        intervalDuration: const Duration(seconds: 10),
-        /* //(Optional) Set foreground notification config to keep the app alive 
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      serviceEnabled = false;
+    }
+    if (permission != LocationPermission.always &&
+        permission != LocationPermission.whileInUse) {
+      serviceEnabled = false;
+    }
+    late LocationSettings locationSettings;
+    if (serviceEnabled) {
+      if (Platform.isAndroid) {
+        locationSettings = AndroidSettings(
+          accuracy: LocationAccuracy.best,
+          distanceFilter: 5,
+          forceLocationManager: true,
+          intervalDuration: const Duration(seconds: 10),
+          /* //(Optional) Set foreground notification config to keep the app alive 
     //when going to the background
     foregroundNotificationConfig: const ForegroundNotificationConfig(
         notificationText:
@@ -108,30 +122,31 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         notificationTitle: "Running in Background",
         enableWakeLock: true,
     ) */
-      );
-    } else if (Platform.isIOS || Platform.isMacOS) {
-      locationSettings = AppleSettings(
-        accuracy: LocationAccuracy.best,
-        activityType: ActivityType.fitness,
-        distanceFilter: 5,
-        pauseLocationUpdatesAutomatically: true,
-        // Only set to true if our app will be started up in the background.
-        showBackgroundLocationIndicator: false,
-      );
-    } else {
-      locationSettings = const LocationSettings(
-        accuracy: LocationAccuracy.best,
-        distanceFilter: 5,
-      );
-    }
-    positionStream =
-        Geolocator.getPositionStream(locationSettings: locationSettings)
-            .listen((Position? position) {
-      if (position != null) {
-        userPreferences.latitude = position.latitude.toString();
-        userPreferences.longitude = position.longitude.toString();
+        );
+      } else if (Platform.isIOS || Platform.isMacOS) {
+        locationSettings = AppleSettings(
+          accuracy: LocationAccuracy.best,
+          activityType: ActivityType.fitness,
+          distanceFilter: 5,
+          pauseLocationUpdatesAutomatically: true,
+          // Only set to true if our app will be started up in the background.
+          showBackgroundLocationIndicator: false,
+        );
+      } else {
+        locationSettings = const LocationSettings(
+          accuracy: LocationAccuracy.best,
+          distanceFilter: 5,
+        );
       }
-    });
+      positionStream =
+          Geolocator.getPositionStream(locationSettings: locationSettings)
+              .listen((Position? position) {
+        if (position != null) {
+          userPreferences.latitude = position.latitude.toString();
+          userPreferences.longitude = position.longitude.toString();
+        }
+      });
+    }
   }
 
   void _listAllData() async {
@@ -689,11 +704,19 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed && openSetting) {
       // LocationUser().initLocationUser();
+      if (positionStream != null) {
+        positionStream!.cancel();
+      }
+      changeLocationUser();
       openSetting = false;
       loadingIndicator(onlyLoading: true, opacity: false);
       _verifyButtonAssistance();
     } else if (state == AppLifecycleState.resumed && openLocation) {
       // LocationUser().initLocationUser();
+      if (positionStream != null) {
+        positionStream!.cancel();
+      }
+      changeLocationUser();
       openLocation = false;
       loadingIndicator(onlyLoading: true, opacity: false);
       _verifyButtonAssistance();
