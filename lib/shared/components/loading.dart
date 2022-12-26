@@ -49,10 +49,10 @@ Widget _loadingIndicator(String text, bool onlyLoading, Color colorLoading) {
 Widget _getLoadingIndicator(bool onlyLoading, Color colorLoading) {
   return Container(
       color: onlyLoading ? Colors.transparent : null,
-      child: CircularProgressIndicator(
-          strokeWidth: 5.0, color: onlyLoading ? colorLoading : null),
       width: 45,
-      height: 45);
+      height: 45,
+      child: CircularProgressIndicator(
+          strokeWidth: 5.0, color: onlyLoading ? colorLoading : null));
 }
 
 Widget _getText(String displayedText, Color colorLoading) {

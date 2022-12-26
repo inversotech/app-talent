@@ -97,8 +97,8 @@ class FormLicensePermitController extends GetxController {
     Get.until((route) => !Get.isDialogOpen!);
     loadingIndicator(onlyLoading: true, opacity: false);
 
-    final _licensePermitService = LicensePermitService();
-    listTypeLicensePermit = await _licensePermitService.getTypeLicensePermit();
+    final licensePermitService = LicensePermitService();
+    listTypeLicensePermit = await licensePermitService.getTypeLicensePermit();
     loadingData.value = true;
     loadingData.value = false;
     Get.until((route) => !Get.isDialogOpen!);
@@ -185,14 +185,13 @@ class FormLicensePermitController extends GetxController {
 
     final Map<String, String> params = {'id_tipo_perm_lic': idTipoPermLic};
 
-    final _licensePermitService = LicensePermitService();
+    final licensePermitService = LicensePermitService();
     listTypeConceptLicensePermit =
-        await _licensePermitService.getTypeConceptLicensePermit(params);
+        await licensePermitService.getTypeConceptLicensePermit(params);
 
     loadingData.value = true;
     loadingData.value = false;
     Get.until((route) => !Get.isDialogOpen!);
-
   }
 
   void cleanTypeInstitution() {
@@ -212,13 +211,12 @@ class FormLicensePermitController extends GetxController {
   void getTypeInstitution() async {
     Get.until((route) => !Get.isDialogOpen!);
     loadingIndicator(onlyLoading: true, opacity: false);
-    final _licensePermitService = LicensePermitService();
-    listTypeInstitution = await _licensePermitService.getTypeInstitution();
- 
-    loadingData.value = true;
-    loadingData.value = false;   
-    Get.until((route) => !Get.isDialogOpen!);
+    final licensePermitService = LicensePermitService();
+    listTypeInstitution = await licensePermitService.getTypeInstitution();
 
+    loadingData.value = true;
+    loadingData.value = false;
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   void validLicensePermit() async {
@@ -233,9 +231,9 @@ class FormLicensePermitController extends GetxController {
       'fecha_hasta': formData.value.fechaHasta.toString(),
       'periodo': formData.value.periodo.toString()
     };
-    final _licensePermitService = LicensePermitService();
+    final licensePermitService = LicensePermitService();
     listValidLicensePermit =
-        await _licensePermitService.getValidateLicensePermit(params);
+        await licensePermitService.getValidateLicensePermit(params);
     if (listValidLicensePermit.isNotEmpty) {
       diasAcumulados.value = listValidLicensePermit[0].diasAcumulado != null
           ? int.parse(listValidLicensePermit[0].diasAcumulado.toString())
@@ -265,11 +263,10 @@ class FormLicensePermitController extends GetxController {
           ? int.parse(listValidLicensePermit[0].maxDiasAnho.toString())
           : 0;
     }
-   
 
     loadingData.value = true;
     loadingData.value = false;
-     Get.until((route) => !Get.isDialogOpen!);
+    Get.until((route) => !Get.isDialogOpen!);
   }
 
   void submit() async {
@@ -376,12 +373,16 @@ class FormLicensePermitController extends GetxController {
           MultipartFile(adjuntoVIVA.value, filename: 'adjunto_viva');
     }
     final form = FormData(params);
-    final _licensePermitService = LicensePermitService();
-    final create = await _licensePermitService.createLicensePermit(form);
+    final licensePermitService = LicensePermitService();
+    final create = await licensePermitService.createLicensePermit(form);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
       Get.back(result: {'change': true, 'data': null});
-      Get.snackbar('Mensaje:', create.message.isNotEmpty ? create.message : 'Se guardó correctamente',
+      Get.snackbar(
+          'Mensaje:',
+          create.message.isNotEmpty
+              ? create.message
+              : 'Se guardó correctamente',
           duration: const Duration(seconds: 8),
           colorText: ColorsApp.white,
           backgroundColor: ColorsApp.success);

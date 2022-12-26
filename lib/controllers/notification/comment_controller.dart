@@ -91,9 +91,9 @@ class CommentController extends GetxController {
       'per_page': perPage.value.toString(),
       'page': page.value.toString()
     };
-    final _notificationService = NotificationService();
-    pagination = await _notificationService.getComments(params);
-     List<dynamic> jsonList;
+    final notificationService = NotificationService();
+    pagination = await notificationService.getComments(params);
+    List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
       jsonList = [];
     } else {
@@ -126,9 +126,9 @@ class CommentController extends GetxController {
       'per_page': perPage.value.toString(),
       'page': '1'
     };
-    final _notificationService = NotificationService();
-    pagination = await _notificationService.getComments(params);
-   List<dynamic> jsonList;
+    final notificationService = NotificationService();
+    pagination = await notificationService.getComments(params);
+    List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
       jsonList = [];
     } else {
@@ -164,8 +164,8 @@ class CommentController extends GetxController {
       'id_persona': userPref.idPerson.toString(),
       'mensaje': mensaje.text
     };
-    final _notificationService = NotificationService();
-    final resp = await _notificationService.saveComment(params);
+    final notificationService = NotificationService();
+    final resp = await notificationService.saveComment(params);
     if (resp.success) {
       if (origenComment == origen) {
         listData = [CommentModel.fromJson(resp.data), ...listData];
@@ -224,8 +224,8 @@ class CommentController extends GetxController {
       'per_page': perPage.toString(),
       'page': item.page.toString()
     };
-    final _notificationService = NotificationService();
-    final paginationNew = await _notificationService.getComments(params);
+    final notificationService = NotificationService();
+    final paginationNew = await notificationService.getComments(params);
     List<dynamic> jsonList =
         paginationNew.data == null ? [] : paginationNew.data as dynamic;
     if (jsonList.isNotEmpty) {
@@ -286,9 +286,9 @@ class CommentController extends GetxController {
           backgroundColor: ColorsApp.danger);
     } else {
       loadingIndicator(onlyLoading: true, opacity: false);
-      final _notificationService = NotificationService();
-      final resp = await _notificationService
-          .deleteComment(item.idComentario.toString());
+      final notificationService = NotificationService();
+      final resp =
+          await notificationService.deleteComment(item.idComentario.toString());
       if (resp.success) {
         if (child) {
           listData[index].comentarios!.removeAt(indexChild);
@@ -314,8 +314,8 @@ class CommentController extends GetxController {
       'id_origen': item.idComentario.toString(),
       'id_persona': userPref.idPerson.toString()
     };
-    final _notificationService = NotificationService();
-    final resp = await _notificationService.saveLike(params);
+    final notificationService = NotificationService();
+    final resp = await notificationService.saveLike(params);
     if (resp.success) {
       if (child) {
         listData[index].comentarios![indexChild].like = item.like;

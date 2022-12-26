@@ -55,15 +55,15 @@ class DepositedSalary extends StatelessWidget {
   }
 
   void _getItemsIncome(BuildContext buildContext) async {
-    final _accountStatusService = AccountStatusService();
-    final _userPreferences = UserPreferences();
+    final accountStatusService = AccountStatusService();
+    final userPreferences = UserPreferences();
     final Map<String, String> params = {
-      'id_entidad': _userPreferences.idEntity.toString(),
+      'id_entidad': userPreferences.idEntity.toString(),
       'id_anho': dateModel.year.toString(),
       'id_mes': dateModel.month.toString(),
-      'id_persona': _userPreferences.idPerson.toString()
+      'id_persona': userPreferences.idPerson.toString()
     };
-    final resp = await _accountStatusService.getIncomes(params);
+    final resp = await accountStatusService.getIncomes(params);
     List detail = [];
     Map data = {};
     if (resp != null) {
@@ -83,16 +83,16 @@ class DepositedSalary extends StatelessWidget {
   }
 
   void _getItemsDiscount(BuildContext buildContext) async {
-    final _accountStatusService = AccountStatusService();
-    final _userPreferences = UserPreferences();
+    final accountStatusService = AccountStatusService();
+    final userPreferences = UserPreferences();
     final Map<String, String> params = {
-      'id_entidad': _userPreferences.idEntity.toString(),
+      'id_entidad': userPreferences.idEntity.toString(),
       'id_anho': dateModel.year.toString(),
       'id_mes': dateModel.month.toString(),
-      'id_cta_cte': _userPreferences.nroDocument.toString(),
-      'id_persona': _userPreferences.idPerson.toString()
+      'id_cta_cte': userPreferences.nroDocument.toString(),
+      'id_persona': userPreferences.idPerson.toString()
     };
-    final resp = await _accountStatusService.getDiscounts(params);
+    final resp = await accountStatusService.getDiscounts(params);
     List detail = [];
     Map data = {};
     if (resp != null) {

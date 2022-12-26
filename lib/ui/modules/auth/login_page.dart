@@ -143,7 +143,7 @@ class LoginPage extends StatelessWidget {
             style: TextStyle(color: ColorsApp.white)),
         value: controller.checkCredencial.value,
         side: MaterialStateBorderSide.resolveWith((Set<MaterialState> states) {
-          return BorderSide(
+          return const BorderSide(
               width: 2.0,
               style: BorderStyle.solid,
               color: ColorsApp

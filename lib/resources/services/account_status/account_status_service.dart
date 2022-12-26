@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/general/file.dart';
 import 'package:path_provider/path_provider.dart' as p;
-import 'package:url_launcher/url_launcher.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/resources/models/response.dart';
@@ -16,8 +15,8 @@ import 'package:url_launcher/url_launcher_string.dart';
 class AccountStatusService {
   Future getAccountStatus(String params) async {
     try {
-      final _apiProvider = ApiProvider();
-      final response = await _apiProvider.getAll(
+      final apiProvider = ApiProvider();
+      final response = await apiProvider.getAll(
           endPoint:
               endPoints['account-status']['account-status'] + '/' + params);
       //_apiProvider.dispose();
@@ -32,8 +31,8 @@ class AccountStatusService {
   }
 
   Future getItems(Map<String, String> entity) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-items'],
         params: entity);
     //_apiProvider.dispose();
@@ -45,8 +44,8 @@ class AccountStatusService {
   }
 
   Future getIncomes(Map<String, String> entity) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-items-incomes'],
         params: entity);
     //_apiProvider.dispose();
@@ -58,8 +57,8 @@ class AccountStatusService {
   }
 
   Future getDiscounts(Map<String, String> entity) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-items-discounts'],
         params: entity);
     //_apiProvider.dispose();
@@ -71,8 +70,8 @@ class AccountStatusService {
   }
 
   Future getHelpsIncomes(Map<String, String> entity) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-helps-incomes'],
         params: entity);
     //_apiProvider.dispose();
@@ -84,8 +83,8 @@ class AccountStatusService {
   }
 
   Future getHelpsDiscounts(Map<String, String> entity) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-helps-discounts'],
         params: entity);
     //_apiProvider.dispose();
@@ -97,8 +96,8 @@ class AccountStatusService {
   }
 
   Future getTravelsIncomes(Map<String, String> entity) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['account-status']['account-status-travels-incomes'],
         params: entity);
     //_apiProvider.dispose();
@@ -110,8 +109,8 @@ class AccountStatusService {
   }
 
   Future getTravelsDiscounts(Map<String, String> entity) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['account-status']
             ['account-status-travels-discounts'],
         params: entity);
@@ -124,8 +123,8 @@ class AccountStatusService {
   }
 
   Future getDetailsAccount(Map<String, String> entity) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['account-status']
             ['account-status-personal-agreement-detail'],
         params: entity);
@@ -138,8 +137,8 @@ class AccountStatusService {
   }
 
   Future<FileModel> gePaymentstTicketMonth(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['workerportal']['payments-ticket-month'],
         params: params);
     //_apiProvider.dispose();
@@ -203,8 +202,8 @@ class AccountStatusService {
     ApiResponse response = ApiResponse.fromJsonNull();
     bool showTicket = false;
     if (!userPreferences.isWorkerChild) {
-      final _apiProvider = ApiProvider();
-      response = await _apiProvider.putNotId(
+      final apiProvider = ApiProvider();
+      response = await apiProvider.putNotId(
           endPoint: endPoints['workerportal']['payments-ticket'],
           params: params);
       //_apiProvider.dispose();

@@ -3,11 +3,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/controllers/home/home_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
-import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 void showModalQr() async {
-  // final userPreferences = UserPreferences();
   final controller = Get.put(HomeController());
 
   Get.dialog(
@@ -61,13 +59,8 @@ void showModalQr() async {
                           suffixIcon: InkWell(
                             onTap: () {
                               if (controller.numDocument.value.isNotEmpty) {
-                                print('document genrate qr');
-                                print(controller.numDocument.value);
-
                                 controller.numDocQr.value =
                                     controller.numDocument.value;
-                                print('document genrate qr');
-                                print(controller.numDocQr.value);
                               }
                             },
                             child: Padding(
@@ -91,9 +84,6 @@ void showModalQr() async {
                           color: ColorsApp.primary),
                       onSaved: (val) {},
                       onChanged: (val) {
-                        print('value numero de documento');
-                        print(val);
-
                         controller.numDocument.value = val.toString();
                       },
                       validator: (value) {

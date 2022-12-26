@@ -6,16 +6,16 @@ import 'package:lamb_talent/resources/providers/api.provider.dart';
 
 class MarkingService {
   Future<ApiResponse> getMapCoordinates() async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getAll(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getAll(
         endPoint: endPoints['assistance']['map-coordinates']);
     //_apiProvider.dispose();
     return response;
   }
 
   Future<ApiResponse> showButtonAssistance(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['assistance']['show-button-assistance'],
         params: params);
     //_apiProvider.dispose();
@@ -23,8 +23,8 @@ class MarkingService {
   }
 
   Future<ApiResponse> workerMarking(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.postParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.postParams(
         endPoint: endPoints['assistance']['worker-marking'],
         params: params,
         showMessage: true);
@@ -33,8 +33,8 @@ class MarkingService {
   }
 
   Future<PaginationModel> assistMarkings(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['assistance']['assist-markings'], params: params);
     //_apiProvider.dispose();
     if (response.success) {
@@ -47,8 +47,8 @@ class MarkingService {
 
   Future<List<MarkingModel>> assistMarkingsIni(
       Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['assistance']['markings-ini'], params: params);
     //_apiProvider.dispose();
     if (response.success) {

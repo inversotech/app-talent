@@ -81,6 +81,7 @@ class ListLicensePermit extends StatelessWidget {
                                 children: [
                                   CircleAvatar(
                                     radius: 18,
+                                    backgroundColor: ColorsApp.info,
                                     child: Text(
                                         item.codigoTipoPermLic != null
                                             ? item.codigoTipoPermLic
@@ -90,7 +91,6 @@ class ListLicensePermit extends StatelessWidget {
                                             fontWeight: FontWeight.w400,
                                             color: Colors.white,
                                             fontSize: 22.0)),
-                                    backgroundColor: ColorsApp.info,
                                   ),
                                   const SizedBox(width: 8.0),
                                   Flexible(
@@ -163,14 +163,16 @@ class ListLicensePermit extends StatelessWidget {
                       'name': item.adjunto.toString(),
                       'type': 'F'
                     };
-                    final _licensePermitService = LicensePermitService();
+                    final licensePermitService = LicensePermitService();
                     final resp =
-                        await _licensePermitService.geFileRequest(params);
+                        await licensePermitService.geFileRequest(params);
+
                     if (resp.success) {
                       final dir = await getTemporaryDirectory();
                       File file = File(dir.path + item.adjunto.toString());
                       Uint8List bytes = base64.decode(resp.data['file']);
                       await file.writeAsBytes(bytes);
+
                       Navigator.of(context).pop();
                       Navigator.push(
                           context,
@@ -252,9 +254,7 @@ class ListLicensePermit extends StatelessWidget {
             children: [
               item.periodo.toString() == 'H'
                   ? Text(
-                      'Fecha: ' +
-                          Jiffy(item.fechaDesde!, 'dd/MM/yyyy')
-                              .format('dd|MM|yyyy'),
+                      'Fecha: ${Jiffy(item.fechaDesde!, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -262,10 +262,7 @@ class ListLicensePermit extends StatelessWidget {
                   : Container(),
               item.periodo.toString() == 'H'
                   ? Text(
-                      'Hora: ' +
-                          Jiffy(item.horaInicio!, 'HH:mm').format('hh:mm a') +
-                          '-' +
-                          Jiffy(item.horaFin!, 'HH:mm').format('hh:mm a'),
+                      'Hora: ${Jiffy(item.horaInicio!, 'HH:mm').format('hh:mm a')}-${Jiffy(item.horaFin!, 'HH:mm').format('hh:mm a')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -273,12 +270,7 @@ class ListLicensePermit extends StatelessWidget {
                   : Container(),
               item.periodo.toString() == 'D'
                   ? Text(
-                      'Fecha: ' +
-                          Jiffy(item.fechaDesde!, 'dd/MM/yyyy')
-                              .format('dd|MM|yyyy') +
-                          '-' +
-                          Jiffy(item.fechaHasta!, 'dd/MM/yyyy')
-                              .format('dd|MM|yyyy'),
+                      'Fecha: ${Jiffy(item.fechaDesde!, 'dd/MM/yyyy').format('dd|MM|yyyy')}-${Jiffy(item.fechaHasta!, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -289,12 +281,7 @@ class ListLicensePermit extends StatelessWidget {
         ),
         item.periodo != null
             ? Text(
-                'Tiempo: ' +
-                    (item.periodo! == 'D'
-                        ? item.dias! + ' días'
-                        : item.periodo! == 'H'
-                            ? item.horas! + ' horas'
-                            : ''),
+                'Tiempo: ${item.periodo! == 'D' ? '${item.dias!} días' : item.periodo! == 'H' ? '${item.horas!} horas' : ''}',
                 style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w500,
                     color: ColorsApp.primary,
@@ -598,11 +585,7 @@ class ListLicensePermit extends StatelessWidget {
               children: [
                 val.email != null
                     ? Text(
-                        val.email.toString() +
-                            ': ' +
-                            Jiffy(val.fecha.toString(), "dd/MM/yyyy HH:mm")
-                                .format('dd|MM|yyyy hh:mm a')
-                                .toString(),
+                        '${val.email}: ${Jiffy(val.fecha.toString(), "dd/MM/yyyy HH:mm").format('dd|MM|yyyy hh:mm a')}',
                         style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w300,
                             color: ColorsApp.primary,
@@ -757,7 +740,7 @@ class ListLicensePermit extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (context) {
-          TextEditingController _inputFieldCtrl = TextEditingController();
+          TextEditingController inputFieldCtrl = TextEditingController();
           return AlertDialog(
             elevation: 0,
             backgroundColor: ColorsApp.info,
@@ -775,7 +758,7 @@ class ListLicensePermit extends StatelessWidget {
               child: Text(text.toUpperCase()),
             )),
             content: TextFormField(
-              controller: _inputFieldCtrl,
+              controller: inputFieldCtrl,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
@@ -836,8 +819,8 @@ class ListLicensePermit extends StatelessWidget {
                 ),
                 onPressed: () {
                   changeRequestStatus(
-                      _inputFieldCtrl.value.text.isNotEmpty
-                          ? _inputFieldCtrl.value.text
+                      inputFieldCtrl.value.text.isNotEmpty
+                          ? inputFieldCtrl.value.text
                           : '',
                       context,
                       idTrabajador,
@@ -852,7 +835,7 @@ class ListLicensePermit extends StatelessWidget {
 
   void changeRequestStatus(String text, BuildContext context,
       String idTrabajador, String id, String idEstado) async {
-    final _licensePermitService = LicensePermitService();
+    final licensePermitService = LicensePermitService();
     Map<String, String> params = {
       'id_trabajador': idTrabajador.toString(),
       'id_estado_lica_per': idEstado,
@@ -860,7 +843,7 @@ class ListLicensePermit extends StatelessWidget {
     };
     loadingIndicator(onlyLoading: false, text: 'Guardando ...');
     final create =
-        await _licensePermitService.chageStatusLicensePermit(id, params);
+        await licensePermitService.chageStatusLicensePermit(id, params);
 
     if (create.success) {
       Navigator.pop(context);

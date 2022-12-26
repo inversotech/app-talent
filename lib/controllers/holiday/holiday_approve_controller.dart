@@ -64,8 +64,8 @@ class HolidayApproveController extends GetxController {
       'restringido': 'S',
       'is_app': 'S'
     };
-    final _holidayService = HolidayService();
-    pagination = await _holidayService.getWorkersHoliday(params);
+    final holidayService = HolidayService();
+    pagination = await holidayService.getWorkersHoliday(params);
     List<dynamic> jsonList =
         pagination.data == null ? [] : pagination.data as List<dynamic>;
     if (jsonList.isNotEmpty) {
@@ -89,8 +89,8 @@ class HolidayApproveController extends GetxController {
 
   Future getActions() async {
     final Map<String, String> params = {'id_modulo': codeModule.value};
-    final _authService = AuthService();
-    final actions = await _authService.getActionsByModule(params);
+    final authService = AuthService();
+    final actions = await authService.getActionsByModule(params);
     isDth.value = actions
         .where((element) =>
             element.clave.toString().toUpperCase() == 'APPROVE_VAC')
@@ -112,8 +112,8 @@ class HolidayApproveController extends GetxController {
     };
     loadingIndicator(onlyLoading: true, opacity: false);
 
-    final _holidayService = HolidayService();
-    pagination = await _holidayService.getWorkersHoliday(params);
+    final holidayService = HolidayService();
+    pagination = await holidayService.getWorkersHoliday(params);
     List<dynamic> jsonList =
         pagination.data == null ? [] : pagination.data as List<dynamic>;
 
@@ -145,8 +145,8 @@ class HolidayApproveController extends GetxController {
       'restringido': 'S',
       'is_app': 'S'
     };
-    final _holidayService = HolidayService();
-    pagination = await _holidayService.getWorkersHoliday(params);
+    final holidayService = HolidayService();
+    pagination = await holidayService.getWorkersHoliday(params);
     List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
       jsonList = [];
@@ -175,7 +175,7 @@ class HolidayApproveController extends GetxController {
 
   void changeRequestStatus(BuildContext buildContext, String text,
       String idEstado, String idWorker, String idPeriodoVacTrab) async {
-    final _holidayService = HolidayService();
+    final holidayService = HolidayService();
     Map<String, String> params = {
       'id_trabajador': idWorker,
       'estado': idEstado,
@@ -183,7 +183,7 @@ class HolidayApproveController extends GetxController {
     };
     loadingIndicator(onlyLoading: false, text: 'Guardando ...');
     final create =
-        await _holidayService.changeStatusHoliday(idPeriodoVacTrab, params);
+        await holidayService.changeStatusHoliday(idPeriodoVacTrab, params);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
       if (Get.isSnackbarOpen) {

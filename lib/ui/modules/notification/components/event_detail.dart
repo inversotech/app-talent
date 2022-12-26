@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:intl/intl.dart';
@@ -24,8 +23,8 @@ class EventDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<EventDetailController>(
         init: EventDetailController(id: id),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (controller) {
           return AppScreen(
@@ -206,12 +205,8 @@ class EventDetail extends StatelessWidget {
                 Image.asset('assets/icons/datetime.png',
                     height: 35, width: 35, color: ColorsApp.primary),
                 const SizedBox(width: 8.0),
-                Text(DateFormat.MMMMd('es')
-                        .format(controller.event.fechaInicio!) +
-                    ' a las ' +
-                    Jiffy(controller.event.fechaInicio.toString(),
-                            'yyyy-MM-dd HH:mm')
-                        .format('hh:mm a'))
+                Text(
+                    '${DateFormat.MMMMd('es').format(controller.event.fechaInicio!)} a las ${Jiffy(controller.event.fechaInicio.toString(), 'yyyy-MM-dd HH:mm').format('hh:mm a')}')
               ],
             ),
             const SizedBox(height: 8.0),

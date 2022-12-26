@@ -48,12 +48,12 @@ class ListHolidayApprove extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 18,
+                          backgroundColor: ColorsApp.info,
                           child: Text((index + 1).toString(),
                               style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w400,
                                   color: Colors.white,
                                   fontSize: 22.0)),
-                          backgroundColor: ColorsApp.info,
                         ),
                         const SizedBox(width: 8.0),
                         Flexible(
@@ -70,12 +70,7 @@ class ListHolidayApprove extends StatelessWidget {
                                     fontSize: 16.0),
                               ),
                               Text(
-                                  'Periodo: ' +
-                                      Jiffy(data.periodoIni, 'dd/MM/yyyy')
-                                          .format('dd|MM|yyyy') +
-                                      ' - ' +
-                                      Jiffy(data.periodoFin, 'dd/MM/yyyy')
-                                          .format('dd|MM|yyyy'),
+                                  'Periodo: ${Jiffy(data.periodoIni, 'dd/MM/yyyy').format('dd|MM|yyyy')} - ${Jiffy(data.periodoFin, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
                                   style: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w500,
                                       color: ColorsApp.primary,
@@ -109,7 +104,7 @@ class ListHolidayApprove extends StatelessWidget {
                             ],
                           ),
                           Text(
-                            'Duración: ' + data.totalDias.toString() + ' días',
+                            'Duración: ${data.totalDias} días',
                             style: GoogleFonts.montserratAlternates(
                                 fontWeight: FontWeight.w500,
                                 color: ColorsApp.primary,
@@ -150,7 +145,7 @@ class ListHolidayApprove extends StatelessWidget {
       'id_periodo_vac_trab': data.idPeriodoVacTrab.toString(),
       'id_persona': data.idPersona.toString()
     };
-    final _holidayService = HolidayService();
+    final holidayService = HolidayService();
     await showDialog(
         context: buildContext,
         barrierDismissible: true,
@@ -175,7 +170,7 @@ class ListHolidayApprove extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               child: SingleChildScrollView(
                 child: FutureBuilder(
-                  future: _holidayService.getHolidays(params),
+                  future: holidayService.getHolidays(params),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       try {
@@ -226,6 +221,8 @@ class ListHolidayApprove extends StatelessWidget {
                                                   children: [
                                                     CircleAvatar(
                                                       radius: 18,
+                                                      backgroundColor:
+                                                          ColorsApp.white,
                                                       child: Text(
                                                           (index + 1)
                                                               .toString(),
@@ -238,8 +235,6 @@ class ListHolidayApprove extends StatelessWidget {
                                                                       .primary,
                                                                   fontSize:
                                                                       22.0)),
-                                                      backgroundColor:
-                                                          ColorsApp.white,
                                                     ),
                                                     const SizedBox(width: 8.0),
                                                     Flexible(
@@ -268,20 +263,7 @@ class ListHolidayApprove extends StatelessWidget {
                                                                         16.0),
                                                           ),
                                                           Text(
-                                                              'Fecha: ' +
-                                                                  Jiffy(
-                                                                          data
-                                                                              .fechaIni,
-                                                                          'dd/MM/yyyy')
-                                                                      .format(
-                                                                          'dd|MM|yyyy') +
-                                                                  ' - ' +
-                                                                  Jiffy(
-                                                                          data
-                                                                              .fechaFin,
-                                                                          'dd/MM/yyyy')
-                                                                      .format(
-                                                                          'dd|MM|yyyy'),
+                                                              'Fecha: ${Jiffy(data.fechaIni, 'dd/MM/yyyy').format('dd|MM|yyyy')} - ${Jiffy(data.fechaFin, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
                                                               style: GoogleFonts.montserrat(
                                                                   fontWeight:
                                                                       FontWeight
@@ -325,10 +307,7 @@ class ListHolidayApprove extends StatelessWidget {
                                                         ],
                                                       ),
                                                       Text(
-                                                        'Duración: ' +
-                                                            data.dias
-                                                                .toString() +
-                                                            ' días',
+                                                        'Duración: ${data.dias} días',
                                                         style: GoogleFonts
                                                             .montserratAlternates(
                                                                 fontWeight:
@@ -576,10 +555,7 @@ class ListHolidayApprove extends StatelessWidget {
               content: Column(children: [
                 Image.asset('assets/icons/check.png',
                     height: 50, width: 50, color: ColorsApp.success),
-                Text(
-                    '¿Desea aprobar la vacación programada de: ' +
-                        nombres +
-                        '?',
+                Text('¿Desea aprobar la vacación programada de: $nombres?',
                     style: GoogleFonts.montserrat(
                         color: ColorsApp.primary,
                         fontWeight: FontWeight.bold,
@@ -646,11 +622,8 @@ class ListHolidayApprove extends StatelessWidget {
             );
           });
     } else {
-      Get.snackbar(
-          'Mensaje:',
-          'Actualmente se programó sólo ' +
-              totalDias.toString() +
-              ' días, debe completar los 30 días',
+      Get.snackbar('Mensaje:',
+          'Actualmente se programó sólo $totalDias días, debe completar los 30 días',
           duration: const Duration(seconds: 8),
           colorText: ColorsApp.white,
           backgroundColor: ColorsApp.warning);
@@ -668,7 +641,7 @@ class ListHolidayApprove extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (context) {
-          TextEditingController _inputFieldCtrl = TextEditingController();
+          TextEditingController inputFieldCtrl = TextEditingController();
           return AlertDialog(
             elevation: 0,
             backgroundColor: ColorsApp.info,
@@ -686,7 +659,7 @@ class ListHolidayApprove extends StatelessWidget {
               child: Text(text.toUpperCase()),
             )),
             content: TextFormField(
-              controller: _inputFieldCtrl,
+              controller: inputFieldCtrl,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
@@ -748,8 +721,8 @@ class ListHolidayApprove extends StatelessWidget {
                 onPressed: () {
                   changeRequestStatus(
                       context,
-                      _inputFieldCtrl.value.text.isNotEmpty
-                          ? _inputFieldCtrl.value.text
+                      inputFieldCtrl.value.text.isNotEmpty
+                          ? inputFieldCtrl.value.text
                           : '',
                       idEstado,
                       idWorker,

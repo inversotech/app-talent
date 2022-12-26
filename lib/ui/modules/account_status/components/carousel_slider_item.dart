@@ -140,10 +140,7 @@ class CarouselSliderItem extends StatelessWidget {
                           Image.asset('assets/icons/calendar.png',
                               height: 30, width: 30, color: ColorsApp.primary),
                           const SizedBox(width: 8.0),
-                          Text(
-                              dateModel.nameMonth +
-                                  ', ' +
-                                  dateModel.year.toString(),
+                          Text('${dateModel.nameMonth}, ${dateModel.year}',
                               style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w400,
                                   color: ColorsApp.primary))

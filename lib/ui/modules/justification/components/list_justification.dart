@@ -88,12 +88,12 @@ class ListJustification extends StatelessWidget {
                                       children: [
                                         CircleAvatar(
                                           radius: 18,
+                                          backgroundColor: ColorsApp.info,
                                           child: Text((index + 1).toString(),
                                               style: GoogleFonts.montserrat(
                                                   fontWeight: FontWeight.w400,
                                                   color: Colors.white,
                                                   fontSize: 22.0)),
-                                          backgroundColor: ColorsApp.info,
                                         ),
                                         const SizedBox(width: 8.0),
                                         Flexible(
@@ -113,11 +113,7 @@ class ListJustification extends StatelessWidget {
                                                     fontSize: 16.0),
                                               ),
                                               Text(
-                                                  'Fecha: ' +
-                                                      DateFormat('dd|MM|yyyy')
-                                                          .format(
-                                                              DateTime.parse(
-                                                                  item.fecha!)),
+                                                  'Fecha: ${DateFormat('dd|MM|yyyy').format(DateTime.parse(item.fecha!))}',
                                                   style: GoogleFonts.montserrat(
                                                       fontWeight:
                                                           FontWeight.w500,
@@ -146,11 +142,12 @@ class ListJustification extends StatelessWidget {
                                                 'archivo':
                                                     item.evidenciaAdj.toString()
                                               };
-                                              final _justificationService =
+                                              final justificationService =
                                                   JustificationService();
                                               ApiResponse resp =
-                                                  await _justificationService
+                                                  await justificationService
                                                       .geFileRequest(params);
+
                                               if (resp.success) {
                                                 final dir =
                                                     await getTemporaryDirectory();
@@ -160,6 +157,7 @@ class ListJustification extends StatelessWidget {
                                                 Uint8List bytes =
                                                     base64.decode(resp.data);
                                                 await file.writeAsBytes(bytes);
+
                                                 Navigator.of(buildContext)
                                                     .pop();
                                                 Navigator.push(
@@ -308,10 +306,7 @@ class ListJustification extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),
                               child: Text(
-                                  'Fecha: ' +
-                                      DateFormat('dd|MM|yyyy').format(
-                                          DateTime.parse(
-                                              data.fecha.toString())),
+                                  'Fecha: ${DateFormat('dd|MM|yyyy').format(DateTime.parse(data.fecha.toString()))}',
                                   style: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w500,
                                       color: ColorsApp.primary,
@@ -572,8 +567,8 @@ class ListJustification extends StatelessWidget {
   void _showEvidence(BuildContext buildContext, JustificationModel data) async {
     loadingIndicator(onlyLoading: true, opacity: true);
     Map<String, String> params = {'archivo': data.evidenciaAdj.toString()};
-    final _justificationService = JustificationService();
-    ApiResponse resp = await _justificationService.geFileRequest(params);
+    final justificationService = JustificationService();
+    ApiResponse resp = await justificationService.geFileRequest(params);
     if (resp.success) {
       final dir = await getTemporaryDirectory();
       File file = File(dir.path + data.evidenciaAdj.toString());
@@ -624,11 +619,7 @@ class ListJustification extends StatelessWidget {
                                     fontSize: 14.0)),
                             item.fechahora != null
                                 ? Text(
-                                    DateFormat('d|M|y hh:mm a')
-                                            .format(DateTime.parse(
-                                                item.fechahora.toString()))
-                                            .toLowerCase() +
-                                        ' (Registrado)',
+                                    '${DateFormat('d|M|y hh:mm a').format(DateTime.parse(item.fechahora.toString())).toLowerCase()} (Registrado)',
                                     style: GoogleFonts.montserrat(
                                         fontWeight: FontWeight.w400,
                                         color: ColorsApp.primary,
@@ -681,11 +672,7 @@ class ListJustification extends StatelessWidget {
               children: [
                 val.email != null
                     ? Text(
-                        val.email.toString() +
-                            ': ' +
-                            Jiffy(val.fecha.toString(), "dd/MM/yyyy HH:mm")
-                                .format('dd|MM|yyyy hh:mm a')
-                                .toString(),
+                        '${val.email}: ${Jiffy(val.fecha.toString(), "dd/MM/yyyy HH:mm").format('dd|MM|yyyy hh:mm a')}',
                         style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w300,
                             color: ColorsApp.primary,
@@ -840,7 +827,7 @@ class ListJustification extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (context) {
-          TextEditingController _inputFieldCtrl = TextEditingController();
+          TextEditingController inputFieldCtrl = TextEditingController();
           return AlertDialog(
             elevation: 0,
             backgroundColor: ColorsApp.info,
@@ -858,7 +845,7 @@ class ListJustification extends StatelessWidget {
               child: Text(text.toUpperCase()),
             )),
             content: TextFormField(
-              controller: _inputFieldCtrl,
+              controller: inputFieldCtrl,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
@@ -919,8 +906,8 @@ class ListJustification extends StatelessWidget {
                 ),
                 onPressed: () {
                   changeRequestStatus(
-                      _inputFieldCtrl.value.text.isNotEmpty
-                          ? _inputFieldCtrl.value.text
+                      inputFieldCtrl.value.text.isNotEmpty
+                          ? inputFieldCtrl.value.text
                           : '',
                       context,
                       idTrabajador,

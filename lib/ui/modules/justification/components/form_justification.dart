@@ -28,6 +28,142 @@ class FormJustification extends StatelessWidget {
               scrollController: controller.scrollController,
               enablePullDown: false,
               enablePullUp: false,
+              floatingActionButton: controller.formData.value.idSolicJustif !=
+                          null &&
+                      controller.formData.value.idEstadoJustif == '01'
+                  ? Container(
+                      padding: const EdgeInsets.only(left: 32.0),
+                      child: SingleChildScrollView(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  _showModalAnular(context, '', controller);
+                                },
+                                style: ButtonStyle(
+                                  alignment: Alignment.center,
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      return ColorsApp
+                                          .danger; // Use the component's default.
+                                    },
+                                  ),
+                                  shape: MaterialStateProperty.resolveWith<
+                                      RoundedRectangleBorder>(
+                                    (Set<MaterialState> states) {
+                                      return RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              25)); // Use the component's default.
+                                    },
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Row(
+                                    children: const [
+                                      Icon(Icons.save_alt_outlined,
+                                          color: Colors.white),
+                                      Text(
+                                        'anular',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                            const SizedBox(width: 12.0),
+                            TextButton(
+                                onPressed: () {
+                                  controller.submit();
+                                },
+                                style: ButtonStyle(
+                                  alignment: Alignment.center,
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      return ColorsApp
+                                          .success; // Use the component's default.
+                                    },
+                                  ),
+                                  shape: MaterialStateProperty.resolveWith<
+                                      RoundedRectangleBorder>(
+                                    (Set<MaterialState> states) {
+                                      return RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              25)); // Use the component's default.
+                                    },
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Row(
+                                    children: [
+                                      Image.asset('assets/icons/save.png',
+                                          height: 30,
+                                          width: 30,
+                                          color: Colors.white),
+                                      const Text(
+                                        'actualizar',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                          ],
+                        ),
+                      ),
+                    )
+                  : controller.formData.value.idSolicJustif == null
+                      ? Container(
+                          padding: const EdgeInsets.only(left: 32.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    controller.submit();
+                                  },
+                                  style: ButtonStyle(
+                                    alignment: Alignment.center,
+                                    backgroundColor: MaterialStateProperty
+                                        .resolveWith<Color>(
+                                      (Set<MaterialState> states) {
+                                        return ColorsApp
+                                            .success; // Use the component's default.
+                                      },
+                                    ),
+                                    shape: MaterialStateProperty.resolveWith<
+                                        RoundedRectangleBorder>(
+                                      (Set<MaterialState> states) {
+                                        return RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                25)); // Use the component's default.
+                                      },
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Row(
+                                      children: [
+                                        Image.asset('assets/icons/save.png',
+                                            height: 30,
+                                            width: 30,
+                                            color: Colors.white),
+                                        const Text(
+                                          'enviar solicitud',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        )
+                      : null,
               child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                 return Obx(() => Form(
@@ -102,143 +238,7 @@ class FormJustification extends StatelessWidget {
                         ],
                       ),
                     ));
-              }),
-              floatingActionButton: controller.formData.value.idSolicJustif !=
-                          null &&
-                      controller.formData.value.idEstadoJustif == '01'
-                  ? Container(
-                      padding: const EdgeInsets.only(left: 32.0),
-                      child: SingleChildScrollView(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                                onPressed: () {
-                                  _showModalAnular(context, '', controller);
-                                },
-                                style: ButtonStyle(
-                                  alignment: Alignment.center,
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                      return ColorsApp
-                                          .danger; // Use the component's default.
-                                    },
-                                  ),
-                                  shape: MaterialStateProperty.resolveWith<
-                                      RoundedRectangleBorder>(
-                                    (Set<MaterialState> states) {
-                                      return RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              25)); // Use the component's default.
-                                    },
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Row(
-                                    children: const [
-                                      Icon(Icons.save_alt_outlined,
-                                          color: Colors.white),
-                                      Text(
-                                        'anular',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                            const SizedBox(width: 12.0),
-                            TextButton(
-                                onPressed: () {
-                                  controller.submit();
-                                },
-                                style: ButtonStyle(
-                                  alignment: Alignment.center,
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                      return ColorsApp
-                                          .success; // Use the component's default.
-                                    },
-                                  ),
-                                  shape: MaterialStateProperty.resolveWith<
-                                      RoundedRectangleBorder>(
-                                    (Set<MaterialState> states) {
-                                      return RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              25)); // Use the component's default.
-                                    },
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Row(
-                                    children: [
-                                      Image.asset('assets/icons/save.png',
-                                          height: 30,
-                                          width: 30,
-                                          color: Colors.white),
-                                      const Text(
-                                        'actualizar',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ))
-                          ],
-                        ),
-                      ),
-                    )
-                  : controller.formData.value.idSolicJustif == null
-                      ? Container(
-                          padding: const EdgeInsets.only(left: 32.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    controller.submit();
-                                  },
-                                  style: ButtonStyle(
-                                    alignment: Alignment.center,
-                                    backgroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                      (Set<MaterialState> states) {
-                                        return ColorsApp
-                                            .success; // Use the component's default.
-                                      },
-                                    ),
-                                    shape: MaterialStateProperty.resolveWith<
-                                        RoundedRectangleBorder>(
-                                      (Set<MaterialState> states) {
-                                        return RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                25)); // Use the component's default.
-                                      },
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: Row(
-                                      children: [
-                                        Image.asset('assets/icons/save.png',
-                                            height: 30,
-                                            width: 30,
-                                            color: Colors.white),
-                                        const Text(
-                                          'enviar solicitud',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        )
-                      : null);
+              }));
         });
   }
 
@@ -532,11 +532,7 @@ class FormJustification extends StatelessWidget {
                       ),
                       item.fechahora != null
                           ? Text(
-                              DateFormat('hh:mm a')
-                                      .format(DateTime.parse(
-                                          item.fechahora.toString()))
-                                      .toLowerCase() +
-                                  ' (Registrado)',
+                              '${DateFormat('hh:mm a').format(DateTime.parse(item.fechahora.toString())).toLowerCase()} (Registrado)',
                               style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w400,
                                   color: ColorsApp.primary))
@@ -569,7 +565,7 @@ class FormJustification extends StatelessWidget {
         context: buildContext,
         barrierDismissible: false,
         builder: (context) {
-          TextEditingController _inputFieldCtrl = TextEditingController();
+          TextEditingController inputFieldCtrl = TextEditingController();
           return AlertDialog(
             elevation: 0,
             backgroundColor: ColorsApp.info,
@@ -578,7 +574,7 @@ class FormJustification extends StatelessWidget {
             titlePadding: EdgeInsets.zero,
             scrollable: true,
             content: TextFormField(
-              controller: _inputFieldCtrl,
+              controller: inputFieldCtrl,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
@@ -635,8 +631,8 @@ class FormJustification extends StatelessWidget {
                 ),
                 onPressed: () {
                   controller.changeRequestStatus(
-                      _inputFieldCtrl.value.text.isNotEmpty
-                          ? _inputFieldCtrl.value.text
+                      inputFieldCtrl.value.text.isNotEmpty
+                          ? inputFieldCtrl.value.text
                           : '');
                 },
               )

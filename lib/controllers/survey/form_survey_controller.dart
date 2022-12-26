@@ -39,11 +39,11 @@ class FormSurveyController extends GetxController {
 
   void _getSurveyCovid() async {
     loadingIndicator(onlyLoading: true, opacity: false);
-    final _surveyService = SurveyService();
+    final surveyService = SurveyService();
     Map<String, String> params = {'id_persona': idPerson};
-    final _apiResponse = await _surveyService.getQuizCovid(params);
-    if (_apiResponse.success) {
-      survey = Survey.fromJson(_apiResponse.data);
+    final apiResponse = await surveyService.getQuizCovid(params);
+    if (apiResponse.success) {
+      survey = Survey.fromJson(apiResponse.data);
       surveyItems = survey.items ?? [];
     }
     loadingData.value = true;
@@ -84,7 +84,7 @@ class FormSurveyController extends GetxController {
     formKey.currentState!.save();
 
     loadingIndicator(onlyLoading: false, text: 'Guardando ...');
-    final _surveyService = SurveyService();
+    final surveyService = SurveyService();
     final userPref = UserPreferences();
     Map<String, String> params = {
       'id_persona': idPerson,
@@ -92,11 +92,11 @@ class FormSurveyController extends GetxController {
       'id_encuesta': survey.idEncuesta.toString(),
       'answers': json.encode(surveyAnswers.toList()).toString()
     };
-    final _apiResponse = await _surveyService.saveAnswers(params);
-    if (_apiResponse.success) {
+    final apiResponse = await surveyService.saveAnswers(params);
+    if (apiResponse.success) {
       saveData.value = true;
-      messageSave.value = _apiResponse.data['message'].toString();
-      puntaje.value = double.parse(_apiResponse.data['puntaje'].toString());
+      messageSave.value = apiResponse.data['message'].toString();
+      puntaje.value = double.parse(apiResponse.data['puntaje'].toString());
     }
     loadingData.value = true;
     loadingData.value = false;

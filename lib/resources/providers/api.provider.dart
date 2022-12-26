@@ -7,7 +7,6 @@ import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/end_points.dart';
-import 'package:lamb_talent/enviroment/enviroment.dart';
 import 'package:lamb_talent/resources/models/response.dart';
 
 class ApiProvider extends GetConnect {
@@ -34,14 +33,9 @@ class ApiProvider extends GetConnect {
           final resp = _parseJsonResponse(response.body);
           if (resp.success) {
             GetStorage storage = GetStorage();
-            print('here');
             if (saveCred) {
-              print('se va a guardar las credenciales');
               final usernamelamb = params['username']!;
               final passwordlamb = params['password']!;
-              print('credenciales');
-              print(usernamelamb);
-              print(passwordlamb);
               await storage.write('saveCredLamb', saveCred);
               await storage.write('usernameLamb', usernamelamb);
               await storage.write('passwordLamb', passwordlamb);
@@ -207,8 +201,7 @@ class ApiProvider extends GetConnect {
         final storage = GetStorage();
         final token = storage.read('tokenLamb');
         final headers = {'Authorization': token.toString()};
-        final response =
-            await put(endPoint + '/' + id, params, headers: headers);
+        final response = await put('$endPoint/$id', params, headers: headers);
         return returnResponseOrThrowException(
             response.status, response.statusCode, response.body, showMessage);
       } catch (e) {
@@ -256,7 +249,7 @@ class ApiProvider extends GetConnect {
         final storage = GetStorage();
         final token = storage.read('tokenLamb');
         final headers = {'Authorization': token.toString()};
-        final response = await delete(endPoint + '/' + id, headers: headers);
+        final response = await delete('$endPoint/$id', headers: headers);
         return returnResponseOrThrowException(
             response.status, response.statusCode, response.body, showMessage);
       } catch (e) {

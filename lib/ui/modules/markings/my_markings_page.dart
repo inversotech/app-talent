@@ -14,8 +14,8 @@ class MyMarkingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<MarkingController>(
         init: MarkingController(),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (_) {
           return AppScreen(

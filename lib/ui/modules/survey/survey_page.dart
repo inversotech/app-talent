@@ -19,8 +19,8 @@ class SurveyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<SurveyController>(
         init: SurveyController(),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (_) {
           return Obx(() => controller.loadingDataInit.value
@@ -134,10 +134,10 @@ class SurveyPage extends StatelessWidget {
                                                     'page': '1',
                                                     'search': query.toString()
                                                   };
-                                                  final _workerService =
+                                                  final workerService =
                                                       WorkerService();
                                                   final list =
-                                                      await _workerService
+                                                      await workerService
                                                           .getMyWorkers(params);
                                                   controller.isSearching.value =
                                                       false;
@@ -233,9 +233,7 @@ class SurveyPage extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                              controller.dateModel.value.nameMonth +
-                                  ', ' +
-                                  controller.dateModel.value.year.toString(),
+                              '${controller.dateModel.value.nameMonth}, ${controller.dateModel.value.year}',
                               style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w400,
                                   color: ColorsApp.primary)),

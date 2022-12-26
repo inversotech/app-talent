@@ -3,8 +3,8 @@ import 'package:lamb_talent/resources/providers/api.provider.dart';
 
 class TravelsService {
   Future getTravelsData(Map<String, String> entity) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['account-status']['travels-data'], params: entity);
     //_apiProvider.dispose();
     if (response.success) {
@@ -15,8 +15,8 @@ class TravelsService {
   }
 
   Future getDetails(Map<String, String> entity) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['account-status']['travels-data-detail'],
         params: entity);
     //_apiProvider.dispose();

@@ -32,11 +32,11 @@ dependencies:
   connectivity_plus: ^3.0.2
   cupertino_icons: ^1.0.5
   datetime_picker_formfield: ^2.0.1
-  device_info_plus: ^8.0.0
   file_picker: ^5.2.4
   firebase_core: ^2.4.0
-  firebase_messaging: ^14.1.4
   flutter:
+    sdk: flutter
+  flutter_localizations: # Add this line
     sdk: flutter
   flutter_countdown_timer: ^4.1.0
   flutter_launcher_icons: ^0.11.0
@@ -48,6 +48,7 @@ dependencies:
   get_storage: ^2.0.3
   google_fonts: ^3.0.1
   high_chart: ^2.0.3
+  http: ^0.13.5
   image_picker: ^0.8.6
   jiffy: ^5.0.0
   onesignal_flutter: ^3.5.0
@@ -62,13 +63,17 @@ dependencies:
   syncfusion_flutter_charts: ^20.3.61
   url_launcher: ^6.1.7
   video_player: ^2.4.9
+  intl: ^0.17.0
+  collection: ^1.16.0
+  device_info_plus: ^8.0.0
+  firebase_messaging: ^14.2.0
+  
 
 dev_dependencies:
-  flutter_lints: ^2.0.1
-  flutter_localizations: # Add this line
-    sdk: flutter
+
   flutter_test:
     sdk: flutter
+  flutter_lints: ^2.0.1
 
 flutter_native_splash:
   color: "#17233C"
@@ -89,6 +94,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true # add by pedro to use in config localization flutter
 
   # To add assets to your application, add an assets section, like this:
   assets:

@@ -18,8 +18,8 @@ class JustificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<JustificationController>(
       init: JustificationController(approve: approve),
-      didUpdateWidget: (_, _stateBuilder) {
-        _stateBuilder.controller!.onInit();
+      didUpdateWidget: (_, stateBuilder) {
+        stateBuilder.controller!.onInit();
       },
       builder: (controller) {
         return AppScreen(
@@ -95,9 +95,7 @@ class JustificationPage extends StatelessWidget {
                       ),
                       Row(children: [
                         Text(
-                          controller.dateModel.value.nameMonth +
-                              ', ' +
-                              controller.dateModel.value.year.toString(),
+                          '${controller.dateModel.value.nameMonth}, ${controller.dateModel.value.year}',
                           style: GoogleFonts.montserrat(
                               fontWeight: FontWeight.w500,
                               color: ColorsApp.primary),

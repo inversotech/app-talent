@@ -5,8 +5,8 @@ import 'package:lamb_talent/resources/providers/api.provider.dart';
 
 class LicensePermitService {
   Future<PaginationModel> getLicensesPermits(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['benefits']['license-permit'], params: params);
     //_apiProvider.dispose();
     if (response.success) {
@@ -19,8 +19,8 @@ class LicensePermitService {
   }
 
   Future<ApiResponse> getLicensesPermit(String id) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getAll(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getAll(
         endPoint: endPoints['benefits']['license-permit-detail'] + '/' + id);
     //_apiProvider.dispose();
     return response;
@@ -28,8 +28,8 @@ class LicensePermitService {
 
   Future<ApiResponse> chageStatusLicensePermit(
       String id, Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.putWithId(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.putWithId(
         endPoint: endPoints['benefits']['license-permit'],
         id: id,
         params: params);
@@ -38,8 +38,8 @@ class LicensePermitService {
   }
 
   Future<List<TypeLicensePermitModel>> getTypeLicensePermit() async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getAll(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getAll(
         endPoint: endPoints['comun']['type-licen-per']);
     //_apiProvider.dispose();
     if (response.success) {
@@ -56,8 +56,8 @@ class LicensePermitService {
 
   Future<List<TypeConceptLicensePermitModel>> getTypeConceptLicensePermit(
       Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['comun']['type-concept-licen-per'], params: params);
     //_apiProvider.dispose();
     if (response.success) {
@@ -74,8 +74,8 @@ class LicensePermitService {
   }
 
   Future<List<TypeInstitutionModel>> getTypeInstitution() async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getAll(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getAll(
         endPoint: endPoints['comun']['type-institution']);
     //_apiProvider.dispose();
     if (response.success) {
@@ -92,8 +92,8 @@ class LicensePermitService {
 
   Future<List<StateLicensePermitModel>> getProcessLicensePermit(
       String id) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getAll(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getAll(
         endPoint: endPoints['benefits']['process-license-permit'] + '/' + id);
     //_apiProvider.dispose();
     if (response.success) {
@@ -110,8 +110,8 @@ class LicensePermitService {
 
   Future<List<ValidLicensePermitModel>> getValidateLicensePermit(
       Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['benefits']['valid-license-permit'],
         params: params);
     //_apiProvider.dispose();
@@ -128,8 +128,8 @@ class LicensePermitService {
   }
 
   Future<ApiResponse> createLicensePermit(FormData formData) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.postUpload(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.postUpload(
         endPoint: endPoints['workerportal']['license-permit'],
         formData: formData,
         showMessage: false);
@@ -138,8 +138,8 @@ class LicensePermitService {
   }
 
   Future<ApiResponse> geFileRequest(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['comun']['file-view'], params: params);
     //_apiProvider.dispose();
     return response;

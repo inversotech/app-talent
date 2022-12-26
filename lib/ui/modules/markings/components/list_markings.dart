@@ -198,18 +198,16 @@ class ListMarking extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 16,
+                backgroundColor: color,
                 child: Text(Jiffy(fecha, 'dd/MM/yyyy').format('dd'),
                     style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w400,
                         color: Colors.white,
                         fontSize: 18.0)),
-                backgroundColor: color,
               ),
               const SizedBox(width: 12.0),
               Text(
-                capitalize(DateFormat.MMMM('es').format(fecha)) +
-                    ', ' +
-                    Jiffy(fecha, 'dd/MM/yyyy').format('yyyy'),
+                '${capitalize(DateFormat.MMMM('es').format(fecha))}, ${Jiffy(fecha, 'dd/MM/yyyy').format('yyyy')}',
                 style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w400,
                     color: ColorsApp.primary,
@@ -220,9 +218,7 @@ class ListMarking extends StatelessWidget {
           Text(
             horaMarking.isNotEmpty
                 ? DateFormat('hh:mm a').format(DateTime.parse(
-                    DateFormat('y-MM-dd').format(DateTime.now()) +
-                        ' ' +
-                        horaMarking.toString()))
+                    '${DateFormat('y-MM-dd').format(DateTime.now())} $horaMarking'))
                 : '      ---     ',
             style: GoogleFonts.montserrat(
                 fontWeight: FontWeight.w400,

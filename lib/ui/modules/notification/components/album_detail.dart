@@ -18,8 +18,8 @@ class AlbumDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<AlbumDetailController>(
         init: AlbumDetailController(id: id),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (controller) {
           return AppScreen(
@@ -42,7 +42,7 @@ class AlbumDetail extends StatelessWidget {
                           leading: Transform.translate(
                             offset: const Offset(-15, -8),
                             child: IconButton(
-                              onPressed: (){
+                              onPressed: () {
                                 controller.goToBack(loadBack);
                               },
                               iconSize: 40,

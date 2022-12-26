@@ -53,15 +53,15 @@ class ListSurvey extends StatelessWidget {
                                 children: [
                                   CircleAvatar(
                                     radius: 18,
+                                    backgroundColor:
+                                        listData[index].aprobado == '1'
+                                            ? ColorsApp.success
+                                            : ColorsApp.danger,
                                     child: Text((index + 1).toString(),
                                         style: GoogleFonts.montserrat(
                                             fontWeight: FontWeight.w400,
                                             color: Colors.white,
                                             fontSize: 22.0)),
-                                    backgroundColor:
-                                        listData[index].aprobado == '1'
-                                            ? ColorsApp.success
-                                            : ColorsApp.danger,
                                   ),
                                   const SizedBox(width: 8.0),
                                   Flexible(
@@ -82,9 +82,7 @@ class ListSurvey extends StatelessWidget {
                                               fontSize: 16.0),
                                         ),
                                         Text(
-                                            'Fecha: ' +
-                                                DateFormat('dd|MM|yyyy').format(
-                                                    listData[index].fecha!),
+                                            'Fecha: ${DateFormat('dd|MM|yyyy').format(listData[index].fecha!)}',
                                             style: GoogleFonts.montserrat(
                                                 fontWeight: FontWeight.w500,
                                                 color: ColorsApp.primary,

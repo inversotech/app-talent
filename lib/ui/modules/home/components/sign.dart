@@ -9,7 +9,8 @@ import 'package:lamb_talent/resources/models/models.dart';
 import 'package:lamb_talent/resources/services/general/person_service.dart';
 import 'package:lamb_talent/resources/services/holiday/holiday_service.dart';
 
-Future<bool> showModalSSign(HolidayModel holiday, String type,BuildContext buildContext) async {
+Future<bool> showModalSSign(
+    HolidayModel holiday, String type, BuildContext buildContext) async {
   UserPreferences userPreferences = UserPreferences();
   PersonService personService = PersonService();
   Map<String, String> params = {
@@ -25,12 +26,12 @@ Future<bool> showModalSSign(HolidayModel holiday, String type,BuildContext build
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
           title: Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                  icon: Image.asset('assets/icons/close.png',
-                      height: 40, width: 40, color: ColorsApp.primary),
-                  onPressed: () => Navigator.of(context).pop()),
-            ),
+            alignment: Alignment.centerRight,
+            child: IconButton(
+                icon: Image.asset('assets/icons/close.png',
+                    height: 40, width: 40, color: ColorsApp.primary),
+                onPressed: () => Navigator.of(context).pop()),
+          ),
           contentPadding: const EdgeInsets.all(8.0),
           titlePadding: EdgeInsets.zero,
           scrollable: true,
@@ -59,19 +60,14 @@ Future<bool> showModalSSign(HolidayModel holiday, String type,BuildContext build
                   children: [
                     Flexible(
                       child: Text(
-                          'Fecha: ' +
-                              Jiffy(holiday.fechaIni, 'yyyy-MM-dd')
-                                  .format('dd|MM|yyyy') +
-                              ' - ' +
-                              Jiffy(holiday.fechaFin, 'yyyy-MM-dd')
-                                  .format('dd|MM|yyyy'),
+                          'Fecha: ${Jiffy(holiday.fechaIni, 'yyyy-MM-dd').format('dd|MM|yyyy')} - ${Jiffy(holiday.fechaFin, 'yyyy-MM-dd').format('dd|MM|yyyy')}',
                           style: GoogleFonts.montserrat(
                               fontWeight: FontWeight.w300,
                               color: ColorsApp.primary,
                               fontSize: 12.0)),
                     ),
                     Text(
-                      'Duración: ' + holiday.dias.toString() + ' días',
+                      'Duración: ${holiday.dias} días',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w300,
                           color: ColorsApp.primary,

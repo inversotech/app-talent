@@ -13,8 +13,8 @@ class HolidayApprovePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HolidayApproveController>(
         init: HolidayApproveController(),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (controller) {
           return AppScreen(
@@ -76,10 +76,10 @@ class HolidayApprovePage extends StatelessWidget {
                   constraints: constraints,
                   listData: controller.listData,
                   isDth: controller.isDth.value,
-                  changeRequestStatus:
-                      (buildContext, text, idEstado, idWorker,idPeriodoVacTrab) {
-                    controller.changeRequestStatus(
-                        buildContext, text, idEstado, idWorker,idPeriodoVacTrab);
+                  changeRequestStatus: (buildContext, text, idEstado, idWorker,
+                      idPeriodoVacTrab) {
+                    controller.changeRequestStatus(buildContext, text, idEstado,
+                        idWorker, idPeriodoVacTrab);
                   },
                 )
               : Container(),
@@ -87,5 +87,4 @@ class HolidayApprovePage extends StatelessWidget {
       ),
     );
   }
-
 }

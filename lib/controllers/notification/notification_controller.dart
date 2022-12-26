@@ -28,7 +28,6 @@ import 'package:lamb_talent/ui/modules/notification/components/comment.dart';
 import 'package:lamb_talent/ui/modules/notification/components/event_detail.dart';
 import 'package:lamb_talent/ui/modules/notification/components/notification_detail.dart';
 import 'package:lamb_talent/ui/modules/notification/components/show_photo.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class NotificationController extends GetxController {
   final refreshController = RefreshController(initialRefresh: false);
@@ -87,8 +86,6 @@ class NotificationController extends GetxController {
   }
 
   void getListDataInitial() async {
-    print('datos list');
-    print(listData);
     if (listData.isEmpty) {
       loadingIndicator(
           onlyLoading: true, opacity: false, colorLoading: ColorsApp.white);
@@ -128,8 +125,8 @@ class NotificationController extends GetxController {
     final Map<String, String> params = {
       'codigo_acceso': codeModule.value.toString()
     };
-    final _authService = AuthService();
-    final resp = await _authService.getAccessNivel(params);
+    final authService = AuthService();
+    final resp = await authService.getAccessNivel(params);
     userPreferences.idNivelAcceso = resp.accesoNivel!.idAccesoNivel != null
         ? resp.accesoNivel!.idAccesoNivel.toString()
         : '';
@@ -161,8 +158,8 @@ class NotificationController extends GetxController {
     if (findIndex != -1) {
       listData[findIndex].globalKey = dataKeyScroll;
     } else {
-      final _notificationService = NotificationService();
-      final resp = await _notificationService.getNotification(idOrigen);
+      final notificationService = NotificationService();
+      final resp = await notificationService.getNotification(idOrigen);
       if (resp.success) {
         NotificationModel notify = NotificationModel.fromJson(resp.data);
         listData.add(NotificationGeneralModel(
@@ -193,8 +190,8 @@ class NotificationController extends GetxController {
     if (findIndex != -1) {
       listData[findIndex].globalKey = dataKeyScroll;
     } else {
-      final _notificationService = NotificationService();
-      final resp = await _notificationService.getalbum(idOrigen);
+      final notificationService = NotificationService();
+      final resp = await notificationService.getalbum(idOrigen);
       if (resp.success) {
         AlbumModel album = AlbumModel.fromJson(resp.data);
         listData.add(NotificationGeneralModel(
@@ -240,8 +237,8 @@ class NotificationController extends GetxController {
       'per_page': perPage.value.toString(),
       'page': page.value.toString()
     };
-    final _notificationService = NotificationService();
-    pagination = await _notificationService.getNotifications(params);
+    final notificationService = NotificationService();
+    pagination = await notificationService.getNotifications(params);
     List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
       jsonList = [];
@@ -262,8 +259,6 @@ class NotificationController extends GetxController {
     } else {
       refreshController.loadComplete();
     }
-    print('value loadding data');
-    print(loadingData.value);
     loadingData.value = false;
     loadingData.value = true;
   }
@@ -278,8 +273,8 @@ class NotificationController extends GetxController {
           : '',
       'code_fcm_app': Env.api.codeFcmApp,
     };
-    final _notificationService = NotificationService();
-    final resp = await _notificationService.totalNoLeidos(params);
+    final notificationService = NotificationService();
+    final resp = await notificationService.totalNoLeidos(params);
     if (resp.success) {
       userPreferences.cantNotify = int.parse(resp.data.toString());
     }
@@ -301,8 +296,8 @@ class NotificationController extends GetxController {
       'per_page': perPage.value.toString(),
       'page': '1'
     };
-    final _notificationService = NotificationService();
-    pagination = await _notificationService.getNotifications(params);
+    final notificationService = NotificationService();
+    pagination = await notificationService.getNotifications(params);
     List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
       jsonList = [];
@@ -366,8 +361,8 @@ class NotificationController extends GetxController {
       'id_origen': item.id.toString(),
       'id_persona': userPreferences.idPerson.toString()
     };
-    final _notificationService = NotificationService();
-    final resp = await _notificationService.saveLike(params);
+    final notificationService = NotificationService();
+    final resp = await notificationService.saveLike(params);
     if (resp.success) {
       listData[index].like = item.like;
       listData[index].countLikes = item.like
@@ -397,17 +392,19 @@ class NotificationController extends GetxController {
 
   shareFileImage(NotificationGeneralModel item) async {
     loadingIndicator(onlyLoading: true, opacity: false);
-    List<String> listPaths = [];
+    // List<String> listPaths = [];
+    List<XFile> listPaths = [];
     for (var i = 0; i < item.fotos!.length; i++) {
       final response =
           await get(Uri.parse(item.fotos![i].imagenUrl.toString()));
       final documentDirectory = (await getTemporaryDirectory()).path;
       File imgFile = File('$documentDirectory/${item.fotos![i].idAfoto}.png');
       imgFile.writeAsBytesSync(response.bodyBytes);
-      listPaths.add(imgFile.path);
+      listPaths.add(XFile(imgFile.path));
     }
     Get.until((route) => !Get.isDialogOpen!);
-    Share.shareFiles(listPaths, text: item.mensaje!);
+    Share.shareXFiles(listPaths, text: item.mensaje!);
+    // Share.shareFiles(listPaths, text: item.mensaje!); // version anterior y ya esta depreciado.
   }
 
   goToLinkUrl(String link) async {
@@ -434,16 +431,16 @@ class NotificationController extends GetxController {
   }
 
   Future _changeRelationPerson() async {
-    final _notificationService = NotificationService();
-    final _userPref = UserPreferences();
+    final notificationService = NotificationService();
+    final userPref = UserPreferences();
     Map<String, String> params = {
       'origen': origen,
       'id_origen': idOrigen,
-      'id_persona': _userPref.idPerson.toString(),
+      'id_persona': userPref.idPerson.toString(),
       'esta_leido': '1'
     };
-    await _notificationService.changeRelationPerson(
-        origen, idOrigen, _userPref.idPerson.toString(), params);
+    await notificationService.changeRelationPerson(
+        origen, idOrigen, userPref.idPerson.toString(), params);
   }
 
   showPhoto(String imageUrl) {

@@ -52,8 +52,8 @@ class LikesController extends GetxController {
       'per_page': perPage.value.toString(),
       'page': page.value.toString()
     };
-    final _notificationService = NotificationService();
-    pagination = await _notificationService.getLikes(params);
+    final notificationService = NotificationService();
+    pagination = await notificationService.getLikes(params);
     List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
       jsonList = [];
@@ -94,8 +94,8 @@ class LikesController extends GetxController {
       'per_page': perPage.value.toString(),
       'page': '1'
     };
-    final _notificationService = NotificationService();
-    pagination = await _notificationService.getLikes(params);
+    final notificationService = NotificationService();
+    pagination = await notificationService.getLikes(params);
     List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
       jsonList = [];
@@ -133,8 +133,8 @@ class LikesController extends GetxController {
       'per_page': perPage.value.toString(),
       'page': '1'
     };
-    final _notificationService = NotificationService();
-    pagination = await _notificationService.getLikes(params);
+    final notificationService = NotificationService();
+    pagination = await notificationService.getLikes(params);
     List<dynamic> jsonList =
         pagination.data == null ? [] : pagination.data as List<dynamic>;
 

@@ -13,8 +13,8 @@ class HolidayPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HolidayController>(
         init: HolidayController(),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (controller) {
           return AppScreen(
@@ -279,9 +279,7 @@ class HolidayPage extends StatelessWidget {
               Image.asset('assets/icons/check.png',
                   height: 50, width: 50, color: ColorsApp.success),
               Text(
-                  '¿Desea aprobar la vacación programada de: ' +
-                      controller.userPreferences.fullnamePerson.toString() +
-                      '?',
+                  '¿Desea aprobar la vacación programada de: ${controller.userPreferences.fullnamePerson}?',
                   style: GoogleFonts.montserrat(
                       color: ColorsApp.primary,
                       fontWeight: FontWeight.bold,
@@ -352,7 +350,7 @@ class HolidayPage extends StatelessWidget {
         context: context,
         barrierDismissible: false,
         builder: (context) {
-          TextEditingController _inputFieldCtrl = TextEditingController();
+          TextEditingController inputFieldCtrl = TextEditingController();
           return AlertDialog(
             elevation: 0,
             backgroundColor: ColorsApp.info,
@@ -370,7 +368,7 @@ class HolidayPage extends StatelessWidget {
               child: Text(text.toUpperCase()),
             )),
             content: TextFormField(
-              controller: _inputFieldCtrl,
+              controller: inputFieldCtrl,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15.0)),
@@ -432,8 +430,8 @@ class HolidayPage extends StatelessWidget {
                 onPressed: () {
                   controller.changeRequestStatus(
                       context,
-                      _inputFieldCtrl.value.text.isNotEmpty
-                          ? _inputFieldCtrl.value.text
+                      inputFieldCtrl.value.text.isNotEmpty
+                          ? inputFieldCtrl.value.text
                           : '',
                       idEstado);
                 },

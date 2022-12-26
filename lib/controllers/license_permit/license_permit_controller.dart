@@ -27,7 +27,7 @@ class LicensePermitController extends GetxController {
       .obs;
   List<LicensePermitGroupModel> listData = [];
   List<StateLicensePermitModel> listStateLicenPer = [];
-    bool changeApprove = false;
+  bool changeApprove = false;
   RxString valueStateLicenPer = ''.obs;
   RxBool loadingDataInit = false.obs;
   RxInt page = 1.obs;
@@ -65,8 +65,8 @@ class LicensePermitController extends GetxController {
 
   Future getActions() async {
     final Map<String, String> params = {'id_modulo': codeModule.value};
-    final _authService = AuthService();
-    final actions = await _authService.getActionsByModule(params);
+    final authService = AuthService();
+    final actions = await authService.getActionsByModule(params);
     isJefeArea.value = actions
         .where((element) =>
             element.clave.toString().toUpperCase() == 'APPROVE_JUST_AREA')
@@ -96,8 +96,8 @@ class LicensePermitController extends GetxController {
           : '',
       'restringido': approve ? 'S' : 'U'
     };
-    final _licensePermitService = LicensePermitService();
-    pagination = await _licensePermitService.getLicensesPermits(params);
+    final licensePermitService = LicensePermitService();
+    pagination = await licensePermitService.getLicensesPermits(params);
 
     List<dynamic> jsonList =
         pagination.data == null ? [] : pagination.data as List<dynamic>;
@@ -143,8 +143,8 @@ class LicensePermitController extends GetxController {
           : '',
       'restringido': approve ? 'S' : 'U'
     };
-    final _licensePermitService = LicensePermitService();
-    pagination = await _licensePermitService.getLicensesPermits(params);
+    final licensePermitService = LicensePermitService();
+    pagination = await licensePermitService.getLicensesPermits(params);
 
     List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
@@ -209,8 +209,8 @@ class LicensePermitController extends GetxController {
       'restringido': approve ? 'S' : 'U'
     };
     loadingIndicator(onlyLoading: true, opacity: false);
-    final _licensePermitService = LicensePermitService();
-    pagination = await _licensePermitService.getLicensesPermits(params);
+    final licensePermitService = LicensePermitService();
+    pagination = await licensePermitService.getLicensesPermits(params);
 
     List<dynamic> jsonList =
         pagination.data == null ? [] : pagination.data as List<dynamic>;
@@ -237,7 +237,8 @@ class LicensePermitController extends GetxController {
     loadingDataInit.value = true;
     Get.until((route) => !Get.isDialogOpen!);
   }
-   void goToBack() {
+
+  void goToBack() {
     final result = {'change': changeApprove, 'data': null};
     Get.back(result: result);
   }

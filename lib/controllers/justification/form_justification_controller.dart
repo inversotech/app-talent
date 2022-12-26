@@ -110,16 +110,16 @@ class FormJustificationController extends GetxController {
         loadingIndicator(onlyLoading: true, opacity: false);
       }
       listMarkings = await justificationService.getMarkingWorker(params);
-      UserPreferences _userPreferences = UserPreferences();
+      UserPreferences userPreferences = UserPreferences();
       params = {
-        'id_entidad': _userPreferences.idEntity != null
-            ? _userPreferences.idEntity.toString()
+        'id_entidad': userPreferences.idEntity != null
+            ? userPreferences.idEntity.toString()
             : '',
-        'id_depto': _userPreferences.idDeparment != null
-            ? _userPreferences.idDeparment.toString()
+        'id_depto': userPreferences.idDeparment != null
+            ? userPreferences.idDeparment.toString()
             : '',
-        'id_trabajador': _userPreferences.idWorker != null
-            ? _userPreferences.idWorker.toString()
+        'id_trabajador': userPreferences.idWorker != null
+            ? userPreferences.idWorker.toString()
             : '',
         'id_motivo_asist': 'A',
         'per_page': '10',
@@ -130,8 +130,8 @@ class FormJustificationController extends GetxController {
       if (!Get.isDialogOpen!) {
         loadingIndicator(onlyLoading: true, opacity: false);
       }
-      final _markingService = MarkingService();
-      PaginationModel pagination = await _markingService.assistMarkings(params);
+      final markingService = MarkingService();
+      PaginationModel pagination = await markingService.assistMarkings(params);
       List<dynamic> jsonList =
           pagination.data == null ? [] : pagination.data as List<dynamic>;
 
@@ -144,10 +144,10 @@ class FormJustificationController extends GetxController {
     }
     listMarkingsSelected = [];
     listColorsMarkingSelected = [];
-    MarkingWorkerModel _horaEntrada = MarkingWorkerModel();
-    MarkingWorkerModel _horaSalidaRef = MarkingWorkerModel();
-    MarkingWorkerModel _horaEntradaRef = MarkingWorkerModel();
-    MarkingWorkerModel _horaSalida = MarkingWorkerModel();
+    MarkingWorkerModel horaEntrada = MarkingWorkerModel();
+    MarkingWorkerModel horaSalidaRef = MarkingWorkerModel();
+    MarkingWorkerModel horaEntradaRef = MarkingWorkerModel();
+    MarkingWorkerModel horaSalida = MarkingWorkerModel();
     final schedule = listSchedule.isNotEmpty ? listSchedule[0] : null;
     final assistance =
         listAssistance.isNotEmpty ? listAssistance[0] : MarkingModel();
@@ -169,7 +169,7 @@ class FormJustificationController extends GetxController {
     final colorSal = _getColorSal(assistance);
     if (findEntrada.idDescripMarcacion == null) {
       if (schedule != null) {
-        _horaEntrada = MarkingWorkerModel(
+        horaEntrada = MarkingWorkerModel(
             fechahoraManual: schedule.fechahoraEntrada,
             idDescripMarcacion: '01',
             esSolicitado: false,
@@ -177,7 +177,7 @@ class FormJustificationController extends GetxController {
             esJustificado: false,
             nombreDescripMarcacion: 'Hora entrada');
         listColorsMarkingSelected.add(colorEnt);
-        listMarkingsSelected.add(_horaEntrada);
+        listMarkingsSelected.add(horaEntrada);
       }
     } else {
       listColorsMarkingSelected.add(colorEnt);
@@ -186,7 +186,7 @@ class FormJustificationController extends GetxController {
     if (findSalidaRef.idDescripMarcacion == null) {
       if (schedule != null) {
         if (schedule.fechahoraSalidaRef != null) {
-          _horaSalidaRef = MarkingWorkerModel(
+          horaSalidaRef = MarkingWorkerModel(
               fechahoraManual: schedule.fechahoraSalidaRef,
               idDescripMarcacion: '02',
               esSolicitado: false,
@@ -195,7 +195,7 @@ class FormJustificationController extends GetxController {
               nombreDescripMarcacion: 'Hora salida ref');
 
           listColorsMarkingSelected.add(colorSalRef);
-          listMarkingsSelected.add(_horaSalidaRef);
+          listMarkingsSelected.add(horaSalidaRef);
         }
       }
     } else {
@@ -205,7 +205,7 @@ class FormJustificationController extends GetxController {
     if (findEntradaRef.idDescripMarcacion == null) {
       if (schedule != null) {
         if (schedule.fechahoraEntradaRef != null) {
-          _horaEntradaRef = MarkingWorkerModel(
+          horaEntradaRef = MarkingWorkerModel(
               fechahoraManual: schedule.fechahoraEntradaRef,
               idDescripMarcacion: '03',
               esSolicitado: false,
@@ -213,7 +213,7 @@ class FormJustificationController extends GetxController {
               esJustificado: false,
               nombreDescripMarcacion: 'Hora entrada ref');
           listColorsMarkingSelected.add(colorEntRef);
-          listMarkingsSelected.add(_horaEntradaRef);
+          listMarkingsSelected.add(horaEntradaRef);
         }
       }
     } else {
@@ -222,7 +222,7 @@ class FormJustificationController extends GetxController {
     }
     if (findSalida.idDescripMarcacion == null) {
       if (schedule != null) {
-        _horaSalida = MarkingWorkerModel(
+        horaSalida = MarkingWorkerModel(
             fechahoraManual: schedule.fechahoraSalida,
             idDescripMarcacion: '04',
             esSolicitado: false,
@@ -231,7 +231,7 @@ class FormJustificationController extends GetxController {
             nombreDescripMarcacion: 'Hora salida');
 
         listColorsMarkingSelected.add(colorSal);
-        listMarkingsSelected.add(_horaSalida);
+        listMarkingsSelected.add(horaSalida);
       }
     } else {
       listColorsMarkingSelected.add(colorSal);

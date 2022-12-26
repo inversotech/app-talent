@@ -18,8 +18,8 @@ class LicensePermitPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<LicensePermitController>(
         init: LicensePermitController(approve: approve),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (controller) {
           return AppScreen(
@@ -99,9 +99,7 @@ class LicensePermitPage extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                              controller.dateModel.value.nameMonth +
-                                  ', ' +
-                                  controller.dateModel.value.year.toString(),
+                              '${controller.dateModel.value.nameMonth}, ${controller.dateModel.value.year}',
                               style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w400,
                                   color: ColorsApp.primary)),

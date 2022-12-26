@@ -28,15 +28,9 @@ class MarkingController extends GetxController {
   RxInt perPage = 7.obs;
   RxInt page = 1.obs;
   RxInt selectOption = 2.obs;
-  RxString selectOptionTitle = (DateTime.now()
-              .subtract(Duration(days: DateTime.now().weekday))
-              .day
-              .toString() +
-          ' al ' +
-          DateTime.now().day.toString() +
-          ' de ' +
-          DateFormat.MMM('es').format(DateTime.now()))
-      .obs;
+  RxString selectOptionTitle =
+      ('${DateTime.now().subtract(Duration(days: DateTime.now().weekday)).day} al ${DateTime.now().day} de ${DateFormat.MMM('es').format(DateTime.now())}')
+          .obs;
   @override
   void onReady() {
     initValues();
@@ -44,7 +38,7 @@ class MarkingController extends GetxController {
     super.onReady();
   }
 
-   void initValues() {
+  void initValues() {
     page.value = 1;
     perPage.value = 7;
     listData = [];
@@ -60,8 +54,7 @@ class MarkingController extends GetxController {
           capitalize(DateFormat.MMMM('es').format(dateResult));
       dateModel.year = int.parse(DateFormat.y().format(dateResult));
       selectOptionTitle.value =
-          (dateModel.nameMonth + ' del ' + dateModel.year.toString())
-              .toString();
+          ('${dateModel.nameMonth} del ${dateModel.year}').toString();
       getListData();
     }
   }
@@ -76,11 +69,8 @@ class MarkingController extends GetxController {
         lastDate: DateTime.now());
     if (date != null) {
       dateModel.date = DateFormat('y-MM-dd').format(date).toString();
-      selectOptionTitle.value = date.day.toString() +
-          ' de ' +
-          DateFormat.MMMM('es').format(date) +
-          ' del ' +
-          date.year.toString();
+      selectOptionTitle.value =
+          '${date.day} de ${DateFormat.MMMM('es').format(date)} del ${date.year}';
       getListData();
     }
   }
@@ -120,7 +110,7 @@ class MarkingController extends GetxController {
       'id_entidad': userPreferences.idEntity != null
           ? userPreferences.idEntity.toString()
           : '',
-     /*  'id_depto': userPreferences.idDeparment != null
+      /*  'id_depto': userPreferences.idDeparment != null
           ? userPreferences.idDeparment.toString()
           : '', */
       'id_trabajador': userPreferences.idWorker != null
@@ -142,7 +132,7 @@ class MarkingController extends GetxController {
     }
     final markingService = MarkingService();
     pagination = await markingService.assistMarkings(params);
-   List<dynamic> jsonList;
+    List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
       jsonList = [];
     } else {
@@ -308,14 +298,8 @@ class MarkingController extends GetxController {
                     .subtract(Duration(days: DateTime.now().weekday)));
                 dateModel.dateTo = DateFormat('y-MM-dd').format(DateTime.now());
                 selectOption.value = 2;
-                selectOptionTitle.value = DateTime.now()
-                        .subtract(Duration(days: DateTime.now().weekday))
-                        .day
-                        .toString() +
-                    ' al ' +
-                    DateTime.now().day.toString() +
-                    ' de ' +
-                    DateFormat.MMM('es').format(DateTime.now());
+                selectOptionTitle.value =
+                    '${DateTime.now().subtract(Duration(days: DateTime.now().weekday)).day} al ${DateTime.now().day} de ${DateFormat.MMM('es').format(DateTime.now())}';
                 Get.back();
                 getListData();
               },
@@ -339,7 +323,7 @@ class MarkingController extends GetxController {
                     capitalize(DateFormat.MMMM('es').format(DateTime.now()));
                 selectOption.value = 3;
                 selectOptionTitle.value =
-                    dateModel.nameMonth + ' del ' + dateModel.year.toString();
+                    '${dateModel.nameMonth} del ${dateModel.year}';
                 Get.back();
                 getListData();
               },

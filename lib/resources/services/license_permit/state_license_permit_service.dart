@@ -4,8 +4,8 @@ import 'package:lamb_talent/resources/providers/api.provider.dart';
 
 class StateLicensePermitService {
   Future<List<StateLicensePermitModel>> getStateLicensePermit() async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getAll(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getAll(
         endPoint: endPoints['comun']['license-permit-status']);
     //_apiProvider.dispose();
     if (response.success) {

@@ -66,33 +66,32 @@ class EventDetailController extends GetxController {
     await _listGroups();
     refreshController.loadNoData();
     loadingData.value = false;
-    print('detalle event');
     Get.until((route) => !Get.isDialogOpen!);
 
     // Get.back();
   }
 
   Future _getEvent() async {
-    final _notificationService = NotificationService();
-    final response = await _notificationService.getEevent(id);
+    final notificationService = NotificationService();
+    final response = await notificationService.getEevent(id);
     event = EventModel.fromJson(response.data);
     await _changeRelationPerson();
   }
 
   Future _changeRelationPerson() async {
-    final _notificationService = NotificationService();
-    final _userPref = UserPreferences();
-    final relationPerson = await _notificationService.getRelationPerson(
-        origen, id, _userPref.idPerson.toString());
+    final notificationService = NotificationService();
+    final userPref = UserPreferences();
+    final relationPerson = await notificationService.getRelationPerson(
+        origen, id, userPref.idPerson.toString());
     if (relationPerson.estaLeido == null || relationPerson.estaLeido == '0') {
       Map<String, String> params = {
         'origen': origen,
         'id_origen': id,
-        'id_persona': _userPref.idPerson.toString(),
+        'id_persona': userPref.idPerson.toString(),
         'esta_leido': '1'
       };
-      await _notificationService.changeRelationPerson(
-          origen, id, _userPref.idPerson.toString(), params);
+      await notificationService.changeRelationPerson(
+          origen, id, userPref.idPerson.toString(), params);
     }
     if (event.addBtnAsistir != null && event.addBtnAsistir == '1') {
       if (relationPerson.seraParticipante != null ||
@@ -106,8 +105,8 @@ class EventDetailController extends GetxController {
 
   Future _listGroups() async {
     final Map<String, String> params = {'origen': origen, 'id_origen': id};
-    final _notificationService = NotificationService();
-    listGroups = await _notificationService.getGroups(params);
+    final notificationService = NotificationService();
+    listGroups = await notificationService.getGroups(params);
   }
 
   goToLinkUrl(String link) async {
@@ -135,16 +134,16 @@ class EventDetailController extends GetxController {
 
   registerAssistance() async {
     loadingIndicator(onlyLoading: true, opacity: false);
-    final _notificationService = NotificationService();
-    final _userPref = UserPreferences();
+    final notificationService = NotificationService();
+    final userPref = UserPreferences();
     Map<String, String> params = {
       'origen': origen,
       'id_origen': id,
-      'id_persona': _userPref.idPerson.toString(),
+      'id_persona': userPref.idPerson.toString(),
       'sera_participante': '1'
     };
-    final changeRegister = await _notificationService.changeRelationPerson(
-        origen, id, _userPref.idPerson.toString(), params);
+    final changeRegister = await notificationService.changeRelationPerson(
+        origen, id, userPref.idPerson.toString(), params);
     if (changeRegister.success) {
       buttonAssitance.value = false;
     }

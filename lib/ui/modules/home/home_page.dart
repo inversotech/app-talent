@@ -23,8 +23,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext buildContext) {
     return GetBuilder<HomeController>(
       init: HomeController(),
-      didUpdateWidget: (_, _stateBuilder) {
-        _stateBuilder.controller!.onInit();
+      didUpdateWidget: (_, stateBuilder) {
+        stateBuilder.controller!.onInit();
       },
       builder: (_) {
         return Obx(() => !controller.loadingData.value
@@ -292,13 +292,13 @@ class HomePage extends StatelessWidget {
                                             ['codigo'] ==
                                         '03'
                                 ? Builder(builder: (context) {
-                                    String _code = controller
+                                    String code = controller
                                         .dataCarousel!['vacacion']['codigo']
                                         .toString();
-                                    String _text = _code == '04'
+                                    String text = code == '04'
                                         ? ' para salir de vacaciones'
                                         : ' para regresar de vacaciones';
-                                    int _dateVacation = DateTime.parse(_code ==
+                                    int dateVacation = DateTime.parse(code ==
                                                 '04'
                                             ? controller
                                                 .dataCarousel!['vacacion']
@@ -309,33 +309,23 @@ class HomePage extends StatelessWidget {
                                                     ['vacacion']['fecha_fin']
                                                 .toString())
                                         .millisecondsSinceEpoch;
-                                    return _code == '04' || _code == '03'
+                                    return code == '04' || code == '03'
                                         ? CountdownTimer(
-                                            endTime: _dateVacation,
+                                            endTime: dateVacation,
                                             onEnd: () {},
                                             widgetBuilder: (context, time) {
                                               String textTime = (time!.days !=
                                                           null
-                                                      ? time.days.toString() +
-                                                          'd-'
+                                                      ? '${time.days}d-'
                                                       : '') +
                                                   (time.hours != null
-                                                      ? time.hours
-                                                              .toString()
-                                                              .padLeft(2, '0') +
-                                                          'h-'
+                                                      ? '${time.hours.toString().padLeft(2, '0')}h-'
                                                       : '') +
                                                   (time.min != null
-                                                      ? time.min
-                                                              .toString()
-                                                              .padLeft(2, '0') +
-                                                          'm-'
+                                                      ? '${time.min.toString().padLeft(2, '0')}m-'
                                                       : '') +
                                                   (time.sec != null
-                                                      ? time.sec
-                                                              .toString()
-                                                              .padLeft(2, '0') +
-                                                          's'
+                                                      ? '${time.sec.toString().padLeft(2, '0')}s'
                                                       : '00s');
                                               return Padding(
                                                 padding: const EdgeInsets.only(
@@ -364,7 +354,7 @@ class HomePage extends StatelessWidget {
                                                                   fontSize:
                                                                       16.0)),
                                                       TextSpan(
-                                                          text: ' ' + _text,
+                                                          text: ' $text',
                                                           style: GoogleFonts
                                                               .montserrat(
                                                                   color: ColorsApp

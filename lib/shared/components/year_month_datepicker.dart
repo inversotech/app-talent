@@ -5,17 +5,18 @@ import 'package:lamb_talent/core/functions/capitalize.dart';
 
 class YearMonthPicker extends StatefulWidget {
   final DateTime selectedDate;
-  const YearMonthPicker({Key? key, required this.selectedDate}) : super(key: key);
+  const YearMonthPicker({Key? key, required this.selectedDate})
+      : super(key: key);
 
   @override
-  _YearMonthPickerState createState() =>
+  YearMonthPickerState createState() =>
       // ignore: no_logic_in_create_state
-      _YearMonthPickerState(selectedDate: selectedDate);
+      YearMonthPickerState(selectedDate: selectedDate);
 }
 
-class _YearMonthPickerState extends State<YearMonthPicker> {
+class YearMonthPickerState extends State<YearMonthPicker> {
   DateTime selectedDate;
-  _YearMonthPickerState({required this.selectedDate});
+  YearMonthPickerState({required this.selectedDate});
   PageController pageController = PageController();
   int displayedYear = 0;
   @override
@@ -115,15 +116,16 @@ class _YearMonthPickerState extends State<YearMonthPicker> {
                 Row(
                   children: <Widget>[
                     IconButton(
-                      icon: const Icon(Icons.keyboard_arrow_up, color: Colors.white),
+                      icon: const Icon(Icons.keyboard_arrow_up,
+                          color: Colors.white),
                       onPressed: () => pageController.animateToPage(
                           displayedYear - 1,
                           duration: const Duration(milliseconds: 400),
                           curve: Curves.easeInOut),
                     ),
                     IconButton(
-                      icon:
-                          const Icon(Icons.keyboard_arrow_down, color: Colors.white),
+                      icon: const Icon(Icons.keyboard_arrow_down,
+                          color: Colors.white),
                       onPressed: () => pageController.animateToPage(
                           displayedYear + 1,
                           duration: const Duration(milliseconds: 400),

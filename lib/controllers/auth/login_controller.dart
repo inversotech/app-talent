@@ -45,9 +45,9 @@ class LoginController extends GetxController {
       'no_caduca': 'S'
     };
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-    final _userPref = UserPreferences();
+    final userPref = UserPreferences();
     String serial = '';
-    OneSignal.shared.setExternalUserId(_userPref.tokenNotify);
+    OneSignal.shared.setExternalUserId(userPref.tokenNotify);
     String deviceId = await PlatformDeviceId.getDeviceId ?? '';
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
@@ -70,18 +70,18 @@ class LoginController extends GetxController {
     params['serial'] = serial;
     params['isvirtual'] = '';
     params['device_source'] = 'APP_UPN';
-    params['token_notify'] = _userPref.tokenNotify;
+    params['token_notify'] = userPref.tokenNotify;
     loadingIndicator(onlyLoading: true, opacity: false);
-    final _apiProvider = ApiProvider();
-    final resp = await _apiProvider.loginLamb(params, checkCredencial.value);
+    final apiProvider = ApiProvider();
+    final resp = await apiProvider.loginLamb(params, checkCredencial.value);
     //_apiProvider.dispose();
 
     if (resp.success) {
       final resp = await _authService.userInfo();
       if (resp.success) {
         Get.until((route) => !Get.isDialogOpen!);
-        if (_userPref.menu!.isNotEmpty) {
-          Get.offAllNamed(_userPref.menu![0].url.toString());
+        if (userPref.menu!.isNotEmpty) {
+          Get.offAllNamed(userPref.menu![0].url.toString());
         }
       }
     }

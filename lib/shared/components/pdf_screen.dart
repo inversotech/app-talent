@@ -23,10 +23,10 @@ class PDFScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _PDFScreenState createState() => _PDFScreenState();
+  PDFScreenState createState() => PDFScreenState();
 }
 
-class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
+class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   final Completer<PDFViewController> _controller =
       Completer<PDFViewController>();
   int pages = 0;
@@ -45,13 +45,13 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                   icon: const Icon(Icons.download),
                   onPressed: () async {
                     if (widget.urlFileDownload.isNotEmpty) {
-                      final _accountStatusService = AccountStatusService();
+                      final accountStatusService = AccountStatusService();
                       final Map<String, String> params = {
                         'p': widget.clave.toString(),
                       };
                       loadingIndicator(
                           onlyLoading: true, text: 'Descargando ...');
-                      await _accountStatusService.saveDownloadPaymentTicket(
+                      await accountStatusService.saveDownloadPaymentTicket(
                           widget.urlFileDownload, widget.titlePdf, params);
                       Navigator.pop(context);
                     }
@@ -73,9 +73,9 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
             fitPolicy: FitPolicy.BOTH,
             preventLinkNavigation:
                 false, // if set to true the link is handled in flutter
-            onRender: (_pages) {
+            onRender: (pages) {
               setState(() {
-                pages = _pages ?? 0;
+                pages = pages ?? 0;
                 isReady = true;
               });
             },

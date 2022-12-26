@@ -86,18 +86,14 @@ class CarouselSliderItem extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        detail![index]['cantidad']
-                                                .toString()
-                                                .padLeft(2, '0') +
-                                            ' ',
+                                        '${detail![index]['cantidad'].toString().padLeft(2, '0')} ',
                                         style: GoogleFonts.montserrat(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 20.0,
                                             color: ColorsApp.primary),
                                       ),
                                       Text(
-                                        detail![index]['nombre'].toString() +
-                                            ' hasta ',
+                                        '${detail![index]['nombre']} hasta ',
                                         style: GoogleFonts.montserrat(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 16.0,

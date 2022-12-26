@@ -3,10 +3,9 @@ import 'package:lamb_talent/resources/models/models.dart';
 import 'package:lamb_talent/resources/providers/api.provider.dart';
 
 class HolidayService {
-
   Future<PaginationModel> getWorkersHoliday(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['benefits']['pro-holiday'], params: params);
     //_apiProvider.dispose();
     if (response.success) {
@@ -19,8 +18,8 @@ class HolidayService {
   }
 
   Future<List<HolidayModel>> getHolidays(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['workerportal']['holiday'], params: params);
     //_apiProvider.dispose();
     if (response.success) {
@@ -37,8 +36,8 @@ class HolidayService {
 
   Future<ApiResponse> signHoliday(
       Map<String, String> params, String iRrolVacacion) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.putNotId(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.putNotId(
         endPoint: endPoints['benefits']['holiday'] +
             '/pro-holidays/' +
             iRrolVacacion +
@@ -50,10 +49,9 @@ class HolidayService {
 
   Future<ApiResponse> changeStatusHoliday(
       String id, Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.putWithId(
-        endPoint: endPoints['benefits']['pro-holiday'].toString() +
-            '/update-vacacion',
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.putWithId(
+        endPoint: '${endPoints['benefits']['pro-holiday']}/update-vacacion',
         id: id,
         params: params);
     //_apiProvider.dispose();

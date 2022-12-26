@@ -16,8 +16,8 @@ class Likes extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<LikesController>(
         init: LikesController(origen: origen, idOrigen: idOrigen),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (controller) {
           return AppScreen(
@@ -119,7 +119,7 @@ class Likes extends StatelessWidget {
               children: List.generate(controller.listData.length, (index) {
             final item = controller.listData[index];
             return Padding(
-              padding: const EdgeInsets.only(bottom:12.0),
+              padding: const EdgeInsets.only(bottom: 12.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -131,7 +131,8 @@ class Likes extends StatelessWidget {
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
                           imageUrl: item.personaAvatar.toString(),
-                          placeholder: (context, url) => const Icon(Icons.person),
+                          placeholder: (context, url) =>
+                              const Icon(Icons.person),
                           errorWidget: (context, url, error) {
                             return const Icon(Icons.person);
                           },
@@ -140,7 +141,7 @@ class Likes extends StatelessWidget {
                   Flexible(
                     child: Padding(
                         padding: const EdgeInsets.only(left: 12.0, right: 8.0),
-                        child: Text(item.personaFullname.toString() + ' ',
+                        child: Text('${item.personaFullname} ',
                             style: GoogleFonts.montserrat(
                                 color: ColorsApp.primary,
                                 fontWeight: FontWeight.w500,

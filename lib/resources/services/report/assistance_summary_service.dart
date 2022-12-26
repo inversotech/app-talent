@@ -6,8 +6,8 @@ import 'package:lamb_talent/resources/providers/api.provider.dart';
 class AssistanceSummaryService {
   Future<List<AssistanceSummaryModel>> getAssistanceSummaryChart(
       Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['report']['monthly-assistance-summary-chart'],
         params: params);
     //_apiProvider.dispose();
@@ -24,20 +24,18 @@ class AssistanceSummaryService {
   }
 
   Future<ApiResponse> getAssistanceSummary(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['report']['monthly-assistance-summary'],
         params: params);
     //_apiProvider.dispose();
     return response;
   }
 
-  
   Future<ApiResponse> getInfoAssistance(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
-        endPoint: endPoints['report']['info-assistance'],
-        params: params);
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
+        endPoint: endPoints['report']['info-assistance'], params: params);
     return response;
   }
 }

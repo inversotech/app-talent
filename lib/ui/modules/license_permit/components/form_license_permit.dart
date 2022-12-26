@@ -27,6 +27,98 @@ class FormLicensePermit extends StatelessWidget {
               scrollController: controller.scrollController,
               enablePullDown: false,
               enablePullUp: false,
+              floatingActionButton: Container(
+                padding: const EdgeInsets.only(left: 32.0),
+                child: SingleChildScrollView(
+                  child: controller.formData.value.idLicenciaPermiso != null &&
+                          controller.formData.value.idEstadoLicaPer == '01'
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+                                  alignment: Alignment.center,
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      return ColorsApp
+                                          .danger; // Use the component's default.
+                                    },
+                                  ),
+                                  shape: MaterialStateProperty.resolveWith<
+                                      RoundedRectangleBorder>(
+                                    (Set<MaterialState> states) {
+                                      return RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              25)); // Use the component's default.
+                                    },
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: Row(
+                                    children: const [
+                                      Icon(Icons.save_alt_outlined,
+                                          color: Colors.white),
+                                      Text(
+                                        'anular',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ))
+                          ],
+                        )
+                      : controller.formData.value.idLicenciaPermiso == null
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      controller.submit();
+                                    },
+                                    style: ButtonStyle(
+                                      alignment: Alignment.center,
+                                      backgroundColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                          return ColorsApp
+                                              .success; // Use the component's default.
+                                        },
+                                      ),
+                                      shape: MaterialStateProperty.resolveWith<
+                                          RoundedRectangleBorder>(
+                                        (Set<MaterialState> states) {
+                                          return RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(
+                                                  25)); // Use the component's default.
+                                        },
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: Row(
+                                        children: [
+                                          Image.asset('assets/icons/save.png',
+                                              height: 30,
+                                              width: 30,
+                                              color: Colors.white),
+                                          const Text(
+                                            'enviar solicitud',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ))
+                              ],
+                            )
+                          : Container(),
+                ),
+              ),
               child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
                 return Obx(() => !controller.loadingData.value
@@ -129,98 +221,7 @@ class FormLicensePermit extends StatelessWidget {
                         ),
                       )
                     : Container());
-              }),
-              floatingActionButton: Container(
-                padding: const EdgeInsets.only(left: 32.0),
-                child: SingleChildScrollView(
-                  child: controller.formData.value.idLicenciaPermiso != null &&
-                          controller.formData.value.idEstadoLicaPer == '01'
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                  alignment: Alignment.center,
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                      return ColorsApp
-                                          .danger; // Use the component's default.
-                                    },
-                                  ),
-                                  shape: MaterialStateProperty.resolveWith<
-                                      RoundedRectangleBorder>(
-                                    (Set<MaterialState> states) {
-                                      return RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              25)); // Use the component's default.
-                                    },
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Row(
-                                    children: const [
-                                      Icon(Icons.save_alt_outlined,
-                                          color: Colors.white),
-                                      Text(
-                                        'anular',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ))
-                          ],
-                        )
-                      : controller.formData.value.idLicenciaPermiso == null
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextButton(
-                                    onPressed: () {
-                                      controller.submit();
-                                    },
-                                    style: ButtonStyle(
-                                      alignment: Alignment.center,
-                                      backgroundColor: MaterialStateProperty
-                                          .resolveWith<Color>(
-                                        (Set<MaterialState> states) {
-                                          return ColorsApp
-                                              .success; // Use the component's default.
-                                        },
-                                      ),
-                                      shape: MaterialStateProperty.resolveWith<
-                                          RoundedRectangleBorder>(
-                                        (Set<MaterialState> states) {
-                                          return RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(
-                                                  25)); // Use the component's default.
-                                        },
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      child: Row(
-                                        children: [
-                                          Image.asset('assets/icons/save.png',
-                                              height: 30,
-                                              width: 30,
-                                              color: Colors.white),
-                                          const Text(
-                                            'enviar solicitud',
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        ],
-                                      ),
-                                    ))
-                              ],
-                            )
-                          : Container(),
-                ),
-              ));
+              }));
         });
   }
 
@@ -505,7 +506,7 @@ class FormLicensePermit extends StatelessWidget {
           } else if (controller.formData.value.periodo == 'D' &&
               controller.formData.value.fechaDesde != null) {
             final fechaDesde = DateTime.parse(
-                controller.formData.value.fechaDesde.toString() + ' 00:00:00');
+                '${controller.formData.value.fechaDesde} 00:00:00');
             DateTime fechaHasta = fechaDesde;
             if (controller.diasFijo.value > 0) {
               fechaHasta = fechaDesde
@@ -564,11 +565,11 @@ class FormLicensePermit extends StatelessWidget {
         format: format,
         onShowPicker: (context, currentValue) async {
           DateTime firstdate = DateTime.parse(
-              controller.formData.value.fechaDesde.toString() + ' 00:00:00');
+              '${controller.formData.value.fechaDesde} 00:00:00');
           DateTime initialDate = DateTime.parse(
-              controller.formData.value.fechaDesde.toString() + ' 00:00:00');
+              '${controller.formData.value.fechaDesde} 00:00:00');
           DateTime lastDate = DateTime.parse(
-              controller.formData.value.fechaDesde.toString() + ' 00:00:00');
+              '${controller.formData.value.fechaDesde} 00:00:00');
           if (controller.diasFijo.value > 0) {
             firstdate =
                 firstdate.add(Duration(days: (controller.diasFijo.value - 1)));
@@ -578,12 +579,12 @@ class FormLicensePermit extends StatelessWidget {
                 lastDate.add(Duration(days: (controller.diasFijo.value - 1)));
           } else if (controller.maxDias.value > 0) {
             initialDate = DateTime.parse(
-                controller.formData.value.fechaHasta.toString() + ' 00:00:00');
+                '${controller.formData.value.fechaHasta} 00:00:00');
             lastDate =
                 lastDate.add(Duration(days: (controller.maxDias.value - 1)));
           } else {
             initialDate = DateTime.parse(
-                controller.formData.value.fechaHasta.toString() + ' 00:00:00');
+                '${controller.formData.value.fechaHasta} 00:00:00');
             lastDate = lastDate = DateTime(DateTime.now().year + 1);
           }
           final date = await showDatePicker(
@@ -644,9 +645,8 @@ class FormLicensePermit extends StatelessWidget {
         enabled:
             controller.formData.value.idEstadoLicaPer != '01' ? false : true,
         initialValue: controller.formData.value.horaInicio != null
-            ? DateTime.parse(DateFormat('y-MM-dd').format(DateTime.now()) +
-                ' ' +
-                controller.formData.value.horaInicio.toString())
+            ? DateTime.parse(
+                '${DateFormat('y-MM-dd').format(DateTime.now())} ${controller.formData.value.horaInicio}')
             : null,
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -711,9 +711,8 @@ class FormLicensePermit extends StatelessWidget {
         enabled:
             controller.formData.value.idEstadoLicaPer != '01' ? false : true,
         initialValue: controller.formData.value.horaFin != null
-            ? DateTime.parse(DateFormat('y-MM-dd').format(DateTime.now()) +
-                ' ' +
-                controller.formData.value.horaFin.toString())
+            ? DateTime.parse(
+                '${DateFormat('y-MM-dd').format(DateTime.now())} ${controller.formData.value.horaFin}')
             : null,
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,

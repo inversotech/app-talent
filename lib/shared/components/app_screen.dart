@@ -143,7 +143,7 @@ class AppScreen extends StatelessWidget {
     if (userPreferences.fullnamePerson != null) {
       if (!userPreferences.isWorkerChild) {
         final split = userPreferences.fullnamePerson.toString().split(' ');
-        fullname = split[0] + '!';
+        fullname = '${split[0]}!';
       } else {
         fullname = userPreferences.fullnamePerson.toString();
       }
@@ -391,8 +391,8 @@ class AppScreen extends StatelessWidget {
               'page': '1',
               'search': query.toString()
             };
-            final _workerService = WorkerService();
-            final list = await _workerService.getMyWorkers(params);
+            final workerService = WorkerService();
+            final list = await workerService.getMyWorkers(params);
             listPersons = list.data;
             return listPersons;
           },

@@ -64,8 +64,8 @@ class JustificationController extends GetxController {
 
   Future getActions() async {
     final Map<String, String> params = {'id_modulo': codeModule.value};
-    final _authService = AuthService();
-    final actions = await _authService.getActionsByModule(params);
+    final authService = AuthService();
+    final actions = await authService.getActionsByModule(params);
     isJefeArea.value = actions
         .where((element) =>
             element.clave.toString().toUpperCase() == 'APPROVE_JUST_AREA')

@@ -20,9 +20,8 @@ class CustomTheme {
         // Decide how you want to apply your own custom them, to the MaterialApp
         brightness: isDark ? Brightness.dark : Brightness.light,
         primary: primary,
-        primaryVariant: primaryVariant,
+        // primaryVariant: primaryVariant,
         secondary: accent,
-        secondaryVariant: accent,
         background: Colors.white,
         surface: surface,
         onBackground: txtColor,
@@ -36,10 +35,12 @@ class CustomTheme {
     var t = ThemeData.from(textTheme: textTheme, colorScheme: colorScheme)
         // We can also add on some extra properties that ColorScheme seems to miss
         .copyWith(
-          
             pageTransitionsTheme: PageTransitionsTheme(
               // makes all platforms that can run Flutter apps display routes without any animation
-              builders: { for (var k in TargetPlatform.values.toList()) k : const _InanimatePageTransitionsBuilder() },
+              builders: {
+                for (var k in TargetPlatform.values.toList())
+                  k: const _InanimatePageTransitionsBuilder()
+              },
             ),
             /*buttonTheme: ButtonThemeData(
               colorScheme: colorScheme,

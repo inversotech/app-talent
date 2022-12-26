@@ -61,8 +61,8 @@ class NotificationDetailController extends GetxController {
   }
 
   Future _getNotification() async {
-    final _notificationService = NotificationService();
-    final response = await _notificationService.getNotification(id);
+    final notificationService = NotificationService();
+    final response = await notificationService.getNotification(id);
     notification = NotificationModel.fromJson(response.data);
     if (notification.addVideo == '1' &&
         notification.videoUrl != null &&
@@ -84,22 +84,22 @@ class NotificationDetailController extends GetxController {
   }
 
   Future _changeRelationPerson() async {
-    final _notificationService = NotificationService();
-    final _userPref = UserPreferences();
+    final notificationService = NotificationService();
+    final userPref = UserPreferences();
     Map<String, String> params = {
       'origen': origen,
       'id_origen': id,
-      'id_persona': _userPref.idPerson.toString(),
+      'id_persona': userPref.idPerson.toString(),
       'esta_leido': '1'
     };
-    await _notificationService.changeRelationPerson(
-        origen, id, _userPref.idPerson.toString(), params);
+    await notificationService.changeRelationPerson(
+        origen, id, userPref.idPerson.toString(), params);
   }
 
   Future _listGroups() async {
     final Map<String, String> params = {'origen': origen, 'id_origen': id};
-    final _notificationService = NotificationService();
-    listGroups = await _notificationService.getGroups(params);
+    final notificationService = NotificationService();
+    listGroups = await notificationService.getGroups(params);
   }
 
   goToLinkUrl(String link) async {

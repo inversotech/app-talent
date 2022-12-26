@@ -19,8 +19,8 @@ class NotificationDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<NotificationDetailController>(
         init: NotificationDetailController(id: id),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (controller) {
           return AppScreen(
@@ -131,7 +131,8 @@ class NotificationDetail extends StatelessWidget {
                   style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.w400, fontSize: 16.0)),
               const SizedBox(height: 8.0),
-              controller.notification.imagenUrl != null && !controller.notification.imagenUrl!.contains('empty')
+              controller.notification.imagenUrl != null &&
+                      !controller.notification.imagenUrl!.contains('empty')
                   ? ClipRRect(
                       child: CachedNetworkImage(
                         fit: BoxFit.cover,

@@ -40,7 +40,7 @@ class Detail extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     color: ColorsApp.primary,
                     fontSize: 18.0)),
-                    const SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Stack(
               children: [
                 listData.isNotEmpty
@@ -126,29 +126,36 @@ class Detail extends StatelessWidget {
                                         separatorBuilder: (context, index) {
                                           return const Divider(
                                               height: 1,
-                                              color: ColorsApp.primary,thickness: 1);
+                                              color: ColorsApp.primary,
+                                              thickness: 1);
                                         },
                                         itemBuilder: (context, index) {
                                           final Map dataItem = items[index];
                                           return Padding(
-                                            padding: const EdgeInsets.only(bottom: 8.0,top: 8.0),
+                                            padding: const EdgeInsets.only(
+                                                bottom: 8.0, top: 8.0),
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Flexible(
                                                   child: Row(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
                                                     children: [
                                                       CircleAvatar(
                                                         radius: 16,
+                                                        backgroundColor:
+                                                            ColorsApp.primary,
                                                         child: Text(
-                                                            (index + 1).toString(),
+                                                            (index + 1)
+                                                                .toString(),
                                                             style: GoogleFonts
                                                                 .montserrat(
                                                                     fontWeight:
@@ -158,13 +165,15 @@ class Detail extends StatelessWidget {
                                                                         .white,
                                                                     fontSize:
                                                                         16.0)),
-                                                        backgroundColor:
-                                                            ColorsApp.primary,
                                                       ),
-                                                      const SizedBox(width: 4.0),
+                                                      const SizedBox(
+                                                          width: 4.0),
                                                       Flexible(
                                                         child: Padding(
-                                                          padding: const EdgeInsets.only(top: 4.0),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 4.0),
                                                           child: Text(
                                                               dataItem.containsKey(
                                                                       'comentario')
@@ -172,17 +181,18 @@ class Detail extends StatelessWidget {
                                                                           'comentario']
                                                                       .toString())
                                                                   : '',
-                                                              style: GoogleFonts
-                                                                  .montserrat(
-                                                                    fontSize: 14.0,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400,
-                                                                      color: ColorsApp
-                                                                          .primary)),
+                                                              style: GoogleFonts.montserrat(
+                                                                  fontSize:
+                                                                      14.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: ColorsApp
+                                                                      .primary)),
                                                         ),
                                                       ),
-                                                      const SizedBox(width: 6.0),
+                                                      const SizedBox(
+                                                          width: 6.0),
                                                     ],
                                                   ),
                                                 ),
@@ -194,19 +204,20 @@ class Detail extends StatelessWidget {
                                                   children: [
                                                     Text(
                                                         format
-                                                            .format(double.parse(
-                                                                dataItem.containsKey(
+                                                            .format(double.parse(dataItem
+                                                                    .containsKey(
                                                                         'valor')
-                                                                    ? dataItem[
-                                                                            'valor']
-                                                                        .toString()
-                                                                    : '0'))
+                                                                ? dataItem[
+                                                                        'valor']
+                                                                    .toString()
+                                                                : '0'))
                                                             .toString(),
-                                                        style:
-                                                            GoogleFonts.montserrat(
-                                                              fontSize: 16.0,
+                                                        style: GoogleFonts
+                                                            .montserrat(
+                                                                fontSize: 16.0,
                                                                 fontWeight:
-                                                                    FontWeight.w500,
+                                                                    FontWeight
+                                                                        .w500,
                                                                 color: ColorsApp
                                                                     .primary)),
                                                     Text(
@@ -220,10 +231,11 @@ class Detail extends StatelessWidget {
                                                                 .format(
                                                                     'dd|MM|yyyy')
                                                             : '',
-                                                        style:
-                                                            GoogleFonts.montserrat(
+                                                        style: GoogleFonts
+                                                            .montserrat(
                                                                 fontWeight:
-                                                                    FontWeight.w500,
+                                                                    FontWeight
+                                                                        .w500,
                                                                 color: ColorsApp
                                                                     .primary,
                                                                 fontSize: 10.0))
@@ -248,7 +260,8 @@ class Detail extends StatelessWidget {
                     : Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Center(
-                          child: Text('No se encontró información para mostrar.',
+                          child: Text(
+                              'No se encontró información para mostrar.',
                               style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w400,
                                   color: ColorsApp.primary)),

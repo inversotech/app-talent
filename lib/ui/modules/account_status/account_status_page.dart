@@ -18,8 +18,8 @@ class AccountStatusPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<AccountStatusController>(
         init: AccountStatusController(),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (_) {
           return Obx(() => !controller.loadingData.value

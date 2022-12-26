@@ -212,21 +212,21 @@ class DepositedHelpTravel extends StatelessWidget {
   }
 
   void _getItemsIncome(BuildContext context) async {
-    final _accountStatusService = AccountStatusService();
-    final _userPreferences = UserPreferences();
+    final accountStatusService = AccountStatusService();
+    final userPreferences = UserPreferences();
     final Map<String, String> params = {
-      'id_entidad': _userPreferences.idEntity.toString(),
+      'id_entidad': userPreferences.idEntity.toString(),
       'id_anho': dateModel.year.toString(),
       'id_mes': dateModel.month.toString(),
-      'id_persona': _userPreferences.idPerson.toString(),
-      'id_cta_cte': _userPreferences.nroDocument.toString()
+      'id_persona': userPreferences.idPerson.toString(),
+      'id_cta_cte': userPreferences.nroDocument.toString()
     };
     // ignore: prefer_typing_uninitialized_variables
     var resp;
     if (code == 'help') {
-      resp = await _accountStatusService.getHelpsIncomes(params);
+      resp = await accountStatusService.getHelpsIncomes(params);
     } else if (code == 'travel') {
-      resp = await _accountStatusService.getTravelsIncomes(params);
+      resp = await accountStatusService.getTravelsIncomes(params);
     }
     List detail = [];
     Map data = {};
@@ -247,21 +247,21 @@ class DepositedHelpTravel extends StatelessWidget {
   }
 
   void _getItemsDiscount(BuildContext context) async {
-    final _accountStatusService = AccountStatusService();
-    final _userPreferences = UserPreferences();
+    final accountStatusService = AccountStatusService();
+    final userPreferences = UserPreferences();
     final Map<String, String> params = {
-      'id_entidad': _userPreferences.idEntity.toString(),
+      'id_entidad': userPreferences.idEntity.toString(),
       'id_anho': dateModel.year.toString(),
       'id_mes': dateModel.month.toString(),
-      'id_persona': _userPreferences.idPerson.toString(),
-      'id_cta_cte': _userPreferences.nroDocument.toString()
+      'id_persona': userPreferences.idPerson.toString(),
+      'id_cta_cte': userPreferences.nroDocument.toString()
     };
     // ignore: prefer_typing_uninitialized_variables
     var resp;
     if (code == 'help') {
-      resp = await _accountStatusService.getHelpsDiscounts(params);
+      resp = await accountStatusService.getHelpsDiscounts(params);
     } else if (code == 'travel') {
-      resp = await _accountStatusService.getTravelsDiscounts(params);
+      resp = await accountStatusService.getTravelsDiscounts(params);
     }
     List detail = [];
     Map data = {};

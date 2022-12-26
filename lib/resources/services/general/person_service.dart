@@ -3,8 +3,8 @@ import 'package:lamb_talent/resources/providers/api.provider.dart';
 
 class PersonService {
   Future<dynamic> getSign(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['comun']['person-signature'], params: params);
     //_apiProvider.dispose();
     if (response.success) {

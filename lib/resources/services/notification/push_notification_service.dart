@@ -29,15 +29,14 @@ class PushNotificationService {
   }
 
   static Future _onMessageOpenAppHandler(RemoteMessage message) async {
-    print('app second plant');
     _openNotificationDetail(message.data);
   }
 
   static Future initializeAppFirebase() async {
     await Firebase.initializeApp();
     token = await FirebaseMessaging.instance.getToken();
-    final _userPref = UserPreferences();
-    _userPref.tokenNotify = token.toString();
+    final userPref = UserPreferences();
+    userPref.tokenNotify = token.toString();
     FirebaseMessaging.onBackgroundMessage(_backgroudHandler);
     FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenAppHandler);
     FirebaseMessaging.onMessage.listen(_onMessageHandler);

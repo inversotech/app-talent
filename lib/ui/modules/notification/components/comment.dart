@@ -32,8 +32,8 @@ class Comment extends StatelessWidget {
             idOrigen: idOrigen,
             idParent: idParent,
             indexOrigen: indexOrigen),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (controller) {
           return AppScreen(
@@ -246,8 +246,7 @@ class Comment extends StatelessWidget {
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.visible,
                                     text: TextSpan(
-                                      text:
-                                          item.personaFullname.toString() + ' ',
+                                      text: '${item.personaFullname} ',
                                       style: GoogleFonts.montserrat(
                                           color: ColorsApp.primary,
                                           fontWeight: FontWeight.w500,
@@ -370,13 +369,7 @@ class Comment extends StatelessWidget {
                                 controller.fnShowComments(item, index);
                               },
                               child: Text(
-                                  'Ver ' +
-                                      (item.comentarios!.isEmpty
-                                          ? item.countComentarios.toString() +
-                                              (item.countComentarios! > 1
-                                                  ? ' respuestas'
-                                                  : ' respuesta')
-                                          : 'más respuestas'),
+                                  'Ver ${item.comentarios!.isEmpty ? item.countComentarios.toString() + (item.countComentarios! > 1 ? ' respuestas' : ' respuesta') : 'más respuestas'}',
                                   style: GoogleFonts.montserrat(
                                       color: ColorsApp.control,
                                       fontWeight: FontWeight.w400,
@@ -458,8 +451,7 @@ class Comment extends StatelessWidget {
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.visible,
                                     text: TextSpan(
-                                      text:
-                                          item.personaFullname.toString() + ' ',
+                                      text: '${item.personaFullname} ',
                                       style: GoogleFonts.montserrat(
                                           color: ColorsApp.primary,
                                           fontWeight: FontWeight.w500,

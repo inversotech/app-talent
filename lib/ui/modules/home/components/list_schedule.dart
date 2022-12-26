@@ -53,9 +53,7 @@ void showModalSchedule(DateTime fecha) async {
                             color: ColorsApp.primary,
                             fontSize: 16.0)),
                     Text(
-                        capitalize(DateFormat.EEEE('es').format(fecha)) +
-                            ' ' +
-                            DateFormat('dd|MM|yyyy').format(fecha),
+                        '${capitalize(DateFormat.EEEE('es').format(fecha))} ${DateFormat('dd|MM|yyyy').format(fecha)}',
                         style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w600,
                             color: ColorsApp.primary,

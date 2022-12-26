@@ -25,8 +25,8 @@ class ChangeEntityController extends GetxController {
 
   void getEntities() async {
     loadingEntities.value = true;
-    final _entityService = EntityService();
-    final list = await _entityService.getListMyEntities();
+    final entityService = EntityService();
+    final list = await entityService.getListMyEntities();
     listMyEntities = [];
     for (var element in list) {
       listMyEntities.add({
@@ -43,8 +43,8 @@ class ChangeEntityController extends GetxController {
   void fnGetDeptos(String val) async {
     listMyDeptos = [];
     loadingDeptos.value = true;
-    final _deparmentService = DeparmentsService();
-    List<Deparment> list = await _deparmentService
+    final deparmentService = DeparmentsService();
+    List<Deparment> list = await deparmentService
         .getListMyDeparments({'id_entidad': val.toString()});
     listMyDeptosG = list;
     for (var element in list) {
@@ -62,8 +62,8 @@ class ChangeEntityController extends GetxController {
       'id_entidad': inputFieldEntity.text.toString(),
       'id_depto': inputFieldDepto.text.toString()
     };
-    final _authService = AuthService();
-    final response = await _authService.changeEntityDepto(params);
+    final authService = AuthService();
+    final response = await authService.changeEntityDepto(params);
     if (response.success) {
       Get.offAllNamed(RoutesName.checkAuth);
     }

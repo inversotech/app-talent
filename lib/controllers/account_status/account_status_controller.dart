@@ -61,8 +61,8 @@ class AccountStatusController extends GetxController {
     final Map<String, String> params = {
       'codigo_acceso': codeModule.value.toString()
     };
-    final _authService = AuthService();
-    final resp = await _authService.getAccessNivel(params);
+    final authService = AuthService();
+    final resp = await authService.getAccessNivel(params);
     userPreferences.idNivelAcceso = resp.accesoNivel!.idAccesoNivel != null
         ? resp.accesoNivel!.idAccesoNivel.toString()
         : '';
@@ -75,18 +75,18 @@ class AccountStatusController extends GetxController {
   }
 
   Future _listDataGeneral() async {
-    final String params = 'p_id_entidad=' +
+    final String params = 'p_id_entidad='.toString() +
         userPreferences.idEntity.toString() +
-        ';p_id_anho=' +
+        ';p_id_anho='.toString() +
         dateModel.value.year.toString() +
-        ';p_id_mes=' +
+        ';p_id_mes='.toString() +
         dateModel.value.month.toString() +
-        ';p_id_persona=' +
+        ';p_id_persona='.toString() +
         userPreferences.idPerson.toString() +
-        ';p_id_cta_cte=' +
+        ';p_id_cta_cte='.toString() +
         userPreferences.nroDocument.toString();
-    final _accountStatusService = AccountStatusService();
-    dataGeneral = await _accountStatusService.getAccountStatus(params);
+    final accountStatusService = AccountStatusService();
+    dataGeneral = await accountStatusService.getAccountStatus(params);
     loadingGeneral.value = true;
     loadingGeneral.value = false;
   }
@@ -101,8 +101,8 @@ class AccountStatusController extends GetxController {
       case 0:
         params['id_cta_cte'] = userPreferences.nroDocument.toString();
         params['id_persona'] = userPreferences.idPerson.toString();
-        final _accountStatusService = AccountStatusService();
-        dataDetail = await _accountStatusService.getItems(params);
+        final accountStatusService = AccountStatusService();
+        dataDetail = await accountStatusService.getItems(params);
         break;
       case 1:
         dataDetail = {
@@ -137,9 +137,9 @@ class AccountStatusController extends GetxController {
       case 3:
         params['id_cuentaaasi'] = '1135061';
         params['id_cta_cte'] = userPreferences.nroDocument.toString();
-        final _accountStatusService = AccountStatusService();
-        dataDetail = await _accountStatusService.getDetailsAccount(params);
-        final resp = await _accountStatusService.getDetailsAccount(params);
+        final accountStatusService = AccountStatusService();
+        dataDetail = await accountStatusService.getDetailsAccount(params);
+        final resp = await accountStatusService.getDetailsAccount(params);
         List detail = [];
         Map data = {};
         if (resp != null) {
@@ -159,8 +159,8 @@ class AccountStatusController extends GetxController {
       case 4:
         params['id_cuentaaasi'] = '1135007';
         params['id_cta_cte'] = userPreferences.nroDocument.toString();
-        final _accountStatusService = AccountStatusService();
-        final resp = await _accountStatusService.getDetailsAccount(params);
+        final accountStatusService = AccountStatusService();
+        final resp = await accountStatusService.getDetailsAccount(params);
         List detail = [];
         Map data = {};
         if (resp != null) {
@@ -208,19 +208,14 @@ class AccountStatusController extends GetxController {
       'id_entidad': userPreferences.idEntity.toString(),
       'type': type
     };
-    final _accountStatusService = AccountStatusService();
+    final accountStatusService = AccountStatusService();
     FileModel ticketPayment =
-        await _accountStatusService.gePaymentstTicketMonth(params);
+        await accountStatusService.gePaymentstTicketMonth(params);
     if (ticketPayment.file.isNotEmpty) {
       String fileName = ticketPayment.fileName.isNotEmpty
           ? ticketPayment.fileName
-          : dateModel.value.month.toString() +
-              '-' +
-              dateModel.value.year.toString() +
-              ' ' +
-              userPreferences.nameEntity.toString() +
-              '.pdf';
-      final file = await _accountStatusService.createFileOfPdfUrl(
+          : '${dateModel.value.month}-${dateModel.value.year} ${userPreferences.nameEntity}.pdf';
+      final file = await accountStatusService.createFileOfPdfUrl(
           ticketPayment.file, fileName);
       Get.until((route) => !Get.isDialogOpen!);
       if (file.path.isNotEmpty) {
@@ -240,7 +235,7 @@ class AccountStatusController extends GetxController {
     } else if (ticketPayment.file.isEmpty) {
       Get.until((route) => !Get.isDialogOpen!);
       Get.snackbar('Mensaje:',
-          'No se encontró boleta del mes de ' + dateModel.value.nameMonth+', '+ dateModel.value.year.toString(),
+          'No se encontró boleta del mes de ${dateModel.value.nameMonth}, ${dateModel.value.year}',
           duration: const Duration(seconds: 8),
           colorText: ColorsApp.white,
           backgroundColor: ColorsApp.danger);

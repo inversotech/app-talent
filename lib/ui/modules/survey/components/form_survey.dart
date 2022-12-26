@@ -86,10 +86,8 @@ class FormSurveyPerson extends StatelessWidget {
                                       RichText(
                                         text: TextSpan(children: [
                                           TextSpan(
-                                            text: controller
-                                                    .survey.descripcionLink
-                                                    .toString() +
-                                                ' ',
+                                            text:
+                                                '${controller.survey.descripcionLink} ',
                                             style: GoogleFonts.montserrat(
                                                 fontSize: 11.0,
                                                 fontWeight: FontWeight.w400,
@@ -205,10 +203,7 @@ class FormSurveyPerson extends StatelessWidget {
                                                                 surveyItem.descripcion !=
                                                                         null
                                                                     ? Text(
-                                                                        '(' +
-                                                                            surveyItem.descripcion
-                                                                                .toString() +
-                                                                            ')',
+                                                                        '(${surveyItem.descripcion})',
                                                                         style: GoogleFonts.montserrat(
                                                                             fontSize:
                                                                                 12.0,
@@ -440,11 +435,11 @@ class FormSurveyPerson extends StatelessWidget {
 
   Column _widgetSurveyItems(
       SurveyItem surveyItem, int level, FormSurveyController controller) {
-    List<Widget> _list = [];
+    List<Widget> list = [];
     surveyItem.items!.forEach(((element) {
-      _list.add(_widgetSurveyItem(element, surveyItem, controller));
+      list.add(_widgetSurveyItem(element, surveyItem, controller));
     }));
-    return Column(children: _list);
+    return Column(children: list);
   }
 
   Widget _widgetSurveyItem(SurveyItem surveyItem, SurveyItem parent,
@@ -466,8 +461,7 @@ class FormSurveyPerson extends StatelessWidget {
                                   fontWeight: FontWeight.w500,
                                   color: ColorsApp.primary)),
                           surveyItem.descripcion != null
-                              ? Text(
-                                  '(' + surveyItem.descripcion.toString() + ')',
+                              ? Text('(${surveyItem.descripcion})',
                                   style: GoogleFonts.montserrat(
                                       fontSize: 13.0,
                                       fontWeight: FontWeight.w500,
@@ -506,9 +500,9 @@ class FormSurveyPerson extends StatelessWidget {
 
   Widget _widgetAlternatives(
       SurveyItem surveyItem, FormSurveyController controller) {
-    List<Widget> _list = [];
+    List<Widget> list = [];
     surveyItem.items!.forEach(((element) {
-      _list.add(_widgetAlternative(element, surveyItem, controller));
+      list.add(_widgetAlternative(element, surveyItem, controller));
     }));
     return Padding(
       padding: const EdgeInsets.only(top: 0.0, bottom: 0.0),
@@ -520,7 +514,7 @@ class FormSurveyPerson extends StatelessWidget {
                   : surveyItem.childrenAlign == 'BOTTOM_RIGHT'
                       ? MainAxisAlignment.end
                       : MainAxisAlignment.center,
-              children: _list,
+              children: list,
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -529,7 +523,7 @@ class FormSurveyPerson extends StatelessWidget {
                   : surveyItem.childrenAlign == 'BOTTOM_RIGHT'
                       ? MainAxisAlignment.start
                       : MainAxisAlignment.center,
-              children: _list,
+              children: list,
             ),
     );
   }

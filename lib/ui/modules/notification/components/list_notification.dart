@@ -41,8 +41,6 @@ class ListNotification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('datos token!!!!');
-    print(token);
     if (listData.isNotEmpty) {
       return Padding(
         padding: const EdgeInsets.only(left: 4.0, right: 4.0),
@@ -451,11 +449,8 @@ class ListNotification extends StatelessWidget {
                       ),
                       const SizedBox(height: 4.0),
                       ExpandableText(
-                        textHeader: item.nombreEntidad.toString() +
-                            (item.mensaje!.isNotEmpty
-                                ? (' | ' + item.mensaje.toString())
-                                : '') +
-                            ' ',
+                        textHeader:
+                            '${item.nombreEntidad}${item.mensaje!.isNotEmpty ? (' | ${item.mensaje}') : ''} ',
                         styleTextHeader: GoogleFonts.montserrat(
                             color: ColorsApp.primary,
                             fontWeight: FontWeight.w600,
@@ -478,11 +473,7 @@ class ListNotification extends StatelessWidget {
                               padding: const EdgeInsets.only(top: 8.0),
                               child: GestureDetector(
                                 child: Text(
-                                    'Ver ' +
-                                        item.countComentarios.toString() +
-                                        (item.countComentarios! > 1
-                                            ? ' comentarios'
-                                            : ' comentario'),
+                                    'Ver ${item.countComentarios}${item.countComentarios! > 1 ? ' comentarios' : ' comentario'}',
                                     style: GoogleFonts.montserrat(
                                         color: ColorsApp.control,
                                         fontWeight: FontWeight.w400,
@@ -637,9 +628,7 @@ class _CardPhotosState extends State<CardPhotos> {
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
             child: Text(
-              itemChangePhoto.toString() +
-                  '/' +
-                  widget.photos.length.toString(),
+              '$itemChangePhoto/${widget.photos.length}',
               style: GoogleFonts.montserrat(
                 color: ColorsApp.white,
                 fontSize: 14,

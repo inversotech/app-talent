@@ -83,8 +83,8 @@ class SurveyController extends GetxController {
     final Map<String, String> params = {
       'codigo_acceso': codeModule.value.toString()
     };
-    final _authService = AuthService();
-    final resp = await _authService.getAccessNivel(params);
+    final authService = AuthService();
+    final resp = await authService.getAccessNivel(params);
     preferences.idNivelAcceso = resp.accesoNivel!.idAccesoNivel != null
         ? resp.accesoNivel!.idAccesoNivel.toString()
         : '';
@@ -110,8 +110,8 @@ class SurveyController extends GetxController {
 
   Future getActions() async {
     final Map<String, String> params = {'id_modulo': codeModule.value};
-    final _authService = AuthService();
-    actions = await _authService.getActionsByModule(params);
+    final authService = AuthService();
+    actions = await authService.getActionsByModule(params);
   }
 
   Future getListMoreData() async {
@@ -125,8 +125,8 @@ class SurveyController extends GetxController {
       'per_page': perPage.value.toString(),
       'page': page.value.toString()
     };
-    final _surveyService = SurveyService();
-    pagination = await _surveyService.getSurveyAnswers(params);
+    final surveyService = SurveyService();
+    pagination = await surveyService.getSurveyAnswers(params);
     List<dynamic> jsonList =
         pagination.data == null ? [] : pagination.data as List<dynamic>;
     if (jsonList.isNotEmpty) {
@@ -158,9 +158,9 @@ class SurveyController extends GetxController {
       'per_page': perPage.value.toString(),
       'page': '1'
     };
-    final _surveyService = SurveyService();
-    pagination = await _surveyService.getSurveyAnswers(params);
-   List<dynamic> jsonList;
+    final surveyService = SurveyService();
+    pagination = await surveyService.getSurveyAnswers(params);
+    List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
       jsonList = [];
     } else {
@@ -197,8 +197,8 @@ class SurveyController extends GetxController {
       'page': '1'
     };
     loadingIndicator(onlyLoading: true, opacity: false);
-    final _surveyService = SurveyService();
-    pagination = await _surveyService.getSurveyAnswers(params);
+    final surveyService = SurveyService();
+    pagination = await surveyService.getSurveyAnswers(params);
     List<dynamic> jsonList =
         pagination.data == null ? [] : pagination.data as List<dynamic>;
 
@@ -251,8 +251,8 @@ class SurveyController extends GetxController {
       'page': '1'
     };
     loadingIndicator(onlyLoading: true, opacity: false);
-    final _surveyService = SurveyService();
-    pagination = await _surveyService.getSurveyAnswers(params);
+    final surveyService = SurveyService();
+    pagination = await surveyService.getSurveyAnswers(params);
     List<dynamic> jsonList =
         pagination.data == null ? [] : pagination.data as List<dynamic>;
 

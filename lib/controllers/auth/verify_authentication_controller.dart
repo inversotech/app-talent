@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/core/routers_names.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
@@ -20,12 +19,12 @@ class VerifyAutheticationController extends GetxController {
   }
 
   void _validToken() async {
-    final _userPref = UserPreferences();
-    if (_userPref.tokenNotify.isNotEmpty) {
-      final _apiProvider = ApiProvider();
+    final userPref = UserPreferences();
+    if (userPref.tokenNotify.isNotEmpty) {
+      final apiProvider = ApiProvider();
       final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-      OneSignal.shared.setExternalUserId(_userPref.tokenNotify);
-      Map<String, String> params = {'token_notify': _userPref.tokenNotify};
+      OneSignal.shared.setExternalUserId(userPref.tokenNotify);
+      Map<String, String> params = {'token_notify': userPref.tokenNotify};
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfoPlugin.androidInfo;
         params['uuid'] = androidInfo.id; //UUID for Android by pedro
@@ -41,16 +40,15 @@ class VerifyAutheticationController extends GetxController {
         params['id_app'] = '6';
       }
       params['device_source'] = 'APP_UPN';
-      final response = await _apiProvider.postParams(
+      final response = await apiProvider.postParams(
           endPoint: endPoints['oauth']['valid-tokens-oauth'],
           params: params,
           showMessage: false);
-      //_apiProvider.dispose();
       if (response.success) {
         final resp = await _authService.userInfo();
         if (resp.success) {
-          if (_userPref.menu!.isNotEmpty) {
-            Get.offAllNamed(_userPref.menu![0].url.toString());
+          if (userPref.menu!.isNotEmpty) {
+            Get.offAllNamed(userPref.menu![0].url.toString());
           }
         } else {
           Get.offAllNamed(RoutesName.login);
@@ -63,8 +61,8 @@ class VerifyAutheticationController extends GetxController {
     }
   }
 
-  void _clearStorage() {
+/*   void _clearStorage() {
     final storage = GetStorage();
     storage.remove('tokenLamb');
-  }
+  } */
 }

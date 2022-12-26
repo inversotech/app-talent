@@ -21,10 +21,10 @@ class DetailSurvey extends StatefulWidget {
       : super(key: key);
 
   @override
-  _DetailSurveyState createState() => _DetailSurveyState();
+  DetailSurveyState createState() => DetailSurveyState();
 }
 
-class _DetailSurveyState extends State<DetailSurvey> {
+class DetailSurveyState extends State<DetailSurvey> {
   final ScrollController _scrollController = ScrollController();
   bool loading = false;
 
@@ -47,7 +47,7 @@ class _DetailSurveyState extends State<DetailSurvey> {
   }
 
   @override
-  Widget build(BuildContext buildContext) {
+  Widget build(BuildContext context) {
     return AppScreen(
       codePage: '16120103',
       scrollController: _scrollController,
@@ -67,7 +67,7 @@ class _DetailSurveyState extends State<DetailSurvey> {
                         offset: const Offset(-15, -4),
                         child: IconButton(
                           onPressed: () {
-                            Navigator.pop(buildContext);
+                            Navigator.pop(context);
                           },
                           iconSize: 40,
                           icon: const Icon(Icons.chevron_left,
@@ -91,10 +91,7 @@ class _DetailSurveyState extends State<DetailSurvey> {
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
                       child: Text(
-                          'Fecha: ' +
-                              Jiffy(widget.fecha, 'yyyy-MM-dd')
-                                  .format('dd|MM|yyyy')
-                                  .toString(),
+                          'Fecha: ${Jiffy(widget.fecha, 'yyyy-MM-dd').format('dd|MM|yyyy')}',
                           style: GoogleFonts.montserrat(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w600,
@@ -143,10 +140,7 @@ class _DetailSurveyState extends State<DetailSurvey> {
                                                       color: Colors.white)),
                                               surveyItem.descripcion != null
                                                   ? Text(
-                                                      '(' +
-                                                          surveyItem.descripcion
-                                                              .toString() +
-                                                          ')',
+                                                      '(${surveyItem.descripcion})',
                                                       style: GoogleFonts
                                                           .montserrat(
                                                               fontSize: 12.0,
@@ -163,20 +157,15 @@ class _DetailSurveyState extends State<DetailSurvey> {
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
-                                            child: _createInputItem(
-                                                buildContext,
-                                                surveyItem,
-                                                surveyItem,
-                                                1))
+                                            child: _createInputItem(context,
+                                                surveyItem, surveyItem, 1))
                                         : surveyItem.tipoItemCodigo == 'SE'
                                             ? Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 8.0),
                                                 child: _widgetSurveyItems(
-                                                    buildContext,
-                                                    surveyItem,
-                                                    1))
+                                                    context, surveyItem, 1))
                                             : Container(),
                                   ],
                                 ),
@@ -212,7 +201,7 @@ class _DetailSurveyState extends State<DetailSurvey> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(surveyItem.titulo.toString() + ':',
+            Text('${surveyItem.titulo}:',
                 style: GoogleFonts.montserrat(
                     fontSize: 14.0,
                     fontWeight: FontWeight.w600,
@@ -228,16 +217,16 @@ class _DetailSurveyState extends State<DetailSurvey> {
 
   Widget _widgetSurveyItems(
       BuildContext buildContext, SurveyItem surveyItem, int level) {
-    List<Widget> _list = [];
+    List<Widget> list = [];
     surveyItem.items!.forEach(((element) {
-      _list.add(_widgetSurveyItem(buildContext, element, surveyItem));
+      list.add(_widgetSurveyItem(buildContext, element, surveyItem));
     }));
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: _list),
+          children: list),
     );
   }
 
@@ -260,7 +249,7 @@ class _DetailSurveyState extends State<DetailSurvey> {
                             fontWeight: FontWeight.w600,
                             color: ColorsApp.primary)),
                     surveyItem.descripcion != null
-                        ? Text('(' + surveyItem.descripcion.toString() + '):',
+                        ? Text('(${surveyItem.descripcion}):',
                             style: GoogleFonts.montserrat(
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w500,
@@ -285,16 +274,16 @@ class _DetailSurveyState extends State<DetailSurvey> {
   }
 
   Widget _widgetAlternatives(SurveyItem surveyItem) {
-    List<Widget> _list = [];
+    List<Widget> list = [];
     surveyItem.items!.forEach(((element) {
-      _list.add(_widgetAlternative(element, surveyItem));
+      list.add(_widgetAlternative(element, surveyItem));
     }));
     return Padding(
       padding: const EdgeInsets.only(top: 0.0, bottom: 0.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: _list,
+        children: list,
       ),
     );
   }
@@ -311,16 +300,16 @@ class _DetailSurveyState extends State<DetailSurvey> {
     setState(() {
       loading = true;
     });
-    final _surveyService = SurveyService();
+    final surveyService = SurveyService();
     Map<String, String> params = {
       'id_encuesta': widget.idEncuesta,
       'id_persona': widget.idPerson,
       'id_entidad': widget.idEntidad,
       'fecha': widget.fecha
     };
-    final _apiResponse = await _surveyService.getQuizAnswerCovidDetail(params);
-    if (_apiResponse.success) {
-      _survey = Survey.fromJson(_apiResponse.data);
+    final apiResponse = await surveyService.getQuizAnswerCovidDetail(params);
+    if (apiResponse.success) {
+      _survey = Survey.fromJson(apiResponse.data);
       _surveyItems = _survey.items ?? [];
     }
     setState(() {

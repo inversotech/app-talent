@@ -52,8 +52,8 @@ class HolidayController extends GetxController {
 
     loadingIndicator(onlyLoading: true, opacity: false);
     await getActions();
-    final _holidayService = HolidayService();
-    listData = await _holidayService.getHolidays(params);
+    final holidayService = HolidayService();
+    listData = await holidayService.getHolidays(params);
     totalPro.value = 0;
     totalGo.value = 0;
     for (var element in listData) {
@@ -69,8 +69,8 @@ class HolidayController extends GetxController {
 
   Future getActions() async {
     final Map<String, String> params = {'id_modulo': codeModule.value};
-    final _authService = AuthService();
-    final actions = await _authService.getActionsByModule(params);
+    final authService = AuthService();
+    final actions = await authService.getActionsByModule(params);
     isDth.value = actions
         .where((element) =>
             element.clave.toString().toUpperCase() == 'APPROVE_VAC')
@@ -88,8 +88,8 @@ class HolidayController extends GetxController {
           : ''
     };
     loadingIndicator(onlyLoading: true, opacity: false);
-    final _holidayService = HolidayService();
-    listData = await _holidayService.getHolidays(params);
+    final holidayService = HolidayService();
+    listData = await holidayService.getHolidays(params);
     totalPro.value = 0;
     totalGo.value = 0;
     for (var element in listData) {
@@ -105,14 +105,14 @@ class HolidayController extends GetxController {
 
   void changeRequestStatus(
       BuildContext buildContext, String text, String idEstado) async {
-    final _holidayService = HolidayService();
+    final holidayService = HolidayService();
     Map<String, String> params = {
       'id_trabajador': userPreferences.idWorker.toString(),
       'estado': idEstado,
       'comentario': text
     };
     loadingIndicator(onlyLoading: false, text: 'Guardando ...');
-    final create = await _holidayService.changeStatusHoliday(
+    final create = await holidayService.changeStatusHoliday(
         idPeriodoVacTrab.toString(), params);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {

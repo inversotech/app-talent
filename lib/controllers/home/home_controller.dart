@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_controller.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -322,7 +321,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   void markingAssistance() async {
     loadingIndicator(onlyLoading: false, text: 'Guardando...');
-    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    // final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
 
     String uuid = await PlatformDeviceId.getDeviceId ?? '';
     /* if (GetPlatform.isAndroid) {
@@ -356,7 +355,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       }
       return;
     }
-    print('Entra aqui ps');
     await continuoMarkingAssistance(uuid, userPreferences.longitude.toString(),
         userPreferences.latitude.toString());
   }
@@ -384,7 +382,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       loadingData.value = false;
       // userPreferences.optionLocation == '2';
       await _getInfoAssistance();
-      print('termina');
       Get.until((route) => !Get.isDialogOpen!);
       loadingData.value = true;
       loadingData.value = false;

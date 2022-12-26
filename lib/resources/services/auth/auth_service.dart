@@ -14,12 +14,12 @@ import 'package:lamb_talent/resources/services/notification/notification_service
 
 class AuthService {
   Future<ApiResponse> userInfo() async {
-    final _apiProvider = ApiProvider();
+    final apiProvider = ApiProvider();
     Map<String, String> params = {
       'codigo_padre': Env.api.codeModule,
       'id_tipoplataforma': '2'
     };
-    final response = await _apiProvider.postParams(
+    final response = await apiProvider.postParams(
         endPoint: endPoints['oauth']['user-info'],
         params: params,
         showMessage: false);
@@ -66,8 +66,8 @@ class AuthService {
   }
 
   Future<ApiResponse> totalEntitiesDeptos() async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getAll(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getAll(
         endPoint: endPoints['comun']['total-entities-deptos']);
     //_apiProvider.dispose();
     if (response.success) {
@@ -80,8 +80,8 @@ class AuthService {
 
   Future<List<ActionModule>> getActionsByModule(
       Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.getWithParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.getWithParams(
         endPoint: endPoints['comun']['actions-by-module'], params: params);
     //_apiProvider.dispose();
     if (response.success) {
@@ -98,8 +98,8 @@ class AuthService {
 
   Future<AccesoNivelUser> getAccessNivel(Map<String, String> params) async {
     try {
-      final _apiProvider = ApiProvider();
-      final resp = await _apiProvider.getWithParams(
+      final apiProvider = ApiProvider();
+      final resp = await apiProvider.getWithParams(
           endPoint: endPoints['comun']['acceso-nivel'], params: params);
       //_apiProvider.dispose();
       final response = AccesoNivelUser.fromJson(resp.data ?? '');
@@ -111,8 +111,8 @@ class AuthService {
   }
 
   Future<ApiResponse> changeEntityDepto(Map<String, String> params) async {
-    final _apiProvider = ApiProvider();
-    final response = await _apiProvider.postParams(
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.postParams(
         endPoint: endPoints['comun']['change-entity-depto'], params: params);
     //_apiProvider.dispose();
     return response;
@@ -125,8 +125,8 @@ class AuthService {
       'id_persona': prefs.idPerson != null ? prefs.idPerson.toString() : '',
       'code_fcm_app': Env.api.codeFcmApp,
     };
-    final _notificationService = NotificationService();
-    final resp = await _notificationService.totalNoLeidos(params);
+    final notificationService = NotificationService();
+    final resp = await notificationService.totalNoLeidos(params);
     if (resp.success) {
       prefs.cantNotify = int.parse(resp.data.toString());
     } else {

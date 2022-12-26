@@ -14,8 +14,8 @@ class NotificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<NotificationController>(
         init: NotificationController(),
-        didUpdateWidget: (_, _stateBuilder) {
-          _stateBuilder.controller!.onInit();
+        didUpdateWidget: (_, stateBuilder) {
+          stateBuilder.controller!.onInit();
         },
         builder: (_) {
           return Obx(() => controller.loadingData.value
