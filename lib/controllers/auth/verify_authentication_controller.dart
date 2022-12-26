@@ -9,6 +9,7 @@ import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/providers/api.provider.dart';
 import 'package:lamb_talent/resources/services/auth/auth_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 
 class VerifyAutheticationController extends GetxController {
   final _authService = AuthService();
@@ -26,16 +27,17 @@ class VerifyAutheticationController extends GetxController {
       final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
       OneSignal.shared.setExternalUserId(_userPref.tokenNotify);
       Map<String, String> params = {'token_notify': _userPref.tokenNotify};
+      String deviceId = await PlatformDeviceId.getDeviceId ?? '';
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfoPlugin.androidInfo;
-        params['uuid'] = androidInfo.id; //UUID for Android by pedro
+        params['uuid'] = deviceId; //UUID for Android by pedro
         // params['uuid'] = androidInfo.androidId!; //UUID for Android
         params['model'] = androidInfo.model;
         params['platform'] = Platform.operatingSystem;
         params['id_app'] = '5';
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfoPlugin.iosInfo;
-        params['uuid'] = iosInfo.identifierForVendor!; //UUID for iOS
+        params['uuid'] = deviceId; //UUID for iOS
         params['model'] = iosInfo.model!;
         params['platform'] = Platform.operatingSystem;
         params['id_app'] = '6';
