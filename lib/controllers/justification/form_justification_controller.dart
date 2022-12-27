@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/routers_names.dart';
 
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/models.dart';
@@ -430,8 +431,15 @@ class FormJustificationController extends GetxController {
         final form = FormData(params);
         final create = await justificationService.createJustification(form);
         Get.until((route) => !Get.isDialogOpen!);
+
+        /* if (Get.isSnackbarOpen) {
+          Get.back();
+        } */
+        // Get.until((route) => Get.isSnackbarOpen);
+
         if (create.success) {
-          Get.back(result: {'change': true, 'data': null});
+          Get.offAllNamed(RoutesName.home);
+          // Get.back(result: {'change': true, 'data': null});
           Get.snackbar('Mensaje:', create.message,
               duration: const Duration(seconds: 8),
               colorText: ColorsApp.white,

@@ -128,10 +128,17 @@ Future<bool> showModalSSign(
                           'type': type,
                           'dias_efect': holiday.dias.toString()
                         };
+
                         final resp = await holidayService.signHoliday(
                             params, holiday.idRolVacacion.toString());
+                        print('respuesta de firma');
+                        print(resp.success);
+                        print(resp.message);
                         if (resp.success) {
-                          Get.back(result: true);
+                          print('ingrese al back firm');
+                          Navigator.pop<bool>(context, true);
+
+                          //Get.back<bool>(result: true);
                         }
                       },
                     ),

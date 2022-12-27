@@ -395,8 +395,16 @@ class NotificationController extends GetxController {
     // List<String> listPaths = [];
     List<XFile> listPaths = [];
     for (var i = 0; i < item.fotos!.length; i++) {
-      final response =
-          await get(Uri.parse(item.fotos![i].imagenUrl.toString()));
+      print('token de acceso');
+      print(token);
+      print(
+          '${Env.api.apiMessengerShell}storage/file?fileName=${item.fotos![i].imagenUrl.toString()}');
+      final response = item.fotos![i].imagenUrl!.contains('http')
+          ? await get(Uri.parse(item.fotos![i].imagenUrl.toString()))
+          : await get(
+              Uri.parse(
+                  '${Env.api.apiMessengerShell}storage/file?fileName=${item.fotos![i].imagenUrl.toString()}'),
+              headers: {'Authorization': token});
       final documentDirectory = (await getTemporaryDirectory()).path;
       File imgFile = File('$documentDirectory/${item.fotos![i].idAfoto}.png');
       imgFile.writeAsBytesSync(response.bodyBytes);

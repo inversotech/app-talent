@@ -552,6 +552,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (dataCarousel != null && dataCarousel!.containsKey('vacacion')) {
       if (dataCarousel!['vacacion']['codigo'].toString() == '01' ||
           dataCarousel!['vacacion']['codigo'].toString() == '02') {
+        //print('marcar vacaciones');
         HolidayModel vacacion =
             HolidayModel.fromJson(dataCarousel!['vacacion']['vacacion']);
         String type = vacacion.inihabilitar == '1'
@@ -560,6 +561,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
                 ? 'R'
                 : '';
         bool sign = await showModalSSign(vacacion, type, buildContext);
+        print('estado de la firma');
+        print(sign);
         if (sign) {
           loadingIndicator(onlyLoading: true, opacity: false);
           await _getListData();
