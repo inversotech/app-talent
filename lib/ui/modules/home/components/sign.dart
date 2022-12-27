@@ -131,11 +131,7 @@ Future<bool> showModalSSign(
 
                         final resp = await holidayService.signHoliday(
                             params, holiday.idRolVacacion.toString());
-                        print('respuesta de firma');
-                        print(resp.success);
-                        print(resp.message);
                         if (resp.success) {
-                          print('ingrese al back firm');
                           Navigator.pop<bool>(context, true);
 
                           //Get.back<bool>(result: true);

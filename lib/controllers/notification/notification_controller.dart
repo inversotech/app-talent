@@ -395,10 +395,6 @@ class NotificationController extends GetxController {
     // List<String> listPaths = [];
     List<XFile> listPaths = [];
     for (var i = 0; i < item.fotos!.length; i++) {
-      print('token de acceso');
-      print(token);
-      print(
-          '${Env.api.apiMessengerShell}storage/file?fileName=${item.fotos![i].imagenUrl.toString()}');
       final response = item.fotos![i].imagenUrl!.contains('http')
           ? await get(Uri.parse(item.fotos![i].imagenUrl.toString()))
           : await get(

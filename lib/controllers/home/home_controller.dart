@@ -561,8 +561,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
                 ? 'R'
                 : '';
         bool sign = await showModalSSign(vacacion, type, buildContext);
-        print('estado de la firma');
-        print(sign);
         if (sign) {
           loadingIndicator(onlyLoading: true, opacity: false);
           await _getListData();
