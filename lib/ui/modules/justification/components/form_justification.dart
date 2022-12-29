@@ -561,7 +561,83 @@ class FormJustification extends StatelessWidget {
 
   void _showModalAnular(BuildContext buildContext, String id,
       FormJustificationController controller) async {
-    await showDialog(
+    TextEditingController inputFieldCtrl = TextEditingController();
+    await Get.dialog(
+        barrierDismissible: false,
+        AlertDialog(
+          elevation: 0,
+          backgroundColor: ColorsApp.info,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+          titlePadding: EdgeInsets.zero,
+          scrollable: true,
+          content: TextFormField(
+            controller: inputFieldCtrl,
+            decoration: InputDecoration(
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+              labelText: 'Descripción (opcional)',
+            ),
+            maxLines: 4,
+            keyboardType: TextInputType.multiline,
+          ),
+          actions: [
+            TextButton(
+                style: ButtonStyle(
+                  alignment: Alignment.center,
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      return ColorsApp.primary; // Use the component's default.
+                    },
+                  ),
+                  shape:
+                      MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                    (Set<MaterialState> states) {
+                      return RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              25)); // Use the component's default.
+                    },
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text('Cerrar', style: TextStyle(color: Colors.white)),
+                ),
+                onPressed: () => Get.back()
+                // Navigator.of(context).pop()
+                ),
+            TextButton(
+              style: ButtonStyle(
+                alignment: Alignment.center,
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    return ColorsApp.danger; // Use the component's default.
+                  },
+                ),
+                shape:
+                    MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                  (Set<MaterialState> states) {
+                    return RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            25)); // Use the component's default.
+                  },
+                ),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text('Anular'),
+              ),
+              onPressed: () {
+                controller.changeRequestStatus(
+                    inputFieldCtrl.value.text.isNotEmpty
+                        ? inputFieldCtrl.value.text
+                        : '');
+              },
+            )
+          ],
+        ));
+
+    /* await showDialog(
         context: buildContext,
         barrierDismissible: false,
         builder: (context) {
@@ -638,6 +714,6 @@ class FormJustification extends StatelessWidget {
               )
             ],
           );
-        });
+        }); */
   }
 }

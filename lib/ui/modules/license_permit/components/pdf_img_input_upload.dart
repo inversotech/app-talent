@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lamb_talent/resources/models/response.dart';
 import 'package:lamb_talent/shared/components/visor_pdf_img.dart';
@@ -106,19 +107,23 @@ class PdfImgInputUpload extends StatelessWidget {
                               File file = File(dir.path + subTitle);
                               Uint8List bytes = base64.decode(resp.data);
                               await file.writeAsBytes(bytes);
-                              Navigator.push(
+                              Get.to(VisorPdfImgPage(
+                                  title: 'Adjunto', filePath: file.path));
+                              /* Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => VisorPdfImgPage(
                                           title: 'Adjunto',
-                                          filePath: file.path)));
+                                          filePath: file.path))); */
                             }
                           } else if (filePath.isNotEmpty) {
-                            Navigator.push(
+                            Get.to(VisorPdfImgPage(
+                                title: 'Adjunto', filePath: filePath));
+                            /* Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => VisorPdfImgPage(
-                                        title: 'Adjunto', filePath: filePath)));
+                                        title: 'Adjunto', filePath: filePath))); */
                           }
                         },
                         icon: const Icon(Icons.remove_red_eye),

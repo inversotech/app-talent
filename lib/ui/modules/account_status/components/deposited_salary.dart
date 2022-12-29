@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/core/colors.dart';
@@ -79,7 +80,7 @@ class DepositedSalary extends StatelessWidget {
       }
     }
     onChange(false);
-    _showModalDetail(buildContext, detail);
+    _showModalDetail(detail);
   }
 
   void _getItemsDiscount(BuildContext buildContext) async {
@@ -114,11 +115,39 @@ class DepositedSalary extends StatelessWidget {
       }
     }
     onChange(false);
-    _showModalDetail(buildContext, detail);
+    _showModalDetail(detail);
   }
 
-  void _showModalDetail(BuildContext buildContext, List data) async {
-    await showDialog(
+  void _showModalDetail(List data) async {
+    await Get.dialog(AlertDialog(
+        elevation: 0,
+        backgroundColor: ColorsApp.info,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+        contentPadding: const EdgeInsets.all(0.0),
+        titlePadding: EdgeInsets.zero,
+        scrollable: false,
+        content: SizedBox(
+          width: Get.width
+          // MediaQuery.of(context).size.width
+          ,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(
+                      onPressed: () => Get.back()
+                      // Navigator.of(context).pop()
+                      ,
+                      icon: const Icon(Icons.highlight_off)),
+                ),
+                Detail(listData: data, isModal: true),
+              ],
+            ),
+          ),
+        )));
+    /* await showDialog(
         context: buildContext,
         barrierDismissible: true,
         builder: (context) {
@@ -146,7 +175,7 @@ class DepositedSalary extends StatelessWidget {
                   ),
                 ),
               ));
-        });
+        }); */
   }
 }
 

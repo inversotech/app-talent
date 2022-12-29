@@ -143,7 +143,7 @@ class YearMonthPickerState extends State<YearMonthPicker> {
 
   buildPager() => Container(
         color: Colors.white,
-        height: 210.0,
+        height: 250.0,
         width: 500.0,
         child: Theme(
             data: Theme.of(context).copyWith(

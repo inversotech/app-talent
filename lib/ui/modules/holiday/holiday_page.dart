@@ -254,7 +254,95 @@ class HolidayPage extends StatelessWidget {
 
   void _showModalApprove(BuildContext context, String idEstado,
       HolidayController controller) async {
-    await showDialog(
+    await Get.dialog(
+        barrierDismissible: false,
+        AlertDialog(
+          elevation: 0,
+          backgroundColor: ColorsApp.info,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          titlePadding: EdgeInsets.zero,
+          scrollable: true,
+          titleTextStyle: GoogleFonts.montserrat(
+              color: ColorsApp.primary,
+              fontWeight: FontWeight.bold,
+              fontSize: 18),
+          title: Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(('Aprobar').toUpperCase()),
+            ),
+          ),
+          content: Column(children: [
+            Image.asset('assets/icons/check.png',
+                height: 50, width: 50, color: ColorsApp.success),
+            Text(
+                '¿Desea aprobar la vacación programada de: ${controller.userPreferences.fullnamePerson}?',
+                style: GoogleFonts.montserrat(
+                    color: ColorsApp.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14),
+                textAlign: TextAlign.center)
+          ]),
+          actions: [
+            TextButton(
+                style: ButtonStyle(
+                  alignment: Alignment.center,
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      return ColorsApp
+                          .primaryVariant; // Use the component's default.
+                    },
+                  ),
+                  shape:
+                      MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                    (Set<MaterialState> states) {
+                      return RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              25)); // Use the component's default.
+                    },
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text('Cerrar',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                ),
+                onPressed: () => Get.back()
+                // Navigator.of(context).pop()
+                ),
+            TextButton(
+              style: ButtonStyle(
+                alignment: Alignment.center,
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    return ColorsApp.success; // Use the component's default.
+                  },
+                ),
+                shape:
+                    MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                  (Set<MaterialState> states) {
+                    return RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            25)); // Use the component's default.
+                  },
+                ),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text('Estoy de acuerdo!',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+              ),
+              onPressed: () {
+                controller.changeRequestStatus(context, '', idEstado);
+              },
+            )
+          ],
+        ));
+
+    /*  await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
@@ -341,12 +429,105 @@ class HolidayPage extends StatelessWidget {
               )
             ],
           );
-        });
+        }); */
   }
 
   void _showModalAnularRefuse(BuildContext context, String idEstado,
       String text, HolidayController controller) async {
-    await showDialog(
+    TextEditingController inputFieldCtrl = TextEditingController();
+    await Get.dialog(
+        barrierDismissible: false,
+        AlertDialog(
+          elevation: 0,
+          backgroundColor: ColorsApp.info,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          titlePadding: EdgeInsets.zero,
+          scrollable: true,
+          titleTextStyle: GoogleFonts.montserrat(
+              color: ColorsApp.primary,
+              fontWeight: FontWeight.bold,
+              fontSize: 18),
+          title: Center(
+              child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(text.toUpperCase()),
+          )),
+          content: TextFormField(
+            controller: inputFieldCtrl,
+            decoration: InputDecoration(
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+              labelText: 'Comentario (opcional)',
+            ),
+            maxLines: 4,
+            keyboardType: TextInputType.multiline,
+          ),
+          actions: [
+            TextButton(
+                style: ButtonStyle(
+                  alignment: Alignment.center,
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      return ColorsApp
+                          .primaryVariant; // Use the component's default.
+                    },
+                  ),
+                  shape:
+                      MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                    (Set<MaterialState> states) {
+                      return RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              25)); // Use the component's default.
+                    },
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text('Cerrar',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                ),
+                onPressed: () => Get.back()
+                // Navigator.of(context).pop() by pedro
+                ),
+            TextButton(
+              style: ButtonStyle(
+                alignment: Alignment.center,
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    return ColorsApp
+                        .primaryVariant; // Use the component's default.
+                  },
+                ),
+                shape:
+                    MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                  (Set<MaterialState> states) {
+                    return RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            25)); // Use the component's default.
+                  },
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(text,
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+              ),
+              onPressed: () {
+                controller.changeRequestStatus(
+                    context,
+                    inputFieldCtrl.value.text.isNotEmpty
+                        ? inputFieldCtrl.value.text
+                        : '',
+                    idEstado);
+              },
+            )
+          ],
+        ));
+
+    /* await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
@@ -438,7 +619,7 @@ class HolidayPage extends StatelessWidget {
               )
             ],
           );
-        });
+        }); */
   }
 
   void _selectYearPicker(

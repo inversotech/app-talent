@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lamb_talent/core/colors.dart';
@@ -173,14 +174,19 @@ class ListLicensePermit extends StatelessWidget {
                       Uint8List bytes = base64.decode(resp.data['file']);
                       await file.writeAsBytes(bytes);
 
-                      Navigator.of(context).pop();
-                      Navigator.push(
+                      // Navigator.of(context).pop();
+                      Get.back();
+                      Get.to(VisorPdfImgPage(
+                          title: 'Adjunto', filePath: file.path));
+
+                      /* Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => VisorPdfImgPage(
-                                  title: 'Adjunto', filePath: file.path)));
+                                  title: 'Adjunto', filePath: file.path))); */
                     } else {
-                      Navigator.of(context).pop();
+                      Get.back();
+                      // Navigator.of(context).pop();
                     }
                   },
                   child: Row(
@@ -294,7 +300,270 @@ class ListLicensePermit extends StatelessWidget {
   void _showModalDetail(BuildContext context, String idTrabajador, String id,
       String idEstado) async {
     final pref = UserPreferences();
-    await showDialog(
+
+    await Get.dialog(
+        barrierDismissible: true,
+        AlertDialog(
+          elevation: 0,
+          backgroundColor: ColorsApp.info,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+          title: Align(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+                icon: Image.asset('assets/icons/close.png',
+                    height: 40, width: 40, color: ColorsApp.primary),
+                onPressed: () => Navigator.of(context).pop()),
+          ),
+          contentPadding: const EdgeInsets.all(8.0),
+          titlePadding: EdgeInsets.zero,
+          scrollable: false,
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: SingleChildScrollView(
+              child: FutureBuilder(
+                future: _getDataLicensePermit(id),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    try {
+                      LicensePermitModel data = snapshot.data['request'];
+                      List<StateLicensePermitModel> listProcess =
+                          snapshot.data['proccess'];
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: Text(
+                                capitalize(data.nombreConcepto.toString()),
+                                style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorsApp.primary,
+                                    fontSize: 16.0)),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: _dateWidget(data),
+                          ),
+                          const SizedBox(height: 8.0),
+                          _fileAndProcessWidget(data, true, context),
+                          const SizedBox(height: 8.0),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: data.motivo != null
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Motivo',
+                                          style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w600,
+                                              color: ColorsApp.primary,
+                                              fontSize: 13.0)),
+                                      Text(data.motivo.toString(),
+                                          style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorsApp.primary,
+                                              fontSize: 12.0))
+                                    ],
+                                  )
+                                : Container(),
+                          ),
+                          const SizedBox(height: 8.0),
+                          const Divider(height: 1, color: ColorsApp.primary),
+                          const SizedBox(height: 8.0),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Proceso: ',
+                                    style: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w600,
+                                        color: ColorsApp.primary,
+                                        fontSize: 13.0)),
+                                Flexible(
+                                  child: Text(
+                                    data.estadoNombre.toString(),
+                                    style: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14.0,
+                                        color: data.idEstadoLicaPer == '01'
+                                            ? ColorsApp.primary
+                                            : data.idEstadoLicaPer == '02'
+                                                ? ColorsApp.basic
+                                                : data.idEstadoLicaPer == '03'
+                                                    ? ColorsApp.success
+                                                    : data.idEstadoLicaPer ==
+                                                            '04'
+                                                        ? ColorsApp.danger
+                                                        : data.idEstadoLicaPer ==
+                                                                '00'
+                                                            ? ColorsApp.danger
+                                                            : Colors.black),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          _processJustif(listProcess),
+                          const SizedBox(height: 12.0)
+                        ],
+                      );
+                    } catch (e) {
+                      return Container(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Center(
+                            child: Text(
+                                'No se encontró información para mostrar',
+                                style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w400,
+                                    color: ColorsApp.primary))),
+                      );
+                    }
+                  } else {
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+          actions: [
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  idEstado == '01' && !pref.isWorkerChild && !approve
+                      ? TextButton(
+                          style: ButtonStyle(
+                            alignment: Alignment.center,
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                return ColorsApp
+                                    .primaryVariant; // Use the component's default.
+                              },
+                            ),
+                            shape: MaterialStateProperty.resolveWith<
+                                RoundedRectangleBorder>(
+                              (Set<MaterialState> states) {
+                                return RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        25)); // Use the component's default.
+                              },
+                            ),
+                          ),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text('Anular',
+                                style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white)),
+                          ),
+                          onPressed: () {
+                            _showModalAnularRefuse(
+                                context, idTrabajador, id, '00', 'Anular');
+                          },
+                        )
+                      : Container(),
+                  (idEstado == '01' && isJefeArea) ||
+                          (idEstado == '02' && isDth)
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                          child: TextButton(
+                            style: ButtonStyle(
+                              alignment: Alignment.center,
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                                  return ColorsApp
+                                      .danger; // Use the component's default.
+                                },
+                              ),
+                              shape: MaterialStateProperty.resolveWith<
+                                  RoundedRectangleBorder>(
+                                (Set<MaterialState> states) {
+                                  return RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          25)); // Use the component's default.
+                                },
+                              ),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text('Rechazar',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            onPressed: () {
+                              _showModalAnularRefuse(
+                                  context, idTrabajador, id, '04', 'Rechazar');
+                            },
+                          ),
+                        )
+                      : Container(),
+                  (idEstado == '01' && isJefeArea) ||
+                          (idEstado == '02' && isDth)
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                          child: TextButton(
+                            style: ButtonStyle(
+                              alignment: Alignment.center,
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                                  return ColorsApp
+                                      .success; // Use the component's default.
+                                },
+                              ),
+                              shape: MaterialStateProperty.resolveWith<
+                                  RoundedRectangleBorder>(
+                                (Set<MaterialState> states) {
+                                  return RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          25)); // Use the component's default.
+                                },
+                              ),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                  idEstado == '01' && isJefeArea
+                                      ? 'Aprobación Area'
+                                      : idEstado == '02' && isDth
+                                          ? 'Aprobación DTH'
+                                          : '',
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            onPressed: () {
+                              _showModalApprove(
+                                  context, idTrabajador, id, idEstado);
+                            },
+                          ),
+                        )
+                      : Container()
+                ],
+              ),
+            )
+          ],
+        ));
+
+    /* await showDialog(
         context: context,
         barrierDismissible: true,
         builder: (context) {
@@ -560,7 +829,7 @@ class ListLicensePermit extends StatelessWidget {
               )
             ],
           );
-        });
+        }); */
   }
 
   Widget _processJustif(List<StateLicensePermitModel> listProcess) {
@@ -632,7 +901,107 @@ class ListLicensePermit extends StatelessWidget {
 
   void _showModalApprove(BuildContext context, String idTrabajador, String id,
       String idEstado) async {
-    await showDialog(
+    await Get.dialog(
+        barrierDismissible: false,
+        AlertDialog(
+          elevation: 0,
+          backgroundColor: ColorsApp.info,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          titlePadding: EdgeInsets.zero,
+          scrollable: true,
+          titleTextStyle: GoogleFonts.montserrat(
+              color: ColorsApp.primary,
+              fontWeight: FontWeight.bold,
+              fontSize: 18),
+          title: Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text((idEstado == '01' && isJefeArea
+                      ? 'Aprobación Area'
+                      : idEstado == '02' && isDth
+                          ? 'Aprobación DTH'
+                          : '')
+                  .toUpperCase()),
+            ),
+          ),
+          content: Column(children: [
+            Image.asset('assets/icons/check.png',
+                height: 50, width: 50, color: ColorsApp.success),
+            Text('¿Desea aprobar el/la permiso/licencia?',
+                style: GoogleFonts.montserrat(
+                    color: ColorsApp.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14))
+          ]),
+          actions: [
+            TextButton(
+                style: ButtonStyle(
+                  alignment: Alignment.center,
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      return ColorsApp
+                          .primaryVariant; // Use the component's default.
+                    },
+                  ),
+                  shape:
+                      MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                    (Set<MaterialState> states) {
+                      return RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              25)); // Use the component's default.
+                    },
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text('Cerrar',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                ),
+                onPressed: () => Get.back()
+                // Navigator.of(context).pop()
+                ),
+            TextButton(
+              style: ButtonStyle(
+                alignment: Alignment.center,
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    return ColorsApp.success; // Use the component's default.
+                  },
+                ),
+                shape:
+                    MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                  (Set<MaterialState> states) {
+                    return RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            25)); // Use the component's default.
+                  },
+                ),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text('Estoy de acuerdo!',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+              ),
+              onPressed: () {
+                changeRequestStatus(
+                    '',
+                    context,
+                    idTrabajador,
+                    id,
+                    idEstado == '01' && isJefeArea
+                        ? '02'
+                        : idEstado == '02' && isDth
+                            ? '03'
+                            : idEstado);
+              },
+            )
+          ],
+        ));
+
+    /* await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
@@ -731,7 +1100,7 @@ class ListLicensePermit extends StatelessWidget {
               )
             ],
           );
-        });
+        }); */
   }
 
   void _showModalAnularRefuse(BuildContext context, String idTrabajador,
@@ -846,9 +1215,10 @@ class ListLicensePermit extends StatelessWidget {
         await licensePermitService.chageStatusLicensePermit(id, params);
 
     if (create.success) {
+      Get.back();
+/*       Navigator.pop(context);
       Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      Navigator.pop(context); */
       onChangeList();
     }
   }

@@ -186,11 +186,15 @@ class HolidayApproveController extends GetxController {
         await holidayService.changeStatusHoliday(idPeriodoVacTrab, params);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
-      if (Get.isSnackbarOpen) {
+/*       if (Get.isSnackbarOpen) {
         Get.back();
-      }
-      Navigator.pop(buildContext);
-      Navigator.pop(buildContext);
+      } */
+      Get.back();
+      // Get.back();
+
+      // Get.back();
+      // Navigator.pop(buildContext);
+      // Navigator.pop(buildContext);
       getListData();
     }
   }

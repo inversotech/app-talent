@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lamb_talent/core/colors.dart';
@@ -157,9 +158,13 @@ class ListJustification extends StatelessWidget {
                                                 Uint8List bytes =
                                                     base64.decode(resp.data);
                                                 await file.writeAsBytes(bytes);
-
-                                                Navigator.of(buildContext)
+                                                Get.back();
+                                                Get.to(VisorPdfImgPage(
+                                                    title: 'Evidencia',
+                                                    filePath: file.path));
+                                                /* Navigator.of(buildContext)
                                                     .pop();
+
                                                 Navigator.push(
                                                     buildContext,
                                                     MaterialPageRoute(
@@ -168,10 +173,11 @@ class ListJustification extends StatelessWidget {
                                                                 title:
                                                                     'Evidencia',
                                                                 filePath: file
-                                                                    .path)));
+                                                                    .path))); */
                                               } else {
-                                                Navigator.of(buildContext)
-                                                    .pop();
+                                                /*                 Navigator.of(buildContext)
+                                                    .pop(); */
+                                                Get.back();
                                               }
                                             },
                                             child: Row(
@@ -257,7 +263,300 @@ class ListJustification extends StatelessWidget {
   void _showModalDetail(BuildContext buildContext, String idTrabajador,
       String id, String idEstado, bool approve) async {
     final pref = UserPreferences();
-    await showDialog(
+
+    await Get.dialog(AlertDialog(
+      elevation: 0,
+      backgroundColor: ColorsApp.info,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+      title: Align(
+        alignment: Alignment.centerRight,
+        child: IconButton(
+            icon: Image.asset('assets/icons/close.png',
+                height: 40, width: 40, color: ColorsApp.primary),
+            onPressed: () => Get.back()),
+      ),
+      contentPadding: const EdgeInsets.all(8.0),
+      titlePadding: EdgeInsets.zero,
+      scrollable: false,
+      content: SizedBox(
+        width: Get.width
+        //MediaQuery.of(context).size.width
+        ,
+        child: SingleChildScrollView(
+          child: FutureBuilder(
+            future: _getDataJustification(id),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                try {
+                  JustificationModel data = snapshot.data['request'];
+                  List<ProcessJustifcationModel> listProcessJustif =
+                      snapshot.data['proccess'];
+                  List<MarkingWorkerModel> listMarkings =
+                      snapshot.data['markings'];
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: Text(capitalize(data.motivo.toString()),
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w600,
+                                color: ColorsApp.primary,
+                                fontSize: 16.0)),
+                      ),
+                      const SizedBox(height: 4.0),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: Text(
+                            'Fecha: ${DateFormat('dd|MM|yyyy').format(DateTime.parse(data.fecha.toString()))}',
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w500,
+                                color: ColorsApp.primary,
+                                fontSize: 12.0)),
+                      ),
+                      const SizedBox(height: 4.0),
+                      data.evidenciaAdj != null
+                          ? InkWell(
+                              onTap: () {
+                                _showEvidence(buildContext, data);
+                              },
+                              child: Row(
+                                children: [
+                                  Image.asset('assets/icons/file.png',
+                                      height: 25,
+                                      width: 25,
+                                      color: ColorsApp.primary),
+                                  Text(data.evidenciaAdj.toString(),
+                                      style: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.w600,
+                                          color: ColorsApp.primary,
+                                          fontSize: 12.0))
+                                ],
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(height: 8.0),
+                      data.descripcion != null
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 4.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Motivo.',
+                                      style: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.w600,
+                                          color: ColorsApp.primary,
+                                          fontSize: 13.0)),
+                                  Text(data.descripcion.toString(),
+                                      style: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.w400,
+                                          color: ColorsApp.primary,
+                                          fontSize: 12.0))
+                                ],
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(height: 8.0),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: Text('Marcaciones solicitadas:',
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w600,
+                                color: ColorsApp.primary,
+                                fontSize: 13.0)),
+                      ),
+                      _markings(listMarkings),
+                      const Divider(height: 1, color: ColorsApp.primary),
+                      const SizedBox(height: 8.0),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Proceso: ',
+                                style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorsApp.primary,
+                                    fontSize: 13.0)),
+                            Flexible(
+                              child: Text(
+                                data.estado.toString(),
+                                style: GoogleFonts.montserrat(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.0,
+                                    color: data.idEstadoJustif == '01'
+                                        ? ColorsApp.primary
+                                        : data.idEstadoJustif == '02'
+                                            ? ColorsApp.basic
+                                            : data.idEstadoJustif == '03'
+                                                ? ColorsApp.success
+                                                : data.idEstadoJustif == '04'
+                                                    ? ColorsApp.danger
+                                                    : data.idEstadoJustif ==
+                                                            '00'
+                                                        ? ColorsApp.danger
+                                                        : Colors.black),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      _processJustif(listProcessJustif),
+                      const SizedBox(height: 12.0)
+                    ],
+                  );
+                } catch (e) {
+                  return Container(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Center(
+                        child: Text('No se encontró información para mostrar',
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w400,
+                                color: ColorsApp.primary))),
+                  );
+                }
+              } else {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+            },
+          ),
+        ),
+      ),
+      actions: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              idEstado == '01' && !pref.isWorkerChild && !approve
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: TextButton(
+                        style: ButtonStyle(
+                          alignment: Alignment.center,
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                              return ColorsApp
+                                  .primaryVariant; // Use the component's default.
+                            },
+                          ),
+                          shape: MaterialStateProperty.resolveWith<
+                              RoundedRectangleBorder>(
+                            (Set<MaterialState> states) {
+                              return RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      25)); // Use the component's default.
+                            },
+                          ),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text('Anular',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                        onPressed: () {
+                          _showModalAnularRefuse(
+                              buildContext, idTrabajador, id, '00', 'Anular');
+                        },
+                      ),
+                    )
+                  : Container(),
+              (idEstado == '01' && isJefeArea) || (idEstado == '02' && isDth)
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: TextButton(
+                        style: ButtonStyle(
+                          alignment: Alignment.center,
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                              return ColorsApp
+                                  .danger; // Use the component's default.
+                            },
+                          ),
+                          shape: MaterialStateProperty.resolveWith<
+                              RoundedRectangleBorder>(
+                            (Set<MaterialState> states) {
+                              return RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      25)); // Use the component's default.
+                            },
+                          ),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text('Rechazar',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                        onPressed: () {
+                          _showModalAnularRefuse(
+                              buildContext, idTrabajador, id, '04', 'Rechazar');
+                        },
+                      ),
+                    )
+                  : Container(),
+              (idEstado == '01' && isJefeArea) || (idEstado == '02' && isDth)
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: TextButton(
+                        style: ButtonStyle(
+                          alignment: Alignment.center,
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                              return ColorsApp
+                                  .success; // Use the component's default.
+                            },
+                          ),
+                          shape: MaterialStateProperty.resolveWith<
+                              RoundedRectangleBorder>(
+                            (Set<MaterialState> states) {
+                              return RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      25)); // Use the component's default.
+                            },
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                              idEstado == '01' && isJefeArea
+                                  ? 'Aprobación Area'
+                                  : idEstado == '02' && isDth
+                                      ? 'Aprobación DTH'
+                                      : '',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                        onPressed: () {
+                          _showModalApprove(
+                              buildContext, idTrabajador, id, idEstado);
+                        },
+                      ),
+                    )
+                  : Container()
+            ],
+          ),
+        )
+      ],
+    ));
+
+    /*    await showDialog(
         context: buildContext,
         barrierDismissible: true,
         builder: (context) {
@@ -561,7 +860,7 @@ class ListJustification extends StatelessWidget {
               )
             ],
           );
-        });
+        }); */
   }
 
   void _showEvidence(BuildContext buildContext, JustificationModel data) async {
@@ -574,14 +873,17 @@ class ListJustification extends StatelessWidget {
       File file = File(dir.path + data.evidenciaAdj.toString());
       Uint8List bytes = base64.decode(resp.data);
       await file.writeAsBytes(bytes);
-      Navigator.of(buildContext).pop();
+      Get.back();
+      Get.to(VisorPdfImgPage(title: 'Evidencia', filePath: file.path));
+      /* Navigator.of(buildContext).pop();
       Navigator.push(
           buildContext,
           MaterialPageRoute(
               builder: (context) =>
-                  VisorPdfImgPage(title: 'Evidencia', filePath: file.path)));
+                  VisorPdfImgPage(title: 'Evidencia', filePath: file.path))); */
     } else {
-      Navigator.of(buildContext).pop();
+      // Navigator.of(buildContext).pop();
+      Get.back();
     }
   }
 
@@ -719,7 +1021,97 @@ class ListJustification extends StatelessWidget {
 
   void _showModalApprove(BuildContext context, String idTrabajador, String id,
       String idEstado) async {
-    await showDialog(
+    await Get.dialog(AlertDialog(
+      elevation: 0,
+      backgroundColor: ColorsApp.info,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      titlePadding: EdgeInsets.zero,
+      scrollable: true,
+      titleTextStyle: GoogleFonts.montserrat(
+          color: ColorsApp.primary, fontWeight: FontWeight.bold, fontSize: 18),
+      title: Center(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text((idEstado == '01' && isJefeArea
+                  ? 'Aprobación Area'
+                  : idEstado == '02' && isDth
+                      ? 'Aprobación DTH'
+                      : '')
+              .toUpperCase()),
+        ),
+      ),
+      content: Column(children: [
+        Image.asset('assets/icons/check.png',
+            height: 50, width: 50, color: ColorsApp.success),
+        Text('¿Desea aprobar la justificacón?',
+            style: GoogleFonts.montserrat(
+                color: ColorsApp.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 14))
+      ]),
+      actions: [
+        TextButton(
+            style: ButtonStyle(
+              alignment: Alignment.center,
+              backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  return ColorsApp
+                      .primaryVariant; // Use the component's default.
+                },
+              ),
+              shape: MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+                (Set<MaterialState> states) {
+                  return RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          25)); // Use the component's default.
+                },
+              ),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text('Cerrar',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
+            ),
+            onPressed: () => Navigator.of(context).pop()),
+        TextButton(
+          style: ButtonStyle(
+            alignment: Alignment.center,
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+                return ColorsApp.success; // Use the component's default.
+              },
+            ),
+            shape: MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+              (Set<MaterialState> states) {
+                return RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        25)); // Use the component's default.
+              },
+            ),
+          ),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text('Estoy de acuerdo!',
+                style: TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
+          ),
+          onPressed: () {
+            changeRequestStatus(
+                '',
+                context,
+                idTrabajador,
+                id,
+                idEstado == '01' && isJefeArea
+                    ? '02'
+                    : idEstado == '02' && isDth
+                        ? '03'
+                        : idEstado);
+          },
+        )
+      ],
+    ));
+    /* await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
@@ -818,7 +1210,7 @@ class ListJustification extends StatelessWidget {
               )
             ],
           );
-        });
+        }); */
   }
 
   void _showModalAnularRefuse(BuildContext context, String idTrabajador,
@@ -933,9 +1325,10 @@ class ListJustification extends StatelessWidget {
     ApiResponse create = await justificationService.changeRequestStatus(params);
 
     if (create.success) {
+      Get.back();
+/*       Navigator.pop(context);
       Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      Navigator.pop(context); */
       onChangeList();
     }
   }

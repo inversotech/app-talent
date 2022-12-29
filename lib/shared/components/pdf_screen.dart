@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:get/get.dart';
 import 'package:lamb_talent/resources/services/account_status/account_status_service.dart';
 
 import 'loading.dart';
@@ -53,7 +54,8 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                           onlyLoading: true, text: 'Descargando ...');
                       await accountStatusService.saveDownloadPaymentTicket(
                           widget.urlFileDownload, widget.titlePdf, params);
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
+                      Get.back();
                     }
                   },
                 )
