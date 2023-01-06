@@ -130,7 +130,7 @@ Future<bool> showModalSSign(
                       params, holiday.idRolVacacion.toString());
 
                   if (resp.success) {
-                    Get.back();
+                    Get.back(result: true);
                     // Navigator.pop<bool>(context, true);
                   }
                 },
