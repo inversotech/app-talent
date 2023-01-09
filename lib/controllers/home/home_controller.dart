@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:io';
 
@@ -142,6 +144,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           Geolocator.getPositionStream(locationSettings: locationSettings)
               .listen((Position? position) {
         if (position != null) {
+          print('UBICACION');
+          print(position.latitude);
+          print(position.longitude);
           userPreferences.latitude = position.latitude.toString();
           userPreferences.longitude = position.longitude.toString();
         }

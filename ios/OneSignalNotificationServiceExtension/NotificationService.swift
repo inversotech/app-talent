@@ -2,11 +2,10 @@
 //  NotificationService.swift
 //  OneSignalNotificationServiceExtension
 //
-//  Created by Amelio Apaza Humerez on 4/03/22.
+//  Created by ACES on 8/01/23.
 //
 
 import UserNotifications
-
 import OneSignal
 
 class NotificationService: UNNotificationServiceExtension {
@@ -16,17 +15,13 @@ class NotificationService: UNNotificationServiceExtension {
     var bestAttemptContent: UNMutableNotificationContent?
 
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-        self.receivedRequest = request
         self.contentHandler = contentHandler
-        self.bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
+        bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
         
         if let bestAttemptContent = bestAttemptContent {
-            // Modify the notification content here...
-            // bestAttemptContent.title = "\(bestAttemptContent.title) [modified]"
-            
-            // contentHandler(bestAttemptContent)
-            
             OneSignal.didReceiveNotificationExtensionRequest(self.receivedRequest, with: bestAttemptContent, withContentHandler: self.contentHandler)
+            contentHandler(bestAttemptContent)
+
         }
     }
     
@@ -34,8 +29,9 @@ class NotificationService: UNNotificationServiceExtension {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
         if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
-            OneSignal.serviceExtensionTimeWillExpireRequest(self.receivedRequest, with: self.bestAttemptContent)
-            contentHandler(bestAttemptContent)
+        OneSignal.serviceExtensionTimeWillExpireRequest(self.receivedRequest, with: self.bestAttemptContent)
+                                contentHandler(bestAttemptContent)
+
         }
     }
 
