@@ -424,7 +424,6 @@ Future<bool> showModalSSign(
           ),
         );
       }); */
-  print(sign);
   if (sign != null) {
     return true;
   } else {
