@@ -565,7 +565,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             : vacacion.finhabilitar == '1'
                 ? 'R'
                 : '';
-        bool sign = await showModalSSign(vacacion, type, buildContext);
+        final sign = await showModalSSign(vacacion, type,buildContext);
         if (sign) {
           loadingIndicator(onlyLoading: true, opacity: false);
           await _getListData();

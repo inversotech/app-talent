@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 
@@ -372,7 +373,39 @@ class HomePage extends StatelessWidget {
                                           )
                                         : Container();
                                   })
-                                : Container()
+                                : (controller.dataCarousel!['vacacion']
+                                    .containsKey('codigo') &&
+                                controller.dataCarousel!['vacacion']
+                                    .containsKey('vacacion')? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Desde ',
+                                        style: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16.0,
+                                            color: ColorsApp.primary),
+                                      ),
+                                      Text(
+                                        Jiffy(controller.dataCarousel!['vacacion']['vacacion']['fecha_ini']).format('dd-MM-yyyy'),
+                                        style: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18.0,
+                                            color: ColorsApp.primary),
+                                      ),
+                                      Text(
+                                        ' hasta ',
+                                        style: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16.0,
+                                            color: ColorsApp.primary),
+                                      ),Text(
+                                        Jiffy(controller.dataCarousel!['vacacion']['vacacion']['fecha_fin']).format('dd-MM-yyyy'),
+                                        style: GoogleFonts.montserrat(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18.0,
+                                            color: ColorsApp.primary),
+                                      )]): (Container()))
                             : Container()
                         : Container();
                   }),
