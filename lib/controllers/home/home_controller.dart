@@ -16,6 +16,7 @@ import 'package:lamb_talent/ui/modules/justification/components/form_justificati
 import 'package:lamb_talent/ui/modules/justification/justificattion_page.dart';
 import 'package:lamb_talent/ui/modules/license_permit/components/form_license_permit.dart';
 import 'package:lamb_talent/ui/modules/license_permit/license_permit_page.dart';
+import 'package:lamb_talent/ui/modules/overtime/overtime_page.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -436,6 +437,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     Get.to(() => const JustificationPage(), transition: Transition.size);
   }
 
+  void goToOvertimes() {
+    isListApprove = false;
+    Get.to(() => OvertimePage(), transition: Transition.size);
+  }
+
   void goToJustificationApprove() async {
     isListApprove = true;
     final result = await Get.to(
@@ -565,7 +571,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             : vacacion.finhabilitar == '1'
                 ? 'R'
                 : '';
-        final sign = await showModalSSign(vacacion, type,buildContext);
+        final sign = await showModalSSign(vacacion, type, buildContext);
         if (sign) {
           loadingIndicator(onlyLoading: true, opacity: false);
           await _getListData();

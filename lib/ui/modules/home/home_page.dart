@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 
@@ -181,7 +180,7 @@ class HomePage extends StatelessWidget {
                 showButtonRequest: !controller.userPreferences.isWorkerChild,
                 title: 'Justificaciones',
                 indexItem: 0,
-                itemCount: 3,
+                itemCount: 4,
                 textButton: [
                   Image.asset('assets/icons/edit.png',
                       height: 30, width: 30, color: Colors.white),
@@ -217,7 +216,7 @@ class HomePage extends StatelessWidget {
                   showButtonRequest: !controller.userPreferences.isWorkerChild,
                   title: 'Permisos y licencias',
                   indexItem: 1,
-                  itemCount: 3,
+                  itemCount: 4,
                   textButton: [
                     Image.asset('assets/icons/edit.png',
                         height: 30, width: 30, color: Colors.white),
@@ -252,7 +251,7 @@ class HomePage extends StatelessWidget {
                   showButtonRequest: !controller.userPreferences.isWorkerChild,
                   title: 'Vacaciones',
                   indexItem: 2,
-                  itemCount: 3,
+                  itemCount: 4,
                   textButton: [
                     controller.dataCarousel != null &&
                             controller.dataCarousel!.containsKey('vacacion')
@@ -386,7 +385,42 @@ class HomePage extends StatelessWidget {
                   },
                   onPressedNotify: () {
                     controller.goToHolidayApprove();
-                  })
+                  }),
+              CarouselSliderItem(
+                cantidadAprobar: controller.dataCarousel != null &&
+                        controller.dataCarousel!.containsKey('sobretiempo')
+                    ? int.parse(controller.dataCarousel!['sobretiempo']
+                            ['total_aprobar']
+                        .toString())
+                    : 0,
+                showButtonRequest: !controller.userPreferences.isWorkerChild,
+                title: 'Sobretiempos',
+                indexItem: 3,
+                itemCount: 4,
+                textButton: [
+                  Image.asset('assets/icons/edit.png',
+                      height: 30, width: 30, color: Colors.white),
+                  Text(
+                    'solicitar sobretiempo',
+                    style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w400, color: Colors.white),
+                  )
+                ],
+                detail: controller.dataCarousel != null &&
+                        controller.dataCarousel!.containsKey('sobretiempo')
+                    ? controller.dataCarousel!['sobretiempo']['lista']
+                    : [],
+                constraints: constraints,
+                onPressedList: () {
+                  controller.goToOvertimes();
+                },
+                onPressedRequest: () {
+                  controller.goToFormJustification();
+                },
+                onPressedNotify: () {
+                  controller.goToJustificationApprove();
+                },
+              ),
             ],
             carouselController: controller.controllerCarousel,
             options: CarouselOptions(

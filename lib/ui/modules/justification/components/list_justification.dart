@@ -391,7 +391,7 @@ class ListJustification extends StatelessWidget {
                                     color: data.idEstadoJustif == '01'
                                         ? ColorsApp.primary
                                         : data.idEstadoJustif == '02'
-                                            ? ColorsApp.basic
+                                            ? ColorsApp.success
                                             : data.idEstadoJustif == '03'
                                                 ? ColorsApp.success
                                                 : data.idEstadoJustif == '04'

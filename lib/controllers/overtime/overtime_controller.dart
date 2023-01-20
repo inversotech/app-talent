@@ -1,20 +1,22 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import "package:collection/collection.dart";
-import 'package:lamb_talent/resources/models/justification/justification_group.dart';
+import 'package:lamb_talent/resources/models/overtime/overtime.dart';
+import 'package:lamb_talent/resources/models/overtime/overtime_group.dart';
+import 'package:lamb_talent/resources/services/overtime/overtime_service.dart';
+import 'package:lamb_talent/shared/components/loading.dart';
+
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/models.dart';
-import 'package:lamb_talent/resources/services/auth/auth_service.dart';
-import 'package:lamb_talent/resources/services/justification/justification_service.dart';
-import 'package:lamb_talent/shared/components/loading.dart';
-import 'package:lamb_talent/shared/components/year_month_datepicker.dart';
-import 'package:lamb_talent/ui/modules/justification/components/form_justification.dart';
 
-class JustificationController extends GetxController {
-  JustificationController({required this.approve});
+import '../../resources/services/auth/auth_service.dart';
+import '../../shared/components/year_month_datepicker.dart';
+
+class OvertimeController extends GetxController {
+  OvertimeController({required this.approve});
   final bool approve;
   final scrollController = ScrollController();
   final refreshController = RefreshController(initialRefresh: false);
@@ -25,21 +27,21 @@ class JustificationController extends GetxController {
           month: DateTime.now().month,
           nameMonth: capitalize(DateFormat.MMMM('es').format(DateTime.now())))
       .obs;
-  List<JustificationGroup> listData = [];
+  List<OvertimeGroup> listData = [];
   bool changeApprove = false;
-  RxString valueStateJustif = ''.obs;
+  RxString valueStateOver = ''.obs;
   RxBool loadingDataInit = false.obs;
   RxInt page = 1.obs;
   RxInt perPage = 10.obs;
 
   RxString codeModule = '16120101'.obs;
   RxBool isJefeArea = false.obs;
+  RxBool isWorker = false.obs;
   RxBool isDth = false.obs;
 
   @override
   void onReady() {
     if (userPreferences.isWorkerChild && approve) {
-      //no ase nada
     } else {
       initValues();
       getListDataInitial();
@@ -51,7 +53,7 @@ class JustificationController extends GetxController {
     page.value = 1;
     perPage.value = 10;
     listData = [];
-    valueStateJustif.value = '';
+    valueStateOver.value = '';
   }
 
   void getListDataInitial() async {
@@ -66,64 +68,25 @@ class JustificationController extends GetxController {
     final Map<String, String> params = {'id_modulo': codeModule.value};
     final authService = AuthService();
     final actions = await authService.getActionsByModule(params);
+    isWorker.value = actions
+        .where((element) =>
+            element.clave.toString().toUpperCase() == 'APPROVE_OVERTIME_WORK')
+        .isNotEmpty;
     isJefeArea.value = actions
         .where((element) =>
-            element.clave.toString().toUpperCase() == 'APPROVE_JUST_AREA')
+            element.clave.toString().toUpperCase() == 'APPROVE_OVERTIME_AREA')
         .isNotEmpty;
     isDth.value = actions
         .where((element) =>
-            element.clave.toString().toUpperCase() == 'APPROVE_JUST_DTH')
+            element.clave.toString().toUpperCase() == 'APPROVE_OVERTIME_DTH')
         .isNotEmpty;
     if (isDth.value && approve) {
-      valueStateJustif.value = '01,02';
+      valueStateOver.value = '01,02,04';
     } else if (isJefeArea.value && approve) {
-      valueStateJustif.value = '01';
+      valueStateOver.value = '01,02';
+    } else if (isWorker.value && approve) {
+      valueStateOver.value = '01';
     }
-  }
-
-  void getListData() async {
-    final Map<String, String> params = {
-      'id_trabajador': userPreferences.idWorker.toString(),
-      'id_entidad': userPreferences.idEntity.toString(),
-      'id_depto': userPreferences.idDeparment.toString(),
-      'id_anho': dateModel.value.year.toString(),
-      'id_mes': dateModel.value.month.toString(),
-      'id_estado_justif_in': valueStateJustif.toString(),
-      'per_page': perPage.value.toString(),
-      'page': '1',
-      'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty
-          ? userPreferences.idNivelAcceso.toString()
-          : '',
-      'restringido': approve ? 'S' : 'U'
-    };
-    loadingIndicator(onlyLoading: true, opacity: false);
-
-    final justificationService = JustificationService();
-    pagination = await justificationService.getJustifications(params);
-    List<dynamic> jsonList =
-        pagination.data == null ? [] : pagination.data as List<dynamic>;
-
-    List<JustificationModel> list = jsonList
-        .map((jsonElement) => JustificationModel.fromJson(jsonElement))
-        .toList();
-    final newlist = groupBy(list, (JustificationModel obj) => obj.idTrabajador);
-    List<JustificationGroup> listDataNew = [];
-    newlist.forEach((key, value) {
-      listDataNew.add(JustificationGroup(
-          idTrabajador: value[0].idTrabajador,
-          apellidonombre: value[0].apellidonombre,
-          children: value));
-    });
-    listData = listDataNew;
-    if (pagination.total <= perPage.value) {
-      refreshController.loadNoData();
-    } else {
-      refreshController.loadComplete();
-    }
-    page.value = 2;
-    loadingDataInit.value = false;
-    loadingDataInit.value = true;
-    Get.until((route) => !Get.isDialogOpen!);
   }
 
   Future getListMoreData() async {
@@ -133,7 +96,7 @@ class JustificationController extends GetxController {
       'id_depto': userPreferences.idDeparment.toString(),
       'id_anho': dateModel.value.year.toString(),
       'id_mes': dateModel.value.month.toString(),
-      'id_estado_justif_in': valueStateJustif.toString(),
+      'id_estado_sobretiempo_in': valueStateOver.toString(),
       'per_page': perPage.value.toString(),
       'page': page.value.toString(),
       'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty
@@ -141,28 +104,25 @@ class JustificationController extends GetxController {
           : '',
       'restringido': approve ? 'S' : 'U'
     };
-    final justificationService = JustificationService();
-    pagination = await justificationService.getJustifications(params);
+    final overtimeService = OvertimeService();
+    pagination = await overtimeService.getOvertimes(params);
     List<dynamic> jsonList =
         pagination.data == null ? [] : pagination.data as List<dynamic>;
     if (jsonList.isNotEmpty) {
-      List<JustificationModel> list = jsonList
-          .map((jsonElement) => JustificationModel.fromJson(jsonElement))
+      List<OvertimeModel> list = jsonList
+          .map((jsonElement) => OvertimeModel.fromJson(jsonElement))
           .toList();
-      final newlist =
-          groupBy(list, (JustificationModel obj) => obj.idTrabajador);
-      List<JustificationGroup> listDataNew = [];
+      final newlist = groupBy(list, (OvertimeModel obj) => obj.idTrabajador);
+      List<OvertimeGroup> listDataNew = [];
       newlist.forEach((key, value) {
-        listDataNew.add(JustificationGroup(
+        listDataNew.add(OvertimeGroup(
             idTrabajador: value[0].idTrabajador,
             apellidonombre: value[0].apellidonombre,
             children: value));
       });
       listData.addAll(listDataNew);
-
       page.value++;
     }
-
     if (pagination.total <= perPage.value ||
         jsonList.length < perPage.value ||
         jsonList.isEmpty) {
@@ -175,41 +135,90 @@ class JustificationController extends GetxController {
     loadingDataInit.value = true;
   }
 
-  void onRefresh() async {
+  Future getListData() async {
     final Map<String, String> params = {
       'id_trabajador': userPreferences.idWorker.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
       'id_depto': userPreferences.idDeparment.toString(),
       'id_anho': dateModel.value.year.toString(),
       'id_mes': dateModel.value.month.toString(),
-      'id_estado_justif_in': valueStateJustif.toString(),
-      'per_page': perPage.toString(),
+      'id_estado_sobretiempo_in': valueStateOver.toString(),
+      'per_page': perPage.value.toString(),
       'page': '1',
       'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty
           ? userPreferences.idNivelAcceso.toString()
           : '',
       'restringido': approve ? 'S' : 'U'
     };
-    final justificationService = JustificationService();
-    pagination = await justificationService.getJustifications(params);
+    loadingIndicator(onlyLoading: true, opacity: false);
+
+    final overtimeService = OvertimeService();
+    pagination = await overtimeService.getOvertimes(params);
+    List<dynamic> jsonList =
+        pagination.data == null ? [] : pagination.data as List<dynamic>;
+
+    List<OvertimeModel> list = jsonList
+        .map((jsonElement) => OvertimeModel.fromJson(jsonElement))
+        .toList();
+    final newlist = groupBy(list, (OvertimeModel obj) => obj.idTrabajador);
+    List<OvertimeGroup> listDataNew = [];
+    newlist.forEach((key, value) {
+      listDataNew.add(OvertimeGroup(
+          idTrabajador: value[0].idTrabajador,
+          apellidonombre: value[0].apellidonombre,
+          children: value));
+    });
+    listData = listDataNew;
+
+    if (pagination.total <= perPage.value) {
+      refreshController.loadNoData();
+    } else {
+      refreshController.loadComplete();
+    }
+    page.value = 2;
+    loadingDataInit.value = false;
+    loadingDataInit.value = true;
+    Get.until((route) => !Get.isDialogOpen!);
+  }
+
+  Future onRefresh() async {
+    final Map<String, String> params = {
+      'id_trabajador': userPreferences.idWorker.toString(),
+      'id_entidad': userPreferences.idEntity.toString(),
+      'id_depto': userPreferences.idDeparment.toString(),
+      'id_anho': dateModel.value.year.toString(),
+      'id_mes': dateModel.value.month.toString(),
+      'id_estado_sobretiempo_in': valueStateOver.toString(),
+      'per_page': perPage.value.toString(),
+      'page': '1',
+      'id_acceso_nivel': userPreferences.idNivelAcceso.isNotEmpty
+          ? userPreferences.idNivelAcceso.toString()
+          : '',
+      'restringido': approve ? 'S' : 'U'
+    };
+
+    final overtimeService = OvertimeService();
+    pagination = await overtimeService.getOvertimes(params);
     List<dynamic> jsonList;
     if (pagination.data == null || pagination.data.runtimeType == String) {
       jsonList = [];
     } else {
       jsonList = pagination.data as List<dynamic>;
     }
-    List<JustificationModel> list = jsonList
-        .map((jsonElement) => JustificationModel.fromJson(jsonElement))
+
+    List<OvertimeModel> list = jsonList
+        .map((jsonElement) => OvertimeModel.fromJson(jsonElement))
         .toList();
-    final newlist = groupBy(list, (JustificationModel obj) => obj.idTrabajador);
-    List<JustificationGroup> listDataNew = [];
+    final newlist = groupBy(list, (OvertimeModel obj) => obj.idTrabajador);
+    List<OvertimeGroup> listDataNew = [];
     newlist.forEach((key, value) {
-      listDataNew.add(JustificationGroup(
+      listDataNew.add(OvertimeGroup(
           idTrabajador: value[0].idTrabajador,
           apellidonombre: value[0].apellidonombre,
           children: value));
     });
     listData = listDataNew;
+
     if (pagination.total <= perPage.value) {
       refreshController.refreshCompleted();
       refreshController.loadNoData();
@@ -220,10 +229,6 @@ class JustificationController extends GetxController {
     page.value = 2;
     loadingDataInit.value = false;
     loadingDataInit.value = true;
-  }
-
-  void onLoading() async {
-    await getListMoreData();
   }
 
   void selectDate() async {
@@ -240,13 +245,8 @@ class JustificationController extends GetxController {
     }
   }
 
-  void goToForm(JustificationModel arguments) async {
-    final result = await Get.to(() => FormJustification(arguments: arguments));
-    if (result != null) {
-      if (result['change'] == 'true' || result['change'] == true) {
-        getListData();
-      }
-    }
+  void onLoading() async {
+    await getListMoreData();
   }
 
   void goToBack() {
