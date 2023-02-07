@@ -287,11 +287,15 @@ class HomePage extends StatelessWidget {
                                     .containsKey('codigo') &&
                                 controller.dataCarousel!['vacacion']
                                     .containsKey('vacacion')
-                            ? controller.dataCarousel!['vacacion']['codigo'] ==
+                            ? (controller.dataCarousel!['vacacion']['codigo'] ==
                                         '04' ||
                                     controller.dataCarousel!['vacacion']
                                             ['codigo'] ==
-                                        '03'
+                                        '03') && controller.dataCarousel!['vacacion']
+                                                ['vacacion']
+                                            .containsKey('fecha_ini') && controller.dataCarousel!['vacacion']
+                                                ['vacacion']
+                                            .containsKey('fecha_fin')
                                 ? Builder(builder: (context) {
                                     String code = controller
                                         .dataCarousel!['vacacion']['codigo']
@@ -373,7 +377,52 @@ class HomePage extends StatelessWidget {
                                           )
                                         : Container();
                                   })
-                                : Container()
+                                : controller.dataCarousel!['vacacion']['codigo'] != '05' &&
+                                        controller.dataCarousel!['vacacion']
+                                                ['vacacion']
+                                            .containsKey('fecha_ini') &&
+                                        controller.dataCarousel!['vacacion']
+                                                ['vacacion']
+                                            .containsKey('fecha_fin')
+                                    ? Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                            Text(
+                                              'Desde ',
+                                              style: GoogleFonts.montserrat(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 16.0,
+                                                  color: ColorsApp.primary),
+                                            ),
+                                            Text(
+                                              Jiffy(controller.dataCarousel![
+                                                          'vacacion']
+                                                      ['vacacion']['fecha_ini'])
+                                                  .format('dd-MM-yyyy'),
+                                              style: GoogleFonts.montserrat(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 18.0,
+                                                  color: ColorsApp.primary),
+                                            ),
+                                            Text(
+                                              ' hasta ',
+                                              style: GoogleFonts.montserrat(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 16.0,
+                                                  color: ColorsApp.primary),
+                                            ),
+                                            Text(
+                                              Jiffy(controller.dataCarousel![
+                                                          'vacacion']
+                                                      ['vacacion']['fecha_fin'])
+                                                  .format('dd-MM-yyyy'),
+                                              style: GoogleFonts.montserrat(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 18.0,
+                                                  color: ColorsApp.primary),
+                                            )
+                                          ])
+                                    : Container()
                             : Container()
                         : Container();
                   }),
