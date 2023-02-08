@@ -44,8 +44,8 @@ class LoginController extends GetxController {
       'password': password.text.toString(),
       'no_caduca': 'S'
     };
-    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     final userPref = UserPreferences();
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     String serial = '';
     if (userPref.tokenNotify.isNotEmpty) {
       OneSignal.shared.setExternalUserId(userPref.tokenNotify);

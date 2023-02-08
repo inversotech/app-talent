@@ -269,7 +269,9 @@ class AppScreen extends StatelessWidget {
                                       // storage.remove('usernameLamb');
                                       storage.remove('passwordLamb');
                                       storage.remove('tokenLamb');
+                                     String tokenNotify = userPreferences.tokenNotify;
                                       userPreferences.clear();
+                                      userPreferences.tokenNotify=tokenNotify;
                                       Navigator.pushReplacementNamed(
                                           context, 'login');
                                     },
