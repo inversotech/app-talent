@@ -2,7 +2,10 @@ import 'package:get/get.dart';
 import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/resources/models/models.dart';
 import 'package:lamb_talent/resources/models/overtime/process_overtime.dart';
+import 'package:lamb_talent/resources/models/overtime/schedule_worker_overtime.dart';
 import 'package:lamb_talent/resources/providers/api.provider.dart';
+
+import '../../models/overtime/type_overtime.dart';
 
 class OvertimeService {
   Future<PaginationModel> getOvertimes(Map<String, String> params) async {
@@ -28,21 +31,35 @@ class OvertimeService {
     return response;
   }
 
-  Future<List<ScheduleWorkerModel>> getScheduleWorker(
+  Future<List<TypeOvertimeModel>> getTypeOvertime() async {
+    final apiProvider = ApiProvider();
+    final response =
+        await apiProvider.getAll(endPoint: endPoints['comun']['overtime-type']);
+    //_apiProvider.dispose();
+    if (response.success) {
+      List<dynamic> jsonList = response.data as List;
+
+      List<TypeOvertimeModel> list = jsonList
+          .map((jsonElement) => TypeOvertimeModel.fromJson(jsonElement))
+          .toList();
+      return list;
+    } else {
+      return [];
+    }
+  }
+
+  Future<ScheduleWorkerOvertimeModel> getScheduleWorker(
       Map<String, String> params) async {
     final apiProvider = ApiProvider();
     final response = await apiProvider.getWithParams(
         endPoint: endPoints['assistance']['worker-scheduled-hours'],
         params: params);
     if (response.success) {
-      List<dynamic> jsonList = response.data as List;
-
-      List<ScheduleWorkerModel> list = jsonList
-          .map((jsonElement) => ScheduleWorkerModel.fromJson(jsonElement))
-          .toList();
-      return list;
+      ScheduleWorkerOvertimeModel res =
+          ScheduleWorkerOvertimeModel.fromJson(response.data);
+      return res;
     } else {
-      return [];
+      return ScheduleWorkerOvertimeModel.fromJson({});
     }
   }
 

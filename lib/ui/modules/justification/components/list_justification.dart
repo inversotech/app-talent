@@ -921,7 +921,7 @@ class ListJustification extends StatelessWidget {
                                     fontSize: 14.0)),
                             item.fechahora != null
                                 ? Text(
-                                    '${DateFormat('d|M|y hh:mm a').format(DateTime.parse(item.fechahora.toString())).toLowerCase()} (Registrado)',
+                                    '${DateFormat('dd|MM|yyyy hh:mm a').format(DateTime.parse(item.fechahora.toString())).toLowerCase()} (Registrado)',
                                     style: GoogleFonts.montserrat(
                                         fontWeight: FontWeight.w400,
                                         color: ColorsApp.primary,
@@ -929,7 +929,7 @@ class ListJustification extends StatelessWidget {
                                 : Container(),
                             item.fechahoraManual != null
                                 ? Text(
-                                    DateFormat('d|M|y hh:mm a')
+                                    DateFormat('dd|MM|yyyy hh:mm a')
                                         .format(DateTime.parse(
                                             item.fechahoraManual.toString()))
                                         .toLowerCase(),

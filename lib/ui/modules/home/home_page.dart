@@ -415,10 +415,10 @@ class HomePage extends StatelessWidget {
                   controller.goToOvertimes();
                 },
                 onPressedRequest: () {
-                  controller.goToFormJustification();
+                  controller.goToFormOvertime();
                 },
                 onPressedNotify: () {
-                  controller.goToJustificationApprove();
+                  controller.goToOvertimeApprove();
                 },
               ),
             ],

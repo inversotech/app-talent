@@ -13,8 +13,6 @@ final Map endPoints = {
     'show-overtime': '${Env.api.apiTalent}comun/assistance/show-overtime',
     'get-process-overtime':
         '${Env.api.apiTalent}comun/assistance/get-process-overtime',
-    'worker-scheduled-hours':
-        '${Env.api.apiTalent}comun/assistance/worker-scheduled-hours',
     'my-entities': '${Env.api.apiTalent}comun/my-entities-contract',
     'my-deptos': '${Env.api.apiTalent}comun/my-deptos-contract',
     'total-entities-deptos':
@@ -40,6 +38,8 @@ final Map endPoints = {
     'change-entity-depto': '${Env.api.apiTalent}comun/change-entity-depto'
   },
   'assistance': {
+    'worker-scheduled-hours':
+        '${Env.api.apiTalent}comun/assistance/worker-scheduled-hours',
     'overtime-type': '${Env.api.apiTalent}assistance/tipo-sobretiempo',
     'register': '${Env.api.apiTalent}assistance/overtime/register',
     'registerStatus': '${Env.api.apiTalent}assistance/overtime/register-status',

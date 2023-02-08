@@ -20,6 +20,7 @@ class ListOvertime extends StatelessWidget {
   final BoxConstraints constraints;
   final void Function(OvertimeModel) onPressed;
   final void Function() onChangeList;
+  final bool isWorker;
   final bool isJefeArea;
   final bool isDth;
   final bool approve;
@@ -29,6 +30,7 @@ class ListOvertime extends StatelessWidget {
     required this.constraints,
     required this.onPressed,
     required this.onChangeList,
+    this.isWorker = false,
     this.isJefeArea = false,
     this.isDth = false,
     this.approve = false,
@@ -155,6 +157,54 @@ class ListOvertime extends StatelessWidget {
             children: [
               item.codigoPeriodo.toString() == 'H'
                   ? Text(
+                      'Fecha: ${Jiffy(item.fecha, 'yyyy-MM-dd').format('dd|MM|yyyy')}',
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w500,
+                          color: ColorsApp.primary,
+                          fontSize: 12.0))
+                  : Container(),
+              item.codigoPeriodo.toString() == 'H'
+                  ? Text(
+                      'Hora: ${Jiffy(item.horaDesde, 'HH:mm').format('hh:mm a')}-${Jiffy(item.horaHasta!, 'HH:mm').format('hh:mm a')}',
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w500,
+                          color: ColorsApp.primary,
+                          fontSize: 12.0))
+                  : Container(),
+              item.codigoPeriodo.toString() == 'D'
+                  ? Text(
+                      'Fecha: ${Jiffy(item.fecha, 'yyyy-MM-dd').format('dd|MM|yyyy')}',
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w500,
+                          color: ColorsApp.primary,
+                          fontSize: 12.0))
+                  : Container()
+            ],
+          ),
+        ),
+        item.codigoPeriodo != null && item.codigoPeriodo == 'H'
+            ? Text('Tiempo: ${item.horas!} horas',
+                style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w500,
+                    color: ColorsApp.primary,
+                    fontSize: 12.0))
+            : Container()
+      ],
+    );
+  }
+
+  Widget _dateWidgetDetail(OvertimeModel item) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              item.codigoPeriodo.toString() == 'H'
+                  ? Text(
                       'Fecha: ${Jiffy(item.fecha, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
@@ -163,7 +213,7 @@ class ListOvertime extends StatelessWidget {
                   : Container(),
               item.codigoPeriodo.toString() == 'H'
                   ? Text(
-                      'Hora: ${Jiffy(item.horaDesde, 'HH:mm').format('hh:mm a')} - ${Jiffy(item.horaHasta!, 'HH:mm').format('hh:mm a')}',
+                      'Hora: ${Jiffy(item.horaDesde, 'HH:mm').format('hh:mm a')}-${Jiffy(item.horaHasta!, 'HH:mm').format('hh:mm a')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -180,7 +230,7 @@ class ListOvertime extends StatelessWidget {
             ],
           ),
         ),
-        item.periodo != null && item.periodo == 'H'
+        item.codigoPeriodo != null && item.codigoPeriodo == 'H'
             ? Text('Tiempo: ${item.horas!} horas',
                 style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w500,
@@ -291,7 +341,7 @@ class ListOvertime extends StatelessWidget {
                           const SizedBox(height: 8.0),
                           Padding(
                             padding: const EdgeInsets.only(left: 4.0),
-                            child: _dateWidget(data),
+                            child: _dateWidgetDetail(data),
                           ),
                           const SizedBox(height: 8.0),
                           const SizedBox(height: 8.0),
@@ -433,7 +483,7 @@ class ListOvertime extends StatelessWidget {
                         )
                       : Container(),
                   (idEstado == '01' && isJefeArea) ||
-                          (idEstado == '02' && isDth)
+                          (idEstado == '04' && isDth)
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 2.0),
                           child: TextButton(
@@ -470,7 +520,7 @@ class ListOvertime extends StatelessWidget {
                         )
                       : Container(),
                   (idEstado == '01' && isJefeArea) ||
-                          (idEstado == '02' && isDth)
+                          (idEstado == '04' && isDth)
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 2.0),
                           child: TextButton(
@@ -498,7 +548,7 @@ class ListOvertime extends StatelessWidget {
                               child: Text(
                                   idEstado == '01' && isJefeArea
                                       ? 'Aprobación Area'
-                                      : idEstado == '02' && isDth
+                                      : idEstado == '04' && isDth
                                           ? 'Aprobación DTH'
                                           : '',
                                   style: const TextStyle(
@@ -520,20 +570,23 @@ class ListOvertime extends StatelessWidget {
   }
 
   Future<Map<String, dynamic>> _getDataOvertime(String id) async {
-    Map<String, dynamic> data = {
-      'request': null,
-      'markings': null,
-      'proccess': null
-    };
+    Map<String, dynamic> data = {'request': null, 'proccess': null};
     final OvertimeService overtimeService = OvertimeService();
     final resp = await overtimeService.getOvertime(id);
+    print('PASA OVERTIME');
     if (resp.success) {
-      OvertimeModel request = OvertimeModel.fromJson(resp.data);
+      print('PASA SUCCES');
+      print(resp.data);
+      OvertimeModel request =
+          OvertimeModel.fromJson(resp.data as Map<String, dynamic>);
+
       data['request'] = request;
     }
+    print('PASA PROCESS antes de if');
     List<ProcessOvertimeModel> listProcess =
         await overtimeService.getProcessOvertime(id);
     data['proccess'] = listProcess;
+    print('PASA PROCESS');
     return data;
   }
 
@@ -745,7 +798,7 @@ class ListOvertime extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8.0),
               child: Text((idEstado == '01' && isJefeArea
                       ? 'Aprobación Area'
-                      : idEstado == '02' && isDth
+                      : idEstado == '04' && isDth
                           ? 'Aprobación DTH'
                           : '')
                   .toUpperCase()),
@@ -754,7 +807,7 @@ class ListOvertime extends StatelessWidget {
           content: Column(children: [
             Image.asset('assets/icons/check.png',
                 height: 50, width: 50, color: ColorsApp.success),
-            Text('¿Desea aprobar el/la permiso/licencia?',
+            Text('¿Desea aprobar el sobretiempo?',
                 style: GoogleFonts.montserrat(
                     color: ColorsApp.primary,
                     fontWeight: FontWeight.bold,
@@ -818,9 +871,9 @@ class ListOvertime extends StatelessWidget {
                     idTrabajador,
                     id,
                     idEstado == '01' && isJefeArea
-                        ? '02'
-                        : idEstado == '02' && isDth
-                            ? '03'
+                        ? '04'
+                        : idEstado == '04' && isDth
+                            ? '05'
                             : idEstado);
               },
             )

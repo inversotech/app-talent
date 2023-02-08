@@ -2,8 +2,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/resources/models/overtime/overtime.dart';
 import 'package:lamb_talent/resources/models/overtime/overtime_group.dart';
+import 'package:lamb_talent/resources/models/overtime/type_overtime.dart';
 import 'package:lamb_talent/resources/services/overtime/overtime_service.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
 
@@ -12,6 +14,7 @@ import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/models.dart';
 
+import '../../resources/providers/api.provider.dart';
 import '../../resources/services/auth/auth_service.dart';
 import '../../shared/components/year_month_datepicker.dart';
 
@@ -68,10 +71,7 @@ class OvertimeController extends GetxController {
     final Map<String, String> params = {'id_modulo': codeModule.value};
     final authService = AuthService();
     final actions = await authService.getActionsByModule(params);
-    isWorker.value = actions
-        .where((element) =>
-            element.clave.toString().toUpperCase() == 'APPROVE_OVERTIME_WORK')
-        .isNotEmpty;
+
     isJefeArea.value = actions
         .where((element) =>
             element.clave.toString().toUpperCase() == 'APPROVE_OVERTIME_AREA')
@@ -81,10 +81,8 @@ class OvertimeController extends GetxController {
             element.clave.toString().toUpperCase() == 'APPROVE_OVERTIME_DTH')
         .isNotEmpty;
     if (isDth.value && approve) {
-      valueStateOver.value = '01,02,04';
+      valueStateOver.value = '01,04';
     } else if (isJefeArea.value && approve) {
-      valueStateOver.value = '01,02';
-    } else if (isWorker.value && approve) {
       valueStateOver.value = '01';
     }
   }
@@ -93,7 +91,8 @@ class OvertimeController extends GetxController {
     final Map<String, String> params = {
       'id_trabajador': userPreferences.idWorker.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
-      'id_depto': userPreferences.idDeparment.toString(),
+/*       'id_depto': userPreferences.idDeparment.toString(),
+ */
       'id_anho': dateModel.value.year.toString(),
       'id_mes': dateModel.value.month.toString(),
       'id_estado_sobretiempo_in': valueStateOver.toString(),
@@ -139,7 +138,8 @@ class OvertimeController extends GetxController {
     final Map<String, String> params = {
       'id_trabajador': userPreferences.idWorker.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
-      'id_depto': userPreferences.idDeparment.toString(),
+/*       'id_depto': userPreferences.idDeparment.toString(),
+ */
       'id_anho': dateModel.value.year.toString(),
       'id_mes': dateModel.value.month.toString(),
       'id_estado_sobretiempo_in': valueStateOver.toString(),
@@ -185,7 +185,8 @@ class OvertimeController extends GetxController {
     final Map<String, String> params = {
       'id_trabajador': userPreferences.idWorker.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
-      'id_depto': userPreferences.idDeparment.toString(),
+/*       'id_depto': userPreferences.idDeparment.toString(),
+ */
       'id_anho': dateModel.value.year.toString(),
       'id_mes': dateModel.value.month.toString(),
       'id_estado_sobretiempo_in': valueStateOver.toString(),

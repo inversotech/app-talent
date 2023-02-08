@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/resources/models/general/acceso_nivel_user.dart';
+import 'package:lamb_talent/resources/models/overtime/overtime.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_approve_page.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_page.dart';
 import 'package:lamb_talent/ui/modules/home/components/view_qr.dart';
@@ -16,6 +17,7 @@ import 'package:lamb_talent/ui/modules/justification/components/form_justificati
 import 'package:lamb_talent/ui/modules/justification/justificattion_page.dart';
 import 'package:lamb_talent/ui/modules/license_permit/components/form_license_permit.dart';
 import 'package:lamb_talent/ui/modules/license_permit/license_permit_page.dart';
+import 'package:lamb_talent/ui/modules/overtime/components/form_overtime.dart';
 import 'package:lamb_talent/ui/modules/overtime/overtime_page.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -461,6 +463,25 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  void goToOvertimeApprove() async {
+    isListApprove = true;
+    final result = await Get.to(
+        () => const OvertimePage(
+              approve: true,
+              title: 'Aprobar Sobretiempos',
+            ),
+        transition: Transition.size);
+    if (result != null) {
+      if (result['change'] == 'true' || result['change'] == true) {
+        loadingIndicator(onlyLoading: true, opacity: false);
+        await _getListData();
+        loadingData.value = true;
+        loadingData.value = false;
+        Get.until((route) => !Get.isDialogOpen!);
+      }
+    }
+  }
+
   void goToLicensePermit() {
     isListApprove = false;
     Get.to(() => const LicensePermitPage(), transition: Transition.size);
@@ -508,6 +529,20 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   void goToFormJustification() async {
     final result = await Get.to(
         () => FormJustification(arguments: JustificationModel()),
+        transition: Transition.size);
+    if (result != null) {
+      if (result['change'] == 'true' || result['change'] == true) {
+        loadingIndicator(onlyLoading: true, opacity: false);
+        await _getListData();
+        loadingData.value = true;
+        loadingData.value = false;
+        Get.until((route) => !Get.isDialogOpen!);
+      }
+    }
+  }
+
+  void goToFormOvertime() async {
+    final result = await Get.to(() => FormOvertime(arguments: OvertimeModel()),
         transition: Transition.size);
     if (result != null) {
       if (result['change'] == 'true' || result['change'] == true) {

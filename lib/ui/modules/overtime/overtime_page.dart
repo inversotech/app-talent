@@ -127,6 +127,7 @@ class OvertimePage extends StatelessWidget {
                     controller.getListData();
                   },
                   isJefeArea: controller.isJefeArea.value,
+                  isWorker: controller.isWorker.value,
                   isDth: controller.isDth.value,
                 )
               : Container(),
