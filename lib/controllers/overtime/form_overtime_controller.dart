@@ -5,7 +5,6 @@ import 'package:lamb_talent/resources/models/overtime/overtime.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/overtime/process_overtime.dart';
 import 'package:get/get.dart';
-import 'package:lamb_talent/resources/models/overtime/schedule_worker_overtime.dart';
 import 'package:lamb_talent/resources/models/overtime/type_overtime.dart';
 import 'package:lamb_talent/resources/services/overtime/overtime_service.dart';
 
@@ -31,9 +30,12 @@ class FormOvertimeController extends GetxController {
   List<ProcessOvertimeModel> listProcessOvertime = [];
   List<Color> listColorsMarkingSelected = [];
   List<TypeOvertimeModel> listTypeOvertime = [];
-  ScheduleWorkerOvertimeModel scheduleWorker = ScheduleWorkerOvertimeModel();
   TextEditingController inputFieldReasonCtrl = TextEditingController(),
-      inputFieldPeriodoCtrl = TextEditingController();
+      inputFieldPeriodoCtrl = TextEditingController(),
+      inputFieldHourFromCtrl = TextEditingController(),
+      inputFieldHourToCtrl = TextEditingController(),
+      inputFieldMaxHourCtrl = TextEditingController(),
+      inputFieldHourTotalCtrl = TextEditingController();
 
   var formData = OvertimeModel().obs;
   RxBool loadMarking = false.obs;
@@ -64,7 +66,6 @@ class FormOvertimeController extends GetxController {
 
     final overtimeService = OvertimeService();
     listTypeOvertime = await overtimeService.getTypeOvertime();
-    print(listTypeOvertime);
     loadingData.value = true;
     loadingData.value = false;
     Get.until((route) => !Get.isDialogOpen!);
@@ -74,8 +75,11 @@ class FormOvertimeController extends GetxController {
   void dispose() {
     scrollController.dispose();
     inputFieldReasonCtrl.dispose();
-
     inputFieldPeriodoCtrl.dispose();
+    inputFieldHourFromCtrl.dispose();
+    inputFieldHourToCtrl.dispose();
+    inputFieldMaxHourCtrl.dispose();
+    inputFieldHourTotalCtrl.dispose();
 
     super.dispose();
   }
@@ -87,22 +91,20 @@ class FormOvertimeController extends GetxController {
   }
 
   void getSchedule() async {
-    print('ASDASD');
     Map<String, String> params = {
       'id_trabajador': userPreferences.idWorker.toString(),
       'fecha': DateFormat('yyyy-MM-dd')
           .format(DateTime.parse(formData.value.fecha.toString()))
     };
-
     loadingIndicator(onlyLoading: true, opacity: false);
     final overtimeService = OvertimeService();
-    scheduleWorker = await overtimeService.getScheduleWorker(params);
+    final scheduleWorker = await overtimeService.getScheduleWorker(params);
     formData.value.horaDesde = scheduleWorker.horaSalida;
     formData.value.maxHoraExt = scheduleWorker.maxHoraExt;
-
+    inputFieldHourFromCtrl.text = scheduleWorker.horaSalida ?? '';
+    inputFieldMaxHourCtrl.text = scheduleWorker.maxHoraExt ?? '';
     Get.until((route) => !Get.isDialogOpen!);
     loadingData.value = true;
     loadingData.value = false;
-    print(formData.value.horaDesde);
   }
 }
