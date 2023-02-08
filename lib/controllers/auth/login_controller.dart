@@ -47,7 +47,10 @@ class LoginController extends GetxController {
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     final userPref = UserPreferences();
     String serial = '';
-    OneSignal.shared.setExternalUserId(userPref.tokenNotify);
+    if (userPref.tokenNotify.isNotEmpty) {
+      OneSignal.shared.setExternalUserId(userPref.tokenNotify);
+      params['token_notify'] = userPref.tokenNotify;
+    }
     String deviceId = await PlatformDeviceId.getDeviceId ?? '';
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
@@ -70,7 +73,6 @@ class LoginController extends GetxController {
     params['serial'] = serial;
     params['isvirtual'] = '';
     params['device_source'] = 'APP_UPN';
-    params['token_notify'] = userPref.tokenNotify;
     loadingIndicator(onlyLoading: true, opacity: false);
     final apiProvider = ApiProvider();
     final resp = await apiProvider.loginLamb(params, checkCredencial.value);

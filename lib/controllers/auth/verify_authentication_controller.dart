@@ -20,40 +20,39 @@ class VerifyAutheticationController extends GetxController {
   }
 
   void _validToken() async {
+    Map<String, String> params = {};
     final userPref = UserPreferences();
+    final apiProvider = ApiProvider();
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     if (userPref.tokenNotify.isNotEmpty) {
-      final apiProvider = ApiProvider();
-      final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
       OneSignal.shared.setExternalUserId(userPref.tokenNotify);
-      Map<String, String> params = {'token_notify': userPref.tokenNotify};
-      String deviceId = await PlatformDeviceId.getDeviceId ?? '';
-      if (Platform.isAndroid) {
-        final androidInfo = await deviceInfoPlugin.androidInfo;
-        params['uuid'] = deviceId; //UUID for Android by pedro
-        // params['uuid'] = androidInfo.androidId!; //UUID for Android
-        params['model'] = androidInfo.model;
-        params['platform'] = Platform.operatingSystem;
-        params['id_app'] = '5';
-      } else if (Platform.isIOS) {
-        final iosInfo = await deviceInfoPlugin.iosInfo;
-        params['uuid'] = deviceId; //UUID for iOS
-        params['model'] = iosInfo.model!;
-        params['platform'] = Platform.operatingSystem;
-        params['id_app'] = '6';
-      }
-      params['device_source'] = 'APP_UPN';
-      final response = await apiProvider.postParams(
-          endPoint: endPoints['oauth']['valid-tokens-oauth'],
-          params: params,
-          showMessage: false);
-      if (response.success) {
-        final resp = await _authService.userInfo();
-        if (resp.success) {
-          if (userPref.menu!.isNotEmpty) {
-            Get.offAllNamed(userPref.menu![0].url.toString());
-          }
-        } else {
-          Get.offAllNamed(RoutesName.login);
+      params['token_notify'] = userPref.tokenNotify;
+    }
+    String deviceId = await PlatformDeviceId.getDeviceId ?? '';
+    if (Platform.isAndroid) {
+      final androidInfo = await deviceInfoPlugin.androidInfo;
+      params['uuid'] = deviceId; //UUID for Android by pedro
+      // params['uuid'] = androidInfo.androidId!; //UUID for Android
+      params['model'] = androidInfo.model;
+      params['platform'] = Platform.operatingSystem;
+      params['id_app'] = '5';
+    } else if (Platform.isIOS) {
+      final iosInfo = await deviceInfoPlugin.iosInfo;
+      params['uuid'] = deviceId; //UUID for iOS
+      params['model'] = iosInfo.model!;
+      params['platform'] = Platform.operatingSystem;
+      params['id_app'] = '6';
+    }
+    params['device_source'] = 'APP_UPN';
+    final response = await apiProvider.postParams(
+        endPoint: endPoints['oauth']['valid-tokens-oauth'],
+        params: params,
+        showMessage: false);
+    if (response.success) {
+      final resp = await _authService.userInfo();
+      if (resp.success) {
+        if (userPref.menu!.isNotEmpty) {
+          Get.offAllNamed(userPref.menu![0].url.toString());
         }
       } else {
         Get.offAllNamed(RoutesName.login);
