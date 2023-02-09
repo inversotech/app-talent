@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lamb_talent/core/location_user.dart';
 import 'package:lamb_talent/resources/models/general/acceso_nivel_user.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_approve_page.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_page.dart';
@@ -71,6 +72,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   @override
   void onReady() {
+    LocationUser().initLocationUser();
     changeLocationUser();
     if ((Get.currentRoute == '/JustificationPage' ||
             Get.currentRoute == '/LicensePermitPage' ||
@@ -113,9 +115,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       if (Platform.isAndroid) {
         locationSettings = AndroidSettings(
           accuracy: LocationAccuracy.best,
-          distanceFilter: 5,
-          forceLocationManager: true,
-          intervalDuration: const Duration(seconds: 10),
+          distanceFilter: 0,
+          forceLocationManager: true
           /* //(Optional) Set foreground notification config to keep the app alive 
     //when going to the background
     foregroundNotificationConfig: const ForegroundNotificationConfig(
@@ -128,25 +129,25 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       } else if (Platform.isIOS || Platform.isMacOS) {
         locationSettings = AppleSettings(
           accuracy: LocationAccuracy.best,
-          activityType: ActivityType.fitness,
-          distanceFilter: 5,
-          pauseLocationUpdatesAutomatically: true,
+          activityType: ActivityType.other,
+          distanceFilter: 0,
+          pauseLocationUpdatesAutomatically: false,
           // Only set to true if our app will be started up in the background.
           showBackgroundLocationIndicator: false,
         );
       } else {
         locationSettings = const LocationSettings(
           accuracy: LocationAccuracy.best,
-          distanceFilter: 5,
+          distanceFilter: 0,
         );
       }
       positionStream =
           Geolocator.getPositionStream(locationSettings: locationSettings)
               .listen((Position? position) {
         if (position != null) {
-          // print('UBICACION');
-          // print(position.latitude);
-          // print(position.longitude);
+          print('UBICACION');
+          print(position.latitude);
+          print(position.longitude);
           userPreferences.latitude = position.latitude.toString();
           userPreferences.longitude = position.longitude.toString();
         }
