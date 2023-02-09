@@ -56,6 +56,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   bool openSetting = false;
   bool openLocation = false;
 
+  int counterVerify = 1;
+
   RxString codeModule = '16120101'.obs;
   bool isListApprove = false;
 
@@ -216,7 +218,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       minutosTolerancia.value = response.data['minutos_tolerancia'] != null
           ? int.parse(response.data['minutos_tolerancia'].toString())
           : 0;
-      if (showButton.value == '3' && !isMarking.value) {
+      if ((showButton.value == '3' || showButton.value == '4') && !isMarking.value) {
         Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:', response.message,
             duration: const Duration(seconds: 8),
@@ -224,6 +226,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             backgroundColor: ColorsApp.warning);
       } else {
         isMarking.value = false;
+      }
+      if (showButton.value == '4' &&
+          counterVerify <= 5 &&
+          !userPreferences.isWorkerChild) {
+        Future.delayed(Duration(seconds: counterVerify), () {
+          counterVerify++;
+          _verifyButtonAssistance();
+        });
       }
     }
 
@@ -316,7 +326,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           ? int.parse(
               dataResponse['button_marking']['minutos_tolerancia'].toString())
           : 0;
-      if (showButton.value == '3' && !isMarking.value) {
+      if ((showButton.value == '3' || showButton.value == '4') && !isMarking.value) {
         Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:', dataResponse['button_marking']['message'],
             duration: const Duration(seconds: 8),
@@ -336,6 +346,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           (permission != LocationPermission.always &&
               permission != LocationPermission.whileInUse)) {
         await _serviceLocationDenied(refreshShowButton: true);
+      }
+      if (showButton.value == '4' && counterVerify <= 5) {
+        Future.delayed(Duration(seconds: counterVerify), () {
+          counterVerify++;
+          _verifyButtonAssistance();
+        });
       }
     } else {
       Get.until((route) => !Get.isDialogOpen!);
