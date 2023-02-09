@@ -63,6 +63,13 @@ class FormJustificationController extends GetxController {
   }
 
   @override
+  void onClose() {
+    scrollController.dispose();
+    inputFieldReasonCtrl.dispose();
+    super.onClose();
+  }
+
+  @override
   void dispose() {
     scrollController.dispose();
     inputFieldReasonCtrl.dispose();

@@ -62,7 +62,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   RxString numDocument = ''.obs;
   RxString numDocQr = ''.obs;
 
-  StreamSubscription<Position>? positionStream;
+  StreamSubscription<Position>? positionStreamSubscription;
 
   @override
   void onInit() {
@@ -87,10 +87,22 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   @override
-  void dispose() {
-    if (positionStream != null) {
-      positionStream!.cancel();
+  void onClose() {
+    if (positionStreamSubscription != null) {
+      positionStreamSubscription!.cancel();
     }
+    refreshController.dispose();
+    scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
+  }
+
+  @override
+  void dispose() {
+    if (positionStreamSubscription != null) {
+      positionStreamSubscription!.cancel();
+    }
+
     refreshController.dispose();
     scrollController.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -114,10 +126,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (serviceEnabled) {
       if (Platform.isAndroid) {
         locationSettings = AndroidSettings(
-          accuracy: LocationAccuracy.best,
-          distanceFilter: 0,
-          forceLocationManager: true
-          /* //(Optional) Set foreground notification config to keep the app alive 
+            accuracy: LocationAccuracy.high,
+            distanceFilter: 0,
+            forceLocationManager: false
+            /* //(Optional) Set foreground notification config to keep the app alive 
     //when going to the background
     foregroundNotificationConfig: const ForegroundNotificationConfig(
         notificationText:
@@ -125,10 +137,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         notificationTitle: "Running in Background",
         enableWakeLock: true,
     ) */
-        );
+            );
       } else if (Platform.isIOS || Platform.isMacOS) {
         locationSettings = AppleSettings(
-          accuracy: LocationAccuracy.best,
+          accuracy: LocationAccuracy.high,
           activityType: ActivityType.other,
           distanceFilter: 0,
           pauseLocationUpdatesAutomatically: false,
@@ -137,21 +149,34 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         );
       } else {
         locationSettings = const LocationSettings(
-          accuracy: LocationAccuracy.best,
+          accuracy: LocationAccuracy.high,
           distanceFilter: 0,
         );
       }
-      positionStream =
-          Geolocator.getPositionStream(locationSettings: locationSettings)
-              .listen((Position? position) {
-        if (position != null) {
-          print('UBICACION');
-          print(position.latitude);
-          print(position.longitude);
-          userPreferences.latitude = position.latitude.toString();
-          userPreferences.longitude = position.longitude.toString();
-        }
-      });
+      if (positionStreamSubscription == null) {
+        final positionStream =
+            Geolocator.getPositionStream(locationSettings: locationSettings);
+        positionStreamSubscription = positionStream.handleError((error) {
+          positionStreamSubscription!.cancel();
+          positionStreamSubscription = null;
+        }).listen((Position? position) {
+          if (position != null) {
+            // print('UBICACION');
+            // print(position.latitude);
+            // print(position.longitude);
+            /* Get.snackbar(
+                'UBICACION:',
+                position.latitude.toString() +
+                    ',' +
+                    position.longitude.toString(),
+                colorText: ColorsApp.white,
+                backgroundColor: ColorsApp.success); */
+            userPreferences.latitude = position.latitude.toString();
+            userPreferences.longitude = position.longitude.toString();
+          }
+        });
+        //positionStreamSubscription?.pause();
+      }
     }
   }
 
@@ -566,7 +591,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             : vacacion.finhabilitar == '1'
                 ? 'R'
                 : '';
-        final sign = await showModalSSign(vacacion, type,buildContext);
+        final sign = await showModalSSign(vacacion, type, buildContext);
         if (sign) {
           loadingIndicator(onlyLoading: true, opacity: false);
           await _getListData();
@@ -708,18 +733,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed && openSetting) {
-      // LocationUser().initLocationUser();
-      if (positionStream != null) {
-        positionStream!.cancel();
+      LocationUser().initLocationUser();
+      if (positionStreamSubscription != null) {
+        positionStreamSubscription!.cancel();
       }
       changeLocationUser();
       openSetting = false;
       loadingIndicator(onlyLoading: true, opacity: false);
       _verifyButtonAssistance();
     } else if (state == AppLifecycleState.resumed && openLocation) {
-      // LocationUser().initLocationUser();
-      if (positionStream != null) {
-        positionStream!.cancel();
+      LocationUser().initLocationUser();
+      if (positionStreamSubscription != null) {
+        positionStreamSubscription!.cancel();
       }
       changeLocationUser();
       openLocation = false;
