@@ -1,5 +1,6 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:intl/intl.dart';
@@ -205,14 +206,12 @@ class FormOvertime extends StatelessWidget {
                               Column(
                                 children: [
                                   _createInputTypeOvertime(controller),
-                                  controller.formData.value
-                                              .codigoTiposobretiempo ==
+                                  controller.formData.value.codigoSobretiempo ==
                                           'FE'
                                       ? _createInputPeriodo(controller)
                                       : Container(),
                                   _createInputDate(context, controller),
-                                  controller.formData.value
-                                                  .codigoTiposobretiempo ==
+                                  controller.formData.value.codigoSobretiempo ==
                                               'HE' ||
                                           controller.formData.value
                                                   .codigoPeriodo ==
@@ -220,28 +219,36 @@ class FormOvertime extends StatelessWidget {
                                       ? _createInputHourFrom(
                                           context, controller)
                                       : Container(),
-                                  controller.formData.value
-                                                  .codigoTiposobretiempo ==
+                                  controller.formData.value.codigoSobretiempo ==
                                               'HE' ||
                                           controller.formData.value
                                                   .codigoPeriodo ==
                                               'H'
                                       ? _createInputHourTo(context, controller)
                                       : Container(),
-                                  controller.formData.value
-                                              .codigoTiposobretiempo ==
-                                          'HE'
-                                      ? _createInputTotalHours(controller)
-                                      : Container(),
-                                  controller.formData.value
-                                                  .codigoTiposobretiempo ==
+                                  controller.formData.value.codigoSobretiempo ==
                                               'HE' ||
                                           controller.formData.value
                                                   .codigoPeriodo ==
                                               'H'
+                                      ? _createInputTotalHours(controller)
+                                      : Container(),
+                                  controller.formData.value.codigoSobretiempo ==
+                                          'HE'
                                       ? _createInputMaxHours(controller)
                                       : Container(),
                                   _createInputReason(controller),
+                                  controller.formData.value.codigoSobretiempo ==
+                                          'FE'
+                                      ? _createImputCompensado(controller)
+                                      : Container(),
+                                  controller.formData.value.compensado == 'S'
+                                      ? _createInputDateCompensado(
+                                          context, controller)
+                                      : Container(),
+                                  controller.formData.value.compensado == 'S'
+                                      ? _createInputReasonCompensado(controller)
+                                      : Container()
                                 ],
                               )
                             ],
@@ -275,7 +282,6 @@ class FormOvertime extends StatelessWidget {
         style: GoogleFonts.montserrat(
             fontWeight: FontWeight.w600, color: ColorsApp.primary),
         type: SelectFormFieldType.dialog,
-        controller: controller.inputFieldReasonCtrl,
         changeIcon: true,
         dialogTitle: 'Seleccionar',
         dialogCancelBtn: 'Cancelar',
@@ -298,7 +304,31 @@ class FormOvertime extends StatelessWidget {
           TypeOvertimeModel model = controller.listTypeOvertime
               .where((element) => element.idTipoSobretiempo == val)
               .first;
-          controller.formData.value.codigoTiposobretiempo = model.codigo;
+          controller.formData.value.codigoSobretiempo = model.codigo;
+
+          controller.formData.value.fecha = null;
+          controller.formData.value.horaDesde = null;
+          controller.formData.value.horaHasta = null;
+          controller.formData.value.horas = null;
+          controller.formData.value.maxHoraExt = null;
+          controller.formData.value.codigoPeriodo = null;
+
+          controller.formData.value.motivo = null;
+          controller.formData.value.compensado = 'N';
+          controller.formData.value.fechaCompensar = null;
+          controller.formData.value.comentarioCompensar = null;
+
+          controller.inputFieldDateCtrl.clear();
+          controller.inputFieldPeriodoCtrl.clear();
+          controller.inputFieldHourFromCtrl.clear();
+          controller.inputFieldHourToCtrl.clear();
+          controller.inputFieldHourTotalCtrl.clear();
+          controller.inputFieldMaxHourCtrl.clear();
+          controller.inputFieldMotivoCtrl.clear();
+          controller.inputFieldCompensarCtrl.clear();
+          controller.inputFieldFechaCompensarCtrl.clear();
+          controller.inputFieldcomentarioCompensarCtrl.clear();
+
           controller.loadingData.value = true;
           controller.loadingData.value = false;
         },
@@ -342,6 +372,14 @@ class FormOvertime extends StatelessWidget {
         items: listPeriodo,
         onChanged: (val) {
           controller.formData.value.codigoPeriodo = val;
+          controller.formData.value.horaDesde = null;
+          controller.formData.value.horaHasta = null;
+          controller.formData.value.horas = null;
+          controller.formData.value.maxHoraExt = null;
+          controller.inputFieldHourFromCtrl.clear();
+          controller.inputFieldHourToCtrl.clear();
+          controller.inputFieldHourTotalCtrl.clear();
+          controller.inputFieldMaxHourCtrl.clear();
           controller.loadingData.value = true;
           controller.loadingData.value = false;
         },
@@ -362,6 +400,7 @@ class FormOvertime extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: DateTimeField(
+        controller: controller.inputFieldDateCtrl,
         enabled: controller.formData.value.idEstadoSobretiempo != '01'
             ? false
             : true,
@@ -466,10 +505,20 @@ class FormOvertime extends StatelessWidget {
             final hourTo =
                 format.parse(controller.formData.value.horaHasta.toString());
             final differenceHour = hourTo.difference(hourFrom);
-            controller.formData.value.horas = DateFormat('HH:mm')
-                .format(format.parse(differenceHour.toString()));
+            /*  controller.formData.value.horas = DateFormat('HH:mm')
+                .format(format.parse(differenceHour.toString())); */
             controller.inputFieldHourTotalCtrl.text =
                 controller.formData.value.horas ?? '';
+
+            final total = differenceHour.inMinutes;
+            final max =
+                int.parse(controller.formData.value.maxHoraExt.toString()) * 60;
+            if (total > max) {
+              Get.snackbar('Error', 'Maximo de horas superado',
+                  duration: const Duration(seconds: 8),
+                  colorText: ColorsApp.white,
+                  backgroundColor: ColorsApp.danger);
+            }
           }
 
           controller.loadingData.value = true;
@@ -490,10 +539,6 @@ class FormOvertime extends StatelessWidget {
         enabled: controller.formData.value.idEstadoSobretiempo != '01'
             ? false
             : true,
-        /* initialValue: controller.formData.value.horaHasta != null
-            ? DateTime.parse(
-                '${DateFormat('y-MM-dd').format(DateTime.now())} ${controller.formData.value.horaHasta}')
-            : null, */
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             border:
@@ -535,11 +580,33 @@ class FormOvertime extends StatelessWidget {
             final hourTo =
                 format.parse(controller.formData.value.horaHasta.toString());
             final differenceHour = hourTo.difference(hourFrom);
-            controller.formData.value.horas = DateFormat('HH:mm')
-                .format(format.parse(differenceHour.toString()));
+            print(differenceHour);
+            if (differenceHour.inMinutes > 0) {
+              controller.formData.value.horas = DateFormat('HH:mm')
+                  .format(format.parse(differenceHour.toString()));
+            } else {
+              Get.snackbar('Error', 'Hora hasta es menor a hora desde',
+                  duration: const Duration(seconds: 4),
+                  colorText: ColorsApp.white,
+                  backgroundColor: ColorsApp.danger);
+              controller.formData.value.horas = '';
+            }
 
             controller.inputFieldHourTotalCtrl.text =
                 controller.formData.value.horas ?? '';
+
+            if (controller.formData.value.codigoSobretiempo == 'HE') {
+              final total = differenceHour.inMinutes;
+              final max =
+                  int.parse(controller.formData.value.maxHoraExt.toString()) *
+                      60;
+              if (total > max) {
+                Get.snackbar('Error', 'Maximo de horas superado',
+                    duration: const Duration(seconds: 4),
+                    colorText: ColorsApp.white,
+                    backgroundColor: ColorsApp.danger);
+              }
+            }
           }
 
           controller.loadingData.value = true;
@@ -555,9 +622,7 @@ class FormOvertime extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         controller: controller.inputFieldHourTotalCtrl,
-        enabled: controller.formData.value.idEstadoSobretiempo != '01'
-            ? false
-            : true,
+        enabled: false,
         /* initialValue: controller.formData.value.horas ?? "", */
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -572,7 +637,7 @@ class FormOvertime extends StatelessWidget {
             fontWeight: FontWeight.w500, color: ColorsApp.primary),
         maxLines: 1,
         keyboardType: TextInputType.multiline,
-        onSaved: (val) => controller.formData.value.motivo = val ?? '',
+        onSaved: (val) => controller.formData.value.horas = val ?? '',
         validator: (value) {
           if (value!.isEmpty) {
             return 'Campo requerido.';
@@ -588,9 +653,7 @@ class FormOvertime extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         controller: controller.inputFieldMaxHourCtrl,
-        enabled: controller.formData.value.idEstadoSobretiempo != '01'
-            ? false
-            : true,
+        enabled: false,
         /* initialValue: controller.formData.value.maxHoraExt, */
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -605,7 +668,7 @@ class FormOvertime extends StatelessWidget {
             fontWeight: FontWeight.w500, color: ColorsApp.primary),
         maxLines: 1,
         keyboardType: TextInputType.multiline,
-        onSaved: (val) => controller.formData.value.motivo = val ?? '',
+        onSaved: (val) => controller.formData.value.maxHoraExt = val ?? '',
         validator: (value) {
           if (value!.isEmpty) {
             return 'Campo requerido.';
@@ -620,10 +683,10 @@ class FormOvertime extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
+        controller: controller.inputFieldMotivoCtrl,
         enabled: controller.formData.value.idEstadoSobretiempo != '01'
             ? false
             : true,
-        initialValue: controller.formData.value.motivo,
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
@@ -638,6 +701,139 @@ class FormOvertime extends StatelessWidget {
         maxLines: 4,
         keyboardType: TextInputType.multiline,
         onSaved: (val) => controller.formData.value.motivo = val ?? '',
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Campo requerido.';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _createImputCompensado(FormOvertimeController controller) {
+    List<Map<String, dynamic>> listPeriodo = [];
+    listPeriodo.add({'value': 'S', 'label': ' Si', 'icon': null});
+    listPeriodo.add({'value': 'N', 'label': 'No', 'icon': null});
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: SelectFormField(
+        decoration: InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 12.0),
+            labelStyle: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w500, color: ColorsApp.primary),
+            labelText: 'Compensado',
+            suffixIcon: const Icon(Icons.arrow_drop_down)),
+        style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w600, color: ColorsApp.primary),
+        type: SelectFormFieldType.dialog,
+        controller: controller.inputFieldCompensarCtrl,
+        changeIcon: true,
+        dialogTitle: 'Seleccionar',
+        dialogCancelBtn: 'Cancelar',
+        enableSearch: false,
+        dialogSearchHint: 'Buscar',
+        items: listPeriodo,
+        onChanged: (val) {
+          controller.formData.value.compensado = val;
+
+          if (val == 'N') {
+            controller.formData.value.fechaCompensar = null;
+            controller.formData.value.comentarioCompensar = null;
+          }
+          controller.loadingData.value = true;
+          controller.loadingData.value = false;
+        },
+        onSaved: (val) => controller.formData.value.compensado = val ?? '',
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Campo requerido.';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _createInputDateCompensado(
+      BuildContext context, FormOvertimeController controller) {
+    final format = DateFormat("dd/MM/yyyy");
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: DateTimeField(
+        controller: controller.inputFieldFechaCompensarCtrl,
+        enabled: controller.formData.value.idEstadoSobretiempo != '01'
+            ? false
+            : true,
+        decoration: InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(50.0)),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 30.0, vertical: 12.0),
+            labelStyle: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w500, color: ColorsApp.primary),
+            labelText: 'Fecha Compensado'),
+        style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w500, color: ColorsApp.primary),
+        format: format,
+        onShowPicker: (context, currentValue) async {
+          final date = await showDatePicker(
+              context: context,
+              firstDate: DateTime(2000),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime(DateTime.now().year + 1));
+          if (date != null) {
+            return date;
+          } else {
+            return currentValue;
+          }
+        },
+        validator: (value) {
+          if (value == null) {
+            return 'Campo requerido.';
+          }
+          return null;
+        },
+        onChanged: (val) {
+          controller.formData.value.fechaCompensar = val != null
+              ? DateFormat('y-MM-dd HH:mm:ss')
+                  .format(DateTime.parse(val.toString()))
+              : null;
+        },
+      ),
+    );
+  }
+
+  Container _createInputReasonCompensado(FormOvertimeController controller) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: TextFormField(
+        controller: controller.inputFieldcomentarioCompensarCtrl,
+        enabled: controller.formData.value.idEstadoSobretiempo != '01'
+            ? false
+            : true,
+        initialValue: controller.formData.value.comentarioCompensar,
+        decoration: InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 30.0, vertical: 12.0),
+          labelStyle: GoogleFonts.montserrat(
+              fontWeight: FontWeight.w500, color: ColorsApp.primary),
+          labelText: 'Motivo Compensado',
+        ),
+        style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w500, color: ColorsApp.primary),
+        maxLines: 4,
+        keyboardType: TextInputType.multiline,
+        onSaved: (val) =>
+            controller.formData.value.comentarioCompensar = val ?? '',
         validator: (value) {
           if (value!.isEmpty) {
             return 'Campo requerido.';

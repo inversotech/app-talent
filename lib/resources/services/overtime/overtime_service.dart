@@ -108,4 +108,13 @@ class OvertimeService {
     //_apiProvider.dispose();
     return response;
   }
+
+  Future<ApiResponse> createOvertime(FormData formData) async {
+    final apiProvider = ApiProvider();
+    final response = await apiProvider.postUpload(
+        endPoint: endPoints['assistance']['register'],
+        formData: formData,
+        showMessage: false);
+    return response;
+  }
 }

@@ -89,7 +89,8 @@ class OvertimeController extends GetxController {
 
   Future getListMoreData() async {
     final Map<String, String> params = {
-      'id_trabajador': userPreferences.idWorker.toString(),
+      'id_trabajador':
+          approve == true ? '' : userPreferences.idWorker.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
 /*       'id_depto': userPreferences.idDeparment.toString(),
  */
@@ -114,10 +115,17 @@ class OvertimeController extends GetxController {
       final newlist = groupBy(list, (OvertimeModel obj) => obj.idTrabajador);
       List<OvertimeGroup> listDataNew = [];
       newlist.forEach((key, value) {
-        listDataNew.add(OvertimeGroup(
-            idTrabajador: value[0].idTrabajador,
-            apellidonombre: value[0].apellidonombre,
-            children: value));
+        final find = listData.indexWhere(
+            (element) => element.idTrabajador == value[0].idTrabajador);
+
+        if (find != -1) {
+          listData[find].children!.addAll(value);
+        } else {
+          listDataNew.add(OvertimeGroup(
+              idTrabajador: value[0].idTrabajador,
+              apellidonombre: value[0].apellidonombre,
+              children: value));
+        }
       });
       listData.addAll(listDataNew);
       page.value++;
@@ -136,7 +144,8 @@ class OvertimeController extends GetxController {
 
   Future getListData() async {
     final Map<String, String> params = {
-      'id_trabajador': userPreferences.idWorker.toString(),
+      'id_trabajador':
+          approve == true ? '' : userPreferences.idWorker.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
 /*       'id_depto': userPreferences.idDeparment.toString(),
  */
@@ -183,7 +192,8 @@ class OvertimeController extends GetxController {
 
   Future onRefresh() async {
     final Map<String, String> params = {
-      'id_trabajador': userPreferences.idWorker.toString(),
+      'id_trabajador':
+          approve == true ? '' : userPreferences.idWorker.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
 /*       'id_depto': userPreferences.idDeparment.toString(),
  */

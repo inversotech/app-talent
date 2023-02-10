@@ -43,7 +43,6 @@ class OvertimeModel {
     this.codigoPeriodo,
     this.maxHoraExt,
     this.idTipoSobretiempo,
-    this.codigoTiposobretiempo,
   });
   String? estadoNombre;
   String? idSobretiempo;
@@ -77,41 +76,40 @@ class OvertimeModel {
   String? apellidonombre;
   String? nombreapellido;
   String? maxHoraExt;
-  String? codigoTiposobretiempo;
   factory OvertimeModel.fromJson(Map<String, dynamic> json) => OvertimeModel(
-      idSobretiempo: json["id_sobretiempo"],
-      idEntidad: json["id_entidad"],
-      idDepto: json["id_depto"],
-      idTrabajador: json["id_trabajador"],
-      tipoSobretiempo: json["tipo_sobretiempo"],
-      codigoSobretiempo: json["codigo_sobretiempo"],
-      fecha: json["fecha"],
-      estadoNombre: json["estado_nombre"] ?? "",
-      horaDesde: json["hora_desde"],
-      horaHasta: json["hora_hasta"],
-      motivo: json["motivo"],
-      numHoras: json["num_horas"],
-      horas: json["horas"],
-      horaDesdeReal: json["hora_desde_real"],
-      horaHastaReal: json["hora_hasta_real"],
-      numHorasReal: json["num_horas_real"],
-      compensado: json["compensado"],
-      fechaCompensar: json["fecha_compensar"],
-      comentarioCompensar: json["comentario_compensar"],
-      idEstadoSobretiempo: json["id_estado_sobretiempo"],
-      estadoSobretiempo: json["estado_sobretiempo"],
-      documentoUrl: json["documento_url"],
-      periodo: json["periodo"],
-      nombre: json["nombre"],
-      paterno: json["paterno"],
-      materno: json["materno"],
-      codigoPeriodo: json["codigo_periodo"] ?? "",
-      numDocumento: json["num_documento"],
-      apellidonombre: json["apellidonombre"],
-      nombreapellido: json["nombreapellido"],
-      idTipoSobretiempo: json["id_tipo_sobretiempo"],
-      maxHoraExt: json["max_hora_ext"],
-      codigoTiposobretiempo: json["codigo_tipo_sobretiempo"]);
+        idSobretiempo: json["id_sobretiempo"] ?? '',
+        idEntidad: json["id_entidad"] ?? '',
+        idDepto: json["id_depto"] ?? '',
+        idTrabajador: json["id_trabajador"] ?? '',
+        tipoSobretiempo: json["tipo_sobretiempo"] ?? '',
+        codigoSobretiempo: json["codigo_sobretiempo"] ?? '',
+        fecha: json["fecha"] ?? '',
+        estadoNombre: json["estado_nombre"] ?? "",
+        horaDesde: json["hora_desde"] ?? '',
+        horaHasta: json["hora_hasta"] ?? '',
+        motivo: json["motivo"] ?? '',
+        numHoras: json["num_horas"] ?? '0',
+        horas: json["horas"] ?? '00:00',
+        horaDesdeReal: json["hora_desde_real"] ?? '',
+        horaHastaReal: json["hora_hasta_real"] ?? '',
+        numHorasReal: json["num_horas_real"] ?? '',
+        compensado: json["compensado"] ?? '',
+        fechaCompensar: json["fecha_compensar"] ?? '',
+        comentarioCompensar: json["comentario_compensar"] ?? '',
+        idEstadoSobretiempo: json["id_estado_sobretiempo"] ?? '',
+        estadoSobretiempo: json["estado_sobretiempo"] ?? '',
+        documentoUrl: json["documento_url"] ?? '',
+        periodo: json["periodo"] ?? '',
+        nombre: json["nombre"] ?? '',
+        paterno: json["paterno"] ?? '',
+        materno: json["materno"] ?? '',
+        codigoPeriodo: json["codigo_periodo"] ?? "",
+        numDocumento: json["num_documento"] ?? '',
+        apellidonombre: json["apellidonombre"] ?? '',
+        nombreapellido: json["nombreapellido"] ?? '',
+        idTipoSobretiempo: json["id_tipo_sobretiempo"] ?? '',
+        maxHoraExt: json["max_hora_ext"] ?? '',
+      );
 
   Map<String, dynamic> toJson() => {
         "id_sobretiempo": idSobretiempo,
@@ -146,6 +144,5 @@ class OvertimeModel {
         "nombreapellido": nombreapellido,
         "id_tipo_sobretiempo": idTipoSobretiempo,
         "max_hora_ext": maxHoraExt,
-        "codigo_tipo_sobretiempo": codigoTiposobretiempo
       };
 }

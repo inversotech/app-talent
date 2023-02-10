@@ -323,6 +323,7 @@ class ListOvertime extends StatelessWidget {
                   if (snapshot.hasData) {
                     try {
                       OvertimeModel data = snapshot.data['request'];
+                      print(data.codigoSobretiempo);
                       List<ProcessOvertimeModel> listProcess =
                           snapshot.data['proccess'];
                       return Column(
@@ -367,6 +368,60 @@ class ListOvertime extends StatelessWidget {
                                   )
                                 : Container(),
                           ),
+                          const SizedBox(height: 8.0),
+                          data.codigoSobretiempo == 'FE'
+                              ? Padding(
+                                  padding: const EdgeInsets.only(left: 4.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      RichText(
+                                        textAlign: TextAlign.start,
+                                        overflow: TextOverflow.visible,
+                                        text: TextSpan(
+                                          text: 'Compensado: ',
+                                          style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w600,
+                                              color: ColorsApp.primary,
+                                              fontSize: 13.0),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                                text: data.compensado,
+                                                style: GoogleFonts.montserrat(
+                                                    color: ColorsApp.primary,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 14.0)),
+                                          ],
+                                        ),
+                                      ),
+                                      data.compensado
+                                                  .toString()
+                                                  .toUpperCase() ==
+                                              'SI'
+                                          ? Text(
+                                              'Fecha: ${Jiffy(data.fechaCompensar, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
+                                              style: GoogleFonts.montserrat(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: ColorsApp.primary,
+                                                  fontSize: 12.0))
+                                          : Container(),
+                                      data.compensado
+                                                  .toString()
+                                                  .toUpperCase() ==
+                                              'SI'
+                                          ? Text(
+                                              'Comentario:  ${data.comentarioCompensar.toString()} ',
+                                              style: GoogleFonts.montserrat(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: ColorsApp.primary,
+                                                  fontSize: 12.0))
+                                          : Container(),
+                                    ],
+                                  ),
+                                )
+                              : Container(),
                           const SizedBox(height: 8.0),
                           const Divider(height: 1, color: ColorsApp.primary),
                           const SizedBox(height: 8.0),
@@ -514,7 +569,7 @@ class ListOvertime extends StatelessWidget {
                             ),
                             onPressed: () {
                               _showModalAnularRefuse(
-                                  context, idTrabajador, id, '04', 'Rechazar');
+                                  context, idTrabajador, id, '06', 'Rechazar');
                             },
                           ),
                         )
@@ -573,20 +628,15 @@ class ListOvertime extends StatelessWidget {
     Map<String, dynamic> data = {'request': null, 'proccess': null};
     final OvertimeService overtimeService = OvertimeService();
     final resp = await overtimeService.getOvertime(id);
-    print('PASA OVERTIME');
     if (resp.success) {
-      print('PASA SUCCES');
-      print(resp.data);
       OvertimeModel request =
           OvertimeModel.fromJson(resp.data as Map<String, dynamic>);
 
       data['request'] = request;
     }
-    print('PASA PROCESS antes de if');
     List<ProcessOvertimeModel> listProcess =
         await overtimeService.getProcessOvertime(id);
     data['proccess'] = listProcess;
-    print('PASA PROCESS');
     return data;
   }
 
@@ -770,6 +820,7 @@ class ListOvertime extends StatelessWidget {
     final create = await overtimeService.chageStatusOvertime(id, params);
 
     if (create.success) {
+      Get.back();
       Get.back();
 /*       Navigator.pop(context);
       Navigator.pop(context);

@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:lamb_talent/resources/models/overtime/type_overtime.dart';
 import 'package:lamb_talent/resources/services/overtime/overtime_service.dart';
 
+import '../../core/colors.dart';
 import '../../resources/models/models.dart';
 import '../../shared/components/loading.dart';
 
@@ -15,6 +16,7 @@ class FormOvertimeController extends GetxController {
   RxBool showwidget = false.obs;
   RxBool showwidget2 = false.obs;
   RxBool showwidget3 = false.obs;
+  bool button = false;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final scrollController = ScrollController();
@@ -30,12 +32,17 @@ class FormOvertimeController extends GetxController {
   List<ProcessOvertimeModel> listProcessOvertime = [];
   List<Color> listColorsMarkingSelected = [];
   List<TypeOvertimeModel> listTypeOvertime = [];
-  TextEditingController inputFieldReasonCtrl = TextEditingController(),
+  TextEditingController inputFieldTypeOvertimeCtrl = TextEditingController(),
       inputFieldPeriodoCtrl = TextEditingController(),
       inputFieldHourFromCtrl = TextEditingController(),
       inputFieldHourToCtrl = TextEditingController(),
       inputFieldMaxHourCtrl = TextEditingController(),
-      inputFieldHourTotalCtrl = TextEditingController();
+      inputFieldHourTotalCtrl = TextEditingController(),
+      inputFieldDateCtrl = TextEditingController(),
+      inputFieldMotivoCtrl = TextEditingController(),
+      inputFieldCompensarCtrl = TextEditingController(),
+      inputFieldFechaCompensarCtrl = TextEditingController(),
+      inputFieldcomentarioCompensarCtrl = TextEditingController();
 
   var formData = OvertimeModel().obs;
   RxBool loadMarking = false.obs;
@@ -52,7 +59,8 @@ class FormOvertimeController extends GetxController {
   void onReady() {
     formData.value = arguments;
     if (formData.value.idSobretiempo != null) {
-      inputFieldReasonCtrl.text = formData.value.idTipoSobretiempo.toString();
+      inputFieldTypeOvertimeCtrl.text =
+          formData.value.idTipoSobretiempo.toString();
     } else {
       formData.value.idEstadoSobretiempo = '01';
     }
@@ -72,22 +80,122 @@ class FormOvertimeController extends GetxController {
   }
 
   @override
-  void dispose() {
+  void onClose() {
     scrollController.dispose();
-    inputFieldReasonCtrl.dispose();
+    inputFieldTypeOvertimeCtrl.dispose();
     inputFieldPeriodoCtrl.dispose();
     inputFieldHourFromCtrl.dispose();
     inputFieldHourToCtrl.dispose();
     inputFieldMaxHourCtrl.dispose();
     inputFieldHourTotalCtrl.dispose();
+    inputFieldMotivoCtrl.dispose();
+    inputFieldCompensarCtrl.dispose();
+    inputFieldFechaCompensarCtrl.dispose();
+    inputFieldcomentarioCompensarCtrl.dispose();
+    super.onClose();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    inputFieldTypeOvertimeCtrl.dispose();
+    inputFieldPeriodoCtrl.dispose();
+    inputFieldHourFromCtrl.dispose();
+    inputFieldHourToCtrl.dispose();
+    inputFieldMaxHourCtrl.dispose();
+    inputFieldHourTotalCtrl.dispose();
+    inputFieldMotivoCtrl.dispose();
+    inputFieldCompensarCtrl.dispose();
+    inputFieldFechaCompensarCtrl.dispose();
+    inputFieldcomentarioCompensarCtrl.dispose();
 
     super.dispose();
   }
 
   void submit() async {
+    final format = DateFormat("HH:mm");
+    final hourFrom = format.parse(formData.value.horaDesde.toString());
+    bool isValid = formKey.currentState!.validate();
+    final hourTo = format.parse(formData.value.horaHasta.toString());
+    final differenceHour = hourTo.difference(hourFrom);
+    if (differenceHour.inMinutes <= 0) {
+      Get.snackbar('Error', 'Hora hasta es menor a hora desde',
+          duration: const Duration(seconds: 8),
+          colorText: ColorsApp.white,
+          backgroundColor: ColorsApp.danger);
+      isValid = false;
+      return;
+    }
+
+    if (formData.value.codigoSobretiempo == 'HE') {
+      final total = differenceHour.inMinutes;
+      final max = int.parse(formData.value.maxHoraExt.toString()) * 60;
+      if (total > max) {
+        Get.snackbar('Error', 'Maximo de horas superado controller',
+            duration: const Duration(seconds: 8),
+            colorText: ColorsApp.white,
+            backgroundColor: ColorsApp.danger);
+        isValid = false;
+        return;
+      }
+    }
+
+    if (!isValid) {
+      Get.snackbar('Mensaje:', 'Corriga los campos marcados de rojo',
+          duration: const Duration(seconds: 8),
+          colorText: ColorsApp.white,
+          backgroundColor: ColorsApp.warning);
+      return;
+    }
     formKey.currentState!.save();
     loadingIndicator(onlyLoading: false, text: 'Guardando ...');
-    final Map<String, dynamic> params = {};
+    final Map<String, dynamic> params = {
+      'id_sobretiempo': '0',
+      'id_entidad': userPreferences.idEntity.toString(),
+      'id_trabajador': userPreferences.idWorker.toString(),
+      'id_depto': userPreferences.idDeparment.toString(),
+      'id_tipo_sobretiempo': formData.value.idTipoSobretiempo,
+      'fecha':
+          formData.value.fecha != null ? formData.value.fecha.toString() : '',
+      'motivo': formData.value.motivo,
+      'hora_desde': formData.value.horaDesde != null
+          ? formData.value.horaDesde.toString()
+          : '',
+      'hora_hasta': formData.value.horaHasta != null
+          ? formData.value.horaHasta.toString()
+          : '',
+      'no_validar': '1',
+      'horas':
+          formData.value.horas != null ? formData.value.horas.toString() : '',
+      'periodo': formData.value.codigoPeriodo != null
+          ? formData.value.codigoPeriodo.toString()
+          : 'H',
+      'compensado': formData.value.compensado != null
+          ? formData.value.compensado.toString()
+          : '',
+      'fecha_compensar': formData.value.fechaCompensar != null
+          ? formData.value.fechaCompensar.toString()
+          : '',
+      'comentario_compensar': formData.value.comentarioCompensar != null
+          ? formData.value.comentarioCompensar.toString()
+          : '',
+    };
+    print(params);
+    final form = FormData(params);
+    final overtimeService = OvertimeService();
+    final create = await overtimeService.createOvertime(form);
+    Get.until((route) => !Get.isDialogOpen!);
+    if (create.success) {
+      Get.back(result: {'change': true, 'data': null});
+      Get.snackbar(
+          'Mensaje:',
+          create.message.isNotEmpty
+              ? create.message
+              : 'Se guardó correctamente',
+          duration: const Duration(seconds: 8),
+          colorText: ColorsApp.white,
+          backgroundColor: ColorsApp.success);
+    }
   }
 
   void getSchedule() async {
@@ -99,10 +207,14 @@ class FormOvertimeController extends GetxController {
     loadingIndicator(onlyLoading: true, opacity: false);
     final overtimeService = OvertimeService();
     final scheduleWorker = await overtimeService.getScheduleWorker(params);
-    formData.value.horaDesde = scheduleWorker.horaSalida;
-    formData.value.maxHoraExt = scheduleWorker.maxHoraExt;
-    inputFieldHourFromCtrl.text = scheduleWorker.horaSalida ?? '';
-    inputFieldMaxHourCtrl.text = scheduleWorker.maxHoraExt ?? '';
+
+    if (formData.value.codigoSobretiempo == 'HE') {
+      formData.value.horaDesde = scheduleWorker.horaSalida;
+      formData.value.maxHoraExt = scheduleWorker.maxHoraExt;
+      inputFieldHourFromCtrl.text = scheduleWorker.horaSalida ?? '';
+      inputFieldMaxHourCtrl.text = scheduleWorker.maxHoraExt ?? '';
+    }
+
     Get.until((route) => !Get.isDialogOpen!);
     loadingData.value = true;
     loadingData.value = false;
