@@ -180,7 +180,6 @@ class FormOvertimeController extends GetxController {
           ? formData.value.comentarioCompensar.toString()
           : '',
     };
-    print(params);
     final form = FormData(params);
     final overtimeService = OvertimeService();
     final create = await overtimeService.createOvertime(form);

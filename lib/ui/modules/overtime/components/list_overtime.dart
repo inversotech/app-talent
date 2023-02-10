@@ -323,7 +323,6 @@ class ListOvertime extends StatelessWidget {
                   if (snapshot.hasData) {
                     try {
                       OvertimeModel data = snapshot.data['request'];
-                      print(data.codigoSobretiempo);
                       List<ProcessOvertimeModel> listProcess =
                           snapshot.data['proccess'];
                       return Column(

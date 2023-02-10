@@ -580,7 +580,6 @@ class FormOvertime extends StatelessWidget {
             final hourTo =
                 format.parse(controller.formData.value.horaHasta.toString());
             final differenceHour = hourTo.difference(hourFrom);
-            print(differenceHour);
             if (differenceHour.inMinutes > 0) {
               controller.formData.value.horas = DateFormat('HH:mm')
                   .format(format.parse(differenceHour.toString()));
