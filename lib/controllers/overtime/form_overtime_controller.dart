@@ -149,15 +149,15 @@ class FormOvertimeController extends GetxController {
     }
     formKey.currentState!.save();
     loadingIndicator(onlyLoading: false, text: 'Guardando ...');
-    final Map<String, dynamic> params = {
+    final Map<String, String> params = {
       'id_sobretiempo': '0',
       'id_entidad': userPreferences.idEntity.toString(),
       'id_trabajador': userPreferences.idWorker.toString(),
       'id_depto': userPreferences.idDeparment.toString(),
-      'id_tipo_sobretiempo': formData.value.idTipoSobretiempo,
+      'id_tipo_sobretiempo': formData.value.idTipoSobretiempo.toString(),
       'fecha':
           formData.value.fecha != null ? formData.value.fecha.toString() : '',
-      'motivo': formData.value.motivo,
+      'motivo': formData.value.motivo.toString(),
       'hora_desde': formData.value.horaDesde != null
           ? formData.value.horaDesde.toString()
           : '',
@@ -180,9 +180,9 @@ class FormOvertimeController extends GetxController {
           ? formData.value.comentarioCompensar.toString()
           : '',
     };
-    final form = FormData(params);
+    print(params);
     final overtimeService = OvertimeService();
-    final create = await overtimeService.createOvertime(form);
+    final create = await overtimeService.createOvertime(params);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
       Get.back(result: {'change': true, 'data': null});

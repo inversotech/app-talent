@@ -42,6 +42,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   RxString showButton = '0'.obs;
   RxString textButton = ''.obs;
   RxString codeModality = ''.obs;
+  RxString optionMarking = 'A'.obs;
   RxString insidePolygon = '0'.obs;
   RxString namePolygon = ''.obs;
   RxString idDescripMarcacion = ''.obs;
@@ -221,7 +222,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       minutosTolerancia.value = response.data['minutos_tolerancia'] != null
           ? int.parse(response.data['minutos_tolerancia'].toString())
           : 0;
-      if ((showButton.value == '3' || showButton.value == '4') && !isMarking.value) {
+      optionMarking.value = response.data['option'] ?? '';
+      if ((showButton.value == '3' || showButton.value == '4') &&
+          !isMarking.value) {
         Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:', response.message,
             duration: const Duration(seconds: 8),
@@ -329,7 +332,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           ? int.parse(
               dataResponse['button_marking']['minutos_tolerancia'].toString())
           : 0;
-      if ((showButton.value == '3' || showButton.value == '4') && !isMarking.value) {
+      optionMarking.value = dataResponse['button_marking']['option'] ?? '';
+      if ((showButton.value == '3' || showButton.value == '4') &&
+          !isMarking.value) {
         Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:', dataResponse['button_marking']['message'],
             duration: const Duration(seconds: 8),
@@ -415,10 +420,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       'uuid': uuid,
       'lng': longitude,
       'lat': latitude,
-      'codigo_modalidad': codeModality.toString(),
+      'codigo_modalidad': codeModality.value.toString(),
       'id_descrip_marcacion': idDescripMarcacion.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
-      'id_depto': userPreferences.idDeparment.toString()
+      'id_depto': userPreferences.idDeparment.toString(),
+      'option': optionMarking.value.toString()
     };
 
     final markingService = MarkingService();
@@ -428,6 +434,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       isMarking.value = true;
       loadingIndicator(onlyLoading: true, opacity: false);
       showButton.value = '0';
+      optionMarking.value = 'A';
       loadingData.value = true;
       loadingData.value = false;
       // userPreferences.optionLocation == '2';
@@ -435,6 +442,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       Get.until((route) => !Get.isDialogOpen!);
       loadingData.value = true;
       loadingData.value = false;
+    } else {
+      optionMarking.value = 'A';
     }
     loadingData.value = true;
     loadingData.value = false;

@@ -109,12 +109,10 @@ class OvertimeService {
     return response;
   }
 
-  Future<ApiResponse> createOvertime(FormData formData) async {
+  Future<ApiResponse> createOvertime(Map<String, String> params) async {
     final apiProvider = ApiProvider();
-    final response = await apiProvider.postUpload(
-        endPoint: endPoints['assistance']['register'],
-        formData: formData,
-        showMessage: false);
+    final response = await apiProvider.postParams(
+        endPoint: endPoints['assistance']['register'], params: params);
     return response;
   }
 }
