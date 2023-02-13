@@ -212,7 +212,6 @@ class FormOvertimeController extends GetxController {
           ? formData.value.comentarioCompensar.toString()
           : '',
     };
-    print(params);
     final overtimeService = OvertimeService();
     final create = await overtimeService.createOvertime(params);
     Get.until((route) => !Get.isDialogOpen!);
