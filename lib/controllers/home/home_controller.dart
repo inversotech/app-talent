@@ -492,7 +492,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   void goToOvertimes() {
     isListApprove = false;
-    Get.to(() => OvertimePage(), transition: Transition.size);
+    Get.to(() => const OvertimePage(), transition: Transition.size);
   }
 
   void goToJustificationApprove() async {

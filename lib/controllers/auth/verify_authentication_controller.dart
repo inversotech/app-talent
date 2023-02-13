@@ -13,13 +13,7 @@ import 'package:platform_device_id/platform_device_id.dart';
 
 class VerifyAutheticationController extends GetxController {
   final _authService = AuthService();
-  @override
-  void onInit() {
-    // _clearStorage();
-
-    super.onInit();
-  }
-
+  
   @override
   void onReady() {
     _validToken();
