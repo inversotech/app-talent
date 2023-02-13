@@ -1,8 +1,7 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/controllers/overtime/form_overtime_controller.dart';
 import 'package:lamb_talent/resources/models/overtime/overtime.dart';
@@ -380,6 +379,7 @@ class FormOvertime extends StatelessWidget {
           controller.inputFieldHourToCtrl.clear();
           controller.inputFieldHourTotalCtrl.clear();
           controller.inputFieldMaxHourCtrl.clear();
+          controller.inputFieldCompensarCtrl.clear();
           controller.loadingData.value = true;
           controller.loadingData.value = false;
         },
@@ -404,9 +404,6 @@ class FormOvertime extends StatelessWidget {
         enabled: controller.formData.value.idEstadoSobretiempo != '01'
             ? false
             : true,
-        initialValue: controller.formData.value.fecha != null
-            ? DateTime.parse(controller.formData.value.fecha.toString())
-            : null,
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             border:
@@ -704,6 +701,7 @@ class FormOvertime extends StatelessWidget {
           if (value!.isEmpty) {
             return 'Campo requerido.';
           }
+
           return null;
         },
       ),
@@ -817,7 +815,6 @@ class FormOvertime extends StatelessWidget {
         enabled: controller.formData.value.idEstadoSobretiempo != '01'
             ? false
             : true,
-        initialValue: controller.formData.value.comentarioCompensar,
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
