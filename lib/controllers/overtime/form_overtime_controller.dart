@@ -9,6 +9,7 @@ import 'package:lamb_talent/resources/models/overtime/type_overtime.dart';
 import 'package:lamb_talent/resources/services/overtime/overtime_service.dart';
 
 import '../../core/colors.dart';
+import '../../core/routers_names.dart';
 import '../../resources/models/models.dart';
 import '../../shared/components/loading.dart';
 
@@ -217,8 +218,7 @@ class FormOvertimeController extends GetxController {
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
       clear();
-
-      Get.back(result: {'change': true, 'data': null});
+      Get.offAllNamed(RoutesName.home);
     }
   }
 
