@@ -6,6 +6,8 @@ import 'package:lamb_talent/resources/models/models.dart';
 import 'package:lamb_talent/resources/services/license_permit/license_permit_service.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
 
+import '../../core/routers_names.dart';
+
 class FormLicensePermitController extends GetxController {
   final scrollController = ScrollController();
   final formKey = GlobalKey<FormState>();
@@ -389,7 +391,9 @@ class FormLicensePermitController extends GetxController {
     final create = await licensePermitService.createLicensePermit(form);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
-      Get.back(result: {'change': true, 'data': null});
+      Get.offAllNamed(RoutesName.home);
+
+      /*  Get.back(result: {'change': true, 'data': null});
       Get.snackbar(
           'Mensaje:',
           create.message.isNotEmpty
@@ -397,7 +401,7 @@ class FormLicensePermitController extends GetxController {
               : 'Se guardó correctamente',
           duration: const Duration(seconds: 8),
           colorText: ColorsApp.white,
-          backgroundColor: ColorsApp.success);
+          backgroundColor: ColorsApp.success); */
     }
   }
 }

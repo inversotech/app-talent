@@ -447,10 +447,10 @@ class FormJustificationController extends GetxController {
         if (create.success) {
           Get.offAllNamed(RoutesName.home);
           // Get.back(result: {'change': true, 'data': null});
-          Get.snackbar('Mensaje:', create.message,
+          /*  Get.snackbar('Mensaje:', create.message,
               duration: const Duration(seconds: 8),
               colorText: ColorsApp.white,
-              backgroundColor: ColorsApp.success);
+              backgroundColor: ColorsApp.success); */
         }
       } else {
         final Map<String, dynamic> params = {
@@ -474,11 +474,13 @@ class FormJustificationController extends GetxController {
             form, formData.value.idSolicJustif.toString());
         Get.until((route) => !Get.isDialogOpen!);
         if (update.success) {
-          Get.back(result: {'change': true, 'data': null});
-          Get.snackbar('Mensaje:', update.message,
+          Get.offAllNamed(RoutesName.home);
+
+/*           Get.back(result: {'change': true, 'data': null});
+ */ /* Get.snackbar('Mensaje:', update.message,
               duration: const Duration(seconds: 8),
               colorText: ColorsApp.white,
-              backgroundColor: ColorsApp.success);
+              backgroundColor: ColorsApp.success); */
         }
       }
     } else {
