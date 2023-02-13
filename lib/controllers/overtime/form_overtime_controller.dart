@@ -84,6 +84,7 @@ class FormOvertimeController extends GetxController {
     scrollController.dispose();
     inputFieldTypeOvertimeCtrl.dispose();
     inputFieldPeriodoCtrl.dispose();
+
     inputFieldHourFromCtrl.dispose();
     inputFieldHourToCtrl.dispose();
     inputFieldMaxHourCtrl.dispose();
@@ -113,16 +114,31 @@ class FormOvertimeController extends GetxController {
   }
 
   void clear() {
+    formData.value.idEstadoSobretiempo = "01";
+    formData.value.periodo = null;
+    formData.value.fecha = null;
     formData.value.codigoPeriodo = null;
     formData.value.horaDesde = null;
     formData.value.horaHasta = null;
     formData.value.horas = null;
     formData.value.maxHoraExt = null;
+    formData.value.motivo = null;
+    formData.value.compensado = null;
+    formData.value.fechaCompensar = null;
+    formData.value.comentarioCompensar = null;
+    inputFieldTypeOvertimeCtrl.clear();
+    inputFieldPeriodoCtrl.clear();
+    inputFieldDateCtrl.clear();
     inputFieldHourFromCtrl.clear();
     inputFieldHourToCtrl.clear();
-    inputFieldHourTotalCtrl.clear();
     inputFieldMaxHourCtrl.clear();
+    inputFieldHourTotalCtrl.clear();
+    inputFieldMotivoCtrl.clear();
     inputFieldCompensarCtrl.clear();
+    inputFieldFechaCompensarCtrl.clear();
+    inputFieldcomentarioCompensarCtrl.clear();
+    loadingData.value = true;
+    loadingData.value = false;
   }
 
   void submit() async {
@@ -201,17 +217,10 @@ class FormOvertimeController extends GetxController {
     final create = await overtimeService.createOvertime(form);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
+      clear();
+
       Get.back(result: {'change': true, 'data': null});
-      Get.snackbar(
-          'Mensaje:',
-          create.message.isNotEmpty
-              ? create.message
-              : 'Se guardó correctamente',
-          duration: const Duration(seconds: 8),
-          colorText: ColorsApp.white,
-          backgroundColor: ColorsApp.success);
     }
-    clear();
   }
 
   void getSchedule() async {
