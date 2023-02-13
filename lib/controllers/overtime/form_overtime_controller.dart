@@ -113,30 +113,32 @@ class FormOvertimeController extends GetxController {
   }
 
   void submit() async {
-    final format = DateFormat("HH:mm");
-    final hourFrom = format.parse(formData.value.horaDesde.toString());
     bool isValid = formKey.currentState!.validate();
-    final hourTo = format.parse(formData.value.horaHasta.toString());
-    final differenceHour = hourTo.difference(hourFrom);
-    if (differenceHour.inMinutes <= 0) {
-      Get.snackbar('Error', 'Hora hasta es menor a hora desde',
-          duration: const Duration(seconds: 8),
-          colorText: ColorsApp.white,
-          backgroundColor: ColorsApp.danger);
-      isValid = false;
-      return;
-    }
 
-    if (formData.value.codigoSobretiempo == 'HE') {
-      final total = differenceHour.inMinutes;
-      final max = int.parse(formData.value.maxHoraExt.toString()) * 60;
-      if (total > max) {
-        Get.snackbar('Error', 'Maximo de horas superado controller',
+    if (formData.value.horaDesde != null && formData.value.horaHasta != null) {
+      final format = DateFormat("HH:mm");
+      final hourFrom = format.parse(formData.value.horaDesde.toString());
+      final hourTo = format.parse(formData.value.horaHasta.toString());
+      final differenceHour = hourTo.difference(hourFrom);
+      if (differenceHour.inMinutes <= 0) {
+        Get.snackbar('Error', 'Hora hasta es menor a hora desde',
             duration: const Duration(seconds: 8),
             colorText: ColorsApp.white,
             backgroundColor: ColorsApp.danger);
         isValid = false;
         return;
+      }
+      if (formData.value.codigoSobretiempo == 'HE') {
+        final total = differenceHour.inMinutes;
+        final max = int.parse(formData.value.maxHoraExt.toString()) * 60;
+        if (total > max) {
+          Get.snackbar('Error', 'Maximo de horas superado controller',
+              duration: const Duration(seconds: 8),
+              colorText: ColorsApp.white,
+              backgroundColor: ColorsApp.danger);
+          isValid = false;
+          return;
+        }
       }
     }
 
