@@ -82,6 +82,18 @@ class FormLicensePermitController extends GetxController {
   }
 
   @override
+  void onClose() {
+    scrollController.dispose();
+    inputFieldTypeLicPerCtrl.dispose();
+    inputFieldTypeConLicPerCtrl.dispose();
+    inputFieldTypeInstitutionCtrl.dispose();
+    inputFieldPeriodoCtrl.dispose();
+    inputFieldDateToCtrl.dispose();
+    inputFieldDateFromCtrl.dispose();
+    super.onClose();
+  }
+
+  @override
   void dispose() {
     scrollController.dispose();
     inputFieldTypeLicPerCtrl.dispose();

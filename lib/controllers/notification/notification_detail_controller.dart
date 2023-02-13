@@ -30,6 +30,12 @@ class NotificationDetailController extends GetxController {
   }
 
   @override
+  void onClose() {
+    controllerVideo.dispose();
+    super.onClose();
+  }
+
+  @override
   void dispose() {
     controllerVideo.dispose();
     super.dispose();

@@ -1216,6 +1216,7 @@ class ListLicensePermit extends StatelessWidget {
 
     if (create.success) {
       Get.back();
+      Get.back();
 /*       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context); */

@@ -79,6 +79,14 @@ class LikesController extends GetxController {
   }
 
   @override
+  void onClose() {
+    search.dispose();
+    scrollController.dispose();
+    refreshController.dispose();
+    super.onClose();
+  }
+
+  @override
   void dispose() {
     search.dispose();
     scrollController.dispose();

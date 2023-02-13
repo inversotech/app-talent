@@ -32,6 +32,12 @@ class FormSurveyController extends GetxController {
   }
 
   @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
+  }
+
+  @override
   void dispose() {
     scrollController.dispose();
     super.dispose();

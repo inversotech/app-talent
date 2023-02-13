@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lamb_talent/core/location_user.dart';
 import 'package:lamb_talent/resources/models/general/acceso_nivel_user.dart';
+import 'package:lamb_talent/resources/models/overtime/overtime.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_approve_page.dart';
 import 'package:lamb_talent/ui/modules/holiday/holiday_page.dart';
 import 'package:lamb_talent/ui/modules/home/components/view_qr.dart';
@@ -16,6 +18,8 @@ import 'package:lamb_talent/ui/modules/justification/components/form_justificati
 import 'package:lamb_talent/ui/modules/justification/justificattion_page.dart';
 import 'package:lamb_talent/ui/modules/license_permit/components/form_license_permit.dart';
 import 'package:lamb_talent/ui/modules/license_permit/license_permit_page.dart';
+import 'package:lamb_talent/ui/modules/overtime/components/form_overtime.dart';
+import 'package:lamb_talent/ui/modules/overtime/overtime_page.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -38,6 +42,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   RxString showButton = '0'.obs;
   RxString textButton = ''.obs;
   RxString codeModality = ''.obs;
+  RxString optionMarking = 'A'.obs;
   RxString insidePolygon = '0'.obs;
   RxString namePolygon = ''.obs;
   RxString idDescripMarcacion = ''.obs;
@@ -55,13 +60,15 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   bool openSetting = false;
   bool openLocation = false;
 
+  int counterVerify = 1;
+
   RxString codeModule = '16120101'.obs;
   bool isListApprove = false;
 
   RxString numDocument = ''.obs;
   RxString numDocQr = ''.obs;
 
-  StreamSubscription<Position>? positionStream;
+  StreamSubscription<Position>? positionStreamSubscription;
 
   @override
   void onInit() {
@@ -71,6 +78,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   @override
   void onReady() {
+    LocationUser().initLocationUser();
     changeLocationUser();
     if ((Get.currentRoute == '/JustificationPage' ||
             Get.currentRoute == '/LicensePermitPage' ||
@@ -85,10 +93,22 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   @override
-  void dispose() {
-    if (positionStream != null) {
-      positionStream!.cancel();
+  void onClose() {
+    if (positionStreamSubscription != null) {
+      positionStreamSubscription!.cancel();
     }
+    refreshController.dispose();
+    scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
+  }
+
+  @override
+  void dispose() {
+    if (positionStreamSubscription != null) {
+      positionStreamSubscription!.cancel();
+    }
+
     refreshController.dispose();
     scrollController.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -112,11 +132,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (serviceEnabled) {
       if (Platform.isAndroid) {
         locationSettings = AndroidSettings(
-          accuracy: LocationAccuracy.best,
-          distanceFilter: 5,
-          forceLocationManager: true,
-          intervalDuration: const Duration(seconds: 10),
-          /* //(Optional) Set foreground notification config to keep the app alive 
+            accuracy: LocationAccuracy.high,
+            distanceFilter: 0,
+            forceLocationManager: false
+            /* //(Optional) Set foreground notification config to keep the app alive 
     //when going to the background
     foregroundNotificationConfig: const ForegroundNotificationConfig(
         notificationText:
@@ -124,33 +143,46 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         notificationTitle: "Running in Background",
         enableWakeLock: true,
     ) */
-        );
+            );
       } else if (Platform.isIOS || Platform.isMacOS) {
         locationSettings = AppleSettings(
-          accuracy: LocationAccuracy.best,
-          activityType: ActivityType.fitness,
-          distanceFilter: 5,
-          pauseLocationUpdatesAutomatically: true,
+          accuracy: LocationAccuracy.high,
+          activityType: ActivityType.other,
+          distanceFilter: 0,
+          pauseLocationUpdatesAutomatically: false,
           // Only set to true if our app will be started up in the background.
           showBackgroundLocationIndicator: false,
         );
       } else {
         locationSettings = const LocationSettings(
-          accuracy: LocationAccuracy.best,
-          distanceFilter: 5,
+          accuracy: LocationAccuracy.high,
+          distanceFilter: 0,
         );
       }
-      positionStream =
-          Geolocator.getPositionStream(locationSettings: locationSettings)
-              .listen((Position? position) {
-        if (position != null) {
-          print('UBICACION');
-          print(position.latitude);
-          print(position.longitude);
-          userPreferences.latitude = position.latitude.toString();
-          userPreferences.longitude = position.longitude.toString();
-        }
-      });
+      if (positionStreamSubscription == null) {
+        final positionStream =
+            Geolocator.getPositionStream(locationSettings: locationSettings);
+        positionStreamSubscription = positionStream.handleError((error) {
+          positionStreamSubscription!.cancel();
+          positionStreamSubscription = null;
+        }).listen((Position? position) {
+          if (position != null) {
+            // print('UBICACION');
+            // print(position.latitude);
+            // print(position.longitude);
+            /* Get.snackbar(
+                'UBICACION:',
+                position.latitude.toString() +
+                    ',' +
+                    position.longitude.toString(),
+                colorText: ColorsApp.white,
+                backgroundColor: ColorsApp.success); */
+            userPreferences.latitude = position.latitude.toString();
+            userPreferences.longitude = position.longitude.toString();
+          }
+        });
+        //positionStreamSubscription?.pause();
+      }
     }
   }
 
@@ -190,7 +222,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       minutosTolerancia.value = response.data['minutos_tolerancia'] != null
           ? int.parse(response.data['minutos_tolerancia'].toString())
           : 0;
-      if (showButton.value == '3' && !isMarking.value) {
+      optionMarking.value = response.data['option'] ?? '';
+      if ((showButton.value == '3' || showButton.value == '4') &&
+          !isMarking.value) {
         Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:', response.message,
             duration: const Duration(seconds: 8),
@@ -198,6 +232,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             backgroundColor: ColorsApp.warning);
       } else {
         isMarking.value = false;
+      }
+      if (showButton.value == '4' &&
+          counterVerify <= 5 &&
+          !userPreferences.isWorkerChild) {
+        Future.delayed(Duration(seconds: counterVerify), () {
+          counterVerify++;
+          _verifyButtonAssistance();
+        });
       }
     }
 
@@ -290,7 +332,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           ? int.parse(
               dataResponse['button_marking']['minutos_tolerancia'].toString())
           : 0;
-      if (showButton.value == '3' && !isMarking.value) {
+      optionMarking.value = dataResponse['button_marking']['option'] ?? '';
+      if ((showButton.value == '3' || showButton.value == '4') &&
+          !isMarking.value) {
         Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:', dataResponse['button_marking']['message'],
             duration: const Duration(seconds: 8),
@@ -310,6 +354,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           (permission != LocationPermission.always &&
               permission != LocationPermission.whileInUse)) {
         await _serviceLocationDenied(refreshShowButton: true);
+      }
+      if (showButton.value == '4' && counterVerify <= 5) {
+        Future.delayed(Duration(seconds: counterVerify), () {
+          counterVerify++;
+          _verifyButtonAssistance();
+        });
       }
     } else {
       Get.until((route) => !Get.isDialogOpen!);
@@ -370,10 +420,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       'uuid': uuid,
       'lng': longitude,
       'lat': latitude,
-      'codigo_modalidad': codeModality.toString(),
+      'codigo_modalidad': codeModality.value.toString(),
       'id_descrip_marcacion': idDescripMarcacion.toString(),
       'id_entidad': userPreferences.idEntity.toString(),
-      'id_depto': userPreferences.idDeparment.toString()
+      'id_depto': userPreferences.idDeparment.toString(),
+      'option': optionMarking.value.toString()
     };
 
     final markingService = MarkingService();
@@ -383,6 +434,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       isMarking.value = true;
       loadingIndicator(onlyLoading: true, opacity: false);
       showButton.value = '0';
+      optionMarking.value = 'A';
       loadingData.value = true;
       loadingData.value = false;
       // userPreferences.optionLocation == '2';
@@ -390,6 +442,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       Get.until((route) => !Get.isDialogOpen!);
       loadingData.value = true;
       loadingData.value = false;
+    } else {
+      optionMarking.value = 'A';
     }
     loadingData.value = true;
     loadingData.value = false;
@@ -436,12 +490,36 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     Get.to(() => const JustificationPage(), transition: Transition.size);
   }
 
+  void goToOvertimes() {
+    isListApprove = false;
+    Get.to(() => OvertimePage(), transition: Transition.size);
+  }
+
   void goToJustificationApprove() async {
     isListApprove = true;
     final result = await Get.to(
         () => const JustificationPage(
               approve: true,
               title: 'Aprobar justificaciones',
+            ),
+        transition: Transition.size);
+    if (result != null) {
+      if (result['change'] == 'true' || result['change'] == true) {
+        loadingIndicator(onlyLoading: true, opacity: false);
+        await _getListData();
+        loadingData.value = true;
+        loadingData.value = false;
+        Get.until((route) => !Get.isDialogOpen!);
+      }
+    }
+  }
+
+  void goToOvertimeApprove() async {
+    isListApprove = true;
+    final result = await Get.to(
+        () => const OvertimePage(
+              approve: true,
+              title: 'Aprobar Sobretiempos',
             ),
         transition: Transition.size);
     if (result != null) {
@@ -514,6 +592,20 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  void goToFormOvertime() async {
+    final result = await Get.to(() => FormOvertime(arguments: OvertimeModel()),
+        transition: Transition.size);
+    if (result != null) {
+      if (result['change'] == 'true' || result['change'] == true) {
+        loadingIndicator(onlyLoading: true, opacity: false);
+        await _getListData();
+        loadingData.value = true;
+        loadingData.value = false;
+        Get.until((route) => !Get.isDialogOpen!);
+      }
+    }
+  }
+
   void goToFormLicenPerm() async {
     final result = await Get.to(
         () => FormLicensePermit(arguments: LicensePermitModel()),
@@ -565,7 +657,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             : vacacion.finhabilitar == '1'
                 ? 'R'
                 : '';
-        final sign = await showModalSSign(vacacion, type,buildContext);
+        final sign = await showModalSSign(vacacion, type, buildContext);
         if (sign) {
           loadingIndicator(onlyLoading: true, opacity: false);
           await _getListData();
@@ -707,18 +799,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed && openSetting) {
-      // LocationUser().initLocationUser();
-      if (positionStream != null) {
-        positionStream!.cancel();
+      LocationUser().initLocationUser();
+      if (positionStreamSubscription != null) {
+        positionStreamSubscription!.cancel();
       }
       changeLocationUser();
       openSetting = false;
       loadingIndicator(onlyLoading: true, opacity: false);
       _verifyButtonAssistance();
     } else if (state == AppLifecycleState.resumed && openLocation) {
-      // LocationUser().initLocationUser();
-      if (positionStream != null) {
-        positionStream!.cancel();
+      LocationUser().initLocationUser();
+      if (positionStreamSubscription != null) {
+        positionStreamSubscription!.cancel();
       }
       changeLocationUser();
       openLocation = false;

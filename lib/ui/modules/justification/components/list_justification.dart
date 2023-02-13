@@ -391,7 +391,7 @@ class ListJustification extends StatelessWidget {
                                     color: data.idEstadoJustif == '01'
                                         ? ColorsApp.primary
                                         : data.idEstadoJustif == '02'
-                                            ? ColorsApp.basic
+                                            ? ColorsApp.success
                                             : data.idEstadoJustif == '03'
                                                 ? ColorsApp.success
                                                 : data.idEstadoJustif == '04'
@@ -921,7 +921,7 @@ class ListJustification extends StatelessWidget {
                                     fontSize: 14.0)),
                             item.fechahora != null
                                 ? Text(
-                                    '${DateFormat('d|M|y hh:mm a').format(DateTime.parse(item.fechahora.toString())).toLowerCase()} (Registrado)',
+                                    '${DateFormat('dd|MM|yyyy hh:mm a').format(DateTime.parse(item.fechahora.toString())).toLowerCase()} (Registrado)',
                                     style: GoogleFonts.montserrat(
                                         fontWeight: FontWeight.w400,
                                         color: ColorsApp.primary,
@@ -929,7 +929,7 @@ class ListJustification extends StatelessWidget {
                                 : Container(),
                             item.fechahoraManual != null
                                 ? Text(
-                                    DateFormat('d|M|y hh:mm a')
+                                    DateFormat('dd|MM|yyyy hh:mm a')
                                         .format(DateTime.parse(
                                             item.fechahoraManual.toString()))
                                         .toLowerCase(),
@@ -1326,6 +1326,8 @@ class ListJustification extends StatelessWidget {
 
     if (create.success) {
       Get.back();
+      Get.back();
+
 /*       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context); */

@@ -41,6 +41,13 @@ class AccountStatusController extends GetxController {
   }
 
   @override
+  void onClose() {
+    refreshController.dispose();
+    scrollController.dispose();
+    super.onClose();
+  }
+
+  @override
   void dispose() {
     refreshController.dispose();
     scrollController.dispose();

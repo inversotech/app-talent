@@ -7,6 +7,12 @@ final Map endPoints = {
     'user-info': '${Env.api.apiTalent}user/info',
   },
   'comun': {
+    'overtime-year': '${Env.api.apiTalent}comun/assistance/year-overtime',
+    'overtime-state': '${Env.api.apiTalent}comun/assistance/estado-sobretiempo',
+    'overtime-type': '${Env.api.apiTalent}comun/assistance/tipo-sobretiempo',
+    'show-overtime': '${Env.api.apiTalent}comun/assistance/show-overtime',
+    'get-process-overtime':
+        '${Env.api.apiTalent}comun/assistance/get-process-overtime',
     'my-entities': '${Env.api.apiTalent}comun/my-entities-contract',
     'my-deptos': '${Env.api.apiTalent}comun/my-deptos-contract',
     'total-entities-deptos':
@@ -32,6 +38,12 @@ final Map endPoints = {
     'change-entity-depto': '${Env.api.apiTalent}comun/change-entity-depto'
   },
   'assistance': {
+    'worker-scheduled-hours':
+        '${Env.api.apiTalent}comun/assistance/worker-scheduled-hours',
+    'overtime-type': '${Env.api.apiTalent}assistance/tipo-sobretiempo',
+    'register': '${Env.api.apiTalent}assistance/overtime/register',
+    'registerStatus': '${Env.api.apiTalent}assistance/overtime/register-status',
+    'process': '${Env.api.apiTalent}assistance/overtime/process',
     'map-coordinates':
         '${Env.api.apiTalent}assistance/assistance/map-coordinates-by-worker',
     'show-button-assistance':
@@ -109,6 +121,7 @@ final Map endPoints = {
         '${Env.api.apiTalent}assistance/justification/request/markings',
   },
   'workerportal': {
+    'my-overtimes': '${Env.api.apiTalent}workerportal/assistance/my-overtimes',
     'license-permit':
         '${Env.api.apiTalent}workerportal/lisenses/licences-permits',
     'holiday':
