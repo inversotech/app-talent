@@ -403,9 +403,6 @@ class FormOvertime extends StatelessWidget {
         enabled: controller.formData.value.idEstadoSobretiempo != '01'
             ? false
             : true,
-        initialValue: controller.formData.value.fecha != null
-            ? DateTime.parse(controller.formData.value.fecha.toString())
-            : null,
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             border:
@@ -816,7 +813,6 @@ class FormOvertime extends StatelessWidget {
         enabled: controller.formData.value.idEstadoSobretiempo != '01'
             ? false
             : true,
-        initialValue: controller.formData.value.comentarioCompensar,
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
