@@ -112,6 +112,19 @@ class FormOvertimeController extends GetxController {
     super.dispose();
   }
 
+  void clear() {
+    formData.value.codigoPeriodo = null;
+    formData.value.horaDesde = null;
+    formData.value.horaHasta = null;
+    formData.value.horas = null;
+    formData.value.maxHoraExt = null;
+    inputFieldHourFromCtrl.clear();
+    inputFieldHourToCtrl.clear();
+    inputFieldHourTotalCtrl.clear();
+    inputFieldMaxHourCtrl.clear();
+    inputFieldCompensarCtrl.clear();
+  }
+
   void submit() async {
     bool isValid = formKey.currentState!.validate();
 
@@ -151,6 +164,7 @@ class FormOvertimeController extends GetxController {
     }
     formKey.currentState!.save();
     loadingIndicator(onlyLoading: false, text: 'Guardando ...');
+
     final Map<String, dynamic> params = {
       'id_sobretiempo': '0',
       'id_entidad': userPreferences.idEntity.toString(),
@@ -197,6 +211,7 @@ class FormOvertimeController extends GetxController {
           colorText: ColorsApp.white,
           backgroundColor: ColorsApp.success);
     }
+    clear();
   }
 
   void getSchedule() async {

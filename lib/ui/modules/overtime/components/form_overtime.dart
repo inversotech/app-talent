@@ -379,6 +379,7 @@ class FormOvertime extends StatelessWidget {
           controller.inputFieldHourToCtrl.clear();
           controller.inputFieldHourTotalCtrl.clear();
           controller.inputFieldMaxHourCtrl.clear();
+          controller.inputFieldCompensarCtrl.clear();
           controller.loadingData.value = true;
           controller.loadingData.value = false;
         },
@@ -700,6 +701,7 @@ class FormOvertime extends StatelessWidget {
           if (value!.isEmpty) {
             return 'Campo requerido.';
           }
+
           return null;
         },
       ),
