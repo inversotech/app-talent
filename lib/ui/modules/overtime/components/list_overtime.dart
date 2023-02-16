@@ -813,13 +813,11 @@ class ListOvertime extends StatelessWidget {
     };
     loadingIndicator(onlyLoading: false, text: 'Guardando ...');
     final create = await overtimeService.chageStatusOvertime(id, params);
-
+    Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
-      Get.back();
-      Get.back();
-/*       Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pop(context); */
+      final userPref = UserPreferences();
+      userPref.resultChange = true;
+      Get.until((route) => Get.currentRoute == '/OvertimePage');
       onChangeList();
     }
   }

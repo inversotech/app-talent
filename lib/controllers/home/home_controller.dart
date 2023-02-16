@@ -55,7 +55,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   Map<String, dynamic>? chartData;
   Map<String, dynamic>? dataCarousel;
   List<dynamic> series = [];
-  RxBool isMarking = false.obs;
+  RxBool showMessage = true.obs;
 
   bool openSetting = false;
   bool openLocation = false;
@@ -224,16 +224,30 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           : 0;
       optionMarking.value = response.data['option'] ?? '';
       if ((showButton.value == '3' || showButton.value == '4') &&
-          !isMarking.value) {
+          showMessage.value) {
+        showMessage.value = false;
         Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:', response.message,
             duration: const Duration(seconds: 8),
             colorText: ColorsApp.white,
             backgroundColor: ColorsApp.warning);
       } else {
-        isMarking.value = false;
+        showMessage.value = true;
       }
-      if (showButton.value == '4' &&
+      refreshController.loadNoData();
+      loadingData.value = true;
+      loadingData.value = false;
+      Get.until((route) => !Get.isDialogOpen!);
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      final permission = await Geolocator.checkPermission();
+      if (codeModality.value == 'TP' && !serviceEnabled) {
+        await _serviceLocationDisable(refreshShowButton: true);
+      } else if (codeModality.value == 'TP' &&
+          (permission != LocationPermission.always &&
+              permission != LocationPermission.whileInUse)) {
+        await _serviceLocationDenied(refreshShowButton: true);
+      } else if (codeModality.value == 'TP' &&
+          showButton.value == '4' &&
           counterVerify <= 5 &&
           !userPreferences.isWorkerChild) {
         Future.delayed(Duration(seconds: counterVerify), () {
@@ -241,21 +255,26 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           _verifyButtonAssistance();
         });
       }
+    } else {
+      refreshController.loadNoData();
+      loadingData.value = true;
+      loadingData.value = false;
+      Get.until((route) => !Get.isDialogOpen!);
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      final permission = await Geolocator.checkPermission();
+      if (codeModality.value == 'TP' && !serviceEnabled) {
+        await _serviceLocationDisable(refreshShowButton: true);
+      } else if (codeModality.value == 'TP' &&
+          (permission != LocationPermission.always &&
+              permission != LocationPermission.whileInUse)) {
+        await _serviceLocationDenied(refreshShowButton: true);
+      }
     }
 
     refreshController.loadNoData();
     loadingData.value = true;
     loadingData.value = false;
     Get.until((route) => !Get.isDialogOpen!);
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    final permission = await Geolocator.checkPermission();
-    if (codeModality.value == 'TP' && !serviceEnabled) {
-      await _serviceLocationDisable(refreshShowButton: true);
-    } else if (codeModality.value == 'TP' &&
-        (permission != LocationPermission.always &&
-            permission != LocationPermission.whileInUse)) {
-      await _serviceLocationDenied(refreshShowButton: true);
-    }
   }
 
   Future _getInfoAssistance() async {
@@ -334,14 +353,15 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           : 0;
       optionMarking.value = dataResponse['button_marking']['option'] ?? '';
       if ((showButton.value == '3' || showButton.value == '4') &&
-          !isMarking.value) {
+          showMessage.value) {
+        showMessage.value = false;
         Get.until((route) => !Get.isDialogOpen!);
         Get.snackbar('Mensaje:', dataResponse['button_marking']['message'],
             duration: const Duration(seconds: 8),
             colorText: ColorsApp.white,
             backgroundColor: ColorsApp.warning);
       } else {
-        isMarking.value = false;
+        showMessage.value = true;
       }
       loadingData.value = true;
       loadingData.value = false;
@@ -354,8 +374,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           (permission != LocationPermission.always &&
               permission != LocationPermission.whileInUse)) {
         await _serviceLocationDenied(refreshShowButton: true);
-      }
-      if (showButton.value == '4' && counterVerify <= 5) {
+      } else if (codeModality.value == 'TP' &&
+          showButton.value == '4' &&
+          counterVerify <= 5) {
         Future.delayed(Duration(seconds: counterVerify), () {
           counterVerify++;
           _verifyButtonAssistance();
@@ -431,7 +452,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     final marking = await markingService.workerMarking(params);
     Get.until((route) => !Get.isDialogOpen!);
     if (marking.success) {
-      isMarking.value = true;
+      showMessage.value = false;
       loadingIndicator(onlyLoading: true, opacity: false);
       showButton.value = '0';
       optionMarking.value = 'A';
@@ -485,90 +506,116 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     Get.to(() => MyMarkingsPage(), transition: Transition.size);
   }
 
-  void goToJustification() {
+  void goToJustification() async {
     isListApprove = false;
-    Get.to(() => const JustificationPage(), transition: Transition.size);
+    await Get.to(() => const JustificationPage(), transition: Transition.size);
+    final userPref = UserPreferences();
+    if (userPref.resultChange) {
+      loadingIndicator(onlyLoading: true, opacity: false);
+      await _getListData();
+      loadingData.value = true;
+      Get.until((route) => !Get.isDialogOpen!);
+      userPref.resultChange = false;
+      loadingData.value = false;
+    }
   }
 
-  void goToOvertimes() {
+  void goToOvertimes() async {
     isListApprove = false;
-    Get.to(() => const OvertimePage(), transition: Transition.size);
+    await Get.to(() => const OvertimePage(), transition: Transition.size);
+    final userPref = UserPreferences();
+    if (userPref.resultChange) {
+      loadingIndicator(onlyLoading: true, opacity: false);
+      await _getListData();
+      loadingData.value = true;
+      Get.until((route) => !Get.isDialogOpen!);
+      userPref.resultChange = false;
+      loadingData.value = false;
+    }
   }
 
   void goToJustificationApprove() async {
     isListApprove = true;
-    final result = await Get.to(
+    await Get.to(
         () => const JustificationPage(
               approve: true,
               title: 'Aprobar justificaciones',
             ),
         transition: Transition.size);
-    if (result != null) {
-      if (result['change'] == 'true' || result['change'] == true) {
-        loadingIndicator(onlyLoading: true, opacity: false);
-        await _getListData();
-        loadingData.value = true;
-        loadingData.value = false;
-        Get.until((route) => !Get.isDialogOpen!);
-      }
+    final userPref = UserPreferences();
+    if (userPref.resultChange) {
+      loadingIndicator(onlyLoading: true, opacity: false);
+      await _getListData();
+      loadingData.value = true;
+      Get.until((route) => !Get.isDialogOpen!);
+      userPref.resultChange = false;
+      loadingData.value = false;
     }
   }
 
   void goToOvertimeApprove() async {
     isListApprove = true;
-    final result = await Get.to(
+    await Get.to(
         () => const OvertimePage(
               approve: true,
               title: 'Aprobar Sobretiempos',
             ),
         transition: Transition.size);
-    if (result != null) {
-      if (result['change'] == 'true' || result['change'] == true) {
-        loadingIndicator(onlyLoading: true, opacity: false);
-        await _getListData();
-        loadingData.value = true;
-        loadingData.value = false;
-        Get.until((route) => !Get.isDialogOpen!);
-      }
+    final userPref = UserPreferences();
+    if (userPref.resultChange) {
+      loadingIndicator(onlyLoading: true, opacity: false);
+      await _getListData();
+      loadingData.value = true;
+      Get.until((route) => !Get.isDialogOpen!);
+      userPref.resultChange = false;
+      loadingData.value = false;
     }
   }
 
-  void goToLicensePermit() {
+  void goToLicensePermit() async {
     isListApprove = false;
-    Get.to(() => const LicensePermitPage(), transition: Transition.size);
+    await Get.to(() => const LicensePermitPage(), transition: Transition.size);
+    final userPref = UserPreferences();
+    if (userPref.resultChange) {
+      loadingIndicator(onlyLoading: true, opacity: false);
+      await _getListData();
+      loadingData.value = true;
+      Get.until((route) => !Get.isDialogOpen!);
+      userPref.resultChange = false;
+      loadingData.value = false;
+    }
   }
 
   void goToLicensePermitApprove() async {
     isListApprove = true;
-    final result = await Get.to(
+    await Get.to(
         () => const LicensePermitPage(
               approve: true,
               title: 'Aprobar permisos y licencias',
             ),
         transition: Transition.size);
-    if (result != null) {
-      if (result['change'] == 'true' || result['change'] == true) {
-        loadingIndicator(onlyLoading: true, opacity: false);
-        await _getListData();
-        loadingData.value = true;
-        loadingData.value = false;
-        Get.until((route) => !Get.isDialogOpen!);
-      }
+    final userPref = UserPreferences();
+    if (userPref.resultChange) {
+      loadingIndicator(onlyLoading: true, opacity: false);
+      await _getListData();
+      loadingData.value = true;
+      Get.until((route) => !Get.isDialogOpen!);
+      userPref.resultChange = false;
+      loadingData.value = false;
     }
   }
 
   void goToHolidayApprove() async {
     isListApprove = true;
-    final result = await Get.to(() => const HolidayApprovePage(),
-        transition: Transition.size);
-    if (result != null) {
-      if (result['change'] == 'true' || result['change'] == true) {
-        loadingIndicator(onlyLoading: true, opacity: false);
-        await _getListData();
-        loadingData.value = true;
-        loadingData.value = false;
-        Get.until((route) => !Get.isDialogOpen!);
-      }
+    await Get.to(() => const HolidayApprovePage(), transition: Transition.size);
+    final userPref = UserPreferences();
+    if (userPref.resultChange) {
+      loadingIndicator(onlyLoading: true, opacity: false);
+      await _getListData();
+      loadingData.value = true;
+      Get.until((route) => !Get.isDialogOpen!);
+      userPref.resultChange = false;
+      loadingData.value = false;
     }
   }
 
@@ -578,46 +625,46 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   void goToFormJustification() async {
-    final result = await Get.to(
-        () => FormJustification(arguments: JustificationModel()),
+    await Get.to(() => FormJustification(arguments: JustificationModel()),
         transition: Transition.size);
-    if (result != null) {
-      if (result['change'] == 'true' || result['change'] == true) {
-        loadingIndicator(onlyLoading: true, opacity: false);
-        await _getListData();
-        loadingData.value = true;
-        loadingData.value = false;
-        Get.until((route) => !Get.isDialogOpen!);
-      }
+
+    final userPref = UserPreferences();
+    if (userPref.resultChange) {
+      loadingIndicator(onlyLoading: true, opacity: false);
+      await _getListData();
+      loadingData.value = true;
+      Get.until((route) => !Get.isDialogOpen!);
+      userPref.resultChange = false;
+      loadingData.value = false;
     }
   }
 
   void goToFormOvertime() async {
-    final result = await Get.to(() => FormOvertime(arguments: OvertimeModel()),
+    await Get.to(() => FormOvertime(arguments: OvertimeModel()),
         transition: Transition.size);
-    if (result != null) {
-      if (result['change'] == 'true' || result['change'] == true) {
-        loadingIndicator(onlyLoading: true, opacity: false);
-        await _getListData();
-        loadingData.value = true;
-        loadingData.value = false;
-        Get.until((route) => !Get.isDialogOpen!);
-      }
+    final userPref = UserPreferences();
+    if (userPref.resultChange) {
+      loadingIndicator(onlyLoading: true, opacity: false);
+      await _getListData();
+      loadingData.value = true;
+      Get.until((route) => !Get.isDialogOpen!);
+      userPref.resultChange = false;
+      loadingData.value = false;
     }
   }
 
   void goToFormLicenPerm() async {
-    final result = await Get.to(
-        () => FormLicensePermit(arguments: LicensePermitModel()),
+    await Get.to(() => FormLicensePermit(arguments: LicensePermitModel()),
         transition: Transition.size);
-    if (result != null) {
-      if (result['change'] == 'true' || result['change'] == true) {
-        loadingIndicator(onlyLoading: true, opacity: false);
-        await _getListData();
-        loadingData.value = true;
-        loadingData.value = false;
-        Get.until((route) => !Get.isDialogOpen!);
-      }
+
+    final userPref = UserPreferences();
+    if (userPref.resultChange) {
+      loadingIndicator(onlyLoading: true, opacity: false);
+      await _getListData();
+      loadingData.value = true;
+      Get.until((route) => !Get.isDialogOpen!);
+      userPref.resultChange = false;
+      loadingData.value = false;
     }
   }
 
@@ -805,6 +852,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       }
       changeLocationUser();
       openSetting = false;
+      showMessage.value = true;
       loadingIndicator(onlyLoading: true, opacity: false);
       _verifyButtonAssistance();
     } else if (state == AppLifecycleState.resumed && openLocation) {
@@ -814,6 +862,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       }
       changeLocationUser();
       openLocation = false;
+      showMessage.value = true;
       loadingIndicator(onlyLoading: true, opacity: false);
       _verifyButtonAssistance();
     }

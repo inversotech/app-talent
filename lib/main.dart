@@ -16,6 +16,7 @@ void main() async {
   await GetStorage.init();
   final prefs = UserPreferences();
   await prefs.initPrefs();
+  prefs.existNotify = false;
   await PushNotificationService.initializeAppFirebase();
   await PushNotificationService.initializeAppOneSingal();
   LocationUser().initLocationUser();

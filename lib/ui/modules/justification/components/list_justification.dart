@@ -17,6 +17,7 @@ import 'package:lamb_talent/shared/components/visor_pdf_img.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:intl/intl.dart';
 
+
 class ListJustification extends StatelessWidget {
   final List<JustificationGroup> listData;
   final BoxConstraints constraints;
@@ -1323,14 +1324,12 @@ class ListJustification extends StatelessWidget {
     };
     loadingIndicator(onlyLoading: false, text: 'Guardando ...');
     ApiResponse create = await justificationService.changeRequestStatus(params);
-
+    
+    Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
-      Get.back();
-      Get.back();
-
-/*       Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pop(context); */
+      final userPref = UserPreferences();
+      userPref.resultChange = true;
+      Get.until((route) => Get.currentRoute == '/JustificationPage');
       onChangeList();
     }
   }

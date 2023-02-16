@@ -17,6 +17,7 @@ class PushNotificationService {
 
   static Future _backgroudHandler(RemoteMessage message) async {
     // print('onBackground Handler ${message.data}');
+    _openNotificationDetail(message.data);
   }
 
   static Future _onMessageHandler(RemoteMessage message) async {
@@ -72,9 +73,11 @@ class PushNotificationService {
   }
 
   static _openNotificationDetail(Map<String, dynamic> data) async {
+    final userRef = UserPreferences();
     final storage = GetStorage();
     switch (data['origen'].toString()) {
       case 'msm_evento':
+        userRef.existNotify = true;
         Get.to(
             () => EventDetail(
                   id: data['id_origen'].toString(),
@@ -85,18 +88,29 @@ class PushNotificationService {
             duration: const Duration(seconds: 1));
         break;
       case 'msm_album':
+        userRef.existNotify = true;
         Get.offAllNamed(RoutesName.notification, arguments: {
           'id_origen': data['id_origen'].toString(),
           'origen': data['origen'].toString()
         });
         break;
       case 'msm_notificacion':
+        userRef.existNotify = true;
         Get.offAllNamed(RoutesName.notification, arguments: {
           'id_origen': data['id_origen'].toString(),
           'origen': data['origen'].toString()
         });
         break;
       case 'msm_horario':
+        userRef.existNotify = true;
+        if (Get.currentRoute == '/HomePage') {
+          Get.forceAppUpdate();
+        } else {
+          Get.offAllNamed(RoutesName.home);
+        }
+        break;
+      case 'msm_sobretiempo':
+        userRef.existNotify = true;
         if (Get.currentRoute == '/HomePage') {
           Get.forceAppUpdate();
         } else {
@@ -104,6 +118,7 @@ class PushNotificationService {
         }
         break;
       case 'msm_vacacion':
+        userRef.existNotify = true;
         if (Get.currentRoute == '/HomePage') {
           Get.forceAppUpdate();
         } else {

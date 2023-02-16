@@ -438,19 +438,10 @@ class FormJustificationController extends GetxController {
         final form = FormData(params);
         final create = await justificationService.createJustification(form);
         Get.until((route) => !Get.isDialogOpen!);
-
-        /* if (Get.isSnackbarOpen) {
-          Get.back();
-        } */
-        // Get.until((route) => Get.isSnackbarOpen);
-
         if (create.success) {
-          Get.offAllNamed(RoutesName.home);
-          // Get.back(result: {'change': true, 'data': null});
-          /*  Get.snackbar('Mensaje:', create.message,
-              duration: const Duration(seconds: 8),
-              colorText: ColorsApp.white,
-              backgroundColor: ColorsApp.success); */
+          final userPref = UserPreferences();
+          userPref.resultChange = true;
+          Get.until((route) => Get.currentRoute == RoutesName.home);
         }
       } else {
         final Map<String, dynamic> params = {
@@ -474,13 +465,9 @@ class FormJustificationController extends GetxController {
             form, formData.value.idSolicJustif.toString());
         Get.until((route) => !Get.isDialogOpen!);
         if (update.success) {
-          Get.offAllNamed(RoutesName.home);
-
-/*           Get.back(result: {'change': true, 'data': null});
- */ /* Get.snackbar('Mensaje:', update.message,
-              duration: const Duration(seconds: 8),
-              colorText: ColorsApp.white,
-              backgroundColor: ColorsApp.success); */
+          final userPref = UserPreferences();
+          userPref.resultChange = true;
+          Get.until((route) => Get.currentRoute == RoutesName.home);
         }
       }
     } else {
@@ -505,8 +492,9 @@ class FormJustificationController extends GetxController {
     ApiResponse create = await justificationService.changeRequestStatus(params);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
-      Get.back();
-      Get.back(result: {'change': true, 'data': null});
+      final userPref = UserPreferences();
+      userPref.resultChange = true;
+      Get.until((route) => Get.currentRoute == RoutesName.home);
     }
   }
 }

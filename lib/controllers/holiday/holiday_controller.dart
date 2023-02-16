@@ -123,8 +123,7 @@ class HolidayController extends GetxController {
         idPeriodoVacTrab.toString(), params);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
-      // Navigator.pop(buildContext);
-      Get.back(); // comment by pedro for implement get.
+      Get.until((route) => Get.currentRoute == '/HolidayPage');
       getListDataInitial();
     }
   }
