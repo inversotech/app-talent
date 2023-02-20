@@ -68,7 +68,8 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
           id.isNotEmpty) {
         showprogress = 0;
         String query = "SELECT * FROM task WHERE task_id='$id'";
-        await FlutterDownloader.loadTasksWithRawQuery(query: query);
+        final tasks =
+            await FlutterDownloader.loadTasksWithRawQuery(query: query);
         if (progress == 100) {
           final accountStatusService = AccountStatusService();
           final Map<String, String> params = {
@@ -77,7 +78,7 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
           await accountStatusService.saveDownloadPaymentTicket(params);
         }
         //if the task exists, open it
-        // if (tasks != null) FlutterDownloader.open(taskId: id);
+        if (tasks != null) FlutterDownloader.open(taskId: id);
       } else if (status == DownloadTaskStatus.failed && id.isNotEmpty) {
         showprogress = 0;
         String query = "SELECT * FROM task WHERE task_id='$id'";
