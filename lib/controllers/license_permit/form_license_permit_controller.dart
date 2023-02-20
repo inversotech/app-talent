@@ -391,17 +391,9 @@ class FormLicensePermitController extends GetxController {
     final create = await licensePermitService.createLicensePermit(form);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
-      Get.offAllNamed(RoutesName.home);
-
-      /*  Get.back(result: {'change': true, 'data': null});
-      Get.snackbar(
-          'Mensaje:',
-          create.message.isNotEmpty
-              ? create.message
-              : 'Se guardó correctamente',
-          duration: const Duration(seconds: 8),
-          colorText: ColorsApp.white,
-          backgroundColor: ColorsApp.success); */
+      final userPref = UserPreferences();
+      userPref.resultChange = true;
+      Get.until((route) => Get.currentRoute == RoutesName.home);
     }
   }
 }

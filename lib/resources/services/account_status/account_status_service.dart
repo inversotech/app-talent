@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/general/file.dart';
@@ -10,6 +11,7 @@ import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/resources/models/response.dart';
 import 'package:lamb_talent/resources/providers/api.provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class AccountStatusService {
@@ -196,53 +198,58 @@ class AccountStatusService {
     }
   }
 
-  Future<ApiResponse> saveDownloadPaymentTicket(
-      String urlFile, String filename, Map<String, String> params) async {
-    final userPreferences = UserPreferences();
+  Future<ApiResponse> downloadPaymentTicket(
+      String urlFile, String filename) async {
     ApiResponse response = ApiResponse.fromJsonNull();
-    bool showTicket = false;
+
+    final status = await Permission.storage.request();
+    if (status.isGranted) {
+      final Directory? baseStorage;
+      if (Platform.isAndroid) {
+        baseStorage = await p.getExternalStorageDirectory();
+      } else {
+        baseStorage = await p.getApplicationDocumentsDirectory();
+      }
+      await FlutterDownloader.enqueue(
+          url: urlFile,
+          savedDir: baseStorage!.path,
+          fileName: filename,
+          showNotification:
+              true, // show download progress in status bar (for Android)
+          openFileFromNotification:
+              true, // click on notification to open downloaded file (for Android)
+          saveInPublicStorage: true);
+    } else {
+      Get.until((route) => !Get.isDialogOpen!);
+      Get.snackbar('Mensaje:', 'Debe otogar permiso para descargar archivos.',
+          duration: const Duration(seconds: 8),
+          colorText: ColorsApp.white,
+          backgroundColor: ColorsApp.danger);
+      openAppSettings();
+    }
+    return response;
+  }
+
+  Future saveDownloadPaymentTicket(Map<String, String> params) async {
+    ApiResponse response = ApiResponse.fromJsonNull();
+    final userPreferences = UserPreferences();
     if (!userPreferences.isWorkerChild) {
       final apiProvider = ApiProvider();
       response = await apiProvider.putNotId(
           endPoint: endPoints['workerportal']['payments-ticket'],
-          params: params);
-      //_apiProvider.dispose();
+          params: params,
+          showMessage: false);
       if (response.success) {
-        showTicket = true;
-      }
-    } else if (userPreferences.isWorkerChild) {
-      showTicket = true;
-    }
-    if (showTicket) {
-      if (await canLaunchUrlString(urlFile.toString())) {
-        await launchUrlString(
-          urlFile.toString(),
-          webViewConfiguration: WebViewConfiguration(headers: {
-            'Content-Type': 'application/force-download',
-            'Content-Disposition': 'attachment',
-            'filename': filename
-          }),
-/*         headers: {
-          'Content-Type': 'application/force-download',
-          'Content-Disposition': 'attachment',
-          'filename': filename
-        } */
-        );
-      } else {
-        Get.until((route) => !Get.isDialogOpen!);
-        Get.snackbar('Mensaje:',
-            'No se puede abrir el navegador web o no hay un navegador web instalado',
+        Get.snackbar('Mensaje:', 'Descarga completada.',
             duration: const Duration(seconds: 8),
             colorText: ColorsApp.white,
-            backgroundColor: ColorsApp.danger);
+            backgroundColor: ColorsApp.success);
       }
     } else {
-      Get.until((route) => !Get.isDialogOpen!);
-      Get.snackbar('Mensaje:', 'No se procedió con la descarga',
+      Get.snackbar('Mensaje:', 'Descarga completada.',
           duration: const Duration(seconds: 8),
           colorText: ColorsApp.white,
-          backgroundColor: ColorsApp.danger);
+          backgroundColor: ColorsApp.success);
     }
-    return response;
   }
 }

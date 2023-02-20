@@ -13,7 +13,7 @@ import 'package:platform_device_id/platform_device_id.dart';
 
 class VerifyAutheticationController extends GetxController {
   final _authService = AuthService();
-  
+
   @override
   void onReady() {
     _validToken();
@@ -55,8 +55,10 @@ class VerifyAutheticationController extends GetxController {
       if (response.success) {
         final resp = await _authService.userInfo();
         if (resp.success) {
-          if (userPref.menu!.isNotEmpty) {
+          if (userPref.menu!.isNotEmpty && !userPref.existNotify) {
             Get.offAllNamed(userPref.menu![0].url.toString());
+          } else {
+            userPref.existNotify = false;
           }
         } else {
           Get.offAllNamed(RoutesName.login);

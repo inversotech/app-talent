@@ -217,7 +217,9 @@ class FormOvertimeController extends GetxController {
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
       clear();
-      Get.offAllNamed(RoutesName.home);
+      final userPref = UserPreferences();
+      userPref.resultChange = true;
+      Get.until((route) => Get.currentRoute == RoutesName.home);
     }
   }
 

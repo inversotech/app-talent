@@ -270,4 +270,21 @@ class UserPreferences {
   set longitude(String value) {
     _prefs?.setString('longitude', value);
   }
+
+  // GET y SET resultChange
+  bool get resultChange {
+    return _prefs?.getBool('resultChange') ?? false;
+  }
+
+  set resultChange(bool value) {
+    _prefs?.setBool('resultChange', value);
+  }
+  // GET y SET existNotify
+  bool get existNotify {
+    return _prefs?.getBool('existNotify') ?? false;
+  }
+
+  set existNotify(bool value) {
+    _prefs?.setBool('existNotify', value);
+  }
 }
