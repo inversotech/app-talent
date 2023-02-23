@@ -279,6 +279,7 @@ class UserPreferences {
   set resultChange(bool value) {
     _prefs?.setBool('resultChange', value);
   }
+
   // GET y SET existNotify
   bool get existNotify {
     return _prefs?.getBool('existNotify') ?? false;
@@ -286,5 +287,14 @@ class UserPreferences {
 
   set existNotify(bool value) {
     _prefs?.setBool('existNotify', value);
+  }
+
+  // GET y SET routeNotify
+  String get routeNotify {
+    return _prefs?.getString('routeNotify') ?? '';
+  }
+
+  set routeNotify(String value) {
+    _prefs?.setString('routeNotify', value);
   }
 }
