@@ -54,6 +54,13 @@ class SurveyController extends GetxController {
   }
 
   @override
+  void onClose() {
+    scrollController.dispose();
+    refreshController.dispose();
+    super.onClose();
+  }
+
+  @override
   void dispose() {
     scrollController.dispose();
     refreshController.dispose();

@@ -6,6 +6,8 @@ import 'package:lamb_talent/resources/models/models.dart';
 import 'package:lamb_talent/resources/services/license_permit/license_permit_service.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
 
+import '../../core/routers_names.dart';
+
 class FormLicensePermitController extends GetxController {
   final scrollController = ScrollController();
   final formKey = GlobalKey<FormState>();
@@ -79,6 +81,18 @@ class FormLicensePermitController extends GetxController {
     }
     _getDatheader();
     super.onReady();
+  }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    inputFieldTypeLicPerCtrl.dispose();
+    inputFieldTypeConLicPerCtrl.dispose();
+    inputFieldTypeInstitutionCtrl.dispose();
+    inputFieldPeriodoCtrl.dispose();
+    inputFieldDateToCtrl.dispose();
+    inputFieldDateFromCtrl.dispose();
+    super.onClose();
   }
 
   @override
@@ -377,15 +391,9 @@ class FormLicensePermitController extends GetxController {
     final create = await licensePermitService.createLicensePermit(form);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
-      Get.back(result: {'change': true, 'data': null});
-      Get.snackbar(
-          'Mensaje:',
-          create.message.isNotEmpty
-              ? create.message
-              : 'Se guardó correctamente',
-          duration: const Duration(seconds: 8),
-          colorText: ColorsApp.white,
-          backgroundColor: ColorsApp.success);
+      final userPref = UserPreferences();
+      userPref.resultChange = true;
+      Get.until((route) => Get.currentRoute == RoutesName.home);
     }
   }
 }

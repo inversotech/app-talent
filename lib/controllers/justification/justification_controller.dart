@@ -153,14 +153,23 @@ class JustificationController extends GetxController {
           groupBy(list, (JustificationModel obj) => obj.idTrabajador);
       List<JustificationGroup> listDataNew = [];
       newlist.forEach((key, value) {
-        listDataNew.add(JustificationGroup(
-            idTrabajador: value[0].idTrabajador,
-            apellidonombre: value[0].apellidonombre,
-            children: value));
+        final find = listData.indexWhere(
+            (element) => element.idTrabajador == value[0].idTrabajador);
+
+        if (find != -1) {
+          listData[find].children!.addAll(value);
+        } else {
+          listDataNew.add(JustificationGroup(
+              idTrabajador: value[0].idTrabajador,
+              apellidonombre: value[0].apellidonombre,
+              children: value));
+        }
       });
       listData.addAll(listDataNew);
+
       page.value++;
     }
+
     if (pagination.total <= perPage.value ||
         jsonList.length < perPage.value ||
         jsonList.isEmpty) {

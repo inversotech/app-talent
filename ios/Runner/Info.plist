@@ -64,6 +64,7 @@
 	<string>Para registrar la evidencia de tu justificación, permiso o licencia.</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

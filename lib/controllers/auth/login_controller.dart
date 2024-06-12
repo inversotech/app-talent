@@ -30,6 +30,14 @@ class LoginController extends GetxController {
   }
 
   @override
+  void onClose() {
+    username.dispose();
+    password.dispose();
+    focusPassword.dispose();
+    super.onClose();
+  }
+
+  @override
   void dispose() {
     username.dispose();
     password.dispose();
@@ -44,10 +52,13 @@ class LoginController extends GetxController {
       'password': password.text.toString(),
       'no_caduca': 'S'
     };
-    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     final userPref = UserPreferences();
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     String serial = '';
-    OneSignal.shared.setExternalUserId(userPref.tokenNotify);
+    if (userPref.tokenNotify.isNotEmpty) {
+      OneSignal.shared.setExternalUserId(userPref.tokenNotify);
+      params['token_notify'] = userPref.tokenNotify;
+    }
     String deviceId = await PlatformDeviceId.getDeviceId ?? '';
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
@@ -70,7 +81,6 @@ class LoginController extends GetxController {
     params['serial'] = serial;
     params['isvirtual'] = '';
     params['device_source'] = 'APP_UPN';
-    params['token_notify'] = userPref.tokenNotify;
     loadingIndicator(onlyLoading: true, opacity: false);
     final apiProvider = ApiProvider();
     final resp = await apiProvider.loginLamb(params, checkCredencial.value);

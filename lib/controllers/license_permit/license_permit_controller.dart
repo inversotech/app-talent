@@ -109,10 +109,17 @@ class LicensePermitController extends GetxController {
           groupBy(list, (LicensePermitModel obj) => obj.idTrabajador);
       List<LicensePermitGroupModel> listDataNew = [];
       newlist.forEach((key, value) {
-        listDataNew.add(LicensePermitGroupModel(
-            idTrabajador: value[0].idTrabajador,
-            apellidonombre: value[0].nombre,
-            children: value));
+        final find = listData.indexWhere(
+            (element) => element.idTrabajador == value[0].idTrabajador);
+
+        if (find != -1) {
+          listData[find].children!.addAll(value);
+        } else {
+          listDataNew.add(LicensePermitGroupModel(
+              idTrabajador: value[0].idTrabajador,
+              apellidonombre: value[0].nombre ?? value[0].nombresGrupo,
+              children: value));
+        }
       });
       listData.addAll(listDataNew);
       page.value++;

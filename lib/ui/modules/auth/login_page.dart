@@ -138,8 +138,9 @@ class LoginPage extends StatelessWidget {
   Widget _checkWidget(buildContext) {
     return Obx(() => CheckboxListTile(
         // tileColor: ColorsApp.white,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
         controlAffinity: ListTileControlAffinity.leading,
-        title: const Text('Guardar Credenciales',
+        title: const Text('Guardar credenciales',
             style: TextStyle(color: ColorsApp.white)),
         value: controller.checkCredencial.value,
         side: MaterialStateBorderSide.resolveWith((Set<MaterialState> states) {

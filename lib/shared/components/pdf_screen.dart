@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:isolate';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
+import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/resources/services/account_status/account_status_service.dart';
 
 import 'loading.dart';
@@ -34,6 +38,89 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   int currentPage = 0;
   bool isReady = false;
   String errorMessage = '';
+  ReceivePort receivePort = ReceivePort();
+  int showprogress = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    downloadListener();
+  }
+
+  downloadListener() {
+    final isSuccess = IsolateNameServer.registerPortWithName(
+        receivePort.sendPort, 'downloader_send_port');
+    if (!isSuccess) {
+      _unbindBackgroundIsolate();
+      downloadListener();
+      return;
+    }
+
+    receivePort.listen((dynamic message) async {
+      String id = message[0];
+      DownloadTaskStatus status = message[1];
+      int progress = message[2];
+      showprogress = progress;
+
+      if (status == DownloadTaskStatus.complete &&
+          progress == 100 &&
+          id.isNotEmpty) {
+        showprogress = 0;
+        String query = "SELECT * FROM task WHERE task_id='$id'";
+        final tasks =
+            await FlutterDownloader.loadTasksWithRawQuery(query: query);
+        if (progress == 100) {
+          final accountStatusService = AccountStatusService();
+          final Map<String, String> params = {
+            'p': widget.clave.toString(),
+          };
+          await accountStatusService.saveDownloadPaymentTicket(params);
+        }
+        //if the task exists, open it
+        if (tasks != null) FlutterDownloader.open(taskId: id);
+      } else if (status == DownloadTaskStatus.failed && id.isNotEmpty) {
+        showprogress = 0;
+        String query = "SELECT * FROM task WHERE task_id='$id'";
+        await FlutterDownloader.loadTasksWithRawQuery(query: query);
+        if (progress == 100) {
+          Get.snackbar('Mensaje:', 'Descarga fallida.',
+              duration: const Duration(seconds: 8),
+              colorText: ColorsApp.white,
+              backgroundColor: ColorsApp.danger);
+        }
+      } else if (status == DownloadTaskStatus.canceled && id.isNotEmpty) {
+        showprogress = 0;
+        String query = "SELECT * FROM task WHERE task_id='$id'";
+        await FlutterDownloader.loadTasksWithRawQuery(query: query);
+        if (progress == 100) {
+          Get.snackbar('Mensaje:', 'Descarga cancelada.',
+              duration: const Duration(seconds: 8),
+              colorText: ColorsApp.white,
+              backgroundColor: ColorsApp.danger);
+        }
+      }
+    });
+    FlutterDownloader.registerCallback(downloadCallback);
+  }
+
+  void _unbindBackgroundIsolate() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+  }
+
+  @pragma('vm:entry-point')
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    final SendPort? sendPort =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
+    sendPort!.send([id, status, progress]);
+  }
+
+  @override
+  void dispose() {
+    _unbindBackgroundIsolate();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,16 +133,21 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                   icon: const Icon(Icons.download),
                   onPressed: () async {
                     if (widget.urlFileDownload.isNotEmpty) {
-                      final accountStatusService = AccountStatusService();
-                      final Map<String, String> params = {
-                        'p': widget.clave.toString(),
-                      };
-                      loadingIndicator(
-                          onlyLoading: true, text: 'Descargando ...');
-                      await accountStatusService.saveDownloadPaymentTicket(
-                          widget.urlFileDownload, widget.titlePdf, params);
-                      // Navigator.pop(context);
-                      Get.back();
+                      try {
+                        final accountStatusService = AccountStatusService();
+                        loadingIndicator(
+                            onlyLoading: false, text: 'Descargando ...');
+                        await accountStatusService.downloadPaymentTicket(
+                            widget.urlFileDownload, widget.titlePdf);
+                        // Navigator.pop(context);
+                        Get.back();
+                      } catch (e) {
+                        Get.back();
+                        Get.snackbar('Mensaje:', e.toString(),
+                            duration: const Duration(seconds: 8),
+                            colorText: ColorsApp.white,
+                            backgroundColor: ColorsApp.danger);
+                      }
                     }
                   },
                 )

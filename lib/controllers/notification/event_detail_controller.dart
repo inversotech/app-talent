@@ -45,6 +45,14 @@ class EventDetailController extends GetxController {
     super.onReady();
   }
 
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    refreshController.dispose();
+    super.onClose();
+  }
+
   @override
   void dispose() {
     scrollController.dispose();

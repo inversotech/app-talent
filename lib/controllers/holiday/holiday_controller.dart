@@ -33,6 +33,13 @@ class HolidayController extends GetxController {
   }
 
   @override
+  void onClose() {
+    scrollController.dispose();
+    refreshController.dispose();
+    super.onClose();
+  }
+
+  @override
   void dispose() {
     scrollController.dispose();
     refreshController.dispose();
@@ -116,8 +123,7 @@ class HolidayController extends GetxController {
         idPeriodoVacTrab.toString(), params);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
-      // Navigator.pop(buildContext);
-      Get.back(); // comment by pedro for implement get.
+      Get.until((route) => Get.currentRoute == '/HolidayPage');
       getListDataInitial();
     }
   }

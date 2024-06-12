@@ -1214,11 +1214,11 @@ class ListLicensePermit extends StatelessWidget {
     final create =
         await licensePermitService.chageStatusLicensePermit(id, params);
 
+    Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
-      Get.back();
-/*       Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pop(context); */
+      final userPref = UserPreferences();
+      userPref.resultChange = true;
+      Get.until((route) => Get.currentRoute == '/LicensePermitPage');
       onChangeList();
     }
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/resources/services/notification/push_notification_service.dart';
@@ -16,9 +17,15 @@ void main() async {
   await GetStorage.init();
   final prefs = UserPreferences();
   await prefs.initPrefs();
+  prefs.existNotify = false;
   await PushNotificationService.initializeAppFirebase();
   await PushNotificationService.initializeAppOneSingal();
   LocationUser().initLocationUser();
+  // Plugin must be initialized before using
+  await FlutterDownloader.initialize(
+      debug:
+          true // optional: set to false to disable printing logs to console (default: true));
+      );
   runApp(const MyApp());
 }
 

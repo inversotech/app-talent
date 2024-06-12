@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/core/routers_names.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
@@ -12,20 +13,25 @@ import 'package:platform_device_id/platform_device_id.dart';
 
 class VerifyAutheticationController extends GetxController {
   final _authService = AuthService();
+
   @override
-  void onInit() {
-    // _clearStorage();
+  void onReady() {
     _validToken();
-    super.onInit();
+    super.onReady();
   }
 
   void _validToken() async {
-    final userPref = UserPreferences();
-    if (userPref.tokenNotify.isNotEmpty) {
+    final storage = GetStorage();
+    final token = storage.read('tokenLamb');
+    if (token != null && token.isNotEmpty) {
+      Map<String, String> params = {};
+      final userPref = UserPreferences();
       final apiProvider = ApiProvider();
       final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-      OneSignal.shared.setExternalUserId(userPref.tokenNotify);
-      Map<String, String> params = {'token_notify': userPref.tokenNotify};
+      if (userPref.tokenNotify.isNotEmpty) {
+        OneSignal.shared.setExternalUserId(userPref.tokenNotify);
+        params['token_notify'] = userPref.tokenNotify;
+      }
       String deviceId = await PlatformDeviceId.getDeviceId ?? '';
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfoPlugin.androidInfo;
@@ -49,8 +55,10 @@ class VerifyAutheticationController extends GetxController {
       if (response.success) {
         final resp = await _authService.userInfo();
         if (resp.success) {
-          if (userPref.menu!.isNotEmpty) {
+          if (userPref.menu!.isNotEmpty && !userPref.existNotify) {
             Get.offAllNamed(userPref.menu![0].url.toString());
+          } else {
+            userPref.existNotify = false;
           }
         } else {
           Get.offAllNamed(RoutesName.login);

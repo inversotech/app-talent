@@ -54,6 +54,15 @@ class CommentController extends GetxController {
   }
 
   @override
+  void onClose() {
+    focusNode.dispose();
+    mensaje.dispose();
+    scrollController.dispose();
+    refreshController.dispose();
+    super.onClose();
+  }
+
+  @override
   void dispose() {
     focusNode.dispose();
     mensaje.dispose();

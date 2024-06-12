@@ -181,7 +181,7 @@ class HomePage extends StatelessWidget {
                 showButtonRequest: !controller.userPreferences.isWorkerChild,
                 title: 'Justificaciones',
                 indexItem: 0,
-                itemCount: 3,
+                itemCount: 4,
                 textButton: [
                   Image.asset('assets/icons/edit.png',
                       height: 30, width: 30, color: Colors.white),
@@ -217,7 +217,7 @@ class HomePage extends StatelessWidget {
                   showButtonRequest: !controller.userPreferences.isWorkerChild,
                   title: 'Permisos y licencias',
                   indexItem: 1,
-                  itemCount: 3,
+                  itemCount: 4,
                   textButton: [
                     Image.asset('assets/icons/edit.png',
                         height: 30, width: 30, color: Colors.white),
@@ -252,7 +252,7 @@ class HomePage extends StatelessWidget {
                   showButtonRequest: !controller.userPreferences.isWorkerChild,
                   title: 'Vacaciones',
                   indexItem: 2,
-                  itemCount: 3,
+                  itemCount: 4,
                   textButton: [
                     controller.dataCarousel != null &&
                             controller.dataCarousel!.containsKey('vacacion')
@@ -283,15 +283,18 @@ class HomePage extends StatelessWidget {
                   detailWidget: List<Widget>.generate(1, (index) {
                     return controller.dataCarousel != null &&
                             controller.dataCarousel!.containsKey('vacacion')
-                        ? controller.dataCarousel!['vacacion']
-                                    .containsKey('codigo') &&
+                        ? controller.dataCarousel!['vacacion'].containsKey('codigo') &&
                                 controller.dataCarousel!['vacacion']
                                     .containsKey('vacacion')
-                            ? controller.dataCarousel!['vacacion']['codigo'] ==
-                                        '04' ||
+                            ? (controller.dataCarousel!['vacacion']['codigo'] == '04' ||
+                                        controller.dataCarousel!['vacacion']
+                                                ['codigo'] ==
+                                            '03') &&
+                                    controller.dataCarousel!['vacacion']['vacacion']
+                                        .containsKey('fecha_ini') &&
                                     controller.dataCarousel!['vacacion']
-                                            ['codigo'] ==
-                                        '03'
+                                            ['vacacion']
+                                        .containsKey('fecha_fin')
                                 ? Builder(builder: (context) {
                                     String code = controller
                                         .dataCarousel!['vacacion']['codigo']
@@ -373,7 +376,50 @@ class HomePage extends StatelessWidget {
                                           )
                                         : Container();
                                   })
-                                : Container()
+                                : controller.dataCarousel!['vacacion']['codigo'] != '05' &&
+                                        controller.dataCarousel!['vacacion']
+                                                ['vacacion']
+                                            .containsKey('fecha_ini') &&
+                                        controller.dataCarousel!['vacacion']
+                                                ['vacacion']
+                                            .containsKey('fecha_fin')
+                                    ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                        Text(
+                                          'Desde ',
+                                          style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16.0,
+                                              color: ColorsApp.primary),
+                                        ),
+                                        Text(
+                                          Jiffy(controller
+                                                      .dataCarousel!['vacacion']
+                                                  ['vacacion']['fecha_ini'])
+                                              .format('dd-MM-yyyy'),
+                                          style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 18.0,
+                                              color: ColorsApp.primary),
+                                        ),
+                                        Text(
+                                          ' hasta ',
+                                          style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16.0,
+                                              color: ColorsApp.primary),
+                                        ),
+                                        Text(
+                                          Jiffy(controller
+                                                      .dataCarousel!['vacacion']
+                                                  ['vacacion']['fecha_fin'])
+                                              .format('dd-MM-yyyy'),
+                                          style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 18.0,
+                                              color: ColorsApp.primary),
+                                        )
+                                      ])
+                                    : Container()
                             : Container()
                         : Container();
                   }),
@@ -386,7 +432,42 @@ class HomePage extends StatelessWidget {
                   },
                   onPressedNotify: () {
                     controller.goToHolidayApprove();
-                  })
+                  }),
+              CarouselSliderItem(
+                cantidadAprobar: controller.dataCarousel != null &&
+                        controller.dataCarousel!.containsKey('sobretiempo')
+                    ? int.parse(controller.dataCarousel!['sobretiempo']
+                            ['total_aprobar']
+                        .toString())
+                    : 0,
+                showButtonRequest: !controller.userPreferences.isWorkerChild,
+                title: 'Sobretiempos',
+                indexItem: 3,
+                itemCount: 4,
+                textButton: [
+                  Image.asset('assets/icons/edit.png',
+                      height: 30, width: 30, color: Colors.white),
+                  Text(
+                    'solicitar sobretiempo',
+                    style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w400, color: Colors.white),
+                  )
+                ],
+                detail: controller.dataCarousel != null &&
+                        controller.dataCarousel!.containsKey('sobretiempo')
+                    ? controller.dataCarousel!['sobretiempo']['lista']
+                    : [],
+                constraints: constraints,
+                onPressedList: () {
+                  controller.goToOvertimes();
+                },
+                onPressedRequest: () {
+                  controller.goToFormOvertime();
+                },
+                onPressedNotify: () {
+                  controller.goToOvertimeApprove();
+                },
+              ),
             ],
             carouselController: controller.controllerCarousel,
             options: CarouselOptions(

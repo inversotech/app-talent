@@ -37,6 +37,13 @@ class HolidayApproveController extends GetxController {
   }
 
   @override
+  void onClose() {
+    scrollController.dispose();
+    refreshController.dispose();
+    super.onClose();
+  }
+
+  @override
   void dispose() {
     scrollController.dispose();
     refreshController.dispose();
@@ -186,15 +193,9 @@ class HolidayApproveController extends GetxController {
         await holidayService.changeStatusHoliday(idPeriodoVacTrab, params);
     Get.until((route) => !Get.isDialogOpen!);
     if (create.success) {
-/*       if (Get.isSnackbarOpen) {
-        Get.back();
-      } */
-      Get.back();
-      // Get.back();
-
-      // Get.back();
-      // Navigator.pop(buildContext);
-      // Navigator.pop(buildContext);
+      final userPref = UserPreferences();
+      userPref.resultChange = true;
+      Get.until((route) => Get.currentRoute == '/HolidayApprovePage');
       getListData();
     }
   }
