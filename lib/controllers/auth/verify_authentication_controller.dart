@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/core/routers_names.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
@@ -55,10 +56,21 @@ class VerifyAutheticationController extends GetxController {
       if (response.success) {
         final resp = await _authService.userInfo();
         if (resp.success) {
-          if (userPref.menu!.isNotEmpty && !userPref.existNotify) {
+          if (userPref.menu!.isNotEmpty && userPref.existNotify == false) {
             Get.offAllNamed(userPref.menu![0].url.toString());
           } else {
-            userPref.existNotify = false;
+            if (userPref.menu!.isNotEmpty &&
+                userPref.existNotify == true &&
+                userPref.routeNotify.isNotEmpty) {
+              Get.offAllNamed(userPref.routeNotify);
+            } else {
+              userPref.existNotify = false;
+              Get.offAllNamed(RoutesName.login);
+              Get.snackbar('Mensaje:', 'No tiene acceso a ningún item.',
+                  duration: const Duration(seconds: 10),
+                  colorText: ColorsApp.danger,
+                  backgroundColor: ColorsApp.white);
+            }
           }
         } else {
           Get.offAllNamed(RoutesName.login);

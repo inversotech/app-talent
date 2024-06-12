@@ -78,6 +78,7 @@ class PushNotificationService {
     switch (data['origen'].toString()) {
       case 'msm_evento':
         userRef.existNotify = true;
+        userRef.routeNotify = RoutesName.notification;
         Get.to(
             () => EventDetail(
                   id: data['id_origen'].toString(),
@@ -89,6 +90,7 @@ class PushNotificationService {
         break;
       case 'msm_album':
         userRef.existNotify = true;
+        userRef.routeNotify = RoutesName.notification;
         Get.offAllNamed(RoutesName.notification, arguments: {
           'id_origen': data['id_origen'].toString(),
           'origen': data['origen'].toString()
@@ -96,6 +98,7 @@ class PushNotificationService {
         break;
       case 'msm_notificacion':
         userRef.existNotify = true;
+        userRef.routeNotify = RoutesName.notification;
         Get.offAllNamed(RoutesName.notification, arguments: {
           'id_origen': data['id_origen'].toString(),
           'origen': data['origen'].toString()
@@ -103,6 +106,7 @@ class PushNotificationService {
         break;
       case 'msm_horario':
         userRef.existNotify = true;
+        userRef.routeNotify = RoutesName.home;
         if (Get.currentRoute == '/HomePage') {
           Get.forceAppUpdate();
         } else {
@@ -111,6 +115,7 @@ class PushNotificationService {
         break;
       case 'msm_sobretiempo':
         userRef.existNotify = true;
+        userRef.routeNotify = RoutesName.home;
         if (Get.currentRoute == '/HomePage') {
           Get.forceAppUpdate();
         } else {
@@ -119,6 +124,7 @@ class PushNotificationService {
         break;
       case 'msm_vacacion':
         userRef.existNotify = true;
+        userRef.routeNotify = RoutesName.home;
         if (Get.currentRoute == '/HomePage') {
           Get.forceAppUpdate();
         } else {
