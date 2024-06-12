@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -39,7 +40,6 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   bool isReady = false;
   String errorMessage = '';
   ReceivePort receivePort = ReceivePort();
-  int showprogress = 0;
 
   @override
   void initState() {
@@ -61,15 +61,10 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
       String id = message[0];
       DownloadTaskStatus status = message[1];
       int progress = message[2];
-      showprogress = progress;
 
       if (status == DownloadTaskStatus.complete &&
           progress == 100 &&
           id.isNotEmpty) {
-        showprogress = 0;
-        String query = "SELECT * FROM task WHERE task_id='$id'";
-        final tasks =
-            await FlutterDownloader.loadTasksWithRawQuery(query: query);
         if (progress == 100) {
           final accountStatusService = AccountStatusService();
           final Map<String, String> params = {
@@ -77,28 +72,39 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
           };
           await accountStatusService.saveDownloadPaymentTicket(params);
         }
-        //if the task exists, open it
-        if (tasks != null) FlutterDownloader.open(taskId: id);
+        if (Platform.isIOS || Platform.isMacOS) {
+          String query = "SELECT * FROM task WHERE task_id='$id'";
+          final tasks =
+              await FlutterDownloader.loadTasksWithRawQuery(query: query);
+          //if the task exists, open it
+          if (tasks != null) {
+            FlutterDownloader.open(taskId: id);
+          }
+        }
       } else if (status == DownloadTaskStatus.failed && id.isNotEmpty) {
-        showprogress = 0;
-        String query = "SELECT * FROM task WHERE task_id='$id'";
-        await FlutterDownloader.loadTasksWithRawQuery(query: query);
-        if (progress == 100) {
-          Get.snackbar('Mensaje:', 'Descarga fallida.',
-              duration: const Duration(seconds: 8),
-              colorText: ColorsApp.white,
-              backgroundColor: ColorsApp.danger);
-        }
+        Get.until((route) => !Get.isDialogOpen!);
+        Get.snackbar('Mensaje:', 'Descarga fallida.',
+            duration: const Duration(seconds: 8),
+            colorText: ColorsApp.white,
+            backgroundColor: ColorsApp.danger);
       } else if (status == DownloadTaskStatus.canceled && id.isNotEmpty) {
-        showprogress = 0;
-        String query = "SELECT * FROM task WHERE task_id='$id'";
-        await FlutterDownloader.loadTasksWithRawQuery(query: query);
-        if (progress == 100) {
-          Get.snackbar('Mensaje:', 'Descarga cancelada.',
-              duration: const Duration(seconds: 8),
-              colorText: ColorsApp.white,
-              backgroundColor: ColorsApp.danger);
-        }
+        Get.until((route) => !Get.isDialogOpen!);
+        Get.snackbar('Mensaje:', 'Descarga cancelada.',
+            duration: const Duration(seconds: 8),
+            colorText: ColorsApp.white,
+            backgroundColor: ColorsApp.danger);
+      } else if (status == DownloadTaskStatus.undefined) {
+        Get.until((route) => !Get.isDialogOpen!);
+        Get.snackbar('Mensaje:', 'Descarga desconocida.',
+            duration: const Duration(seconds: 8),
+            colorText: ColorsApp.white,
+            backgroundColor: ColorsApp.danger);
+      } else if (status == DownloadTaskStatus.paused) {
+        Get.until((route) => !Get.isDialogOpen!);
+        Get.snackbar('Mensaje:', 'Descarga pausada.',
+            duration: const Duration(seconds: 8),
+            colorText: ColorsApp.white,
+            backgroundColor: ColorsApp.danger);
       }
     });
     FlutterDownloader.registerCallback(downloadCallback);
@@ -140,7 +146,6 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
                         await accountStatusService.downloadPaymentTicket(
                             widget.urlFileDownload, widget.titlePdf);
                         // Navigator.pop(context);
-                        Get.back();
                       } catch (e) {
                         Get.back();
                         Get.snackbar('Mensaje:', e.toString(),

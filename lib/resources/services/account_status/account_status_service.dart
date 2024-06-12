@@ -240,13 +240,17 @@ class AccountStatusService {
           params: params,
           showMessage: false);
       if (response.success) {
-        Get.snackbar('Mensaje:', 'Descarga completada.',
+        Get.until((route) => !Get.isDialogOpen!);
+        Get.snackbar('Mensaje:',
+            'Descarga completada.${Platform.isIOS || Platform.isMacOS ? ' No olvide guardar el archivo.' : ''}',
             duration: const Duration(seconds: 8),
             colorText: ColorsApp.white,
             backgroundColor: ColorsApp.success);
       }
     } else {
-      Get.snackbar('Mensaje:', 'Descarga completada.',
+      Get.until((route) => !Get.isDialogOpen!);
+      Get.snackbar('Mensaje:',
+          'Descarga completada.${Platform.isIOS || Platform.isMacOS ? ' No olvide guardar el archivo.' : ''}',
           duration: const Duration(seconds: 8),
           colorText: ColorsApp.white,
           backgroundColor: ColorsApp.success);
