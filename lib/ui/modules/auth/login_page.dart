@@ -8,34 +8,95 @@ class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
   final controller = Get.put(LoginController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: Column(
+        children: [
+          _headerSection(),
+          _formSection(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _headerSection() {
+    return Expanded(
+      flex: 2,
+      child: Container(
+        width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [ColorsApp.primary, ColorsApp.primaryVariant],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [ColorsApp.primary, Color.fromARGB(255, 3, 36, 71)],
           ),
         ),
-        child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                _logo(),
-                _title(),
-                const SizedBox(height: 30),
-                _userPasswordWidget(context),
-                _checkWidget(context),
-                const SizedBox(height: 20),
-                _submitButton(context),
-              ],
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/icons/logo.png',
+                height: 80,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Bienvenido',
+                style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  fontSize: 32,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Ingresa tus credenciales',
+                style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w300,
+                  color: Colors.white70,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _formSection(BuildContext context) {
+    return Expanded(
+      flex: 3,
+      child: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(32),
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(28, 32, 28, 24),
+          child: GetBuilder<LoginController>(
+            init: LoginController(),
+            builder: (_) => Form(
+              key: controller.formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _usernameField(),
+                  const SizedBox(height: 20),
+                  _passwordField(context),
+                  const SizedBox(height: 12),
+                  _checkWidget(),
+                  const SizedBox(height: 28),
+                  _submitButton(context),
+                ],
+              ),
             ),
           ),
         ),
@@ -43,157 +104,156 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _logo() {
-    return Image.asset('assets/icons/logo.png',
-        height: 60.0, fit: BoxFit.cover);
+  Widget _usernameField() {
+    return TextFormField(
+      controller: controller.username,
+      keyboardType: TextInputType.text,
+      autofocus: true,
+      style: GoogleFonts.montserrat(
+        fontSize: 16,
+        color: ColorsApp.primary,
+      ),
+      decoration: _inputDecoration(
+        label: 'Usuario',
+        hint: 'Ingrese su usuario',
+        icon: Icons.person_outline_rounded,
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Usuario requerido';
+        }
+        return null;
+      },
+      onEditingComplete: () => controller.focusPassword.requestFocus(),
+    );
   }
 
-  Widget _title() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        text: 'Bienvenido',
+  Widget _passwordField(BuildContext context) {
+    return Obx(
+      () => TextFormField(
+        controller: controller.password,
+        focusNode: controller.focusPassword,
+        obscureText: controller.obscureText.value,
         style: GoogleFonts.montserrat(
-            fontWeight: FontWeight.w300, color: Colors.white, fontSize: 30),
-      ),
-    );
-  }
-
-  Widget _userPasswordWidget(buildContext) {
-    return GetBuilder<LoginController>(
-        init: LoginController(),
-        builder: (_) => Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              child: Form(
-                key: controller.formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(15.0)),
-                      padding: const EdgeInsets.all(12.0),
-                      child: Semantics(
-                        label: 'Usuario',
-                        enabled: true,
-                        hint: 'Ingrese su usuario',
-                        child: TextFormField(
-                          controller: controller.username,
-                          keyboardType: TextInputType.visiblePassword,
-                          autofocus: true,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.person_outlined),
-                            labelText: 'Usuario',
-                            hintText: 'Ingrese su usuario',
-                            labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                            border: InputBorder.none,
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Usuario requerido.';
-                            }
-                            return null;
-                          },
-                          onEditingComplete: () =>
-                              controller.focusPassword.requestFocus(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12.0),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(15.0)),
-                      padding: const EdgeInsets.all(12.0),
-                      child: Semantics(
-                          label: 'Contraseña',
-                          enabled: true,
-                          hint: 'Ingrese su contraseña',
-                          child: Obx(() => TextFormField(
-                                controller: controller.password,
-                                focusNode: controller.focusPassword,
-                                obscureText: controller.obscureText.value,
-                                decoration: inputDecorationPassword(),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return 'Contraseña requerido.';
-                                  }
-                                  return null;
-                                },
-                                onEditingComplete: () {
-                                  controller.loginLamb(buildContext);
-                                },
-                              ))),
-                    ),
-                  ],
-                ),
-              ),
-            ));
-  }
-
-  Widget _checkWidget(buildContext) {
-    return Obx(() => CheckboxListTile(
-        // tileColor: ColorsApp.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-        controlAffinity: ListTileControlAffinity.leading,
-        title: const Text('Guardar credenciales',
-            style: TextStyle(color: ColorsApp.white)),
-        value: controller.checkCredencial.value,
-        side: MaterialStateBorderSide.resolveWith((Set<MaterialState> states) {
-          return const BorderSide(
-              width: 2.0,
-              style: BorderStyle.solid,
-              color: ColorsApp
-                  .white); // Defer to default value on the theme or widget.
-        }),
-        onChanged: (val) {
-          controller.checkCredencial.value = val!;
-        }));
-  }
-
-  Widget _submitButton(BuildContext buildContext) {
-    return SizedBox(
-      width: double.infinity,
-      child: TextButton(
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(ColorsApp.info),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    side: const BorderSide(color: ColorsApp.info)))),
-        child: const Padding(
-          padding: EdgeInsets.all(4.0),
-          child: Text(
-            'Ingresar',
-            style: TextStyle(fontSize: 16, color: Colors.black),
-          ),
+          fontSize: 16,
+          color: ColorsApp.primary,
         ),
-        onPressed: () {
-          controller.loginLamb(buildContext);
-        },
-      ),
-    );
-  }
-
-  InputDecoration inputDecorationPassword() {
-    return InputDecoration(
-      icon: const Icon(Icons.lock_outlined),
-      labelText: 'Contraseña',
-      hintText: 'Ingrese su contraseña',
-      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-      border: InputBorder.none,
-      suffixIcon: Obx(() => IconButton(
-            icon: Icon(controller.obscureText.value
-                ? Icons.visibility
-                : Icons.visibility_off),
+        decoration: _inputDecoration(
+          label: 'Contraseña',
+          hint: 'Ingrese su contraseña',
+          icon: Icons.lock_outline_rounded,
+          suffixIcon: IconButton(
+            icon: Icon(
+              controller.obscureText.value
+                  ? Icons.visibility_outlined
+                  : Icons.visibility_off_outlined,
+              color: ColorsApp.control,
+            ),
             onPressed: () {
               controller.obscureText.value = !controller.obscureText.value;
             },
-          )),
+          ),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Contraseña requerida';
+          }
+          return null;
+        },
+        onEditingComplete: () => controller.loginLamb(context),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration({
+    required String label,
+    required String hint,
+    required IconData icon,
+    Widget? suffixIcon,
+  }) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      labelStyle: GoogleFonts.montserrat(
+        fontWeight: FontWeight.w500,
+        color: ColorsApp.primaryVariant,
+      ),
+      hintStyle: GoogleFonts.montserrat(
+        color: ColorsApp.control,
+      ),
+      prefixIcon: Icon(icon, color: ColorsApp.primaryVariant),
+      suffixIcon: suffixIcon,
+      filled: true,
+      fillColor: ColorsApp.info.withValues(alpha: 0.25),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: ColorsApp.primary, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: ColorsApp.danger),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(color: ColorsApp.danger, width: 2),
+      ),
+    );
+  }
+
+  Widget _checkWidget() {
+    return Obx(
+      () => Row(
+        children: [
+          SizedBox(
+            height: 24,
+            width: 24,
+            child: Checkbox(
+              value: controller.checkCredencial.value,
+              activeColor: ColorsApp.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
+              side: const BorderSide(color: ColorsApp.control),
+              onChanged: (val) => controller.checkCredencial.value = val!,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            'Guardar credenciales',
+            style: GoogleFonts.montserrat(
+              color: ColorsApp.primaryVariant,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _submitButton(BuildContext context) {
+    return FilledButton(
+      style: FilledButton.styleFrom(
+        backgroundColor: ColorsApp.primary,
+        foregroundColor: Colors.white,
+        minimumSize: const Size.fromHeight(54),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
+        elevation: 0,
+      ),
+      onPressed: () => controller.loginLamb(context),
+      child: Text(
+        'Ingresar',
+        style: GoogleFonts.montserrat(
+          fontSize: 17,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 }

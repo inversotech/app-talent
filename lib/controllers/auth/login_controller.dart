@@ -10,7 +10,6 @@ import 'package:lamb_talent/resources/providers/api.provider.dart';
 import 'package:lamb_talent/resources/services/auth/auth_service.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -56,12 +55,13 @@ class LoginController extends GetxController {
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     String serial = '';
     if (userPref.tokenNotify.isNotEmpty) {
-      OneSignal.shared.setExternalUserId(userPref.tokenNotify);
+      OneSignal.login(userPref.tokenNotify);
       params['token_notify'] = userPref.tokenNotify;
     }
-    String deviceId = await PlatformDeviceId.getDeviceId ?? '';
+    String deviceId = '';
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
+      deviceId = androidInfo.id;
       params['uuid'] = deviceId; //UUID for Android by pedro
       // params['uuid'] = androidInfo.androidId!; //UUID for Android
       params['model'] = androidInfo.model;
@@ -71,6 +71,7 @@ class LoginController extends GetxController {
       params['id_app'] = '5';
     } else if (Platform.isIOS) {
       final iosInfo = await deviceInfoPlugin.iosInfo;
+      deviceId = iosInfo.identifierForVendor ?? '';
       params['uuid'] = deviceId; //UUID for iOS
       params['model'] = iosInfo.model!;
       params['platform'] = Platform.operatingSystem;

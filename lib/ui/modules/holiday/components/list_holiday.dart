@@ -57,7 +57,7 @@ class ListHoliday extends StatelessWidget {
                                     fontSize: 16.0),
                               ),
                               Text(
-                                  'Fecha: ${Jiffy(data.fechaIni, 'dd/MM/yyyy').format('dd|MM|yyyy')} - ${Jiffy(data.fechaFin, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
+                                  'Fecha: ${Jiffy.parse(data.fechaIni!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')} - ${Jiffy.parse(data.fechaFin!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
                                   style: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w500,
                                       color: ColorsApp.primary,

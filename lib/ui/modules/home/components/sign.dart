@@ -63,7 +63,7 @@ Future<bool> showModalSSign(
                     children: [
                       Flexible(
                         child: Text(
-                            'Fecha: ${Jiffy(holiday.fechaIni, 'yyyy-MM-dd').format('dd|MM|yyyy')} - ${Jiffy(holiday.fechaFin, 'yyyy-MM-dd').format('dd|MM|yyyy')}',
+                            'Fecha: ${Jiffy.parse(holiday.fechaIni!, pattern: 'yyyy-MM-dd').format(pattern: 'dd|MM|yyyy')} - ${Jiffy.parse(holiday.fechaFin!, pattern: 'yyyy-MM-dd').format(pattern: 'dd|MM|yyyy')}',
                             style: GoogleFonts.montserrat(
                                 fontWeight: FontWeight.w300,
                                 color: ColorsApp.primary,
@@ -266,7 +266,7 @@ Future<bool> showModalSSign(
                   children: [
                     Flexible(
                       child: Text(
-                          'Fecha: ${Jiffy(holiday.fechaIni, 'yyyy-MM-dd').format('dd|MM|yyyy')} - ${Jiffy(holiday.fechaFin, 'yyyy-MM-dd').format('dd|MM|yyyy')}',
+                          'Fecha: ${Jiffy.parse(holiday.fechaIni!, pattern: 'yyyy-MM-dd').format(pattern: 'dd|MM|yyyy')} - ${Jiffy.parse(holiday.fechaFin!, pattern: 'yyyy-MM-dd').format(pattern: 'dd|MM|yyyy')}',
                           style: GoogleFonts.montserrat(
                               fontWeight: FontWeight.w300,
                               color: ColorsApp.primary,

@@ -22,10 +22,14 @@ void main() async {
   await PushNotificationService.initializeAppOneSingal();
   LocationUser().initLocationUser();
   // Plugin must be initialized before using
-  await FlutterDownloader.initialize(
-      debug:
-          true // optional: set to false to disable printing logs to console (default: true));
-      );
+  try {
+    await FlutterDownloader.initialize(
+        debug:
+            true // optional: set to false to disable printing logs to console (default: true));
+        );
+  } catch (e) {
+    debugPrint('FlutterDownloader init error: $e');
+  }
   runApp(const MyApp());
 }
 
@@ -54,7 +58,7 @@ class MyApp extends StatelessWidget {
         Locale('es', 'PE'),
       ],
       theme: CustomTheme(
-              isDark: false, textTheme: const TextTheme(bodyText1: body1Style))
+              isDark: false, textTheme: const TextTheme(bodyLarge: body1Style))
           .themeData,
       initialRoute: RoutesName.checkAuth,
       transitionDuration: const Duration(seconds: 0),

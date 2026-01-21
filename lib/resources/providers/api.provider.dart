@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -8,6 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/resources/models/response.dart';
+import 'package:http/http.dart' as http;
 
 class ApiProvider extends GetConnect {
   Future<ApiResponse> loginLamb(
@@ -70,8 +72,8 @@ class ApiProvider extends GetConnect {
 
   Future<bool> checkInternet(String endPoint) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi) {
+    if (connectivityResult.contains(ConnectivityResult.wifi) ||
+        connectivityResult.contains(ConnectivityResult.mobile)) {
       try {
         final uri = Uri.parse(endPoint);
         String domain = uri.host;

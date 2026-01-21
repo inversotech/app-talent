@@ -70,7 +70,7 @@ class ListHolidayApprove extends StatelessWidget {
                                     fontSize: 16.0),
                               ),
                               Text(
-                                  'Periodo: ${Jiffy(data.periodoIni, 'dd/MM/yyyy').format('dd|MM|yyyy')} - ${Jiffy(data.periodoFin, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
+                                  'Periodo: ${Jiffy.parseFromDateTime(data.periodoIni!).format(pattern: 'dd|MM|yyyy')} - ${Jiffy.parseFromDateTime(data.periodoFin!).format(pattern: 'dd|MM|yyyy')}',
                                   style: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w500,
                                       color: ColorsApp.primary,
@@ -256,7 +256,7 @@ class ListHolidayApprove extends StatelessWidget {
                                                                 fontSize: 16.0),
                                                       ),
                                                       Text(
-                                                          'Fecha: ${Jiffy(data.fechaIni, 'dd/MM/yyyy').format('dd|MM|yyyy')} - ${Jiffy(data.fechaFin, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
+                                                          'Fecha: ${Jiffy.parse(data.fechaIni!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')} - ${Jiffy.parse(data.fechaFin!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
                                                           style: GoogleFonts
                                                               .montserrat(
                                                                   fontWeight:
@@ -635,7 +635,7 @@ class ListHolidayApprove extends StatelessWidget {
                                                                         16.0),
                                                           ),
                                                           Text(
-                                                              'Fecha: ${Jiffy(data.fechaIni, 'dd/MM/yyyy').format('dd|MM|yyyy')} - ${Jiffy(data.fechaFin, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
+                                                              'Fecha: ${Jiffy.parse(data.fechaIni!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')} - ${Jiffy.parse(data.fechaFin!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
                                                               style: GoogleFonts.montserrat(
                                                                   fontWeight:
                                                                       FontWeight

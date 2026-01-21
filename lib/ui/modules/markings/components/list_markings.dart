@@ -199,7 +199,7 @@ class ListMarking extends StatelessWidget {
               CircleAvatar(
                 radius: 16,
                 backgroundColor: color,
-                child: Text(Jiffy(fecha, 'dd/MM/yyyy').format('dd'),
+                child: Text(Jiffy.parseFromDateTime(fecha).format(pattern: 'dd'),
                     style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w400,
                         color: Colors.white,
@@ -207,7 +207,7 @@ class ListMarking extends StatelessWidget {
               ),
               const SizedBox(width: 12.0),
               Text(
-                '${capitalize(DateFormat.MMMM('es').format(fecha))}, ${Jiffy(fecha, 'dd/MM/yyyy').format('yyyy')}',
+                '${capitalize(DateFormat.MMMM('es').format(fecha))}, ${Jiffy.parseFromDateTime(fecha).format(pattern: 'yyyy')}',
                 style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w400,
                     color: ColorsApp.primary,

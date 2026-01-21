@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
@@ -16,14 +17,20 @@ import 'package:lamb_talent/shared/components/app_screen.dart';
 import 'components/carousel_slider_item.dart';
 import 'components/time_dynamic.dart';
 
+/// Códigos de estado de vacaciones
+class VacationCodes {
+  static const String startingSoon = '04';
+  static const String endingSoon = '03';
+  static const String noVacation = '05';
+}
+
 class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+  HomePage({super.key});
   final controller = Get.put(HomeController());
+
   @override
-  // ignore: avoid_renaming_method_parameters
-  Widget build(BuildContext buildContext) {
+  Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
-      init: HomeController(),
       didUpdateWidget: (_, stateBuilder) {
         stateBuilder.controller!.onInit();
       },
@@ -42,505 +49,499 @@ class HomePage extends StatelessWidget {
                 rightBeforeBackground: 0,
                 bottomBeforeBackground: 0,
                 child: LayoutBuilder(builder:
-                    (BuildContext context, BoxConstraints constraints) {
+                    (BuildContext layoutContext, BoxConstraints constraints) {
                   return Column(
                     children: [
                       _widgetAssistance(),
-                      _widgetSlider(constraints, buildContext),
+                      _widgetSlider(constraints, context),
                     ],
                   );
                 }),
               )
-            : Container());
+            : const SizedBox.shrink());
       },
     );
   }
 
   Widget _widgetAssistance() {
+    final theme = Theme.of(Get.context!);
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Card(
-          margin: const EdgeInsets.all(0.0),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(25)),
-          ),
-          child: Column(
-            children: [
-              controller.showButton.value == '1' &&
-                      controller.hourMarking.value.isNotEmpty &&
-                      controller.loadingData.value == false &&
-                      !controller.userPreferences.isWorkerChild
-                  ? MarkingWidget(
-                      onPressed: () {
-                        controller.markingAssistance();
-                      },
-                      hourMarking: controller.hourMarking.value,
-                      minutosTolerancia: controller.minutosTolerancia.value,
-                      descripcionMarcacion: controller.textButton.value,
-                      idDescripcionMarcacion:
-                          controller.idDescripMarcacion.value,
-                    )
-                  : Container(),
-              Padding(
-                padding:
-                    const EdgeInsets.only(left: 12.0, right: 12.0, top: 18.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        InkWell(
-                            onTap: () {
-                              controller.fnShowModalSchedule();
-                            },
-                            child: Image.asset('assets/icons/datetime.png',
-                                height: 35,
-                                width: 35,
-                                color: ColorsApp.primary)),
-                        InkWell(
-                            onTap: () {
-                              controller.fnShowModalQr();
-                            },
-                            child: Text(
+        elevation: 0,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(28),
+        ),
+        color: theme.colorScheme.surfaceContainerLowest,
+        child: Column(
+          children: [
+            // Marking Widget Section
+            if (controller.showButton.value == '1' &&
+                controller.hourMarking.value.isNotEmpty &&
+                controller.loadingData.value == false &&
+                !controller.userPreferences.isWorkerChild)
+              MarkingWidget(
+                onPressed: () {
+                  controller.markingAssistance();
+                },
+                hourMarking: controller.hourMarking.value,
+                minutosTolerancia: controller.minutosTolerancia.value,
+                descripcionMarcacion: controller.textButton.value,
+                idDescripcionMarcacion: controller.idDescripMarcacion.value,
+              ),
+
+            // Header Section
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+              child: Column(
+                children: [
+                  // Action Buttons Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Schedule Button
+                      IconButton.filledTonal(
+                        onPressed: () {
+                          controller.fnShowModalSchedule();
+                        },
+                        icon: const Icon(Icons.calendar_month_outlined),
+                        style: IconButton.styleFrom(
+                          backgroundColor:
+                              ColorsApp.info.withValues(alpha: 0.3),
+                          foregroundColor: ColorsApp.primary,
+                        ),
+                      ),
+                      // QR Button
+                      FilledButton.tonal(
+                        onPressed: () {
+                          controller.fnShowModalQr();
+                        },
+                        style: FilledButton.styleFrom(
+                          backgroundColor:
+                              ColorsApp.info.withValues(alpha: 0.3),
+                          foregroundColor: ColorsApp.primary,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 12,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.qr_code_2, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
                               'Ver QR',
                               style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400, fontSize: 18.0),
-                            )
-
-                            /* const Icon(
-                              Icons.qr_code,
-                              size: 26,
-                            ) */
-                            ),
-                        /* Flexible(
-                          child: Column(
-                            children: [
-                              /*        controller.showButton.value == '1' &&
-                                      controller.hourMarking.isNotEmpty
-                                  ? Container()
-                                  : const SizedBox(height: 35.0), */
-                              SizedBox(height: 5.0),
-                              InkWell(
-                                  onTap: () {
-                                    controller.fnShowModalQr();
-                                  },
-                                  child: const Icon(
-                                    Icons.qr_code,
-                                    size: 26,
-                                  )),
-                              SizedBox(height: 10.0),
-                              Text(
-                                'Asistencia',
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 25.0),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
                               ),
-                            ],
-                          ),
-                        ), */
-                        InkWell(
-                            onTap: () {
-                              controller.goToMarkings();
-                            },
-                            child: const Icon(Icons.format_list_numbered,
-                                size: 30)),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(
-                        'Asistencia',
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w600, fontSize: 25.0),
+                            ),
+                          ],
+                        ),
                       ),
+                      // List Button
+                      IconButton.filledTonal(
+                        onPressed: () {
+                          controller.goToMarkings();
+                        },
+                        icon: const Icon(Icons.format_list_numbered_rounded),
+                        style: IconButton.styleFrom(
+                          backgroundColor:
+                              ColorsApp.info.withValues(alpha: 0.3),
+                          foregroundColor: ColorsApp.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 12),
+                  // Title
+                  Text(
+                    'Asistencia',
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                      color: ColorsApp.primary,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Obx(() => _createChartPie()),
-              const SizedBox(
-                height: 8.0,
-              ),
-            ],
-          )),
+            ),
+
+            // Chart Section
+            Obx(() => _createChartPie()),
+
+            const SizedBox(height: 12),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _widgetSlider(BoxConstraints constraints, buildContext) {
-    return controller.loadingData.value == false
-        ? CarouselSlider(
-            items: [
-              CarouselSliderItem(
-                cantidadAprobar: controller.dataCarousel != null &&
-                        controller.dataCarousel!.containsKey('justificacion')
-                    ? int.parse(controller.dataCarousel!['justificacion']
-                            ['total_aprobar']
-                        .toString())
-                    : 0,
-                showButtonRequest: !controller.userPreferences.isWorkerChild,
-                title: 'Justificaciones',
-                indexItem: 0,
-                itemCount: 4,
-                textButton: [
-                  Image.asset('assets/icons/edit.png',
-                      height: 30, width: 30, color: Colors.white),
-                  Text(
-                    'solicitar justificación',
+  Widget _widgetSlider(BoxConstraints constraints, BuildContext buildContext) {
+    if (controller.loadingData.value) {
+      return const SizedBox.shrink();
+    }
+
+    return CarouselSlider(
+      items: [
+        _buildJustificationSlider(constraints),
+        _buildLicensePermitSlider(constraints),
+        _buildVacationSlider(constraints, buildContext),
+        _buildOvertimeSlider(constraints),
+      ],
+      carouselController: controller.controllerCarousel,
+      options: CarouselOptions(
+        height: 265,
+        viewportFraction: 1,
+        initialPage: 0,
+        enableInfiniteScroll: true,
+        reverse: false,
+        autoPlay: false,
+        scrollDirection: Axis.horizontal,
+      ),
+    );
+  }
+
+  Widget _buildJustificationSlider(BoxConstraints constraints) {
+    return CarouselSliderItem(
+      cantidadAprobar: _getCarouselCount('justificacion'),
+      showButtonRequest: !controller.userPreferences.isWorkerChild,
+      title: 'Justificaciones',
+      indexItem: 0,
+      itemCount: 4,
+      textButton: [
+        Icon(Icons.edit_note_rounded, size: 20, color: ColorsApp.primary),
+        const SizedBox(width: 8),
+        Text(
+          'Solicitar justificación',
+          style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w500,
+            color: ColorsApp.primary,
+            fontSize: 13,
+          ),
+        ),
+      ],
+      detail: _getCarouselList('justificacion'),
+      constraints: constraints,
+      onPressedList: controller.goToJustification,
+      onPressedRequest: controller.goToFormJustification,
+      onPressedNotify: controller.goToJustificationApprove,
+    );
+  }
+
+  Widget _buildLicensePermitSlider(BoxConstraints constraints) {
+    return CarouselSliderItem(
+      cantidadAprobar: _getCarouselCount('licenciapermiso'),
+      showButtonRequest: !controller.userPreferences.isWorkerChild,
+      title: 'Permisos y licencias',
+      indexItem: 1,
+      itemCount: 4,
+      textButton: [
+        Icon(Icons.assignment_outlined, size: 20, color: ColorsApp.primary),
+        const SizedBox(width: 8),
+        Text(
+          'Solicitar permiso',
+          style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w500,
+            color: ColorsApp.primary,
+            fontSize: 13,
+          ),
+        ),
+      ],
+      detail: _getCarouselList('licenciapermiso'),
+      constraints: constraints,
+      onPressedList: controller.goToLicensePermit,
+      onPressedRequest: controller.goToFormLicenPerm,
+      onPressedNotify: controller.goToLicensePermitApprove,
+    );
+  }
+
+  Widget _buildVacationSlider(
+      BoxConstraints constraints, BuildContext buildContext) {
+    return CarouselSliderItem(
+      cantidadAprobar: _getCarouselCount('vacacion'),
+      showButtonRequest: !controller.userPreferences.isWorkerChild,
+      title: 'Vacaciones',
+      indexItem: 2,
+      itemCount: 4,
+      textButton: [_buildVacationButtonText()],
+      isDetailWidget: true,
+      detailWidget: [_buildVacationDetail()],
+      constraints: constraints,
+      onPressedList: controller.goToHoliday,
+      onPressedRequest: () async {
+        controller.fnVacation(buildContext);
+      },
+      onPressedNotify: controller.goToHolidayApprove,
+    );
+  }
+
+  Widget _buildOvertimeSlider(BoxConstraints constraints) {
+    return CarouselSliderItem(
+      cantidadAprobar: _getCarouselCount('sobretiempo'),
+      showButtonRequest: !controller.userPreferences.isWorkerChild,
+      title: 'Sobretiempos',
+      indexItem: 3,
+      itemCount: 4,
+      textButton: [
+        Icon(Icons.more_time_rounded, size: 20, color: ColorsApp.primary),
+        const SizedBox(width: 8),
+        Text(
+          'Solicitar sobretiempo',
+          style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w500,
+            color: ColorsApp.primary,
+            fontSize: 13,
+          ),
+        ),
+      ],
+      detail: _getCarouselList('sobretiempo'),
+      constraints: constraints,
+      onPressedList: controller.goToOvertimes,
+      onPressedRequest: controller.goToFormOvertime,
+      onPressedNotify: controller.goToOvertimeApprove,
+    );
+  }
+
+  int _getCarouselCount(String key) {
+    if (controller.dataCarousel == null ||
+        !controller.dataCarousel!.containsKey(key)) {
+      return 0;
+    }
+    return int.parse(controller.dataCarousel![key]['total_aprobar'].toString());
+  }
+
+  dynamic _getCarouselList(String key) {
+    if (controller.dataCarousel == null ||
+        !controller.dataCarousel!.containsKey(key)) {
+      return [];
+    }
+    return controller.dataCarousel![key]['lista'];
+  }
+
+  Widget _buildVacationButtonText() {
+    final vacationData = controller.dataCarousel?['vacacion'];
+    if (vacationData == null) {
+      return Text(
+        '...',
+        style: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w400, color: ColorsApp.primary),
+      );
+    }
+
+    final descripcion = vacationData['descripcion']?.toString();
+    return Text(
+      descripcion ?? '...',
+      style: GoogleFonts.montserrat(
+          fontWeight: FontWeight.w400, color: ColorsApp.primary),
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _buildVacationDetail() {
+    final vacationData = controller.dataCarousel?['vacacion'];
+    if (vacationData == null) {
+      return const SizedBox.shrink();
+    }
+
+    final codigo = vacationData['codigo']?.toString();
+    final vacacionInfo = vacationData['vacacion'];
+
+    if (codigo == null || vacacionInfo == null) {
+      return const SizedBox.shrink();
+    }
+
+    final hasFechas = vacacionInfo.containsKey('fecha_ini') &&
+        vacacionInfo.containsKey('fecha_fin');
+
+    if (!hasFechas) {
+      return const SizedBox.shrink();
+    }
+
+    final isCountdown = codigo == VacationCodes.startingSoon ||
+        codigo == VacationCodes.endingSoon;
+
+    if (isCountdown) {
+      return _buildVacationCountdown(codigo, vacacionInfo);
+    }
+
+    if (codigo != VacationCodes.noVacation) {
+      return _buildVacationDateRange(vacacionInfo);
+    }
+
+    return const SizedBox.shrink();
+  }
+
+  Widget _buildVacationCountdown(String code, dynamic vacacionInfo) {
+    final isStarting = code == VacationCodes.startingSoon;
+    final text = isStarting
+        ? ' para salir de vacaciones'
+        : ' para regresar de vacaciones';
+    final dateKey = isStarting ? 'fecha_ini' : 'fecha_fin';
+    final dateVacation =
+        DateTime.parse(vacacionInfo[dateKey].toString()).millisecondsSinceEpoch;
+
+    return CountdownTimer(
+      endTime: dateVacation,
+      onEnd: () {},
+      widgetBuilder: (context, time) {
+        if (time == null) {
+          return const SizedBox.shrink();
+        }
+
+        final textTime = _formatCountdownTime(time);
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              text: 'Te quedan ',
+              style: GoogleFonts.montserrat(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16.0),
+              children: <TextSpan>[
+                TextSpan(
+                    text: textTime,
                     style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w400, color: Colors.white),
-                  )
-                ],
-                detail: controller.dataCarousel != null &&
-                        controller.dataCarousel!.containsKey('justificacion')
-                    ? controller.dataCarousel!['justificacion']['lista']
-                    : [],
-                constraints: constraints,
-                onPressedList: () {
-                  controller.goToJustification();
-                },
-                onPressedRequest: () {
-                  controller.goToFormJustification();
-                },
-                onPressedNotify: () {
-                  controller.goToJustificationApprove();
-                },
-              ),
-              CarouselSliderItem(
-                  cantidadAprobar: controller.dataCarousel != null &&
-                          controller.dataCarousel!
-                              .containsKey('licenciapermiso')
-                      ? int.parse(controller.dataCarousel!['licenciapermiso']
-                              ['total_aprobar']
-                          .toString())
-                      : 0,
-                  showButtonRequest: !controller.userPreferences.isWorkerChild,
-                  title: 'Permisos y licencias',
-                  indexItem: 1,
-                  itemCount: 4,
-                  textButton: [
-                    Image.asset('assets/icons/edit.png',
-                        height: 30, width: 30, color: Colors.white),
-                    Text(
-                      'solicitar permiso',
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w400, color: Colors.white),
-                    )
-                  ],
-                  detail: controller.dataCarousel != null &&
-                          controller.dataCarousel!
-                              .containsKey('licenciapermiso')
-                      ? controller.dataCarousel!['licenciapermiso']['lista']
-                      : [],
-                  constraints: constraints,
-                  onPressedList: () {
-                    controller.goToLicensePermit();
-                  },
-                  onPressedRequest: () {
-                    controller.goToFormLicenPerm();
-                  },
-                  onPressedNotify: () {
-                    controller.goToLicensePermitApprove();
-                  }),
-              CarouselSliderItem(
-                  cantidadAprobar: controller.dataCarousel != null &&
-                          controller.dataCarousel!.containsKey('vacacion')
-                      ? int.parse(controller.dataCarousel!['vacacion']
-                              ['total_aprobar']
-                          .toString())
-                      : 0,
-                  showButtonRequest: !controller.userPreferences.isWorkerChild,
-                  title: 'Vacaciones',
-                  indexItem: 2,
-                  itemCount: 4,
-                  textButton: [
-                    controller.dataCarousel != null &&
-                            controller.dataCarousel!.containsKey('vacacion')
-                        ? controller.dataCarousel!['vacacion']
-                                .containsKey('descripcion')
-                            ? Text(
-                                controller.dataCarousel!['vacacion']
-                                        ['descripcion']
-                                    .toString(),
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white),
-                                textAlign: TextAlign.center)
-                            : Text(
-                                '...',
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white),
-                              )
-                        : Text(
-                            '...',
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w400,
-                                color: Colors.white),
-                          )
-                  ],
-                  isDetailWidget: true,
-                  detailWidget: List<Widget>.generate(1, (index) {
-                    return controller.dataCarousel != null &&
-                            controller.dataCarousel!.containsKey('vacacion')
-                        ? controller.dataCarousel!['vacacion'].containsKey('codigo') &&
-                                controller.dataCarousel!['vacacion']
-                                    .containsKey('vacacion')
-                            ? (controller.dataCarousel!['vacacion']['codigo'] == '04' ||
-                                        controller.dataCarousel!['vacacion']
-                                                ['codigo'] ==
-                                            '03') &&
-                                    controller.dataCarousel!['vacacion']['vacacion']
-                                        .containsKey('fecha_ini') &&
-                                    controller.dataCarousel!['vacacion']
-                                            ['vacacion']
-                                        .containsKey('fecha_fin')
-                                ? Builder(builder: (context) {
-                                    String code = controller
-                                        .dataCarousel!['vacacion']['codigo']
-                                        .toString();
-                                    String text = code == '04'
-                                        ? ' para salir de vacaciones'
-                                        : ' para regresar de vacaciones';
-                                    int dateVacation = DateTime.parse(code ==
-                                                '04'
-                                            ? controller
-                                                .dataCarousel!['vacacion']
-                                                    ['vacacion']['fecha_ini']
-                                                .toString()
-                                            : controller
-                                                .dataCarousel!['vacacion']
-                                                    ['vacacion']['fecha_fin']
-                                                .toString())
-                                        .millisecondsSinceEpoch;
-                                    return code == '04' || code == '03'
-                                        ? CountdownTimer(
-                                            endTime: dateVacation,
-                                            onEnd: () {},
-                                            widgetBuilder: (context, time) {
-                                              String textTime = (time!.days !=
-                                                          null
-                                                      ? '${time.days}d-'
-                                                      : '') +
-                                                  (time.hours != null
-                                                      ? '${time.hours.toString().padLeft(2, '0')}h-'
-                                                      : '') +
-                                                  (time.min != null
-                                                      ? '${time.min.toString().padLeft(2, '0')}m-'
-                                                      : '') +
-                                                  (time.sec != null
-                                                      ? '${time.sec.toString().padLeft(2, '0')}s'
-                                                      : '00s');
-                                              return Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 16.0, right: 16.0),
-                                                child: RichText(
-                                                  textAlign: TextAlign.center,
-                                                  text: TextSpan(
-                                                    text: 'Te quedan ',
-                                                    style:
-                                                        GoogleFonts.montserrat(
-                                                            color: ColorsApp
-                                                                .primary,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontSize: 16.0),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                          text: textTime,
-                                                          style: GoogleFonts
-                                                              .montserrat(
-                                                                  color: ColorsApp
-                                                                      .primary,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  fontSize:
-                                                                      16.0)),
-                                                      TextSpan(
-                                                          text: ' $text',
-                                                          style: GoogleFonts
-                                                              .montserrat(
-                                                                  color: ColorsApp
-                                                                      .primary,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  fontSize:
-                                                                      16.0)),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                        : Container();
-                                  })
-                                : controller.dataCarousel!['vacacion']['codigo'] != '05' &&
-                                        controller.dataCarousel!['vacacion']
-                                                ['vacacion']
-                                            .containsKey('fecha_ini') &&
-                                        controller.dataCarousel!['vacacion']
-                                                ['vacacion']
-                                            .containsKey('fecha_fin')
-                                    ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                        Text(
-                                          'Desde ',
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16.0,
-                                              color: ColorsApp.primary),
-                                        ),
-                                        Text(
-                                          Jiffy(controller
-                                                      .dataCarousel!['vacacion']
-                                                  ['vacacion']['fecha_ini'])
-                                              .format('dd-MM-yyyy'),
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18.0,
-                                              color: ColorsApp.primary),
-                                        ),
-                                        Text(
-                                          ' hasta ',
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16.0,
-                                              color: ColorsApp.primary),
-                                        ),
-                                        Text(
-                                          Jiffy(controller
-                                                      .dataCarousel!['vacacion']
-                                                  ['vacacion']['fecha_fin'])
-                                              .format('dd-MM-yyyy'),
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18.0,
-                                              color: ColorsApp.primary),
-                                        )
-                                      ])
-                                    : Container()
-                            : Container()
-                        : Container();
-                  }),
-                  constraints: constraints,
-                  onPressedList: () {
-                    controller.goToHoliday();
-                  },
-                  onPressedRequest: () async {
-                    controller.fnVacation(buildContext);
-                  },
-                  onPressedNotify: () {
-                    controller.goToHolidayApprove();
-                  }),
-              CarouselSliderItem(
-                cantidadAprobar: controller.dataCarousel != null &&
-                        controller.dataCarousel!.containsKey('sobretiempo')
-                    ? int.parse(controller.dataCarousel!['sobretiempo']
-                            ['total_aprobar']
-                        .toString())
-                    : 0,
-                showButtonRequest: !controller.userPreferences.isWorkerChild,
-                title: 'Sobretiempos',
-                indexItem: 3,
-                itemCount: 4,
-                textButton: [
-                  Image.asset('assets/icons/edit.png',
-                      height: 30, width: 30, color: Colors.white),
-                  Text(
-                    'solicitar sobretiempo',
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16.0)),
+                TextSpan(
+                    text: ' $text',
                     style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w400, color: Colors.white),
-                  )
-                ],
-                detail: controller.dataCarousel != null &&
-                        controller.dataCarousel!.containsKey('sobretiempo')
-                    ? controller.dataCarousel!['sobretiempo']['lista']
-                    : [],
-                constraints: constraints,
-                onPressedList: () {
-                  controller.goToOvertimes();
-                },
-                onPressedRequest: () {
-                  controller.goToFormOvertime();
-                },
-                onPressedNotify: () {
-                  controller.goToOvertimeApprove();
-                },
-              ),
-            ],
-            carouselController: controller.controllerCarousel,
-            options: CarouselOptions(
-              height: 186,
-              viewportFraction: 1,
-              initialPage: 0,
-              enableInfiniteScroll: true,
-              reverse: false,
-              autoPlay: false,
-              scrollDirection: Axis.horizontal,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16.0)),
+              ],
             ),
-          )
-        : Container();
+          ),
+        );
+      },
+    );
+  }
+
+  String _formatCountdownTime(CurrentRemainingTime time) {
+    final parts = <String>[];
+    if (time.days != null) parts.add('${time.days}d');
+    if (time.hours != null)
+      parts.add('${time.hours.toString().padLeft(2, '0')}h');
+    if (time.min != null) parts.add('${time.min.toString().padLeft(2, '0')}m');
+    parts.add('${(time.sec ?? 0).toString().padLeft(2, '0')}s');
+    return parts.join('-');
+  }
+
+  Widget _buildVacationDateRange(dynamic vacacionInfo) {
+    final fechaIni = Jiffy.parse(vacacionInfo['fecha_ini'].toString())
+        .format(pattern: 'dd-MM-yyyy');
+    final fechaFin = Jiffy.parse(vacacionInfo['fecha_fin'].toString())
+        .format(pattern: 'dd-MM-yyyy');
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Desde ',
+          style: GoogleFonts.montserrat(
+              fontWeight: FontWeight.w400, fontSize: 16.0, color: Colors.white),
+        ),
+        Text(
+          fechaIni,
+          style: GoogleFonts.montserrat(
+              fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
+        ),
+        Text(
+          ' hasta ',
+          style: GoogleFonts.montserrat(
+              fontWeight: FontWeight.w400, fontSize: 16.0, color: Colors.white),
+        ),
+        Text(
+          fechaFin,
+          style: GoogleFonts.montserrat(
+              fontWeight: FontWeight.w500, fontSize: 18.0, color: Colors.white),
+        ),
+      ],
+    );
   }
 
   Widget _createChartPie() {
-    return controller.loadingData.value == false
-        ? SfCircularChart(
-            annotations: <CircularChartAnnotation>[
-              CircularChartAnnotation(
-                widget: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(DateFormat('dd').format(DateTime.now()),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w600,
-                            color: ColorsApp.primary,
-                            fontSize: 25)),
-                    Text(
-                        capitalize(
-                            DateFormat.MMMM('es').format(DateTime.now())),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w500,
-                            color: ColorsApp.primary,
-                            fontSize: 12)),
-                  ],
+    if (controller.loadingData.value) {
+      return const SizedBox.shrink();
+    }
+
+    return SizedBox(
+      height: 220,
+      child: SfCircularChart(
+        margin: EdgeInsets.zero,
+        annotations: <CircularChartAnnotation>[
+          CircularChartAnnotation(
+            widget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  DateFormat('dd').format(DateTime.now()),
+                  style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w600,
+                    color: ColorsApp.primary,
+                    fontSize: 22,
+                  ),
                 ),
-              )
-            ],
-            legend: Legend(
-                alignment: ChartAlignment.center,
-                isResponsive: true,
-                padding: 2.0,
-                itemPadding: 8.0,
-                textStyle: GoogleFonts.montserrat(
+                Text(
+                  capitalize(DateFormat.MMMM('es').format(DateTime.now())),
+                  style: GoogleFonts.montserrat(
                     fontWeight: FontWeight.w500,
-                    fontSize: 10.0,
-                    color: ColorsApp.primary),
-                position: LegendPosition.bottom,
-                overflowMode: LegendItemOverflowMode.wrap,
-                isVisible: true),
-            tooltipBehavior: TooltipBehavior(enable: true),
-            series: <RadialBarSeries<AssistanceSummaryModel, String>>[
-              RadialBarSeries<AssistanceSummaryModel, String>(
-                  cornerStyle: CornerStyle.bothCurve,
-                  legendIconType: LegendIconType.circle,
-                  radius: '100%',
-                  gap: '2%',
-                  innerRadius: '40%',
-                  dataSource: controller.listData,
-                  xValueMapper: (AssistanceSummaryModel data, _) =>
-                      capitalize(data.nombre),
-                  yValueMapper: (AssistanceSummaryModel data, _) =>
-                      data.cantidad,
-                  dataLabelMapper: (AssistanceSummaryModel data, _) =>
-                      data.cantidad.toString(),
-                  pointColorMapper: (AssistanceSummaryModel data, _) =>
-                      controller.colorAssistance(data.code),
-                  dataLabelSettings: DataLabelSettings(
-                      isVisible: true,
-                      textStyle:
-                          GoogleFonts.montserrat(fontWeight: FontWeight.w400))),
-            ])
-        : Container();
+                    color: ColorsApp.primary,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+        legend: Legend(
+          alignment: ChartAlignment.center,
+          isResponsive: true,
+          padding: 0,
+          itemPadding: 6,
+          textStyle: GoogleFonts.montserrat(
+            fontWeight: FontWeight.w500,
+            fontSize: 10,
+            color: ColorsApp.primary,
+          ),
+          position: LegendPosition.bottom,
+          overflowMode: LegendItemOverflowMode.wrap,
+          isVisible: true,
+        ),
+        tooltipBehavior: TooltipBehavior(enable: true),
+        series: <RadialBarSeries<AssistanceSummaryModel, String>>[
+          RadialBarSeries<AssistanceSummaryModel, String>(
+            cornerStyle: CornerStyle.bothCurve,
+            legendIconType: LegendIconType.circle,
+            radius: '85%',
+            gap: '3%',
+            innerRadius: '40%',
+            dataSource: controller.listData,
+            xValueMapper: (AssistanceSummaryModel data, _) =>
+                capitalize(data.nombre),
+            yValueMapper: (AssistanceSummaryModel data, _) => data.cantidad,
+            dataLabelMapper: (AssistanceSummaryModel data, _) =>
+                data.cantidad.toString(),
+            pointColorMapper: (AssistanceSummaryModel data, _) =>
+                controller.colorAssistance(data.code),
+            dataLabelSettings: DataLabelSettings(
+              isVisible: true,
+              textStyle: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w400,
+                fontSize: 11,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

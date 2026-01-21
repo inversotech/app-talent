@@ -46,27 +46,26 @@ class PushNotificationService {
   static Future initializeAppOneSingal() async {
     //Remove this method to stop OneSignal Debugging
     if (kDebugMode) {
-      OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+      OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
     }
-    OneSignal.shared.setAppId(Env.api.appIdOneSignal);
+    OneSignal.initialize(Env.api.appIdOneSignal);
 // The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    OneSignal.shared
-        .promptUserForPushNotificationPermission()
-        .then((accepted) {});
-    OneSignal.shared.setNotificationWillShowInForegroundHandler(
-        (OSNotificationReceivedEvent event) {
+    OneSignal.Notifications.requestPermission(true);
+
+    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
       // Will be called whenever a notification is received in foreground
       // Display Notification, pass null param for not displaying the notification
-      event.complete(event.notification);
+      event.notification.display();
     });
 
-    OneSignal.shared
-        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+    OneSignal.Notifications.addClickListener((event) {
       // Will be called whenever a notification is opened/button pressed.
-      _openNotificationDetail(result.notification.additionalData!);
+      if (event.notification.additionalData != null) {
+        _openNotificationDetail(event.notification.additionalData!);
+      }
     });
 
-    OneSignal.shared.setPermissionObserver((OSPermissionStateChanges changes) {
+    OneSignal.Notifications.addPermissionObserver((permission) {
       // Will be called whenever the permission changes
       // (ie. user taps Allow on the permission prompt in iOS)
     });

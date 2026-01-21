@@ -260,7 +260,7 @@ class ListLicensePermit extends StatelessWidget {
             children: [
               item.periodo.toString() == 'H'
                   ? Text(
-                      'Fecha: ${Jiffy(item.fechaDesde!, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
+                      'Fecha: ${Jiffy.parse(item.fechaDesde!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -268,7 +268,7 @@ class ListLicensePermit extends StatelessWidget {
                   : Container(),
               item.periodo.toString() == 'H'
                   ? Text(
-                      'Hora: ${Jiffy(item.horaInicio!, 'HH:mm').format('hh:mm a')}-${Jiffy(item.horaFin!, 'HH:mm').format('hh:mm a')}',
+                      'Hora: ${Jiffy.parse(item.horaInicio!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}-${Jiffy.parse(item.horaFin!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -276,7 +276,7 @@ class ListLicensePermit extends StatelessWidget {
                   : Container(),
               item.periodo.toString() == 'D'
                   ? Text(
-                      'Fecha: ${Jiffy(item.fechaDesde!, 'dd/MM/yyyy').format('dd|MM|yyyy')}-${Jiffy(item.fechaHasta!, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
+                      'Fecha: ${Jiffy.parse(item.fechaDesde!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}-${Jiffy.parse(item.fechaHasta!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -854,7 +854,7 @@ class ListLicensePermit extends StatelessWidget {
               children: [
                 val.email != null
                     ? Text(
-                        '${val.email}: ${Jiffy(val.fecha.toString(), "dd/MM/yyyy HH:mm").format('dd|MM|yyyy hh:mm a')}',
+                        '${val.email}: ${Jiffy.parse(val.fecha.toString(), pattern: "dd/MM/yyyy HH:mm").format(pattern: 'dd|MM|yyyy hh:mm a')}',
                         style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w300,
                             color: ColorsApp.primary,

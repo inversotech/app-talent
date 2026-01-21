@@ -163,7 +163,7 @@ class EventDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          '${capitalize(DateFormat.EEEE('es').format(controller.event.fechaInicio!).substring(0, 3))}, ${DateFormat.d('es').format(controller.event.fechaInicio!)} de ${capitalize(DateFormat.MMM('es').format(controller.event.fechaInicio!))} a las ${Jiffy(controller.event.fechaInicio.toString(), 'yyyy-MM-dd HH:mm').format('hh:mm a').toLowerCase()}',
+                          '${capitalize(DateFormat.EEEE('es').format(controller.event.fechaInicio!).substring(0, 3))}, ${DateFormat.d('es').format(controller.event.fechaInicio!)} de ${capitalize(DateFormat.MMM('es').format(controller.event.fechaInicio!))} a las ${Jiffy.parse(controller.event.fechaInicio.toString(), pattern: 'yyyy-MM-dd HH:mm').format(pattern: 'hh:mm a').toLowerCase()}',
                           style: GoogleFonts.montserrat(
                               fontWeight: FontWeight.w400, fontSize: 14.0)),
                       ExpandableText(
@@ -206,7 +206,7 @@ class EventDetail extends StatelessWidget {
                     height: 35, width: 35, color: ColorsApp.primary),
                 const SizedBox(width: 8.0),
                 Text(
-                    '${DateFormat.MMMMd('es').format(controller.event.fechaInicio!)} a las ${Jiffy(controller.event.fechaInicio.toString(), 'yyyy-MM-dd HH:mm').format('hh:mm a')}')
+                    '${DateFormat.MMMMd('es').format(controller.event.fechaInicio!)} a las ${Jiffy.parse(controller.event.fechaInicio.toString(), pattern: 'yyyy-MM-dd HH:mm').format(pattern: 'hh:mm a')}')
               ],
             ),
             const SizedBox(height: 8.0),

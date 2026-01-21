@@ -152,7 +152,7 @@ class ListNotification extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              '${capitalize(DateFormat.EEEE('es').format(item.fechaInicio!).substring(0, 3))}, ${DateFormat.d('es').format(item.fechaInicio!)} de ${capitalize(DateFormat.MMM('es').format(item.fechaInicio!))} a las ${Jiffy(item.fechaInicio.toString(), 'yyyy-MM-dd HH:mm').format('hh:mm a').toLowerCase()}',
+                              '${capitalize(DateFormat.EEEE('es').format(item.fechaInicio!).substring(0, 3))}, ${DateFormat.d('es').format(item.fechaInicio!)} de ${capitalize(DateFormat.MMM('es').format(item.fechaInicio!))} a las ${Jiffy.parseFromDateTime(item.fechaInicio!).format(pattern: 'hh:mm a').toLowerCase()}',
                               style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w400, fontSize: 14.0)),
                           ExpandableText(
@@ -249,7 +249,7 @@ class ListNotification extends StatelessWidget {
                         children: [
                           Text(
                               capitalize(
-                                  Jiffy(item.fechaInicio, "yyyy-MM-dd HH:mm:ss")
+                                  Jiffy.parseFromDateTime(item.fechaInicio!)
                                       .fromNow()),
                               style: GoogleFonts.montserrat(
                                   fontWeight: FontWeight.w400, fontSize: 12.0)),
@@ -487,7 +487,7 @@ class ListNotification extends StatelessWidget {
                       const SizedBox(height: 8.0),
                       Text(
                           capitalize(
-                              Jiffy(item.fechaInicio, "yyyy-MM-dd HH:mm:ss")
+                              Jiffy.parseFromDateTime(item.fechaInicio!)
                                   .fromNow()),
                           style: GoogleFonts.montserrat(
                               color: ColorsApp.control,

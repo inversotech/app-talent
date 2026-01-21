@@ -15,7 +15,7 @@ class CustomTheme {
 
   ThemeData get themeData {
     /// Create a TextTheme and ColorScheme, that we can use to generate ThemeData
-    Color txtColor = textTheme.bodyText1!.color!;
+    Color txtColor = textTheme.bodyLarge!.color!;
     ColorScheme colorScheme = ColorScheme(
         // Decide how you want to apply your own custom them, to the MaterialApp
         brightness: isDark ? Brightness.dark : Brightness.light,
@@ -52,8 +52,7 @@ class CustomTheme {
       splashColor: splashColor,
       materialTapTargetSize: materialTapTargetSize, */
             ),*/
-            highlightColor: accent,
-            toggleableActiveColor: accent);
+            highlightColor: accent);
 
     /// Return the themeData which MaterialApp can now use
     return t;

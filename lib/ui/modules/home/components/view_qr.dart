@@ -98,7 +98,7 @@ void showModalQr() async {
                     const SizedBox(height: 8.0),
                     const SizedBox(height: 12.0),
                     Obx(() => controller.numDocQr.isNotEmpty
-                        ? QrImage(
+                        ? QrImageView(
                             data: controller.numDocQr.toString(),
                             version: QrVersions.auto,
                             size: 320,

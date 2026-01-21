@@ -305,8 +305,7 @@ class Comment extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     child: Text(
-                                        Jiffy(item.updatedAt,
-                                                "yyyy-MM-dd HH:mm:ss")
+                                        Jiffy.parseFromDateTime(item.updatedAt!)
                                             .fromNow(),
                                         style: GoogleFonts.montserrat(
                                             color: ColorsApp.control,
@@ -510,8 +509,7 @@ class Comment extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     child: Text(
-                                        Jiffy(item.updatedAt,
-                                                "yyyy-MM-dd HH:mm:ss")
+                                        Jiffy.parseFromDateTime(item.updatedAt!)
                                             .fromNow(),
                                         style: GoogleFonts.montserrat(
                                             color: ColorsApp.control,

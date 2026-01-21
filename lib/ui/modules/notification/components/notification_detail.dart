@@ -118,9 +118,9 @@ class NotificationDetail extends StatelessWidget {
                           fontWeight: FontWeight.w500, fontSize: 16.0)),
                   Text(
                       controller.notification.fecha != null
-                          ? Jiffy(controller.notification.fecha.toString(),
-                                  'yyyy-MM-dd HH:mm')
-                              .format('hh:mm a')
+                          ? Jiffy.parse(controller.notification.fecha.toString(),
+                                  pattern: 'yyyy-MM-dd HH:mm')
+                              .format(pattern: 'hh:mm a')
                           : '',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w400, fontSize: 12.0)),

@@ -153,7 +153,7 @@ class ListOvertime extends StatelessWidget {
             children: [
               item.codigoPeriodo.toString() == 'H'
                   ? Text(
-                      'Fecha: ${Jiffy(item.fecha, 'yyyy-MM-dd').format('dd|MM|yyyy')}',
+                      'Fecha: ${Jiffy.parse(item.fecha!, pattern: 'yyyy-MM-dd').format(pattern: 'dd|MM|yyyy')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -161,7 +161,7 @@ class ListOvertime extends StatelessWidget {
                   : Container(),
               item.codigoPeriodo.toString() == 'H'
                   ? Text(
-                      'Hora: ${Jiffy(item.horaDesde, 'HH:mm').format('hh:mm a')}-${Jiffy(item.horaHasta!, 'HH:mm').format('hh:mm a')}',
+                      'Hora: ${Jiffy.parse(item.horaDesde!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}-${Jiffy.parse(item.horaHasta!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -169,7 +169,7 @@ class ListOvertime extends StatelessWidget {
                   : Container(),
               item.codigoPeriodo.toString() == 'D'
                   ? Text(
-                      'Fecha: ${Jiffy(item.fecha, 'yyyy-MM-dd').format('dd|MM|yyyy')}',
+                      'Fecha: ${Jiffy.parse(item.fecha!, pattern: 'yyyy-MM-dd').format(pattern: 'dd|MM|yyyy')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -201,7 +201,7 @@ class ListOvertime extends StatelessWidget {
             children: [
               item.codigoPeriodo.toString() == 'H'
                   ? Text(
-                      'Fecha: ${Jiffy(item.fecha, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
+                      'Fecha: ${Jiffy.parse(item.fecha!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -209,7 +209,7 @@ class ListOvertime extends StatelessWidget {
                   : Container(),
               item.codigoPeriodo.toString() == 'H'
                   ? Text(
-                      'Hora: ${Jiffy(item.horaDesde, 'HH:mm').format('hh:mm a')}-${Jiffy(item.horaHasta!, 'HH:mm').format('hh:mm a')}',
+                      'Hora: ${Jiffy.parse(item.horaDesde!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}-${Jiffy.parse(item.horaHasta!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -217,7 +217,7 @@ class ListOvertime extends StatelessWidget {
                   : Container(),
               item.codigoPeriodo.toString() == 'D'
                   ? Text(
-                      'Fecha: ${Jiffy(item.fecha, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
+                      'Fecha: ${Jiffy.parse(item.fecha!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w500,
                           color: ColorsApp.primary,
@@ -396,7 +396,7 @@ class ListOvertime extends StatelessWidget {
                                                   .toUpperCase() ==
                                               'SI'
                                           ? Text(
-                                              'Fecha: ${Jiffy(data.fechaCompensar, 'dd/MM/yyyy').format('dd|MM|yyyy')}',
+                                              'Fecha: ${Jiffy.parse(data.fechaCompensar!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
                                               style: GoogleFonts.montserrat(
                                                   fontWeight: FontWeight.w500,
                                                   color: ColorsApp.primary,
@@ -659,7 +659,7 @@ class ListOvertime extends StatelessWidget {
               children: [
                 val.email != null
                     ? Text(
-                        '${val.email}: ${Jiffy(val.fecha.toString(), "dd/MM/yyyy HH:mm").format('dd|MM|yyyy hh:mm a')}',
+                        '${val.email}: ${Jiffy.parse(val.fecha.toString(), pattern: "dd/MM/yyyy HH:mm").format(pattern: 'dd|MM|yyyy hh:mm a')}',
                         style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w300,
                             color: ColorsApp.primary,

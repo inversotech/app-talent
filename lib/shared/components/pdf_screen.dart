@@ -59,7 +59,8 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
 
     receivePort.listen((dynamic message) async {
       String id = message[0];
-      DownloadTaskStatus status = message[1];
+      int statusValue = message[1];
+      DownloadTaskStatus status = DownloadTaskStatus.values[statusValue];
       int progress = message[2];
 
       if (status == DownloadTaskStatus.complete &&
@@ -115,8 +116,7 @@ class PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   }
 
   @pragma('vm:entry-point')
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
+  static void downloadCallback(String id, int status, int progress) {
     final SendPort? sendPort =
         IsolateNameServer.lookupPortByName('downloader_send_port');
     sendPort!.send([id, status, progress]);

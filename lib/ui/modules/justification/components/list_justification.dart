@@ -975,7 +975,7 @@ class ListJustification extends StatelessWidget {
               children: [
                 val.email != null
                     ? Text(
-                        '${val.email}: ${Jiffy(val.fecha.toString(), "dd/MM/yyyy HH:mm").format('dd|MM|yyyy hh:mm a')}',
+                        '${val.email}: ${Jiffy.parse(val.fecha.toString(), pattern: "dd/MM/yyyy HH:mm").format(pattern: 'dd|MM|yyyy hh:mm a')}',
                         style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w300,
                             color: ColorsApp.primary,

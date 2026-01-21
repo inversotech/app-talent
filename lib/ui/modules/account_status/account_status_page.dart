@@ -162,7 +162,7 @@ class AccountStatusPage extends StatelessWidget {
                                     controller.selectSlider.value = val;
                                     controller.loadListDetail();
                                   },
-                                  height: 268,
+                                  height: 271,
                                   viewportFraction: 1,
                                   initialPage: 0,
                                   enableInfiniteScroll: true,

@@ -282,7 +282,7 @@ class SurveyController extends GetxController {
   void goToDetail(Survey survey) {
     Get.to(() => DetailSurvey(
           fecha:
-              Jiffy(survey.fecha, 'yyyy-MM-dd').format('yyyy-MM-dd').toString(),
+              Jiffy.parseFromDateTime(survey.fecha!).format(pattern: 'yyyy-MM-dd').toString(),
           idPerson: idPerson.value.isNotEmpty
               ? idPerson.value
               : preferences.idPerson.toString(),

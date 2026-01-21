@@ -29,67 +29,77 @@ class MarkingWidget extends StatelessWidget {
           descripcionMarcacion: descripcionMarcacion,
           idDescripcionMarcacion: idDescripcionMarcacion),
       builder: (controller) => SizedBox(
-          width: double.infinity,
-          child: Obx(() => Card(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(25)),
-              ),
-              color: ColorsApp.info,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    Text(
-                      controller.subTitleMarking.value,
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary,
-                          fontSize: 16.0),
-                      textAlign: TextAlign.center,
+        width: double.infinity,
+        child: Obx(
+          () => Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            color: ColorsApp.info.withValues(alpha: 0.6),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Column(
+                children: [
+                  // Subtitle
+                  Text(
+                    controller.subTitleMarking.value,
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w500,
+                      color: ColorsApp.primary.withValues(alpha: 0.8),
+                      fontSize: 14,
                     ),
-                    const SizedBox(height: 2.0),
-                    Text(controller.textMarking.value.toLowerCase(),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w600,
-                            color: controller.colorButtonMarking,
-                            fontSize: 22.0)),
-                    _buttonAssistanceMarking(),
-                  ],
-                ),
-              )))),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 4),
+                  // Time Display
+                  Text(
+                    controller.textMarking.value.toLowerCase(),
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w700,
+                      color: controller.colorButtonMarking,
+                      fontSize: 28,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Marking Button
+                  _buttonAssistanceMarking(),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
   Widget _buttonAssistanceMarking() {
-    return TextButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-              (Set<MaterialState> states) {
-                return ColorsApp.primary; // Use the component's default.
-              },
-            ),
-            shape: MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
-              (Set<MaterialState> states) {
-                return RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        10)); // Use the component's default.
-              },
+    return FilledButton(
+      onPressed: onPressed,
+      style: FilledButton.styleFrom(
+        backgroundColor: ColorsApp.primary,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        elevation: 0,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.check_circle_outline_rounded, size: 22),
+          const SizedBox(width: 10),
+          Text(
+            capitalize(descripcionMarcacion.toLowerCase()),
+            style: GoogleFonts.montserrat(
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
             ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.check_box_outlined, color: Colors.white),
-              Text(
-                capitalize(descripcionMarcacion.toLowerCase()),
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w400, color: Colors.white),
-              ),
-            ],
-          ),
-          onPressed: () {
-            onPressed();
-          },
-        );
+        ],
+      ),
+    );
   }
 }

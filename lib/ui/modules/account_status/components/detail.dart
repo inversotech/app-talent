@@ -223,13 +223,13 @@ class Detail extends StatelessWidget {
                                                     Text(
                                                         dataItem.containsKey(
                                                                 'fecha')
-                                                            ? Jiffy(
+                                                            ? Jiffy.parse(
                                                                     dataItem[
                                                                             'fecha']
                                                                         .toString(),
-                                                                    'dd/MM/yyyy')
+                                                                    pattern: 'dd/MM/yyyy')
                                                                 .format(
-                                                                    'dd|MM|yyyy')
+                                                                    pattern: 'dd|MM|yyyy')
                                                             : '',
                                                         style: GoogleFonts
                                                             .montserrat(

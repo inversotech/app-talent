@@ -12,7 +12,7 @@ class ButtonMarkingController extends GetxController {
   final String idDescripcionMarcacion;
   Timer? _timer;
   RxString subTitleMarking = 'Ya puedes marcar tu asistencia'.obs;
-  RxString textMarking = Jiffy().format('hh:mm:ss a').obs;
+  RxString textMarking = Jiffy.now().format(pattern: 'hh:mm:ss a').obs;
   Color colorButtonMarking = ColorsApp.success;
   ButtonMarkingController(
       {required this.hourMarking,
@@ -47,7 +47,7 @@ class ButtonMarkingController extends GetxController {
   void _timeInterval() {
     DateTime timeMarking = DateTime.parse(hourMarking);
     DateTime timeNow =
-        DateTime.parse(Jiffy().format('yyyy-MM-dd HH:mm').toString());
+        DateTime.parse(Jiffy.now().format(pattern: 'yyyy-MM-dd HH:mm').toString());
     DateTime timeTolerancia =
         timeMarking.add(Duration(minutes: minutosTolerancia));
     RxBool nowAfterMarking = timeNow.isAfter(timeMarking).obs;
@@ -74,10 +74,10 @@ class ButtonMarkingController extends GetxController {
       }
     }
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      textMarking.value = Jiffy().format('hh:mm:ss a');
+      textMarking.value = Jiffy.now().format(pattern: 'hh:mm:ss a');
       DateTime timeMarking = DateTime.parse(hourMarking);
       DateTime timeNow =
-          DateTime.parse(Jiffy().format('yyyy-MM-dd HH:mm').toString());
+          DateTime.parse(Jiffy.now().format(pattern: 'yyyy-MM-dd HH:mm').toString());
       DateTime timeTolerancia =
           timeMarking.add(Duration(minutes: minutosTolerancia));
       RxBool nowAfterMarking = timeNow.isAfter(timeMarking).obs;

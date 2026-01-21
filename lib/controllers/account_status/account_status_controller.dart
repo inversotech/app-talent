@@ -1,4 +1,4 @@
-import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +17,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class AccountStatusController extends GetxController {
   final refreshController = RefreshController(initialRefresh: false);
   final scrollController = ScrollController();
-  final controllerCarousel = CarouselController();
+  final controllerCarousel = CarouselSliderController();
   final userPreferences = UserPreferences();
   var dateModel = DateModel(
           year: DateTime.now().year,

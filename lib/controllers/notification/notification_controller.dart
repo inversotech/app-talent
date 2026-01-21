@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
 
-import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
@@ -32,7 +32,7 @@ import 'package:lamb_talent/ui/modules/notification/components/show_photo.dart';
 class NotificationController extends GetxController {
   final refreshController = RefreshController(initialRefresh: false);
   final scrollController = ScrollController();
-  final controllerCarousel = CarouselController();
+  final controllerCarousel = CarouselSliderController();
   String idOrigen = '';
   String origen = '';
   final userPreferences = UserPreferences();
@@ -99,7 +99,7 @@ class NotificationController extends GetxController {
     } else {
       loadingIndicator(onlyLoading: true, opacity: false);
     }
-    await Jiffy.locale("es");
+    await Jiffy.setLocale("es");
     await _getAccessNivel();
     await getListMoreData();
     Get.until((route) => !Get.isDialogOpen!);

@@ -12,6 +12,9 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'change_entity.dart';
 import 'custom_footer_loading.dart';
 
+/// Código del tab de notificaciones
+const String kNotificationTabCode = '16120104';
+
 class AppScreen extends StatelessWidget {
   final Widget child;
   final String codePage;
@@ -40,114 +43,37 @@ class AppScreen extends StatelessWidget {
   final Color backgroundColor;
 
   final userPreferences = UserPreferences();
-  AppScreen(
-      {required this.codePage,
-      required this.child,
-      this.refreshController,
-      this.onRefresh,
-      this.onLoading,
-      required this.scrollController,
-      this.enablePullDown = false,
-      this.enablePullUp = false,
-      this.showTabs = false,
-      this.principalPage = false,
-      this.showTitleHeader = true,
-      this.showSearchPerson = true,
-      this.floatingActionButton,
-      this.bottomSheet,
-      this.leftBeforeBackground = 4,
-      this.rightBeforeBackground = 4,
-      this.bottomBeforeBackground = 4,
-      this.paddingLeft = 12,
-      this.paddingRight = 12,
-      this.paddingTop = 8,
-      this.paddingBottom = 8,
-      this.backgroundColor = ColorsApp.white,
-      this.colorLoading = ColorsApp.primary,
-      Key? key})
-      : super(key: key);
+
+  AppScreen({
+    required this.codePage,
+    required this.child,
+    this.refreshController,
+    this.onRefresh,
+    this.onLoading,
+    required this.scrollController,
+    this.enablePullDown = false,
+    this.enablePullUp = false,
+    this.showTabs = false,
+    this.principalPage = false,
+    this.showTitleHeader = true,
+    this.showSearchPerson = true,
+    this.floatingActionButton,
+    this.bottomSheet,
+    this.leftBeforeBackground = 4,
+    this.rightBeforeBackground = 4,
+    this.bottomBeforeBackground = 4,
+    this.paddingLeft = 12,
+    this.paddingRight = 12,
+    this.paddingTop = 8,
+    this.paddingBottom = 8,
+    this.backgroundColor = ColorsApp.white,
+    this.colorLoading = ColorsApp.primary,
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
-    final storage = GetStorage();
-    int initialIndex = 0;
-    List<Widget> tabs = [];
-    List<Menu> menu = userPreferences.menu ?? [];
-    int index = 0;
-    for (var element in menu) {
-      if (codePage == element.code) {
-        initialIndex = index;
-      }
-      tabs.add(Container(
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            color:
-                codePage == element.code ? Colors.white : Colors.transparent),
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: element.code == '16120104' && userPreferences.cantNotify > 0
-              ? Stack(
-                  children: [
-                    Wrap(
-                        direction: Axis.vertical,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Image.asset(element.icon.toString(),
-                              height: 30.0,
-                              fit: BoxFit.cover,
-                              color: codePage == element.code
-                                  ? ColorsApp.primary
-                                  : Colors.white),
-                          Text(element.title.toString())
-                        ]),
-                    Positioned(
-                        top: 0.0,
-                        left: 0.0,
-                        child: Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: ColorsApp.danger,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          constraints: const BoxConstraints(
-                            minWidth: 12,
-                            minHeight: 12,
-                          ),
-                          child: Text(
-                            userPreferences.cantNotify.toString(),
-                            style: GoogleFonts.montserrat(
-                                color: ColorsApp.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.center,
-                          ),
-                        ))
-                  ],
-                )
-              : Wrap(
-                  direction: Axis.vertical,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                      Image.asset(element.icon.toString(),
-                          height: 30.0,
-                          fit: BoxFit.cover,
-                          color: codePage == element.code
-                              ? ColorsApp.primary
-                              : Colors.white),
-                      Text(element.title.toString())
-                    ]),
-        ),
-      ));
-      index++;
-    }
-    String fullname = '';
-    if (userPreferences.fullnamePerson != null) {
-      if (!userPreferences.isWorkerChild) {
-        final split = userPreferences.fullnamePerson.toString().split(' ');
-        fullname = '${split[0]}!';
-      } else {
-        fullname = userPreferences.fullnamePerson.toString();
-      }
-    }
+    final tabsData = _buildTabs();
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -158,221 +84,355 @@ class AppScreen extends StatelessWidget {
           ),
         ),
         child: DefaultTabController(
-          initialIndex: initialIndex,
-          length: tabs.length,
+          initialIndex: tabsData.initialIndex,
+          length: tabsData.tabs.length,
           child: Scaffold(
             backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              automaticallyImplyLeading: false,
-              elevation: 0,
-              toolbarHeight: showTitleHeader ? 80.0 : null,
-              title: SizedBox(
-                width: double.infinity,
-                child: Stack(
-                  children: [
-                    Positioned(
-                        top: 5,
-                        left: 0,
-                        child: userPreferences.cantEntities > 1 ||
-                                userPreferences.cantDeptos > 1
-                            ? InkWell(
-                                onTap: () {
-                                  showModalChangeEntity(context);
-                                },
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Flexible(
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Text(
-                                            userPreferences.nameEntity != null
-                                                ? userPreferences.nameEntity
-                                                    .toString()
-                                                : '',
-                                            style: GoogleFonts.montserrat(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 18.0)),
-                                      ),
-                                    ),
-                                    const Icon(Icons.arrow_drop_down, size: 30)
-                                  ],
-                                ),
-                              )
-                            : SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Text(
-                                    userPreferences.nameEntity != null
-                                        ? userPreferences.nameEntity.toString()
-                                        : '',
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18.0)),
-                              )),
-                    Center(
-                        child: Column(
-                      children: [
-                        Image.asset('assets/icons/logo.png',
-                            height: 40.0, fit: BoxFit.cover),
-                        showTitleHeader
-                            ? SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Wrap(
-                                  direction: Axis.horizontal,
-                                  alignment: WrapAlignment.center,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: [
-                                    !userPreferences.isWorkerChild
-                                        ? DateTime.now().hour > 12
-                                            ? const Text('Buenas tardes, ',
-                                                style: TextStyle(
-                                                    fontSize: 16.0,
-                                                    fontFamily: 'Montserrat',
-                                                    fontWeight:
-                                                        FontWeight.w400))
-                                            : Text('Buenos días, ',
-                                                style: GoogleFonts.montserrat(
-                                                    fontSize: 16.0,
-                                                    fontWeight:
-                                                        FontWeight.w400))
-                                        : Container(),
-                                    Text(fullname,
-                                        style: GoogleFonts.montserrat(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w600))
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                      ],
-                    )),
-                    Positioned(
-                        top: -10,
-                        right: 0,
-                        child: Row(
-                          children: [
-                            userPreferences.searchPerson && showSearchPerson
-                                ? IconButton(
-                                    onPressed: () {
-                                      _searchWorker(context);
-                                    },
-                                    icon: const Icon(Icons.person_search))
-                                : Container(),
-                            !userPreferences.isWorkerChild
-                                ? IconButton(
-                                    onPressed: () {
-                                      // storage.remove('saveCredLamb');
-                                      // storage.remove('usernameLamb');
-                                      storage.remove('passwordLamb');
-                                      storage.remove('tokenLamb');
-                                     String tokenNotify = userPreferences.tokenNotify;
-                                      userPreferences.clear();
-                                      userPreferences.tokenNotify=tokenNotify;
-                                      Navigator.pushReplacementNamed(
-                                          context, 'login');
-                                    },
-                                    icon: const Icon(Icons.logout))
-                                : IconButton(
-                                    onPressed: () {
-                                      _backToHome();
-                                    },
-                                    icon: const Icon(Icons.home)),
-                          ],
-                        )),
-                    const SizedBox(height: 10)
-                  ],
-                ),
-              ),
-            ),
-            body: !principalPage
-                ? Container(
-                    padding: EdgeInsets.only(
-                        left: leftBeforeBackground,
-                        right: rightBeforeBackground,
-                        top: 0,
-                        bottom: bottomBeforeBackground),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(25),
-                      child: Container(
-                          color: backgroundColor,
-                          padding: EdgeInsets.only(
-                              left: paddingLeft,
-                              right: paddingRight,
-                              top: 0,
-                              bottom: paddingBottom),
-                          child: SmartRefresher(
-                              enablePullDown: enablePullDown,
-                              enablePullUp: enablePullUp,
-                              controller: refreshController != null
-                                  ? refreshController!
-                                  : _refreshController,
-                              onRefresh: enablePullDown ? onRefresh : null,
-                              onLoading: enablePullUp ? onLoading : null,
-                              scrollDirection: Axis.vertical,
-                              header: const WaterDropMaterialHeader(),
-                              footer: CustomFooterLoading(
-                                  colorLoading: colorLoading),
-                              scrollController: scrollController,
-                              physics: const ScrollPhysics(),
-                              child: SingleChildScrollView(
-                                  child: Padding(
-                                padding: EdgeInsets.only(top: paddingTop),
-                                child: child,
-                              )))),
-                    ),
-                  )
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: SmartRefresher(
-                        enablePullDown: enablePullDown,
-                        enablePullUp: enablePullUp,
-                        controller: refreshController != null
-                            ? refreshController!
-                            : _refreshController,
-                        onRefresh: enablePullDown ? onRefresh : null,
-                        onLoading: enablePullUp ? onLoading : null,
-                        scrollDirection: Axis.vertical,
-                        header: const WaterDropMaterialHeader(),
-                        footer: CustomFooterLoading(colorLoading: colorLoading),
-                        scrollController: scrollController,
-                        physics: const ScrollPhysics(),
-                        child: SingleChildScrollView(child: child)),
-                  ),
-            bottomNavigationBar: showTabs
-                ? TabBar(
-                    unselectedLabelColor: Colors.white,
-                    labelColor: ColorsApp.primary,
-                    onTap: (val) {
-                      if (initialIndex != val) {
-                        if (val == 0) {
-                          Get.offAllNamed(
-                              userPreferences.menu![0].url.toString());
-                        } else if (val == 1) {
-                          Get.offAllNamed(
-                              userPreferences.menu![1].url.toString());
-                        } else if (val == 2) {
-                          Get.offAllNamed(
-                              userPreferences.menu![2].url.toString());
-                        } else if (val == 3) {
-                          Get.offAllNamed(
-                              userPreferences.menu![3].url.toString());
-                        }
-                      }
-                    },
-                    labelPadding: const EdgeInsets.symmetric(vertical: 8.0),
-                    tabs: tabs,
-                  )
-                : null,
+            appBar: _buildAppBar(context),
+            body: _buildBody(),
+            bottomNavigationBar: _buildBottomNavBar(tabsData),
             bottomSheet: bottomSheet,
             floatingActionButton: floatingActionButton,
           ),
         ),
       ),
     );
+  }
+
+  /// Obtiene el saludo según la hora del día
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Buenos días, ';
+    } else if (hour < 19) {
+      return 'Buenas tardes, ';
+    } else {
+      return 'Buenas noches, ';
+    }
+  }
+
+  /// Obtiene el nombre a mostrar
+  String _getDisplayName() {
+    if (userPreferences.fullnamePerson == null) {
+      return '';
+    }
+    if (!userPreferences.isWorkerChild) {
+      final split = userPreferences.fullnamePerson.toString().split(' ');
+      return '${split[0]}!';
+    }
+    return userPreferences.fullnamePerson.toString();
+  }
+
+  /// Construye los tabs y retorna el índice inicial
+  _TabsData _buildTabs() {
+    int initialIndex = 0;
+    List<Widget> tabs = [];
+    List<Menu> menu = userPreferences.menu ?? [];
+
+    for (int index = 0; index < menu.length; index++) {
+      final element = menu[index];
+      if (codePage == element.code) {
+        initialIndex = index;
+      }
+      tabs.add(_buildTabItem(element));
+    }
+
+    return _TabsData(tabs: tabs, initialIndex: initialIndex);
+  }
+
+  /// Construye un item de tab individual
+  Widget _buildTabItem(Menu element) {
+    final isSelected = codePage == element.code;
+    final hasNotifications =
+        element.code == kNotificationTabCode && userPreferences.cantNotify > 0;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        color: isSelected ? Colors.white : Colors.transparent,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: hasNotifications
+            ? _buildTabWithBadge(element, isSelected)
+            : _buildTabContent(element, isSelected),
+      ),
+    );
+  }
+
+  /// Contenido básico del tab (ícono + título)
+  Widget _buildTabContent(Menu element, bool isSelected) {
+    return Wrap(
+      direction: Axis.vertical,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Image.asset(
+          element.icon.toString(),
+          height: 30.0,
+          fit: BoxFit.cover,
+          color: isSelected ? ColorsApp.primary : Colors.white,
+        ),
+        Text(element.title.toString()),
+      ],
+    );
+  }
+
+  /// Tab con badge de notificaciones
+  Widget _buildTabWithBadge(Menu element, bool isSelected) {
+    return Stack(
+      children: [
+        _buildTabContent(element, isSelected),
+        Positioned(
+          top: 0.0,
+          left: 0.0,
+          child: Container(
+            padding: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              color: ColorsApp.danger,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            constraints: const BoxConstraints(
+              minWidth: 12,
+              minHeight: 12,
+            ),
+            child: Text(
+              userPreferences.cantNotify.toString(),
+              style: GoogleFonts.montserrat(
+                color: ColorsApp.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Construye el AppBar
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      automaticallyImplyLeading: false,
+      elevation: 0,
+      toolbarHeight: showTitleHeader ? 80.0 : null,
+      title: SizedBox(
+        width: double.infinity,
+        child: Stack(
+          children: [
+            _buildEntitySelector(context),
+            _buildCenterContent(),
+            _buildActionButtons(context),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Selector de entidad (izquierda del AppBar)
+  Widget _buildEntitySelector(BuildContext context) {
+    final entityName = userPreferences.nameEntity?.toString() ?? '';
+    final canChangeEntity =
+        userPreferences.cantEntities > 1 || userPreferences.cantDeptos > 1;
+
+    return Positioned(
+      top: 5,
+      left: 0,
+      child: canChangeEntity
+          ? InkWell(
+              onTap: () => showModalChangeEntity(context),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        entityName,
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18.0,
+                          color: ColorsApp.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Icon(Icons.arrow_drop_down, size: 30),
+                ],
+              ),
+            )
+          : SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Text(
+                entityName,
+                style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18.0,
+                  color: ColorsApp.white,
+                ),
+              ),
+            ),
+    );
+  }
+
+  /// Contenido central del AppBar (logo + saludo)
+  Widget _buildCenterContent() {
+    return Center(
+      child: Column(
+        children: [
+          Image.asset('assets/icons/logo.png', height: 40.0, fit: BoxFit.cover),
+          if (showTitleHeader)
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Wrap(
+                direction: Axis.horizontal,
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  if (!userPreferences.isWorkerChild)
+                    Text(
+                      _getGreeting(),
+                      style: GoogleFonts.montserrat(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
+                      ),
+                    ),
+                  Text(
+                    _getDisplayName(),
+                    style: GoogleFonts.montserrat(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// Botones de acción (derecha del AppBar)
+  Widget _buildActionButtons(BuildContext context) {
+    return Positioned(
+      top: -10,
+      right: 0,
+      child: Row(
+        children: [
+          if (userPreferences.searchPerson && showSearchPerson)
+            IconButton(
+              onPressed: () => _searchWorker(context),
+              icon: const Icon(Icons.person_search, color: Colors.white),
+            ),
+          if (!userPreferences.isWorkerChild)
+            IconButton(
+              onPressed: () => _logout(context),
+              icon: const Icon(Icons.logout, color: Colors.white),
+            )
+          else
+            IconButton(
+              onPressed: _backToHome,
+              icon: const Icon(Icons.home, color: Colors.white),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// Construye el cuerpo de la pantalla
+  Widget _buildBody() {
+    final refresher = _buildSmartRefresher(
+      child: principalPage
+          ? SingleChildScrollView(child: child)
+          : SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(top: paddingTop),
+                child: child,
+              ),
+            ),
+    );
+
+    if (principalPage) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(25),
+        child: refresher,
+      );
+    }
+
+    return Container(
+      padding: EdgeInsets.only(
+        left: leftBeforeBackground,
+        right: rightBeforeBackground,
+        top: 0,
+        bottom: bottomBeforeBackground,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(25),
+        child: Container(
+          color: backgroundColor,
+          padding: EdgeInsets.only(
+            left: paddingLeft,
+            right: paddingRight,
+            top: 0,
+            bottom: paddingBottom,
+          ),
+          child: refresher,
+        ),
+      ),
+    );
+  }
+
+  /// Construye el SmartRefresher reutilizable
+  Widget _buildSmartRefresher({required Widget child}) {
+    return SmartRefresher(
+      enablePullDown: enablePullDown,
+      enablePullUp: enablePullUp,
+      controller: refreshController ?? _refreshController,
+      onRefresh: enablePullDown ? onRefresh : null,
+      onLoading: enablePullUp ? onLoading : null,
+      scrollDirection: Axis.vertical,
+      header: const WaterDropMaterialHeader(),
+      footer: CustomFooterLoading(colorLoading: colorLoading),
+      scrollController: scrollController,
+      physics: const ScrollPhysics(),
+      child: child,
+    );
+  }
+
+  /// Construye la barra de navegación inferior
+  Widget? _buildBottomNavBar(_TabsData tabsData) {
+    if (!showTabs) return null;
+
+    return TabBar(
+      unselectedLabelColor: Colors.white,
+      labelColor: ColorsApp.primary,
+      onTap: (val) {
+        if (tabsData.initialIndex != val &&
+            userPreferences.menu != null &&
+            val < userPreferences.menu!.length) {
+          Get.offAllNamed(userPreferences.menu![val].url.toString());
+        }
+      },
+      labelPadding: const EdgeInsets.symmetric(vertical: 8.0),
+      tabs: tabsData.tabs,
+    );
+  }
+
+  /// Cierra sesión
+  void _logout(BuildContext context) {
+    final storage = GetStorage();
+    storage.remove('passwordLamb');
+    storage.remove('tokenLamb');
+    String tokenNotify = userPreferences.tokenNotify;
+    userPreferences.clear();
+    userPreferences.tokenNotify = tokenNotify;
+    Get.offAllNamed('login');
   }
 
   void _searchWorker(BuildContext buildContext) async {
@@ -439,4 +499,12 @@ class AppScreen extends StatelessWidget {
     userPreferences.fullnamePersonFather = '';
     Get.forceAppUpdate();
   }
+}
+
+/// Clase auxiliar para almacenar datos de los tabs
+class _TabsData {
+  final List<Widget> tabs;
+  final int initialIndex;
+
+  _TabsData({required this.tabs, required this.initialIndex});
 }

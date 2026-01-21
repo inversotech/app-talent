@@ -38,7 +38,7 @@ class LikesController extends GetxController {
 
   void getListDataInitial() async {
     loadingIndicator(onlyLoading: true, opacity: false);
-    await Jiffy.locale("es");
+    await Jiffy.setLocale("es");
     await getListMoreData();
     loadingData.value = true;
     Get.until((route) => !Get.isDialogOpen!);

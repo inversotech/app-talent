@@ -91,7 +91,7 @@ class DetailSurveyState extends State<DetailSurvey> {
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
                       child: Text(
-                          'Fecha: ${Jiffy(widget.fecha, 'yyyy-MM-dd').format('dd|MM|yyyy')}',
+                          'Fecha: ${Jiffy.parse(widget.fecha!, pattern: 'yyyy-MM-dd').format(pattern: 'dd|MM|yyyy')}',
                           style: GoogleFonts.montserrat(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w600,

@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -20,7 +20,7 @@ import 'package:lamb_talent/ui/modules/license_permit/components/form_license_pe
 import 'package:lamb_talent/ui/modules/license_permit/license_permit_page.dart';
 import 'package:lamb_talent/ui/modules/overtime/components/form_overtime.dart';
 import 'package:lamb_talent/ui/modules/overtime/overtime_page.dart';
-import 'package:platform_device_id/platform_device_id.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:lamb_talent/core/colors.dart';
@@ -36,7 +36,7 @@ import 'package:lamb_talent/ui/modules/markings/my_markings_page.dart';
 class HomeController extends GetxController with WidgetsBindingObserver {
   final userPreferences = UserPreferences();
   final scrollController = ScrollController();
-  final controllerCarousel = CarouselController();
+  final controllerCarousel = CarouselSliderController();
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
   RxString showButton = '0'.obs;
@@ -399,15 +399,15 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     loadingIndicator(onlyLoading: false, text: 'Guardando...');
     // final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
 
-    String uuid = await PlatformDeviceId.getDeviceId ?? '';
-    /* if (GetPlatform.isAndroid) {
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    String uuid = '';
+    if (Platform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
-      uuid = androidInfo.id; //UUID for Android reemplaze for pedro
-      //uuid = androidInfo.androidId!; //UUID for Android
-    } else if (GetPlatform.isIOS) {
+      uuid = androidInfo.id;
+    } else if (Platform.isIOS) {
       final iosInfo = await deviceInfoPlugin.iosInfo;
-      uuid = iosInfo.identifierForVendor!; //UUID for iOS
-    } */
+      uuid = iosInfo.identifierForVendor ?? '';
+    }
 
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
