@@ -24,33 +24,100 @@ class DepositedSalary extends StatelessWidget {
   // ignore: avoid_renaming_method_parameters
   Widget build(BuildContext buildContext) {
     final dataMap = data != null ? data as Map : {};
-    return Column(
-      children: [
-        CreateCardItem(
-          title: 'Ingresos',
-          amount: dataMap.containsKey('l_ingresos')
-              ? dataMap['l_ingresos'].toString()
-              : '0',
-          color: ColorsApp.success,
-          onPressed: () {
-            onChange(true);
-            _getItemsIncome(buildContext);
-          },
-          icon: const Icon(Icons.equalizer),
+    final colorScheme = Theme.of(buildContext).colorScheme;
+    final format = NumberFormat.currency(symbol: 'S/. ', locale: 'en_US');
+
+    return Card(
+      elevation: 0,
+      color: colorScheme.surfaceContainerLowest,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            _buildRow(
+              colorScheme: colorScheme,
+              format: format,
+              label: 'Ingresos',
+              amount: dataMap.containsKey('l_ingresos')
+                  ? dataMap['l_ingresos'].toString()
+                  : '0',
+              icon: Icons.trending_up,
+              buttonColor: ColorsApp.success,
+              onPressed: () {
+                onChange(true);
+                _getItemsIncome(buildContext);
+              },
+            ),
+            const Divider(height: 24),
+            _buildRow(
+              colorScheme: colorScheme,
+              format: format,
+              label: 'Descuentos',
+              amount: dataMap.containsKey('l_descuentos_total')
+                  ? dataMap['l_descuentos_total'].toString()
+                  : '0',
+              icon: Icons.trending_down,
+              buttonColor: ColorsApp.warning,
+              onPressed: () {
+                onChange(true);
+                _getItemsDiscount(buildContext);
+              },
+            ),
+          ],
         ),
-        const SizedBox(height: 4.0),
-        CreateCardItem(
-          title: 'Descuentos',
-          amount: dataMap.containsKey('l_descuentos_total')
-              ? dataMap['l_descuentos_total'].toString()
-              : '0',
-          color: ColorsApp.warning,
-          onPressed: () {
-            onChange(true);
-            _getItemsDiscount(buildContext);
-          },
-          icon: const Icon(Icons.bar_chart),
-        )
+      ),
+    );
+  }
+
+  Widget _buildRow({
+    required ColorScheme colorScheme,
+    required NumberFormat format,
+    required String label,
+    required String amount,
+    required IconData icon,
+    required Color buttonColor,
+    required VoidCallback onPressed,
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: buttonColor.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: buttonColor, size: 20),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label,
+                  style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w400,
+                      color: colorScheme.onSurfaceVariant,
+                      fontSize: 12)),
+              const SizedBox(height: 2),
+              Text(format.format(double.parse(amount)).toString(),
+                  style: GoogleFonts.montserratAlternates(
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurface,
+                      fontSize: 16)),
+            ],
+          ),
+        ),
+        IconButton.filled(
+          onPressed: onPressed,
+          style: IconButton.styleFrom(
+            backgroundColor: buttonColor,
+            foregroundColor: Colors.white,
+            minimumSize: const Size(36, 36),
+            padding: EdgeInsets.zero,
+          ),
+          icon: const Icon(Icons.search, size: 18),
+        ),
       ],
     );
   }
@@ -197,85 +264,74 @@ class CreateCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20.0),
-                Container(
-                  height: 25.0,
-                  decoration: const BoxDecoration(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(25.0)),
-                    color: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Card(
+        elevation: 0,
+        color: colorScheme.surfaceContainerLowest,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconTheme(
+                      data: IconThemeData(color: color, size: 20),
+                      child: icon,
+                    ),
                   ),
-                ),
-                Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    borderRadius:
-                        BorderRadius.vertical(bottom: Radius.circular(25.0)),
-                    color: Colors.white,
+                  FilledButton.tonal(
+                    onPressed: onPressed,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: color,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.search, size: 18),
+                        const SizedBox(width: 6),
+                        Text('Ver detalle',
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w500, fontSize: 12.0)),
+                      ],
+                    ),
                   ),
-                  padding: const EdgeInsets.only(
-                      left: 18.0, right: 18.0, bottom: 16.0, top: 0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      icon,
-                      Text(title,
-                          style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w400,
-                              color: ColorsApp.primary)),
-                      const SizedBox(height: 8.0),
-                      Text(format.format(double.parse(amount)).toString(),
-                          style: GoogleFonts.montserratAlternates(
-                              fontWeight: FontWeight.w400,
-                              color: ColorsApp.primary,
-                              fontSize: 18.0)),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Positioned(
-              top: 0,
-              right: 12,
-              child: InkWell(
-                onTap: () {
-                  onPressed();
-                },
-                child: Container(
-                  width: 150,
-                  height: 35,
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: const BorderRadius.all(Radius.circular(25)),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/icons/search.png',
-                          height: 30, width: 30, color: Colors.white),
-                      Text('Ver detalle',
-                          style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                              fontSize: 12.0))
-                    ],
-                  ),
-                ),
+                ],
               ),
-            ),
-          ],
-        ));
+              const SizedBox(height: 12),
+              Text(title,
+                  style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w500,
+                      color: colorScheme.onSurfaceVariant,
+                      fontSize: 13)),
+              const SizedBox(height: 4),
+              Text(format.format(double.parse(amount)).toString(),
+                  style: GoogleFonts.montserratAlternates(
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurface,
+                      fontSize: 20.0)),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/controllers/overtime/form_overtime_controller.dart';
 import 'package:lamb_talent/resources/models/overtime/overtime.dart';
-import 'package:lamb_talent/shared/components/app_screen.dart';
+import 'package:lamb_talent/shared/components/secondary_screen.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:select_form_field/select_form_field.dart';
@@ -20,8 +20,12 @@ class FormOvertime extends StatelessWidget {
     return GetBuilder<FormOvertimeController>(
       init: FormOvertimeController(arguments: arguments),
       builder: (controller) {
-        return AppScreen(
-            codePage: '16120101',
+        return SecondaryScreen(
+            title: controller.formData.value.idEstadoSobretiempo == '01'
+                ? controller.formData.value.idSobretiempo == null
+                    ? 'Nuevo Sobretiempo'
+                    : 'Actualizar Sobretiempo'
+                : 'Detalle Sobretiempo',
             scrollController: controller.scrollController,
             enablePullDown: false,
             enablePullUp: false,
@@ -166,42 +170,6 @@ class FormOvertime extends StatelessWidget {
                         children: [
                           Column(
                             children: [
-                              const SizedBox(height: 8.0),
-                              AppBar(
-                                centerTitle: true,
-                                leading: Transform.translate(
-                                  offset: const Offset(-15, -8),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    iconSize: 40,
-                                    icon: const Icon(Icons.chevron_left,
-                                        color: ColorsApp.primary),
-                                  ),
-                                ),
-                                elevation: 0,
-                                backgroundColor: Colors.white,
-                                toolbarHeight: 40.0,
-                                title: Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text(
-                                    controller.formData.value
-                                                .idEstadoSobretiempo ==
-                                            '01'
-                                        ? controller.formData.value
-                                                    .idSobretiempo ==
-                                                null
-                                            ? 'Nuevo Sobretiempo'
-                                            : 'Actualizar Sobretiempo'
-                                        : 'Detalle Sobretiempo',
-                                    style: GoogleFonts.montserrat(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w700,
-                                        color: ColorsApp.primary),
-                                  ),
-                                ),
-                              ),
                               Column(
                                 children: [
                                   _createInputTypeOvertime(controller),

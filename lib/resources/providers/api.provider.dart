@@ -9,7 +9,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/end_points.dart';
 import 'package:lamb_talent/resources/models/response.dart';
-import 'package:http/http.dart' as http;
 
 class ApiProvider extends GetConnect {
   Future<ApiResponse> loginLamb(

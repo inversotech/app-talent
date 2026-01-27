@@ -37,6 +37,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   final userPreferences = UserPreferences();
   final scrollController = ScrollController();
   final controllerCarousel = CarouselSliderController();
+  RxInt carouselIndex = 0.obs;
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
   RxString showButton = '0'.obs;
@@ -503,12 +504,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   void goToMarkings() {
-    Get.to(() => MyMarkingsPage(), transition: Transition.size);
+    Get.to(() => MyMarkingsPage(), transition: Transition.cupertino);
   }
 
   void goToJustification() async {
     isListApprove = false;
-    await Get.to(() => const JustificationPage(), transition: Transition.size);
+    await Get.to(() => const JustificationPage(), transition: Transition.cupertino);
     final userPref = UserPreferences();
     if (userPref.resultChange) {
       loadingIndicator(onlyLoading: true, opacity: false);
@@ -522,7 +523,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   void goToOvertimes() async {
     isListApprove = false;
-    await Get.to(() => const OvertimePage(), transition: Transition.size);
+    await Get.to(() => const OvertimePage(), transition: Transition.cupertino);
     final userPref = UserPreferences();
     if (userPref.resultChange) {
       loadingIndicator(onlyLoading: true, opacity: false);
@@ -541,7 +542,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               approve: true,
               title: 'Aprobar justificaciones',
             ),
-        transition: Transition.size);
+        transition: Transition.cupertino);
     final userPref = UserPreferences();
     if (userPref.resultChange) {
       loadingIndicator(onlyLoading: true, opacity: false);
@@ -560,7 +561,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               approve: true,
               title: 'Aprobar Sobretiempos',
             ),
-        transition: Transition.size);
+        transition: Transition.cupertino);
     final userPref = UserPreferences();
     if (userPref.resultChange) {
       loadingIndicator(onlyLoading: true, opacity: false);
@@ -574,7 +575,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   void goToLicensePermit() async {
     isListApprove = false;
-    await Get.to(() => const LicensePermitPage(), transition: Transition.size);
+    await Get.to(() => const LicensePermitPage(), transition: Transition.cupertino);
     final userPref = UserPreferences();
     if (userPref.resultChange) {
       loadingIndicator(onlyLoading: true, opacity: false);
@@ -593,7 +594,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               approve: true,
               title: 'Aprobar permisos y licencias',
             ),
-        transition: Transition.size);
+        transition: Transition.cupertino);
     final userPref = UserPreferences();
     if (userPref.resultChange) {
       loadingIndicator(onlyLoading: true, opacity: false);
@@ -607,7 +608,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   void goToHolidayApprove() async {
     isListApprove = true;
-    await Get.to(() => const HolidayApprovePage(), transition: Transition.size);
+    await Get.to(() => const HolidayApprovePage(), transition: Transition.cupertino);
     final userPref = UserPreferences();
     if (userPref.resultChange) {
       loadingIndicator(onlyLoading: true, opacity: false);
@@ -621,12 +622,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   void goToHoliday() {
     isListApprove = false;
-    Get.to(() => const HolidayPage(), transition: Transition.size);
+    Get.to(() => const HolidayPage(), transition: Transition.cupertino);
   }
 
   void goToFormJustification() async {
     await Get.to(() => FormJustification(arguments: JustificationModel()),
-        transition: Transition.size);
+        transition: Transition.cupertino);
 
     final userPref = UserPreferences();
     if (userPref.resultChange) {
@@ -641,7 +642,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   void goToFormOvertime() async {
     await Get.to(() => FormOvertime(arguments: OvertimeModel()),
-        transition: Transition.size);
+        transition: Transition.cupertino);
     final userPref = UserPreferences();
     if (userPref.resultChange) {
       loadingIndicator(onlyLoading: true, opacity: false);
@@ -655,7 +656,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   void goToFormLicenPerm() async {
     await Get.to(() => FormLicensePermit(arguments: LicensePermitModel()),
-        transition: Transition.size);
+        transition: Transition.cupertino);
 
     final userPref = UserPreferences();
     if (userPref.resultChange) {

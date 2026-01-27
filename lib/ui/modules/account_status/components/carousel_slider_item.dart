@@ -30,91 +30,74 @@ class CarouselSliderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Card(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16.0),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+    return Card(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25))),
+        child: Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16.0),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _widgetFilters(context),
+                const SizedBox(height: 12.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _widgetFilters(context),
-                    const SizedBox(height: 12.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.asset('assets/icons/money.png',
-                                height: 40,
-                                width: 40,
-                                color: ColorsApp.primary),
-                            Text(title,
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w400,
-                                    color: ColorsApp.primary,
-                                    fontSize: 20.0)),
-                            Text(titleContinue ?? '',
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w400,
-                                    color: ColorsApp.primary,
-                                    fontSize: 20.0)),
-                          ],
-                        ),
-                        showBoleta
-                            ? InkWell(
-                                onTap: () {
-                                  onPressed();
-                                },
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Image.asset('assets/icons/pdf.png',
-                                          height: 25,
-                                          width: 25,
-                                          color: ColorsApp.primary),
-                                      Text('Ver boleta',
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w400,
-                                              color: ColorsApp.primary,
-                                              fontSize: 14.0))
-                                    ]),
-                              )
-                            : Container(),
+                        Image.asset('assets/icons/money.png',
+                            height: 40,
+                            width: 40,
+                            color: ColorsApp.primary),
+                        Text(title,
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w400,
+                                color: ColorsApp.primary,
+                                fontSize: 20.0)),
+                        Text(titleContinue ?? '',
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w400,
+                                color: ColorsApp.primary,
+                                fontSize: 20.0)),
                       ],
                     ),
-                    const SizedBox(height: 12.0),
-                    Text(format.format(double.parse(amount)).toString(),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w400,
-                            color: ColorsApp.primary,
-                            fontSize: 40.0))
-                  ]),
-            )),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List<Widget>.generate(itemCount, (index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3.0),
-              child: Icon(
-                Icons.circle_rounded,
-                size: 10,
-                color: index == indexItem ? Colors.white : Colors.white30,
-              ),
-            );
-          }),
-        ),
-      ],
-    );
+                    showBoleta
+                        ? InkWell(
+                            onTap: () {
+                              onPressed();
+                            },
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset('assets/icons/pdf.png',
+                                      height: 25,
+                                      width: 25,
+                                      color: ColorsApp.primary),
+                                  Text('Ver boleta',
+                                      style: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.w400,
+                                          color: ColorsApp.primary,
+                                          fontSize: 14.0))
+                                ]),
+                          )
+                        : Container(),
+                  ],
+                ),
+                const SizedBox(height: 12.0),
+                Text(format.format(double.parse(amount)).toString(),
+                    style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w400,
+                        color: ColorsApp.primary,
+                        fontSize: 40.0))
+              ]),
+        ));
   }
 
   Container _widgetFilters(BuildContext context) {

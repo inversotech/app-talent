@@ -17,8 +17,10 @@ class Detail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          color: ColorsApp.info,
-          borderRadius: BorderRadius.all(Radius.circular(25))),
+        borderRadius: BorderRadius.all(
+          Radius.circular(25),
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
@@ -28,18 +30,20 @@ class Detail extends StatelessWidget {
             title != null
                 ? Container(
                     alignment: Alignment.centerRight,
-                    child: Text(title!,
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w400,
-                            color: ColorsApp.primary)),
+                    child: Text(
+                      title!,
+                      style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.w400,
+                          color: ColorsApp.primary),
+                    ),
                   )
                 : Container(),
             title != null ? const SizedBox(height: 12.0) : Container(),
-            Text('Detalle',
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w600,
-                    color: ColorsApp.primary,
-                    fontSize: 18.0)),
+            Text(
+              'Detalle',
+              style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w600, fontSize: 18.0),
+            ),
             const SizedBox(height: 8.0),
             Stack(
               children: [
@@ -172,7 +176,7 @@ class Detail extends StatelessWidget {
                                                         child: Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 4.0),
                                                           child: Text(
                                                               dataItem.containsKey(
@@ -221,15 +225,18 @@ class Detail extends StatelessWidget {
                                                                 color: ColorsApp
                                                                     .primary)),
                                                     Text(
-                                                        dataItem.containsKey(
-                                                                'fecha')
+                                                        dataItem
+                                                                .containsKey(
+                                                                    'fecha')
                                                             ? Jiffy.parse(
                                                                     dataItem[
                                                                             'fecha']
                                                                         .toString(),
-                                                                    pattern: 'dd/MM/yyyy')
+                                                                    pattern:
+                                                                        'dd/MM/yyyy')
                                                                 .format(
-                                                                    pattern: 'dd|MM|yyyy')
+                                                                    pattern:
+                                                                        'dd|MM|yyyy')
                                                             : '',
                                                         style: GoogleFonts
                                                             .montserrat(

@@ -3,7 +3,7 @@ import 'package:lamb_talent/controllers/overtime/overtime_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/core/colors.dart';
-import 'package:lamb_talent/shared/components/app_screen.dart';
+import 'package:lamb_talent/shared/components/secondary_screen.dart';
 import 'package:lamb_talent/ui/modules/overtime/components/list_overtime.dart';
 
 class OvertimePage extends StatelessWidget {
@@ -21,46 +21,20 @@ class OvertimePage extends StatelessWidget {
         stateBuilder.controller!.onInit();
       },
       builder: (controller) {
-        return AppScreen(
+        return SecondaryScreen(
+            title: title,
             refreshController: controller.refreshController,
             scrollController: controller.scrollController,
             enablePullDown: true,
             enablePullUp: true,
             onRefresh: controller.onRefresh,
             onLoading: controller.onLoading,
-            codePage: '16120101',
-            showTabs: true,
+            onBackPressed: controller.goToBack,
             child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
               return Column(
                 children: [
                   const SizedBox(height: 8.0),
-                  AppBar(
-                    centerTitle: true,
-                    leading: Transform.translate(
-                      offset: const Offset(-15, -8),
-                      child: IconButton(
-                        onPressed: controller.goToBack,
-                        iconSize: 40,
-                        icon: const Icon(Icons.chevron_left,
-                            color: ColorsApp.primary),
-                      ),
-                    ),
-                    elevation: 0,
-                    backgroundColor: Colors.white,
-                    toolbarHeight: 40.0,
-                    title: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        title,
-                        style: GoogleFonts.montserrat(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w700,
-                            color: ColorsApp.primary),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20.0),
                   Obx(() => _widgetFilters(controller)),
                   const SizedBox(height: 8.0),
                   Obx(() => _widgetBody(constraints, controller))

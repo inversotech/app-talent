@@ -28,147 +28,84 @@ class DepositedHelpTravel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Map dataMap = data != null ? data as Map : {};
+    final colorScheme = Theme.of(context).colorScheme;
     return Card(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25))),
-      color: ColorsApp.info,
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title,
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                    fontSize: 16.0)),
-            const SizedBox(height: 8.0),
+            Text(
+              title,
+              style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.w600, fontSize: 16.0),
+            ),
+            const SizedBox(height: 12.0),
             Card(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              color: colorScheme.surfaceContainerLowest,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: Text('Informadas',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorsApp.primary)),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                                format
-                                    .format(double.parse(
-                                        dataMap.containsKey('ingresos')
-                                            ? dataMap['ingresos'].toString()
-                                            : '0'))
-                                    .toString(),
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w500,
-                                    color: ColorsApp.primary)),
-                            IconButton(
-                                onPressed: () {
-                                  onChange(true);
-                                  _getItemsIncome(context);
-                                },
-                                icon: Container(
-                                  alignment: Alignment.center,
-                                  decoration: const BoxDecoration(
-                                      color: ColorsApp.warning,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(25))),
-                                  child: Image.asset(
-                                    'assets/icons/search.png',
-                                    height: 30,
-                                    width: 30,
-                                    color: Colors.white,
-                                  ),
-                                ))
-                          ],
-                        )
-                      ],
+                    _buildRowItem(
+                      context,
+                      label: 'Informadas',
+                      value: format
+                          .format(double.parse(dataMap.containsKey('ingresos')
+                              ? dataMap['ingresos'].toString()
+                              : '0'))
+                          .toString(),
+                      buttonColor: ColorsApp.warning,
+                      onPressed: () {
+                        onChange(true);
+                        _getItemsIncome(context);
+                      },
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: Text('Adelanto',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorsApp.primary)),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                                format
-                                    .format(double.parse(
-                                        dataMap.containsKey('descuentos')
-                                            ? dataMap['descuentos'].toString()
-                                            : '0'))
-                                    .toString(),
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w500,
-                                    color: ColorsApp.primary)),
-                            IconButton(
-                                onPressed: () {
-                                  onChange(true);
-                                  _getItemsDiscount(context);
-                                },
-                                icon: Container(
-                                  alignment: Alignment.center,
-                                  decoration: const BoxDecoration(
-                                      color: ColorsApp.success,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(25))),
-                                  child: Image.asset(
-                                    'assets/icons/search.png',
-                                    height: 30,
-                                    width: 30,
-                                    color: Colors.white,
-                                  ),
-                                ))
-                          ],
-                        )
-                      ],
+                    const SizedBox(height: 8),
+                    _buildRowItem(
+                      context,
+                      label: 'Adelanto',
+                      value: format
+                          .format(double.parse(dataMap.containsKey('descuentos')
+                              ? dataMap['descuentos'].toString()
+                              : '0'))
+                          .toString(),
+                      buttonColor: ColorsApp.success,
+                      onPressed: () {
+                        onChange(true);
+                        _getItemsDiscount(context);
+                      },
                     ),
-                    const SizedBox(height: 12.0),
+                    const Divider(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Flexible(
-                          child: Text(
-                              (double.parse(dataMap.containsKey('sub_total')
-                                          ? dataMap['sub_total'].toString()
-                                          : '0')) >
-                                      0
-                                  ? 'Depositado'
-                                  : 'Descontado',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorsApp.primary)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 45),
-                          child: Text(
-                              format
-                                  .format(double.parse(
-                                      dataMap.containsKey('sub_total')
-                                          ? dataMap['sub_total'].toString()
-                                          : '0'))
-                                  .toString(),
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorsApp.primary)),
-                        )
+                        Text(
+                            (double.parse(dataMap.containsKey('sub_total')
+                                        ? dataMap['sub_total'].toString()
+                                        : '0')) >
+                                    0
+                                ? 'Depositado'
+                                : 'Descontado',
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w500,
+                                color: colorScheme.onSurfaceVariant,
+                                fontSize: 13)),
+                        Text(
+                            format
+                                .format(double.parse(
+                                    dataMap.containsKey('sub_total')
+                                        ? dataMap['sub_total'].toString()
+                                        : '0'))
+                                .toString(),
+                            style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onSurface)),
                       ],
                     )
                   ],
@@ -177,38 +114,76 @@ class DepositedHelpTravel extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             Card(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25))),
-                child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0, vertical: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text('Saldo final',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorsApp.primary)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 45),
-                          child: Text(
-                              format
-                                  .format(double.parse(
-                                      dataMap.containsKey('total')
-                                          ? dataMap['total'].toString()
-                                          : '0'))
-                                  .toString(),
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorsApp.primary)),
-                        )
-                      ],
-                    )))
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              color: colorScheme.primaryContainer,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 14.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Saldo final',
+                        style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w600,
+                            color: colorScheme.onPrimaryContainer,
+                            fontSize: 14)),
+                    Text(
+                        format
+                            .format(double.parse(dataMap.containsKey('total')
+                                ? dataMap['total'].toString()
+                                : '0'))
+                            .toString(),
+                        style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w700,
+                            color: colorScheme.onPrimaryContainer,
+                            fontSize: 16)),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildRowItem(
+    BuildContext context, {
+    required String label,
+    required String value,
+    required Color buttonColor,
+    required VoidCallback onPressed,
+  }) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label,
+            style: GoogleFonts.montserrat(
+                fontWeight: FontWeight.w400,
+                color: colorScheme.onSurfaceVariant,
+                fontSize: 13)),
+        Row(
+          children: [
+            Text(value,
+                style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w500, color: colorScheme.onSurface)),
+            const SizedBox(width: 8),
+            IconButton.filled(
+              onPressed: onPressed,
+              style: IconButton.styleFrom(
+                backgroundColor: buttonColor,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(36, 36),
+                padding: EdgeInsets.zero,
+              ),
+              icon: const Icon(Icons.search, size: 18),
+            ),
+          ],
+        )
+      ],
     );
   }
 

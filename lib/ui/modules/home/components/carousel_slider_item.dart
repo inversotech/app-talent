@@ -67,26 +67,6 @@ class CarouselSliderItem extends StatelessWidget {
               else
                 const SizedBox(width: 48),
 
-              // Page Indicators
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List<Widget>.generate(itemCount, (index) {
-                  final isActive = index == indexItem;
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    width: isActive ? 24 : 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: isActive
-                          ? Colors.white
-                          : Colors.white.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  );
-                }),
-              ),
-
               // List Button
               IconButton.filledTonal(
                 onPressed: onPressedList,

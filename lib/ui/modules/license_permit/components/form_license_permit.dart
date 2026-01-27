@@ -8,7 +8,7 @@ import 'package:select_form_field/select_form_field.dart';
 import 'package:lamb_talent/controllers/license_permit/form_license_permit_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/resources/models/models.dart';
-import 'package:lamb_talent/shared/components/app_screen.dart';
+import 'package:lamb_talent/shared/components/secondary_screen.dart';
 
 import 'pdf_img_input_upload.dart';
 
@@ -22,8 +22,12 @@ class FormLicensePermit extends StatelessWidget {
     return GetBuilder<FormLicensePermitController>(
         init: FormLicensePermitController(arguments: arguments),
         builder: (controller) {
-          return AppScreen(
-              codePage: '16120101',
+          return SecondaryScreen(
+              title: controller.formData.value.idEstadoLicaPer == '01'
+                  ? controller.formData.value.idLicenciaPermiso == null
+                      ? 'Nueva Solicitud'
+                      : 'Actualizar Solicitud'
+                  : 'Detalle Solicitud',
               scrollController: controller.scrollController,
               enablePullDown: false,
               enablePullUp: false,
@@ -126,41 +130,6 @@ class FormLicensePermit extends StatelessWidget {
                         key: controller.formKey,
                         child: Column(
                           children: [
-                            const SizedBox(height: 8.0),
-                            AppBar(
-                              centerTitle: true,
-                              leading: Transform.translate(
-                                offset: const Offset(-15, -8),
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  iconSize: 40,
-                                  icon: const Icon(Icons.chevron_left,
-                                      color: ColorsApp.primary),
-                                ),
-                              ),
-                              elevation: 0,
-                              backgroundColor: Colors.white,
-                              toolbarHeight: 40.0,
-                              title: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                  controller.formData.value.idEstadoLicaPer ==
-                                          '01'
-                                      ? controller.formData.value
-                                                  .idLicenciaPermiso ==
-                                              null
-                                          ? 'Nueva Solicitud'
-                                          : 'Actualizar Solicitud'
-                                      : 'Detalle Solicitud',
-                                  style: GoogleFonts.montserrat(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w700,
-                                      color: ColorsApp.primary),
-                                ),
-                              ),
-                            ),
                             Column(
                               children: [
                                 _createInputTypeLicPer(controller),

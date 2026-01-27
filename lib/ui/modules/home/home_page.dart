@@ -186,23 +186,53 @@ class HomePage extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return CarouselSlider(
-      items: [
-        _buildJustificationSlider(constraints),
-        _buildLicensePermitSlider(constraints),
-        _buildVacationSlider(constraints, buildContext),
-        _buildOvertimeSlider(constraints),
+    return Column(
+      children: [
+        // Indicadores fijos
+        Obx(() => Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List<Widget>.generate(4, (index) {
+                  final isActive = index == controller.carouselIndex.value;
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    width: isActive ? 24 : 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: isActive
+                          ? Colors.white
+                          : Colors.white.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  );
+                }),
+              ),
+            )),
+        // Carrusel
+        CarouselSlider(
+          items: [
+            _buildJustificationSlider(constraints),
+            _buildLicensePermitSlider(constraints),
+            _buildVacationSlider(constraints, buildContext),
+            _buildOvertimeSlider(constraints),
+          ],
+          carouselController: controller.controllerCarousel,
+          options: CarouselOptions(
+            height: 267,
+            viewportFraction: 1,
+            initialPage: 0,
+            enableInfiniteScroll: true,
+            reverse: false,
+            autoPlay: false,
+            scrollDirection: Axis.horizontal,
+            onPageChanged: (index, reason) {
+              controller.carouselIndex.value = index;
+            },
+          ),
+        ),
       ],
-      carouselController: controller.controllerCarousel,
-      options: CarouselOptions(
-        height: 265,
-        viewportFraction: 1,
-        initialPage: 0,
-        enableInfiniteScroll: true,
-        reverse: false,
-        autoPlay: false,
-        scrollDirection: Axis.horizontal,
-      ),
     );
   }
 
@@ -325,7 +355,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildVacationButtonText() {
     final vacationData = controller.dataCarousel?['vacacion'];
-    if (vacationData == null) {
+    if (vacationData == null || vacationData.isEmpty) {
       return Text(
         '...',
         style: GoogleFonts.montserrat(
@@ -344,17 +374,15 @@ class HomePage extends StatelessWidget {
 
   Widget _buildVacationDetail() {
     final vacationData = controller.dataCarousel?['vacacion'];
-    if (vacationData == null) {
+    if (vacationData == null || vacationData.isEmpty) {
       return const SizedBox.shrink();
     }
 
     final codigo = vacationData['codigo']?.toString();
     final vacacionInfo = vacationData['vacacion'];
-
-    if (codigo == null || vacacionInfo == null) {
+    if (codigo == null || vacacionInfo == null || vacacionInfo.isEmpty) {
       return const SizedBox.shrink();
     }
-
     final hasFechas = vacacionInfo.containsKey('fecha_ini') &&
         vacacionInfo.containsKey('fecha_fin');
 

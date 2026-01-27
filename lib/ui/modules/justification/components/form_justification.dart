@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/controllers/justification/form_justification_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/resources/models/models.dart';
-import 'package:lamb_talent/shared/components/app_screen.dart';
+import 'package:lamb_talent/shared/components/secondary_screen.dart';
 import 'package:lamb_talent/shared/components/checkbox_app.dart';
 import 'package:select_form_field/select_form_field.dart';
 
@@ -23,11 +23,21 @@ class FormJustification extends StatelessWidget {
     return GetBuilder<FormJustificationController>(
         init: FormJustificationController(arguments: arguments),
         builder: (controller) {
-          return AppScreen(
-              codePage: '16120101',
+          return SecondaryScreen(
               scrollController: controller.scrollController,
               enablePullDown: false,
               enablePullUp: false,
+              titleWidget: Obx(() => Text(
+                    controller.formData.value.idEstadoJustif == '01'
+                        ? controller.formData.value.idSolicJustif == null
+                            ? 'Nueva Justificación'
+                            : 'Actualizar Justificación'
+                        : 'Detalle Justificación',
+                    style: GoogleFonts.montserrat(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
+                  )),
               floatingActionButton: controller.formData.value.idSolicJustif !=
                           null &&
                       controller.formData.value.idEstadoJustif == '01'
@@ -172,41 +182,6 @@ class FormJustification extends StatelessWidget {
                         children: [
                           Column(
                             children: [
-                              const SizedBox(height: 8.0),
-                              AppBar(
-                                centerTitle: true,
-                                leading: Transform.translate(
-                                  offset: const Offset(-15, -8),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    iconSize: 40,
-                                    icon: const Icon(Icons.chevron_left,
-                                        color: ColorsApp.primary),
-                                  ),
-                                ),
-                                elevation: 0,
-                                backgroundColor: Colors.white,
-                                toolbarHeight: 40.0,
-                                title: Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Text(
-                                    controller.formData.value.idEstadoJustif ==
-                                            '01'
-                                        ? controller.formData.value
-                                                    .idSolicJustif ==
-                                                null
-                                            ? 'Nueva Justificación'
-                                            : 'Actualizar Justificación'
-                                        : 'Detalle Justificación',
-                                    style: GoogleFonts.montserrat(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w700,
-                                        color: ColorsApp.primary),
-                                  ),
-                                ),
-                              ),
                               const SizedBox(height: 8.0),
                               _createInputDate(context, controller),
                               _createInputReason(controller),
