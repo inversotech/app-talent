@@ -4,6 +4,7 @@ import 'package:lamb_talent/ui/modules/auth/login_page.dart';
 import 'package:lamb_talent/ui/modules/auth/verify_authentication_page.dart';
 import 'package:lamb_talent/ui/modules/home/home_page.dart';
 import 'package:lamb_talent/ui/modules/notification/notification_page.dart';
+import 'package:lamb_talent/ui/modules/procesos/procesos_page.dart';
 import 'package:lamb_talent/ui/modules/survey/survey_page.dart';
 
 import 'routers_names.dart';
@@ -16,6 +17,7 @@ getRouters() {
     GetPage(name: RoutesName.notification, page: () => NotificationPage()),
     GetPage(name: RoutesName.accountStatus, page: () => AccountStatusPage()),
     GetPage(name: RoutesName.survey, page: () => SurveyPage()),
+    GetPage(name: RoutesName.procesos, page: () => ProcesosPage()),
   ];
   return routesApp;
 }

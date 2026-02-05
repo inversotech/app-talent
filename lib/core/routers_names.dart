@@ -5,4 +5,5 @@ class RoutesName {
   static const String notification = '/notification';
   static const String accountStatus = '/account-status';
   static const String survey = '/survey';
+  static const String procesos = '/procesos';
 }

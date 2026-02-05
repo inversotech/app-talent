@@ -6,7 +6,6 @@ import 'package:lamb_talent/resources/services/notification/push_notification_se
 import 'package:lamb_talent/ui/custom_theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'core/colors.dart';
 import 'core/location_user.dart';
 import 'core/routers.dart';
 import 'core/routers_names.dart';
@@ -38,11 +37,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    const body1Style = TextStyle(
-      fontWeight: FontWeight.w300,
-      fontSize: 14.0,
-      color: ColorsApp.primary,
-    );
     return GetMaterialApp(
       showPerformanceOverlay: false,
       debugShowCheckedModeBanner: false,
@@ -57,9 +51,7 @@ class MyApp extends StatelessWidget {
         Locale('es', 'ES'),
         Locale('es', 'PE'),
       ],
-      theme: CustomTheme(
-              isDark: false, textTheme: const TextTheme(bodyLarge: body1Style))
-          .themeData,
+      theme: CustomTheme(isDark: false).themeData,
       initialRoute: RoutesName.checkAuth,
       transitionDuration: const Duration(seconds: 0),
       getPages: getRouters(),

@@ -157,5 +157,12 @@ final Map endPoints = {
     'likes': '${Env.api.apiMessenger}red/likes',
     'total-no-leidos': '${Env.api.apiMessenger}report/total-no-leidos',
     'storage': '${Env.api.apiMessengerShell}storage',
+  },
+  'procesos': {
+    'solicitud-pago':
+        '${Env.api.apiTalent}workerportal/procesos/solicitud-pago',
+    'solicitud-vale':
+        '${Env.api.apiTalent}workerportal/procesos/solicitud-vale',
+    'rendir-vale': '${Env.api.apiTalent}workerportal/procesos/rendir-vale',
   }
 };

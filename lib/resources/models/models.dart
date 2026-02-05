@@ -28,3 +28,5 @@ export 'holiday/holiday.dart';
 export 'quiz/quiz.dart';
 export 'quiz/quiz_item.dart';
 export 'quiz/quiz_answer.dart';
+export 'procesos/solicitud_pago.dart';
+export 'procesos/documento_gasto.dart';
