@@ -425,10 +425,6 @@ class FormOvertime extends StatelessWidget {
         enabled: controller.formData.value.idEstadoSobretiempo != '01'
             ? false
             : true,
-        /* initialValue: controller.formData.value.horaDesde != null
-            ? DateTime.parse(
-                '${DateFormat('y-MM-dd').format(DateTime.now())} ${controller.formData.value.horaDesde}')
-            : null, */
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             border:
@@ -470,8 +466,6 @@ class FormOvertime extends StatelessWidget {
             final hourTo =
                 format.parse(controller.formData.value.horaHasta.toString());
             final differenceHour = hourTo.difference(hourFrom);
-            /*  controller.formData.value.horas = DateFormat('HH:mm')
-                .format(format.parse(differenceHour.toString())); */
             controller.inputFieldHourTotalCtrl.text =
                 controller.formData.value.horas ?? '';
 
@@ -587,7 +581,6 @@ class FormOvertime extends StatelessWidget {
       child: TextFormField(
         controller: controller.inputFieldHourTotalCtrl,
         enabled: false,
-        /* initialValue: controller.formData.value.horas ?? "", */
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
@@ -618,7 +611,6 @@ class FormOvertime extends StatelessWidget {
       child: TextFormField(
         controller: controller.inputFieldMaxHourCtrl,
         enabled: false,
-        /* initialValue: controller.formData.value.maxHoraExt, */
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),

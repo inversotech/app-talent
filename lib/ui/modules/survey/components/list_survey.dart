@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/resources/models/quiz/quiz.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 
 class ListSurvey extends StatelessWidget {
   final List<Survey> listData;
@@ -40,7 +41,7 @@ class ListSurvey extends StatelessWidget {
                   },
                   child: Container(
                     alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    padding: const EdgeInsets.symmetric(vertical: Spacing.xs),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -57,13 +58,10 @@ class ListSurvey extends StatelessWidget {
                                         listData[index].aprobado == '1'
                                             ? ColorsApp.success
                                             : ColorsApp.danger,
-                                    child: Text((index + 1).toString(),
-                                        style: GoogleFonts.montserrat(
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.white,
-                                            fontSize: 22.0)),
+                                    child: AppText.h2((index + 1).toString(),
+                                        color: Colors.white),
                                   ),
-                                  const SizedBox(width: 8.0),
+                                  const SizedBox(width: Spacing.sm),
                                   Flexible(
                                     child: Column(
                                       crossAxisAlignment:
@@ -71,50 +69,23 @@ class ListSurvey extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        const SizedBox(height: 10.0),
-                                        Text(
+                                        const SizedBox(height: Spacing.sm),
+                                        AppText.h3(
                                           capitalize(listData[index]
                                               .nombre
                                               .toString()),
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w600,
-                                              color: ColorsApp.primary,
-                                              fontSize: 16.0),
+                                          color: ColorsApp.primary,
                                         ),
-                                        Text(
+                                        AppText.label(
                                             'Fecha: ${DateFormat('dd|MM|yyyy').format(listData[index].fecha!)}',
-                                            style: GoogleFonts.montserrat(
-                                                fontWeight: FontWeight.w500,
-                                                color: ColorsApp.primary,
-                                                fontSize: 12.0)),
+                                            color: ColorsApp.primary),
                                       ],
                                     ),
                                   )
                                 ],
                               ),
                             ),
-                            /* listData[index].idEstadoJustif == '01'
-                                ? TextButton(
-                                    onPressed: () {
-                                      onPressed(listData[index]);
-                                    },
-                                    child: Column(
-                                      children: [
-                                        Icon(
-                                          Icons.edit,
-                                          color: ColorsApp.primary,
-                                        ),
-                                        Text(
-                                          'editar',
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w300,
-                                              color: ColorsApp.primary,
-                                              fontSize: 12.0),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                : Container() */
+                            /* Código comentado - botón de edición */
                           ],
                         ),
                       ],
@@ -130,11 +101,10 @@ class ListSurvey extends StatelessWidget {
       );
     } else {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(Spacing.sm),
         child: Center(
-          child: Text('No se encontró información para mostrar.',
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400, color: ColorsApp.primary)),
+          child: AppText.body('No se encontró información para mostrar.',
+              color: ColorsApp.primary),
         ),
       );
     }

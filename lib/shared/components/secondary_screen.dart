@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'custom_footer_loading.dart';
@@ -44,10 +45,10 @@ class SecondaryScreen extends StatelessWidget {
     this.enablePullUp = false,
     this.floatingActionButton,
     this.onBackPressed,
-    this.paddingLeft = 12,
-    this.paddingRight = 12,
-    this.paddingTop = 8,
-    this.paddingBottom = 8,
+    this.paddingLeft = Spacing.lg,
+    this.paddingRight = Spacing.lg,
+    this.paddingTop = Spacing.md,
+    this.paddingBottom = Spacing.md,
     this.colorLoading = ColorsApp.primary,
     this.backgroundColor = ColorsApp.white,
     this.actions,
@@ -62,7 +63,7 @@ class SecondaryScreen extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [ColorsApp.primary, ColorsApp.primaryVariant],
+            colors: [ColorsApp.neutral50, ColorsApp.neutral100],
           ),
         ),
         child: Scaffold(
@@ -79,6 +80,15 @@ class SecondaryScreen extends StatelessWidget {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [ColorsApp.primary, ColorsApp.primaryLight],
+          ),
+        ),
+      ),
       leading: IconButton(
         onPressed: onBackPressed ?? () => Get.back(),
         icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
@@ -101,7 +111,7 @@ class SecondaryScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 4, right: 4, bottom: 4),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         child: ColoredBox(
           color: backgroundColor,
           child: Padding(

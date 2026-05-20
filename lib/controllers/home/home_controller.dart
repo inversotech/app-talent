@@ -733,7 +733,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
               (Set<MaterialState> states) {
-                return ColorsApp.info; // Use the component's default.
+                return ColorsApp.neutral200; // Use the component's default.
               },
             ), shape: MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
               (Set<MaterialState> states) {
@@ -795,7 +795,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
                 style: ButtonStyle(backgroundColor:
                     MaterialStateProperty.resolveWith<Color>(
                   (Set<MaterialState> states) {
-                    return ColorsApp.info; // Use the component's default.
+                    return ColorsApp.neutral200; // Use the component's default.
                   },
                 ), shape:
                     MaterialStateProperty.resolveWith<RoundedRectangleBorder>(

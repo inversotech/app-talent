@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/general/date_model.dart';
 import 'package:lamb_talent/resources/services/account_status/account_status_service.dart';
+import 'package:lamb_talent/shared/components/app_card.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 
 import 'detail.dart';
 
@@ -13,65 +15,55 @@ class DepositedSalary extends StatelessWidget {
   final dynamic data;
   final Function(bool) onChange;
   final DateModel dateModel;
-  const DepositedSalary(
-      {Key? key,
-      required this.data,
-      required this.dateModel,
-      required this.onChange})
-      : super(key: key);
+  const DepositedSalary({
+    super.key,
+    required this.data,
+    required this.dateModel,
+    required this.onChange,
+  });
 
   @override
-  // ignore: avoid_renaming_method_parameters
   Widget build(BuildContext buildContext) {
     final dataMap = data != null ? data as Map : {};
-    final colorScheme = Theme.of(buildContext).colorScheme;
     final format = NumberFormat.currency(symbol: 'S/. ', locale: 'en_US');
 
-    return Card(
-      elevation: 0,
-      color: colorScheme.surfaceContainerLowest,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildRow(
-              colorScheme: colorScheme,
-              format: format,
-              label: 'Ingresos',
-              amount: dataMap.containsKey('l_ingresos')
-                  ? dataMap['l_ingresos'].toString()
-                  : '0',
-              icon: Icons.trending_up,
-              buttonColor: ColorsApp.success,
-              onPressed: () {
-                onChange(true);
-                _getItemsIncome(buildContext);
-              },
-            ),
-            const Divider(height: 24),
-            _buildRow(
-              colorScheme: colorScheme,
-              format: format,
-              label: 'Descuentos',
-              amount: dataMap.containsKey('l_descuentos_total')
-                  ? dataMap['l_descuentos_total'].toString()
-                  : '0',
-              icon: Icons.trending_down,
-              buttonColor: ColorsApp.warning,
-              onPressed: () {
-                onChange(true);
-                _getItemsDiscount(buildContext);
-              },
-            ),
-          ],
-        ),
+    return AppCard.neutral(
+      padding: const EdgeInsets.all(Spacing.md),
+      child: Column(
+        children: [
+          _buildRow(
+            format: format,
+            label: 'Ingresos',
+            amount: dataMap.containsKey('l_ingresos')
+                ? dataMap['l_ingresos'].toString()
+                : '0',
+            icon: Icons.trending_up,
+            buttonColor: ColorsApp.success,
+            onPressed: () {
+              onChange(true);
+              _getItemsIncome(buildContext);
+            },
+          ),
+          const Divider(height: 24, color: ColorsApp.neutral200),
+          _buildRow(
+            format: format,
+            label: 'Descuentos',
+            amount: dataMap.containsKey('l_descuentos_total')
+                ? dataMap['l_descuentos_total'].toString()
+                : '0',
+            icon: Icons.trending_down,
+            buttonColor: ColorsApp.warning,
+            onPressed: () {
+              onChange(true);
+              _getItemsDiscount(buildContext);
+            },
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildRow({
-    required ColorScheme colorScheme,
     required NumberFormat format,
     required String label,
     required String amount,
@@ -82,29 +74,23 @@ class DepositedSalary extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(Spacing.sm),
           decoration: BoxDecoration(
             color: buttonColor.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
           ),
           child: Icon(icon, color: buttonColor, size: 20),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: Spacing.md),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label,
-                  style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w400,
-                      color: colorScheme.onSurfaceVariant,
-                      fontSize: 12)),
-              const SizedBox(height: 2),
-              Text(format.format(double.parse(amount)).toString(),
-                  style: GoogleFonts.montserratAlternates(
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.onSurface,
-                      fontSize: 16)),
+              AppText.bodySmall(label, color: ColorsApp.neutral500),
+              AppText.bodyLarge(
+                format.format(double.parse(amount)).toString(),
+                color: ColorsApp.neutral800,
+              ),
             ],
           ),
         ),
@@ -112,7 +98,7 @@ class DepositedSalary extends StatelessWidget {
           onPressed: onPressed,
           style: IconButton.styleFrom(
             backgroundColor: buttonColor,
-            foregroundColor: Colors.white,
+            foregroundColor: ColorsApp.white,
             minimumSize: const Size(36, 36),
             padding: EdgeInsets.zero,
           ),
@@ -188,25 +174,21 @@ class DepositedSalary extends StatelessWidget {
   void _showModalDetail(List data) async {
     await Get.dialog(AlertDialog(
         elevation: 0,
-        backgroundColor: ColorsApp.info,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+        backgroundColor: ColorsApp.neutral200,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.lg)),
         contentPadding: const EdgeInsets.all(0.0),
         titlePadding: EdgeInsets.zero,
         scrollable: false,
         content: SizedBox(
-          width: Get.width
-          // MediaQuery.of(context).size.width
-          ,
+          width: Get.width,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Container(
                   alignment: Alignment.centerRight,
                   child: IconButton(
-                      onPressed: () => Get.back()
-                      // Navigator.of(context).pop()
-                      ,
+                      onPressed: () => Get.back(),
                       icon: const Icon(Icons.highlight_off)),
                 ),
                 Detail(listData: data, isModal: true),
@@ -214,35 +196,6 @@ class DepositedSalary extends StatelessWidget {
             ),
           ),
         )));
-    /* await showDialog(
-        context: buildContext,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-              elevation: 0,
-              backgroundColor: ColorsApp.info,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0)),
-              contentPadding: const EdgeInsets.all(0.0),
-              titlePadding: EdgeInsets.zero,
-              scrollable: false,
-              content: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: IconButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            icon: const Icon(Icons.highlight_off)),
-                      ),
-                      Detail(listData: data, isModal: true),
-                    ],
-                  ),
-                ),
-              ));
-        }); */
   }
 }
 
@@ -253,83 +206,75 @@ class CreateCardItem extends StatelessWidget {
   final Color color;
   final Widget icon;
   final Function() onPressed;
-  CreateCardItem(
-      {Key? key,
-      required this.title,
-      required this.amount,
-      required this.color,
-      required this.icon,
-      required this.onPressed})
-      : super(key: key);
+  CreateCardItem({
+    super.key,
+    required this.title,
+    required this.amount,
+    required this.color,
+    required this.icon,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Card(
-        elevation: 0,
-        color: colorScheme.surfaceContainerLowest,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: color.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: IconTheme(
-                      data: IconThemeData(color: color, size: 20),
-                      child: icon,
-                    ),
+      padding: const EdgeInsets.symmetric(horizontal: Spacing.sm),
+      child: AppCard.neutral(
+        padding: const EdgeInsets.all(Spacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(Spacing.sm),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
                   ),
-                  FilledButton.tonal(
-                    onPressed: onPressed,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: color,
-                      foregroundColor: Colors.white,
+                  child: IconTheme(
+                    data: IconThemeData(color: color, size: 20),
+                    child: icon,
+                  ),
+                ),
+                // Botón "Ver detalle" con color personalizado
+                Material(
+                  color: color,
+                  borderRadius: BorderRadius.circular(AppRadius.md),
+                  child: InkWell(
+                    onTap: onPressed,
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                    child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        horizontal: Spacing.md,
+                        vertical: Spacing.sm,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.search,
+                              size: 16, color: ColorsApp.white),
+                          const SizedBox(width: Spacing.xs),
+                          AppText.label(
+                            'Ver detalle',
+                            color: ColorsApp.white,
+                          ),
+                        ],
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.search, size: 18),
-                        const SizedBox(width: 6),
-                        Text('Ver detalle',
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w500, fontSize: 12.0)),
-                      ],
-                    ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(title,
-                  style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w500,
-                      color: colorScheme.onSurfaceVariant,
-                      fontSize: 13)),
-              const SizedBox(height: 4),
-              Text(format.format(double.parse(amount)).toString(),
-                  style: GoogleFonts.montserratAlternates(
-                      fontWeight: FontWeight.w600,
-                      color: colorScheme.onSurface,
-                      fontSize: 20.0)),
-            ],
-          ),
+                ),
+              ],
+            ),
+            const SizedBox(height: Spacing.md),
+            AppText.bodySmall(title, color: ColorsApp.neutral500),
+            const SizedBox(height: Spacing.xs),
+            AppText.h1(
+              format.format(double.parse(amount)).toString(),
+              color: ColorsApp.neutral800,
+            ),
+          ],
         ),
       ),
     );

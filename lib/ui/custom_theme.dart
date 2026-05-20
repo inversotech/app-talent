@@ -130,7 +130,7 @@ class CustomTheme {
       cardTheme: CardThemeData(
         elevation: Elevation.none, // Flat design para limpieza visual
         shape: RoundedRectangleBorder(
-          borderRadius: Radius.circularLg,
+          borderRadius: AppRadius.circularLg,
         ),
         color: ColorsApp.white,
         margin: EdgeInsets.zero,
@@ -153,7 +153,7 @@ class CustomTheme {
             vertical: Spacing.md,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: Radius.circularMd,
+            borderRadius: AppRadius.circularMd,
           ),
           textStyle: AppTextStyles.button,
           minimumSize: const Size(88, 48),
@@ -172,7 +172,7 @@ class CustomTheme {
             vertical: Spacing.md,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: Radius.circularMd,
+            borderRadius: AppRadius.circularMd,
           ),
           textStyle: AppTextStyles.button,
           minimumSize: const Size(88, 48),
@@ -189,7 +189,7 @@ class CustomTheme {
             vertical: Spacing.sm,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: Radius.circularSm,
+            borderRadius: AppRadius.circularSm,
           ),
           textStyle: AppTextStyles.button,
         ),
@@ -211,7 +211,7 @@ class CustomTheme {
         foregroundColor: ColorsApp.white,
         elevation: Elevation.medium,
         shape: RoundedRectangleBorder(
-          borderRadius: Radius.circularMd,
+          borderRadius: AppRadius.circularMd,
         ),
       ),
 
@@ -224,27 +224,27 @@ class CustomTheme {
 
         // Borders
         border: OutlineInputBorder(
-          borderRadius: Radius.circularMd,
+          borderRadius: AppRadius.circularMd,
           borderSide: const BorderSide(color: ColorsApp.neutral300, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: Radius.circularMd,
+          borderRadius: AppRadius.circularMd,
           borderSide: const BorderSide(color: ColorsApp.neutral300, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: Radius.circularMd,
+          borderRadius: AppRadius.circularMd,
           borderSide: const BorderSide(color: ColorsApp.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: Radius.circularMd,
+          borderRadius: AppRadius.circularMd,
           borderSide: const BorderSide(color: ColorsApp.danger, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: Radius.circularMd,
+          borderRadius: AppRadius.circularMd,
           borderSide: const BorderSide(color: ColorsApp.danger, width: 2),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: Radius.circularMd,
+          borderRadius: AppRadius.circularMd,
           borderSide: const BorderSide(color: ColorsApp.neutral200, width: 1),
         ),
 
@@ -255,11 +255,15 @@ class CustomTheme {
         ),
 
         // Text styles
-        labelStyle: AppTextStyles.labelLarge.copyWith(color: ColorsApp.neutral700),
-        floatingLabelStyle: AppTextStyles.labelMedium.copyWith(color: ColorsApp.primary),
-        hintStyle: AppTextStyles.bodyMedium.copyWith(color: ColorsApp.neutral400),
+        labelStyle:
+            AppTextStyles.labelLarge.copyWith(color: ColorsApp.neutral700),
+        floatingLabelStyle:
+            AppTextStyles.labelMedium.copyWith(color: ColorsApp.primary),
+        hintStyle:
+            AppTextStyles.bodyMedium.copyWith(color: ColorsApp.neutral400),
         errorStyle: AppTextStyles.bodySmall.copyWith(color: ColorsApp.danger),
-        helperStyle: AppTextStyles.bodySmall.copyWith(color: ColorsApp.neutral500),
+        helperStyle:
+            AppTextStyles.bodySmall.copyWith(color: ColorsApp.neutral500),
 
         // Icon colors
         prefixIconColor: ColorsApp.neutral600,
@@ -274,11 +278,13 @@ class CustomTheme {
         disabledColor: ColorsApp.neutral200,
         selectedColor: ColorsApp.primary,
         secondarySelectedColor: ColorsApp.primaryLight,
-        padding: const EdgeInsets.symmetric(horizontal: Spacing.md, vertical: Spacing.sm),
+        padding: const EdgeInsets.symmetric(
+            horizontal: Spacing.md, vertical: Spacing.sm),
         labelStyle: AppTextStyles.labelMedium,
-        secondaryLabelStyle: AppTextStyles.labelMedium.copyWith(color: ColorsApp.white),
+        secondaryLabelStyle:
+            AppTextStyles.labelMedium.copyWith(color: ColorsApp.white),
         shape: RoundedRectangleBorder(
-          borderRadius: Radius.circularPill,
+          borderRadius: AppRadius.circularPill,
         ),
         side: const BorderSide(color: ColorsApp.neutral300, width: 1),
         elevation: Elevation.none,
@@ -291,7 +297,7 @@ class CustomTheme {
         backgroundColor: ColorsApp.white,
         elevation: Elevation.high,
         shape: RoundedRectangleBorder(
-          borderRadius: Radius.circularLg,
+          borderRadius: AppRadius.circularLg,
         ),
         titleTextStyle: AppTextStyles.h2Primary,
         contentTextStyle: AppTextStyles.bodyMedium,
@@ -303,8 +309,11 @@ class CustomTheme {
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: ColorsApp.white,
         elevation: Elevation.high,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(28.0)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(28.0), // AppRadius.lg value
+            topRight: Radius.circular(28.0),
+          ),
         ),
         clipBehavior: Clip.antiAlias,
       ),
@@ -329,7 +338,7 @@ class CustomTheme {
           return ColorsApp.neutral300;
         }),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Radius.sm / 2),
+          borderRadius: BorderRadius.circular(AppRadius.sm / 2),
         ),
       ),
 
@@ -366,8 +375,12 @@ class CustomTheme {
       // Sin animaciones en transiciones de página (requisito del proyecto)
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
-          for (var platform in TargetPlatform.values)
-            platform: _InanimatePageTransitionsBuilder(),
+          TargetPlatform.android: _InanimatePageTransitionsBuilder(),
+          TargetPlatform.iOS: _InanimatePageTransitionsBuilder(),
+          TargetPlatform.fuchsia: _InanimatePageTransitionsBuilder(),
+          TargetPlatform.linux: _InanimatePageTransitionsBuilder(),
+          TargetPlatform.macOS: _InanimatePageTransitionsBuilder(),
+          TargetPlatform.windows: _InanimatePageTransitionsBuilder(),
         },
       ),
     );

@@ -169,7 +169,7 @@ class NotificationDetail extends StatelessWidget {
                               decoration: const BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(25)),
-                                  color: ColorsApp.info),
+                                  color: ColorsApp.neutral200),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,

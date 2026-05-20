@@ -13,6 +13,7 @@ import 'package:lamb_talent/resources/models/license-permit/license_permit.dart'
 import 'package:lamb_talent/resources/models/license-permit/license_permit_group.dart';
 import 'package:lamb_talent/resources/models/license-permit/state_license_permit.dart';
 import 'package:lamb_talent/resources/services/license_permit/license_permit_service.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
 import 'package:lamb_talent/shared/components/visor_pdf_img.dart';
 import 'package:path_provider/path_provider.dart';
@@ -48,11 +49,8 @@ class ListLicensePermit extends StatelessWidget {
             return Column(
               children: [
                 approve
-                    ? Text(itemFather.apellidonombre.toString(),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w400,
-                            color: ColorsApp.primary,
-                            fontSize: 16.0))
+                    ? AppText.h3(itemFather.apellidonombre.toString(),
+                        color: ColorsApp.primary)
                     : Container(),
                 ListView.separated(
                     scrollDirection: Axis.vertical,
@@ -82,16 +80,13 @@ class ListLicensePermit extends StatelessWidget {
                                 children: [
                                   CircleAvatar(
                                     radius: 18,
-                                    backgroundColor: ColorsApp.info,
-                                    child: Text(
+                                    backgroundColor: ColorsApp.neutral200,
+                                    child: AppText.labelLarge(
                                         item.codigoTipoPermLic != null
                                             ? item.codigoTipoPermLic
                                                 .toString()[0]
                                             : ' ',
-                                        style: GoogleFonts.montserrat(
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.white,
-                                            fontSize: 22.0)),
+                                        color: Colors.white),
                                   ),
                                   const SizedBox(width: 8.0),
                                   Flexible(
@@ -102,14 +97,11 @@ class ListLicensePermit extends StatelessWidget {
                                           MainAxisAlignment.start,
                                       children: [
                                         const SizedBox(height: 4.0),
-                                        Text(
+                                        AppText.h3(
                                           capitalize(item
                                               .nombreCortoTipoConcepto
                                               .toString()),
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w600,
-                                              color: ColorsApp.primary,
-                                              fontSize: 16.0),
+                                          color: ColorsApp.primary,
                                         ),
                                         _dateWidget(item)
                                       ],
@@ -140,9 +132,8 @@ class ListLicensePermit extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
-          child: Text('No se encontró información para mostrar.',
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400, color: ColorsApp.primary)),
+          child: AppText.body('No se encontró información para mostrar.',
+              color: ColorsApp.primary),
         ),
       );
     }
@@ -174,19 +165,11 @@ class ListLicensePermit extends StatelessWidget {
                       Uint8List bytes = base64.decode(resp.data['file']);
                       await file.writeAsBytes(bytes);
 
-                      // Navigator.of(context).pop();
                       Get.back();
                       Get.to(VisorPdfImgPage(
                           title: 'Adjunto', filePath: file.path));
-
-                      /* Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => VisorPdfImgPage(
-                                  title: 'Adjunto', filePath: file.path))); */
                     } else {
                       Get.back();
-                      // Navigator.of(context).pop();
                     }
                   },
                   child: Row(
@@ -195,11 +178,8 @@ class ListLicensePermit extends StatelessWidget {
                       Image.asset('assets/icons/file.png',
                           height: 25, width: 25, color: ColorsApp.primary),
                       Flexible(
-                        child: Text(item.adjunto.toString().toLowerCase(),
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w600,
-                                color: ColorsApp.primary,
-                                fontSize: 12.0)),
+                        child: AppText.label(item.adjunto.toString().toLowerCase(),
+                            color: ColorsApp.primary),
                       )
                     ],
                   ),
@@ -209,37 +189,27 @@ class ListLicensePermit extends StatelessWidget {
         Column(
           children: [
             !detail
-                ? Text(
+                ? AppText.label(
                     item.estadoNombre.toString(),
-                    style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13.0,
-                        color: item.idEstadoLicaPer == '01'
-                            ? ColorsApp.primary
-                            : item.idEstadoLicaPer == '02'
-                                ? ColorsApp.basic
-                                : item.idEstadoLicaPer == '03'
-                                    ? ColorsApp.success
-                                    : item.idEstadoLicaPer == '04'
+                    color: item.idEstadoLicaPer == '01'
+                        ? ColorsApp.primary
+                        : item.idEstadoLicaPer == '02'
+                            ? ColorsApp.basic
+                            : item.idEstadoLicaPer == '03'
+                                ? ColorsApp.success
+                                : item.idEstadoLicaPer == '04'
+                                    ? ColorsApp.danger
+                                    : item.idEstadoLicaPer == '00'
                                         ? ColorsApp.danger
-                                        : item.idEstadoLicaPer == '00'
-                                            ? ColorsApp.danger
-                                            : Colors.black),
+                                        : Colors.black,
                   )
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Tipo: ',
-                          style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13.0,
-                              color: ColorsApp.primary)),
-                      Text(item.tipoPermLic.toString(),
-                          style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13.0,
-                              color: ColorsApp.primary)),
+                      AppText.label('Tipo: ', color: ColorsApp.primary),
+                      AppText.label(item.tipoPermLic.toString(),
+                          color: ColorsApp.primary),
                     ],
                   )
           ],
@@ -259,39 +229,27 @@ class ListLicensePermit extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               item.periodo.toString() == 'H'
-                  ? Text(
+                  ? AppText.label(
                       'Fecha: ${Jiffy.parse(item.fechaDesde!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary,
-                          fontSize: 12.0))
+                      color: ColorsApp.primary)
                   : Container(),
               item.periodo.toString() == 'H'
-                  ? Text(
+                  ? AppText.label(
                       'Hora: ${Jiffy.parse(item.horaInicio!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}-${Jiffy.parse(item.horaFin!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}',
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary,
-                          fontSize: 12.0))
+                      color: ColorsApp.primary)
                   : Container(),
               item.periodo.toString() == 'D'
-                  ? Text(
+                  ? AppText.label(
                       'Fecha: ${Jiffy.parse(item.fechaDesde!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}-${Jiffy.parse(item.fechaHasta!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary,
-                          fontSize: 12.0))
+                      color: ColorsApp.primary)
                   : Container()
             ],
           ),
         ),
         item.periodo != null
-            ? Text(
+            ? AppText.label(
                 'Tiempo: ${item.periodo! == 'D' ? '${item.dias!} días' : item.periodo! == 'H' ? '${item.horas!} horas' : ''}',
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w500,
-                    color: ColorsApp.primary,
-                    fontSize: 12.0))
+                color: ColorsApp.primary)
             : Container()
       ],
     );
@@ -305,7 +263,7 @@ class ListLicensePermit extends StatelessWidget {
         barrierDismissible: true,
         AlertDialog(
           elevation: 0,
-          backgroundColor: ColorsApp.info,
+          backgroundColor: ColorsApp.neutral200,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
           title: Align(
@@ -313,7 +271,7 @@ class ListLicensePermit extends StatelessWidget {
             child: IconButton(
                 icon: Image.asset('assets/icons/close.png',
                     height: 40, width: 40, color: ColorsApp.primary),
-                onPressed: () => Navigator.of(context).pop()),
+                onPressed: () => Get.back()),
           ),
           contentPadding: const EdgeInsets.all(8.0),
           titlePadding: EdgeInsets.zero,
@@ -335,12 +293,9 @@ class ListLicensePermit extends StatelessWidget {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 4.0),
-                            child: Text(
+                            child: AppText.h3(
                                 capitalize(data.nombreConcepto.toString()),
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w600,
-                                    color: ColorsApp.primary,
-                                    fontSize: 16.0)),
+                                color: ColorsApp.primary),
                           ),
                           const SizedBox(height: 8.0),
                           Padding(
@@ -358,16 +313,10 @@ class ListLicensePermit extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('Motivo',
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w600,
-                                              color: ColorsApp.primary,
-                                              fontSize: 13.0)),
-                                      Text(data.motivo.toString(),
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w500,
-                                              color: ColorsApp.primary,
-                                              fontSize: 12.0))
+                                      AppText.labelLarge('Motivo',
+                                          color: ColorsApp.primary),
+                                      AppText.label(data.motivo.toString(),
+                                          color: ColorsApp.primary)
                                     ],
                                   )
                                 : Container(),
@@ -381,30 +330,23 @@ class ListLicensePermit extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Proceso: ',
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w600,
-                                        color: ColorsApp.primary,
-                                        fontSize: 13.0)),
+                                AppText.labelLarge('Proceso: ',
+                                    color: ColorsApp.primary),
                                 Flexible(
-                                  child: Text(
+                                  child: AppText.body(
                                     data.estadoNombre.toString(),
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14.0,
-                                        color: data.idEstadoLicaPer == '01'
-                                            ? ColorsApp.primary
-                                            : data.idEstadoLicaPer == '02'
-                                                ? ColorsApp.basic
-                                                : data.idEstadoLicaPer == '03'
-                                                    ? ColorsApp.success
+                                    color: data.idEstadoLicaPer == '01'
+                                        ? ColorsApp.primary
+                                        : data.idEstadoLicaPer == '02'
+                                            ? ColorsApp.basic
+                                            : data.idEstadoLicaPer == '03'
+                                                ? ColorsApp.success
+                                                : data.idEstadoLicaPer == '04'
+                                                    ? ColorsApp.danger
                                                     : data.idEstadoLicaPer ==
-                                                            '04'
+                                                            '00'
                                                         ? ColorsApp.danger
-                                                        : data.idEstadoLicaPer ==
-                                                                '00'
-                                                            ? ColorsApp.danger
-                                                            : Colors.black),
+                                                        : Colors.black,
                                   ),
                                 )
                               ],
@@ -418,11 +360,9 @@ class ListLicensePermit extends StatelessWidget {
                       return Container(
                         padding: const EdgeInsets.all(12.0),
                         child: Center(
-                            child: Text(
+                            child: AppText.body(
                                 'No se encontró información para mostrar',
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w400,
-                                    color: ColorsApp.primary))),
+                                color: ColorsApp.primary)),
                       );
                     }
                   } else {
@@ -562,274 +502,6 @@ class ListLicensePermit extends StatelessWidget {
             )
           ],
         ));
-
-    /* await showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            elevation: 0,
-            backgroundColor: ColorsApp.info,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0)),
-            title: Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                  icon: Image.asset('assets/icons/close.png',
-                      height: 40, width: 40, color: ColorsApp.primary),
-                  onPressed: () => Navigator.of(context).pop()),
-            ),
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: EdgeInsets.zero,
-            scrollable: false,
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                child: FutureBuilder(
-                  future: _getDataLicensePermit(id),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      try {
-                        LicensePermitModel data = snapshot.data['request'];
-                        List<StateLicensePermitModel> listProcess =
-                            snapshot.data['proccess'];
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: Text(
-                                  capitalize(data.nombreConcepto.toString()),
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w600,
-                                      color: ColorsApp.primary,
-                                      fontSize: 16.0)),
-                            ),
-                            const SizedBox(height: 8.0),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: _dateWidget(data),
-                            ),
-                            const SizedBox(height: 8.0),
-                            _fileAndProcessWidget(data, true, context),
-                            const SizedBox(height: 8.0),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: data.motivo != null
-                                  ? Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Motivo',
-                                            style: GoogleFonts.montserrat(
-                                                fontWeight: FontWeight.w600,
-                                                color: ColorsApp.primary,
-                                                fontSize: 13.0)),
-                                        Text(data.motivo.toString(),
-                                            style: GoogleFonts.montserrat(
-                                                fontWeight: FontWeight.w500,
-                                                color: ColorsApp.primary,
-                                                fontSize: 12.0))
-                                      ],
-                                    )
-                                  : Container(),
-                            ),
-                            const SizedBox(height: 8.0),
-                            const Divider(height: 1, color: ColorsApp.primary),
-                            const SizedBox(height: 8.0),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Proceso: ',
-                                      style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w600,
-                                          color: ColorsApp.primary,
-                                          fontSize: 13.0)),
-                                  Flexible(
-                                    child: Text(
-                                      data.estadoNombre.toString(),
-                                      style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14.0,
-                                          color: data.idEstadoLicaPer == '01'
-                                              ? ColorsApp.primary
-                                              : data.idEstadoLicaPer == '02'
-                                                  ? ColorsApp.basic
-                                                  : data.idEstadoLicaPer == '03'
-                                                      ? ColorsApp.success
-                                                      : data.idEstadoLicaPer ==
-                                                              '04'
-                                                          ? ColorsApp.danger
-                                                          : data.idEstadoLicaPer ==
-                                                                  '00'
-                                                              ? ColorsApp.danger
-                                                              : Colors.black),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            _processJustif(listProcess),
-                            const SizedBox(height: 12.0)
-                          ],
-                        );
-                      } catch (e) {
-                        return Container(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Center(
-                              child: Text(
-                                  'No se encontró información para mostrar',
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w400,
-                                      color: ColorsApp.primary))),
-                        );
-                      }
-                    } else {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ),
-            ),
-            actions: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    idEstado == '01' && !pref.isWorkerChild && !approve
-                        ? TextButton(
-                            style: ButtonStyle(
-                              alignment: Alignment.center,
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  return ColorsApp
-                                      .primaryVariant; // Use the component's default.
-                                },
-                              ),
-                              shape: MaterialStateProperty.resolveWith<
-                                  RoundedRectangleBorder>(
-                                (Set<MaterialState> states) {
-                                  return RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          25)); // Use the component's default.
-                                },
-                              ),
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text('Anular',
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white)),
-                            ),
-                            onPressed: () {
-                              _showModalAnularRefuse(
-                                  context, idTrabajador, id, '00', 'Anular');
-                            },
-                          )
-                        : Container(),
-                    (idEstado == '01' && isJefeArea) ||
-                            (idEstado == '02' && isDth)
-                        ? Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: TextButton(
-                              style: ButtonStyle(
-                                alignment: Alignment.center,
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    return ColorsApp
-                                        .danger; // Use the component's default.
-                                  },
-                                ),
-                                shape: MaterialStateProperty.resolveWith<
-                                    RoundedRectangleBorder>(
-                                  (Set<MaterialState> states) {
-                                    return RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            25)); // Use the component's default.
-                                  },
-                                ),
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text('Rechazar',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              onPressed: () {
-                                _showModalAnularRefuse(context, idTrabajador,
-                                    id, '04', 'Rechazar');
-                              },
-                            ),
-                          )
-                        : Container(),
-                    (idEstado == '01' && isJefeArea) ||
-                            (idEstado == '02' && isDth)
-                        ? Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: TextButton(
-                              style: ButtonStyle(
-                                alignment: Alignment.center,
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    return ColorsApp
-                                        .success; // Use the component's default.
-                                  },
-                                ),
-                                shape: MaterialStateProperty.resolveWith<
-                                    RoundedRectangleBorder>(
-                                  (Set<MaterialState> states) {
-                                    return RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            25)); // Use the component's default.
-                                  },
-                                ),
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(
-                                    idEstado == '01' && isJefeArea
-                                        ? 'Aprobación Area'
-                                        : idEstado == '02' && isDth
-                                            ? 'Aprobación DTH'
-                                            : '',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              onPressed: () {
-                                _showModalApprove(
-                                    context, idTrabajador, id, idEstado);
-                              },
-                            ),
-                          )
-                        : Container()
-                  ],
-                ),
-              )
-            ],
-          );
-        }); */
   }
 
   Widget _processJustif(List<StateLicensePermitModel> listProcess) {
@@ -843,29 +515,20 @@ class ListLicensePermit extends StatelessWidget {
                     ? StepState.error
                     : StepState.complete
                 : StepState.disabled,
-            title: Text(val.nombre.toString(),
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w500,
-                    color: ColorsApp.primary,
-                    fontSize: 14.0)),
+            title: AppText.labelLarge(val.nombre.toString(),
+                color: ColorsApp.primary),
             subtitle: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 val.email != null
-                    ? Text(
+                    ? AppText.bodySmall(
                         '${val.email}: ${Jiffy.parse(val.fecha.toString(), pattern: "dd/MM/yyyy HH:mm").format(pattern: 'dd|MM|yyyy hh:mm a')}',
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w300,
-                            color: ColorsApp.primary,
-                            fontSize: 12.0))
+                        color: ColorsApp.primary)
                     : Container(),
                 val.comentario != null
-                    ? Text(val.comentario.toString(),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w300,
-                            color: ColorsApp.primary,
-                            fontSize: 12.0))
+                    ? AppText.bodySmall(val.comentario.toString(),
+                        color: ColorsApp.primary)
                     : Container()
               ],
             ),
@@ -905,7 +568,7 @@ class ListLicensePermit extends StatelessWidget {
         barrierDismissible: false,
         AlertDialog(
           elevation: 0,
-          backgroundColor: ColorsApp.info,
+          backgroundColor: ColorsApp.neutral200,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           titlePadding: EdgeInsets.zero,
@@ -928,11 +591,8 @@ class ListLicensePermit extends StatelessWidget {
           content: Column(children: [
             Image.asset('assets/icons/check.png',
                 height: 50, width: 50, color: ColorsApp.success),
-            Text('¿Desea aprobar el/la permiso/licencia?',
-                style: GoogleFonts.montserrat(
-                    color: ColorsApp.primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14))
+            AppText.labelLarge('¿Desea aprobar el/la permiso/licencia?',
+                color: ColorsApp.primary)
           ]),
           actions: [
             TextButton(
@@ -959,9 +619,7 @@ class ListLicensePermit extends StatelessWidget {
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
-                onPressed: () => Get.back()
-                // Navigator.of(context).pop()
-                ),
+                onPressed: () => Get.back()),
             TextButton(
               style: ButtonStyle(
                 alignment: Alignment.center,
@@ -1000,107 +658,6 @@ class ListLicensePermit extends StatelessWidget {
             )
           ],
         ));
-
-    /* await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            elevation: 0,
-            backgroundColor: ColorsApp.info,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            titlePadding: EdgeInsets.zero,
-            scrollable: true,
-            titleTextStyle: GoogleFonts.montserrat(
-                color: ColorsApp.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 18),
-            title: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text((idEstado == '01' && isJefeArea
-                        ? 'Aprobación Area'
-                        : idEstado == '02' && isDth
-                            ? 'Aprobación DTH'
-                            : '')
-                    .toUpperCase()),
-              ),
-            ),
-            content: Column(children: [
-              Image.asset('assets/icons/check.png',
-                  height: 50, width: 50, color: ColorsApp.success),
-              Text('¿Desea aprobar el/la permiso/licencia?',
-                  style: GoogleFonts.montserrat(
-                      color: ColorsApp.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14))
-            ]),
-            actions: [
-              TextButton(
-                  style: ButtonStyle(
-                    alignment: Alignment.center,
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        return ColorsApp
-                            .primaryVariant; // Use the component's default.
-                      },
-                    ),
-                    shape: MaterialStateProperty.resolveWith<
-                        RoundedRectangleBorder>(
-                      (Set<MaterialState> states) {
-                        return RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                25)); // Use the component's default.
-                      },
-                    ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text('Cerrar',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold)),
-                  ),
-                  onPressed: () => Navigator.of(context).pop()),
-              TextButton(
-                style: ButtonStyle(
-                  alignment: Alignment.center,
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      return ColorsApp.success; // Use the component's default.
-                    },
-                  ),
-                  shape:
-                      MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
-                    (Set<MaterialState> states) {
-                      return RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              25)); // Use the component's default.
-                    },
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('Estoy de acuerdo!',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                onPressed: () {
-                  changeRequestStatus(
-                      '',
-                      context,
-                      idTrabajador,
-                      id,
-                      idEstado == '01' && isJefeArea
-                          ? '02'
-                          : idEstado == '02' && isDth
-                              ? '03'
-                              : idEstado);
-                },
-              )
-            ],
-          );
-        }); */
   }
 
   void _showModalAnularRefuse(BuildContext context, String idTrabajador,
@@ -1112,7 +669,7 @@ class ListLicensePermit extends StatelessWidget {
           TextEditingController inputFieldCtrl = TextEditingController();
           return AlertDialog(
             elevation: 0,
-            backgroundColor: ColorsApp.info,
+            backgroundColor: ColorsApp.neutral200,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
             titlePadding: EdgeInsets.zero,
@@ -1161,7 +718,7 @@ class ListLicensePermit extends StatelessWidget {
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
-                  onPressed: () => Navigator.of(context).pop()),
+                  onPressed: () => Get.back()),
               TextButton(
                 style: ButtonStyle(
                   alignment: Alignment.center,

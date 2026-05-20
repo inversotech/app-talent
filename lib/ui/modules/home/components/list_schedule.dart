@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/models.dart';
 import 'package:lamb_talent/resources/services/justification/justification_service.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 
 void showModalSchedule(DateTime fecha) async {
   JustificationService justificationService = JustificationService();
@@ -17,17 +18,12 @@ void showModalSchedule(DateTime fecha) async {
     'id_entidad': userPreferences.idEntity.toString()
     // 'id_depto': userPreferences.idDeparment.toString()
   };
-  final styleTitle = GoogleFonts.montserrat(
-      fontWeight: FontWeight.w600, color: ColorsApp.primary, fontSize: 13.0);
-
-  final styleSubTitle = GoogleFonts.montserrat(
-      fontWeight: FontWeight.w400, color: ColorsApp.primary, fontSize: 13.0);
   Get.dialog(
       AlertDialog(
           elevation: 0,
-          backgroundColor: ColorsApp.info,
+          backgroundColor: ColorsApp.neutral200,
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
           title: Align(
             alignment: Alignment.centerRight,
             child: IconButton(
@@ -35,32 +31,25 @@ void showModalSchedule(DateTime fecha) async {
                     height: 40, width: 40, color: ColorsApp.primary),
                 onPressed: () => Get.back()),
           ),
-          contentPadding: const EdgeInsets.all(8.0),
+          contentPadding: const EdgeInsets.all(Spacing.sm),
           titlePadding: EdgeInsets.zero,
           scrollable: false,
           content: SizedBox(
             width: Get.width,
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
+                padding: const EdgeInsets.only(left: Spacing.sm),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Horario programado',
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w600,
-                            color: ColorsApp.primary,
-                            fontSize: 16.0)),
-                    Text(
+                    AppText.h3('Horario programado', color: ColorsApp.primary),
+                    AppText.label(
                         '${capitalize(DateFormat.EEEE('es').format(fecha))} ${DateFormat('dd|MM|yyyy').format(fecha)}',
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w600,
-                            color: ColorsApp.primary,
-                            fontSize: 13.0)),
-                    const SizedBox(height: 8.0),
+                        color: ColorsApp.primary),
+                    const SizedBox(height: Spacing.sm),
                     const Divider(height: 1, color: ColorsApp.primary),
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: Spacing.sm),
                     FutureBuilder(
                       future: justificationService.getScheduleWorker(params),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -83,16 +72,16 @@ void showModalSchedule(DateTime fecha) async {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text('Entrada:', style: styleTitle),
-                                            const SizedBox(height: 4.0),
-                                            Text(
+                                            AppText.label('Entrada:', color: ColorsApp.primary),
+                                            const SizedBox(height: Spacing.xs),
+                                            AppText.body(
                                                 DateFormat('dd|MM|yyyy hh:mm a')
                                                     .format(DateTime.parse(item
                                                         .fechahoraEntrada
                                                         .toString()))
                                                     .toLowerCase(),
-                                                style: styleSubTitle),
-                                            const SizedBox(height: 8.0),
+                                                color: ColorsApp.primary),
+                                            const SizedBox(height: Spacing.sm),
                                             item.fechahoraSalidaRef != null &&
                                                     item.fechahoraEntradaRef !=
                                                         null
@@ -103,12 +92,12 @@ void showModalSchedule(DateTime fecha) async {
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      Text(
+                                                      AppText.label(
                                                           'Salida al refrigerio:',
-                                                          style: styleTitle),
+                                                          color: ColorsApp.primary),
                                                       const SizedBox(
-                                                          height: 4.0),
-                                                      Text(
+                                                          height: Spacing.xs),
+                                                      AppText.body(
                                                           DateFormat(
                                                                   'dd|MM|yyyy hh:mm a')
                                                               .format(DateTime
@@ -116,15 +105,15 @@ void showModalSchedule(DateTime fecha) async {
                                                                       .fechahoraSalidaRef
                                                                       .toString()))
                                                               .toLowerCase(),
-                                                          style: styleSubTitle),
+                                                          color: ColorsApp.primary),
                                                       const SizedBox(
-                                                          height: 8.0),
-                                                      Text(
+                                                          height: Spacing.sm),
+                                                      AppText.label(
                                                           'Entrada después del refrigerio:',
-                                                          style: styleTitle),
+                                                          color: ColorsApp.primary),
                                                       const SizedBox(
-                                                          height: 4.0),
-                                                      Text(
+                                                          height: Spacing.xs),
+                                                      AppText.body(
                                                           DateFormat(
                                                                   'dd|MM|yyyy hh:mm a')
                                                               .format(DateTime
@@ -132,21 +121,21 @@ void showModalSchedule(DateTime fecha) async {
                                                                       .fechahoraEntradaRef
                                                                       .toString()))
                                                               .toLowerCase(),
-                                                          style: styleSubTitle),
+                                                          color: ColorsApp.primary),
                                                       const SizedBox(
-                                                          height: 8.0),
+                                                          height: Spacing.sm),
                                                     ],
                                                   )
                                                 : Container(),
-                                            Text('Salida:', style: styleTitle),
-                                            const SizedBox(height: 4.0),
-                                            Text(
+                                            AppText.label('Salida:', color: ColorsApp.primary),
+                                            const SizedBox(height: Spacing.xs),
+                                            AppText.body(
                                                 DateFormat('dd|MM|yyyy hh:mm a')
                                                     .format(DateTime.parse(item
                                                         .fechahoraSalida
                                                         .toString()))
                                                     .toLowerCase(),
-                                                style: styleSubTitle),
+                                                color: ColorsApp.primary),
                                           ],
                                         );
                                       },
@@ -159,32 +148,34 @@ void showModalSchedule(DateTime fecha) async {
                                 ],
                               );
                             } else {
-                              return Container(
-                                padding: const EdgeInsets.all(12.0),
-                                child: const Center(
-                                    child: Text(
-                                        'No se encontró información para mostrar')),
+                              return Padding(
+                                padding: const EdgeInsets.all(Spacing.md),
+                                child: Center(
+                                    child: AppText.body(
+                                        'No se encontró información para mostrar',
+                                        color: ColorsApp.neutral600)),
                               );
                             }
                           } catch (e) {
-                            return Container(
-                              padding: const EdgeInsets.all(12.0),
-                              child: const Center(
-                                  child: Text(
-                                      'No se encontró información para mostrar')),
+                            return Padding(
+                              padding: const EdgeInsets.all(Spacing.md),
+                              child: Center(
+                                  child: AppText.body(
+                                      'No se encontró información para mostrar',
+                                      color: ColorsApp.neutral600)),
                             );
                           }
                         } else {
                           return const Center(
                             child: Padding(
-                              padding: EdgeInsets.all(12.0),
+                              padding: EdgeInsets.all(Spacing.md),
                               child: CircularProgressIndicator(),
                             ),
                           );
                         }
                       },
                     ),
-                    const SizedBox(height: 12.0),
+                    const SizedBox(height: Spacing.md),
                   ],
                 ),
               ),

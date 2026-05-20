@@ -23,7 +23,7 @@ Future<bool> showModalSSign(
       builder: (context) {
         return AlertDialog(
             elevation: 0,
-            backgroundColor: ColorsApp.info,
+            backgroundColor: ColorsApp.neutral200,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25.0)),
             title: Align(
@@ -228,7 +228,7 @@ Future<bool> showModalSSign(
       builder: (context) {
         return AlertDialog(
           elevation: 0,
-          backgroundColor: ColorsApp.info,
+          backgroundColor: ColorsApp.neutral200,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
           title: Align(

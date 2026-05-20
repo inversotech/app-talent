@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lamb_talent/controllers/overtime/overtime_controller.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:lamb_talent/shared/components/secondary_screen.dart';
 import 'package:lamb_talent/ui/modules/overtime/components/list_overtime.dart';
 
@@ -34,9 +35,9 @@ class OvertimePage extends StatelessWidget {
                 builder: (BuildContext context, BoxConstraints constraints) {
               return Column(
                 children: [
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: Spacing.sm),
                   Obx(() => _widgetFilters(controller)),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: Spacing.sm),
                   Obx(() => _widgetBody(constraints, controller))
                 ],
               );
@@ -49,7 +50,7 @@ class OvertimePage extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
             border: Border.all(color: ColorsApp.primary, width: 1.5),
-            borderRadius: BorderRadius.circular(25.0)),
+            borderRadius: BorderRadius.circular(AppRadius.pill)),
         child: Column(
           children: [
             InkWell(
@@ -57,21 +58,17 @@ class OvertimePage extends StatelessWidget {
                 controller.selectDate();
               },
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: Spacing.sm, horizontal: Spacing.md),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: const [Text('')],
-                    ),
+                    const Row(children: [Text('')]),
                     Row(
                       children: [
-                        Text(
-                          '${controller.dateModel.value.nameMonth},${controller.dateModel.value.year}',
-                          style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w500,
-                              color: ColorsApp.primary),
+                        AppText.label(
+                          '${controller.dateModel.value.nameMonth}, ${controller.dateModel.value.year}',
+                          color: ColorsApp.primary,
                         ),
                         const Icon(Icons.arrow_drop_down)
                       ],

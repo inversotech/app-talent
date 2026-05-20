@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/resources/models/holiday/holiday.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 
 class ListHoliday extends StatelessWidget {
   final List<HolidayModel> listData;
@@ -26,7 +27,7 @@ class ListHoliday extends StatelessWidget {
               onPressed: () async {},
               child: Container(
                 alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: Spacing.sm),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -35,67 +36,52 @@ class ListHoliday extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 18,
-                          backgroundColor: ColorsApp.info,
-                          child: Text((index + 1).toString(),
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.white,
-                                  fontSize: 22.0)),
+                          backgroundColor: ColorsApp.neutral200,
+                          child: AppText.h2((index + 1).toString(),
+                              color: Colors.white),
                         ),
-                        const SizedBox(width: 8.0),
+                        const SizedBox(width: Spacing.sm),
                         Flexible(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 4.0),
-                              Text(
+                              const SizedBox(height: Spacing.xs),
+                              AppText.h3(
                                 capitalize(data.nombrePeriodo.toString()),
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w600,
-                                    color: ColorsApp.primary,
-                                    fontSize: 16.0),
+                                color: ColorsApp.primary,
                               ),
-                              Text(
+                              AppText.label(
                                   'Fecha: ${Jiffy.parse(data.fechaIni!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')} - ${Jiffy.parse(data.fechaFin!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorsApp.primary,
-                                      fontSize: 12.0)),
+                                  color: ColorsApp.primary),
                             ],
                           ),
                         )
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
+                      padding: const EdgeInsets.only(top: Spacing.sm),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
                               const SizedBox(width: 40.0),
-                              Text(
+                              AppText.label(
                                 data.estadoTrab.toString(),
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12.0,
-                                    color: data.idEstadoVacTrab == '01'
-                                        ? ColorsApp.primary
-                                        : data.idEstadoVacTrab == '02'
-                                            ? ColorsApp.success
-                                            : data.idEstadoVacTrab == '03'
-                                                ? ColorsApp.warning
-                                                : Colors.black),
+                                color: data.idEstadoVacTrab == '01'
+                                    ? ColorsApp.primary
+                                    : data.idEstadoVacTrab == '02'
+                                        ? ColorsApp.success
+                                        : data.idEstadoVacTrab == '03'
+                                            ? ColorsApp.warning
+                                            : Colors.black,
                               ),
                             ],
                           ),
-                          Text(
+                          AppText.label(
                             'Duración: ${data.dias} días',
-                            style: GoogleFonts.montserratAlternates(
-                                fontWeight: FontWeight.w500,
-                                color: ColorsApp.primary,
-                                fontSize: 12.0),
+                            color: ColorsApp.primary,
                           )
                         ],
                       ),
@@ -115,11 +101,10 @@ class ListHoliday extends StatelessWidget {
           itemCount: listData.length);
     } else {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(Spacing.sm),
         child: Center(
-          child: Text('No se encontró información para mostrar.',
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400, color: ColorsApp.primary)),
+          child: AppText.body('No se encontró información para mostrar.',
+              color: ColorsApp.primary),
         ),
       );
     }

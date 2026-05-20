@@ -21,14 +21,14 @@ class RendirValeList extends StatelessWidget {
           child: Column(
             children: [
               const Icon(Icons.assignment_return_outlined,
-                  size: 64, color: ColorsApp.info),
+                  size: 64, color: ColorsApp.neutral200),
               const SizedBox(height: 16),
               Text(
                 'Próximamente',
                 style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
-                  color: ColorsApp.control,
+                  color: ColorsApp.neutral500,
                 ),
               ),
               const SizedBox(height: 8),
@@ -37,7 +37,7 @@ class RendirValeList extends StatelessWidget {
                 style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  color: ColorsApp.control,
+                  color: ColorsApp.neutral500,
                 ),
               ),
             ],

@@ -74,8 +74,8 @@ class Spacing {
 /// Sistema de border radius para mantener consistencia en corners redondeados
 ///
 /// Regla: Usar valores consistentes en toda la app para crear cohesión visual
-class Radius {
-  Radius._(); // Constructor privado
+class AppRadius {
+  AppRadius._(); // Constructor privado
 
   /// Small: 12px
   /// Uso: Botones pequeños, chips, badges, inputs compactos
@@ -94,16 +94,16 @@ class Radius {
   static const double pill = 50.0;
 
   /// Helper: BorderRadius circular sm
-  static final BorderRadius circularSm = BorderRadius.circular(Radius.sm);
+  static final BorderRadius circularSm = BorderRadius.circular(AppRadius.sm);
 
   /// Helper: BorderRadius circular md
-  static final BorderRadius circularMd = BorderRadius.circular(Radius.md);
+  static final BorderRadius circularMd = BorderRadius.circular(AppRadius.md);
 
   /// Helper: BorderRadius circular lg
-  static final BorderRadius circularLg = BorderRadius.circular(Radius.lg);
+  static final BorderRadius circularLg = BorderRadius.circular(AppRadius.lg);
 
   /// Helper: BorderRadius circular pill
-  static final BorderRadius circularPill = BorderRadius.circular(Radius.pill);
+  static final BorderRadius circularPill = BorderRadius.circular(AppRadius.pill);
 }
 
 // ==============================================================================

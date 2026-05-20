@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
@@ -52,11 +53,8 @@ class ListJustification extends StatelessWidget {
             return Column(
               children: [
                 approve
-                    ? Text(itemFather.apellidonombre.toString(),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w400,
-                            color: ColorsApp.primary,
-                            fontSize: 16.0))
+                    ? AppText.h3(itemFather.apellidonombre.toString(),
+                        color: ColorsApp.primary)
                     : Container(),
                 ListView.separated(
                     scrollDirection: Axis.vertical,
@@ -90,7 +88,7 @@ class ListJustification extends StatelessWidget {
                                       children: [
                                         CircleAvatar(
                                           radius: 18,
-                                          backgroundColor: ColorsApp.info,
+                                          backgroundColor: ColorsApp.neutral200,
                                           child: Text((index + 1).toString(),
                                               style: GoogleFonts.montserrat(
                                                   fontWeight: FontWeight.w400,
@@ -106,21 +104,14 @@ class ListJustification extends StatelessWidget {
                                                 MainAxisAlignment.start,
                                             children: [
                                               const SizedBox(height: 10.0),
-                                              Text(
+                                              AppText.h3(
                                                 capitalize(
                                                     item.motivo.toString()),
-                                                style: GoogleFonts.montserrat(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: ColorsApp.primary,
-                                                    fontSize: 16.0),
+                                                color: ColorsApp.primary,
                                               ),
-                                              Text(
+                                              AppText.bodySmall(
                                                   'Fecha: ${DateFormat('dd|MM|yyyy').format(DateTime.parse(item.fecha!))}',
-                                                  style: GoogleFonts.montserrat(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: ColorsApp.primary,
-                                                      fontSize: 12.0)),
+                                                  color: ColorsApp.primary),
                                             ],
                                           ),
                                         )
@@ -163,21 +154,7 @@ class ListJustification extends StatelessWidget {
                                                 Get.to(VisorPdfImgPage(
                                                     title: 'Evidencia',
                                                     filePath: file.path));
-                                                /* Navigator.of(buildContext)
-                                                    .pop();
-
-                                                Navigator.push(
-                                                    buildContext,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            VisorPdfImgPage(
-                                                                title:
-                                                                    'Evidencia',
-                                                                filePath: file
-                                                                    .path))); */
                                               } else {
-                                                /*                 Navigator.of(buildContext)
-                                                    .pop(); */
                                                 Get.back();
                                               }
                                             },
@@ -189,17 +166,11 @@ class ListJustification extends StatelessWidget {
                                                     height: 25,
                                                     width: 25,
                                                     color: ColorsApp.primary),
-                                                Text(
+                                                AppText.labelLarge(
                                                     item.evidenciaAdj
                                                         .toString()
                                                         .toLowerCase(),
-                                                    style:
-                                                        GoogleFonts.montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: ColorsApp
-                                                                .primary,
-                                                            fontSize: 12.0))
+                                                    color: ColorsApp.primary)
                                               ],
                                             ),
                                           ),
@@ -253,9 +224,8 @@ class ListJustification extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
-          child: Text('No se encontró información para mostrar.',
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400, color: ColorsApp.primary)),
+          child: AppText.body('No se encontró información para mostrar.',
+              color: ColorsApp.primary),
         ),
       );
     }
@@ -267,7 +237,7 @@ class ListJustification extends StatelessWidget {
 
     await Get.dialog(AlertDialog(
       elevation: 0,
-      backgroundColor: ColorsApp.info,
+      backgroundColor: ColorsApp.neutral200,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
       title: Align(
         alignment: Alignment.centerRight,
@@ -301,21 +271,15 @@ class ListJustification extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 4.0),
-                        child: Text(capitalize(data.motivo.toString()),
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w600,
-                                color: ColorsApp.primary,
-                                fontSize: 16.0)),
+                        child: AppText.h3(capitalize(data.motivo.toString()),
+                            color: ColorsApp.primary),
                       ),
                       const SizedBox(height: 4.0),
                       Padding(
                         padding: const EdgeInsets.only(left: 4.0),
-                        child: Text(
+                        child: AppText.bodySmall(
                             'Fecha: ${DateFormat('dd|MM|yyyy').format(DateTime.parse(data.fecha.toString()))}',
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w500,
-                                color: ColorsApp.primary,
-                                fontSize: 12.0)),
+                            color: ColorsApp.primary),
                       ),
                       const SizedBox(height: 4.0),
                       data.evidenciaAdj != null
@@ -329,11 +293,8 @@ class ListJustification extends StatelessWidget {
                                       height: 25,
                                       width: 25,
                                       color: ColorsApp.primary),
-                                  Text(data.evidenciaAdj.toString(),
-                                      style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w600,
-                                          color: ColorsApp.primary,
-                                          fontSize: 12.0))
+                                  AppText.labelLarge(data.evidenciaAdj.toString(),
+                                      color: ColorsApp.primary)
                                 ],
                               ),
                             )
@@ -346,16 +307,10 @@ class ListJustification extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Motivo.',
-                                      style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w600,
-                                          color: ColorsApp.primary,
-                                          fontSize: 13.0)),
-                                  Text(data.descripcion.toString(),
-                                      style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w400,
-                                          color: ColorsApp.primary,
-                                          fontSize: 12.0))
+                                  AppText.labelLarge('Motivo.',
+                                      color: ColorsApp.primary),
+                                  AppText.bodySmall(data.descripcion.toString(),
+                                      color: ColorsApp.primary)
                                 ],
                               ),
                             )
@@ -363,11 +318,8 @@ class ListJustification extends StatelessWidget {
                       const SizedBox(height: 8.0),
                       Padding(
                         padding: const EdgeInsets.only(left: 4.0),
-                        child: Text('Marcaciones solicitadas:',
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w600,
-                                color: ColorsApp.primary,
-                                fontSize: 13.0)),
+                        child: AppText.labelLarge('Marcaciones solicitadas:',
+                            color: ColorsApp.primary),
                       ),
                       _markings(listMarkings),
                       const Divider(height: 1, color: ColorsApp.primary),
@@ -414,10 +366,8 @@ class ListJustification extends StatelessWidget {
                   return Container(
                     padding: const EdgeInsets.all(12.0),
                     child: Center(
-                        child: Text('No se encontró información para mostrar',
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w400,
-                                color: ColorsApp.primary))),
+                        child: AppText.body('No se encontró información para mostrar',
+                            color: ColorsApp.primary)),
                   );
                 }
               } else {
@@ -556,312 +506,6 @@ class ListJustification extends StatelessWidget {
         )
       ],
     ));
-
-    /*    await showDialog(
-        context: buildContext,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            elevation: 0,
-            backgroundColor: ColorsApp.info,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0)),
-            title: Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                  icon: Image.asset('assets/icons/close.png',
-                      height: 40, width: 40, color: ColorsApp.primary),
-                  onPressed: () => Navigator.of(context).pop()),
-            ),
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: EdgeInsets.zero,
-            scrollable: false,
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                child: FutureBuilder(
-                  future: _getDataJustification(id),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      try {
-                        JustificationModel data = snapshot.data['request'];
-                        List<ProcessJustifcationModel> listProcessJustif =
-                            snapshot.data['proccess'];
-                        List<MarkingWorkerModel> listMarkings =
-                            snapshot.data['markings'];
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: Text(capitalize(data.motivo.toString()),
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w600,
-                                      color: ColorsApp.primary,
-                                      fontSize: 16.0)),
-                            ),
-                            const SizedBox(height: 4.0),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: Text(
-                                  'Fecha: ${DateFormat('dd|MM|yyyy').format(DateTime.parse(data.fecha.toString()))}',
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorsApp.primary,
-                                      fontSize: 12.0)),
-                            ),
-                            const SizedBox(height: 4.0),
-                            data.evidenciaAdj != null
-                                ? InkWell(
-                                    onTap: () {
-                                      _showEvidence(buildContext, data);
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Image.asset('assets/icons/file.png',
-                                            height: 25,
-                                            width: 25,
-                                            color: ColorsApp.primary),
-                                        Text(data.evidenciaAdj.toString(),
-                                            style: GoogleFonts.montserrat(
-                                                fontWeight: FontWeight.w600,
-                                                color: ColorsApp.primary,
-                                                fontSize: 12.0))
-                                      ],
-                                    ),
-                                  )
-                                : Container(),
-                            const SizedBox(height: 8.0),
-                            data.descripcion != null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(left: 4.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Motivo.',
-                                            style: GoogleFonts.montserrat(
-                                                fontWeight: FontWeight.w600,
-                                                color: ColorsApp.primary,
-                                                fontSize: 13.0)),
-                                        Text(data.descripcion.toString(),
-                                            style: GoogleFonts.montserrat(
-                                                fontWeight: FontWeight.w400,
-                                                color: ColorsApp.primary,
-                                                fontSize: 12.0))
-                                      ],
-                                    ),
-                                  )
-                                : Container(),
-                            const SizedBox(height: 8.0),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: Text('Marcaciones solicitadas:',
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w600,
-                                      color: ColorsApp.primary,
-                                      fontSize: 13.0)),
-                            ),
-                            _markings(listMarkings),
-                            const Divider(height: 1, color: ColorsApp.primary),
-                            const SizedBox(height: 8.0),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Proceso: ',
-                                      style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w600,
-                                          color: ColorsApp.primary,
-                                          fontSize: 13.0)),
-                                  Flexible(
-                                    child: Text(
-                                      data.estado.toString(),
-                                      style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14.0,
-                                          color: data.idEstadoJustif == '01'
-                                              ? ColorsApp.primary
-                                              : data.idEstadoJustif == '02'
-                                                  ? ColorsApp.basic
-                                                  : data.idEstadoJustif == '03'
-                                                      ? ColorsApp.success
-                                                      : data.idEstadoJustif ==
-                                                              '04'
-                                                          ? ColorsApp.danger
-                                                          : data.idEstadoJustif ==
-                                                                  '00'
-                                                              ? ColorsApp.danger
-                                                              : Colors.black),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            _processJustif(listProcessJustif),
-                            const SizedBox(height: 12.0)
-                          ],
-                        );
-                      } catch (e) {
-                        return Container(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Center(
-                              child: Text(
-                                  'No se encontró información para mostrar',
-                                  style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w400,
-                                      color: ColorsApp.primary))),
-                        );
-                      }
-                    } else {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ),
-            ),
-            actions: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    idEstado == '01' && !pref.isWorkerChild && !approve
-                        ? Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: TextButton(
-                              style: ButtonStyle(
-                                alignment: Alignment.center,
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    return ColorsApp
-                                        .primaryVariant; // Use the component's default.
-                                  },
-                                ),
-                                shape: MaterialStateProperty.resolveWith<
-                                    RoundedRectangleBorder>(
-                                  (Set<MaterialState> states) {
-                                    return RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            25)); // Use the component's default.
-                                  },
-                                ),
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text('Anular',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              onPressed: () {
-                                _showModalAnularRefuse(
-                                    context, idTrabajador, id, '00', 'Anular');
-                              },
-                            ),
-                          )
-                        : Container(),
-                    (idEstado == '01' && isJefeArea) ||
-                            (idEstado == '02' && isDth)
-                        ? Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: TextButton(
-                              style: ButtonStyle(
-                                alignment: Alignment.center,
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    return ColorsApp
-                                        .danger; // Use the component's default.
-                                  },
-                                ),
-                                shape: MaterialStateProperty.resolveWith<
-                                    RoundedRectangleBorder>(
-                                  (Set<MaterialState> states) {
-                                    return RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            25)); // Use the component's default.
-                                  },
-                                ),
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text('Rechazar',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              onPressed: () {
-                                _showModalAnularRefuse(context, idTrabajador,
-                                    id, '04', 'Rechazar');
-                              },
-                            ),
-                          )
-                        : Container(),
-                    (idEstado == '01' && isJefeArea) ||
-                            (idEstado == '02' && isDth)
-                        ? Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: TextButton(
-                              style: ButtonStyle(
-                                alignment: Alignment.center,
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    return ColorsApp
-                                        .success; // Use the component's default.
-                                  },
-                                ),
-                                shape: MaterialStateProperty.resolveWith<
-                                    RoundedRectangleBorder>(
-                                  (Set<MaterialState> states) {
-                                    return RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            25)); // Use the component's default.
-                                  },
-                                ),
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text(
-                                    idEstado == '01' && isJefeArea
-                                        ? 'Aprobación Area'
-                                        : idEstado == '02' && isDth
-                                            ? 'Aprobación DTH'
-                                            : '',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              onPressed: () {
-                                _showModalApprove(
-                                    context, idTrabajador, id, idEstado);
-                              },
-                            ),
-                          )
-                        : Container()
-                  ],
-                ),
-              )
-            ],
-          );
-        }); */
   }
 
   void _showEvidence(BuildContext buildContext, JustificationModel data) async {
@@ -876,14 +520,7 @@ class ListJustification extends StatelessWidget {
       await file.writeAsBytes(bytes);
       Get.back();
       Get.to(VisorPdfImgPage(title: 'Evidencia', filePath: file.path));
-      /* Navigator.of(buildContext).pop();
-      Navigator.push(
-          buildContext,
-          MaterialPageRoute(
-              builder: (context) =>
-                  VisorPdfImgPage(title: 'Evidencia', filePath: file.path))); */
     } else {
-      // Navigator.of(buildContext).pop();
       Get.back();
     }
   }
@@ -915,29 +552,20 @@ class ListJustification extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 4.0),
-                            Text(item.nombreDescripMarcacion.toString(),
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w600,
-                                    color: ColorsApp.primary,
-                                    fontSize: 14.0)),
+                            AppText.body(item.nombreDescripMarcacion.toString(),
+                                color: ColorsApp.primary),
                             item.fechahora != null
-                                ? Text(
+                                ? AppText.body(
                                     '${DateFormat('dd|MM|yyyy hh:mm a').format(DateTime.parse(item.fechahora.toString())).toLowerCase()} (Registrado)',
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w400,
-                                        color: ColorsApp.primary,
-                                        fontSize: 14.0))
+                                    color: ColorsApp.primary)
                                 : Container(),
                             item.fechahoraManual != null
-                                ? Text(
+                                ? AppText.body(
                                     DateFormat('dd|MM|yyyy hh:mm a')
                                         .format(DateTime.parse(
                                             item.fechahoraManual.toString()))
                                         .toLowerCase(),
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w400,
-                                        color: ColorsApp.primary,
-                                        fontSize: 14.0))
+                                    color: ColorsApp.primary)
                                 : Container()
                           ],
                         ),
@@ -964,29 +592,20 @@ class ListJustification extends StatelessWidget {
                     ? StepState.error
                     : StepState.complete
                 : StepState.disabled,
-            title: Text(val.nombre.toString(),
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w500,
-                    color: ColorsApp.primary,
-                    fontSize: 14.0)),
+            title: AppText.body(val.nombre.toString(),
+                color: ColorsApp.primary),
             subtitle: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 val.email != null
-                    ? Text(
+                    ? AppText.bodySmall(
                         '${val.email}: ${Jiffy.parse(val.fecha.toString(), pattern: "dd/MM/yyyy HH:mm").format(pattern: 'dd|MM|yyyy hh:mm a')}',
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w300,
-                            color: ColorsApp.primary,
-                            fontSize: 12.0))
+                        color: ColorsApp.primary)
                     : Container(),
                 val.comentario != null
-                    ? Text(val.comentario.toString(),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w300,
-                            color: ColorsApp.primary,
-                            fontSize: 12.0))
+                    ? AppText.bodySmall(val.comentario.toString(),
+                        color: ColorsApp.primary)
                     : Container()
               ],
             ),
@@ -1024,7 +643,7 @@ class ListJustification extends StatelessWidget {
       String idEstado) async {
     await Get.dialog(AlertDialog(
       elevation: 0,
-      backgroundColor: ColorsApp.info,
+      backgroundColor: ColorsApp.neutral200,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       titlePadding: EdgeInsets.zero,
       scrollable: true,
@@ -1044,11 +663,8 @@ class ListJustification extends StatelessWidget {
       content: Column(children: [
         Image.asset('assets/icons/check.png',
             height: 50, width: 50, color: ColorsApp.success),
-        Text('¿Desea aprobar la justificacón?',
-            style: GoogleFonts.montserrat(
-                color: ColorsApp.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 14))
+        AppText.labelLarge('¿Desea aprobar la justificacón?',
+            color: ColorsApp.primary)
       ]),
       actions: [
         TextButton(
@@ -1074,7 +690,7 @@ class ListJustification extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold)),
             ),
-            onPressed: () => Navigator.of(context).pop()),
+            onPressed: () => Get.back()),
         TextButton(
           style: ButtonStyle(
             alignment: Alignment.center,
@@ -1112,106 +728,6 @@ class ListJustification extends StatelessWidget {
         )
       ],
     ));
-    /* await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            elevation: 0,
-            backgroundColor: ColorsApp.info,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            titlePadding: EdgeInsets.zero,
-            scrollable: true,
-            titleTextStyle: GoogleFonts.montserrat(
-                color: ColorsApp.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 18),
-            title: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text((idEstado == '01' && isJefeArea
-                        ? 'Aprobación Area'
-                        : idEstado == '02' && isDth
-                            ? 'Aprobación DTH'
-                            : '')
-                    .toUpperCase()),
-              ),
-            ),
-            content: Column(children: [
-              Image.asset('assets/icons/check.png',
-                  height: 50, width: 50, color: ColorsApp.success),
-              Text('¿Desea aprobar la justificacón?',
-                  style: GoogleFonts.montserrat(
-                      color: ColorsApp.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14))
-            ]),
-            actions: [
-              TextButton(
-                  style: ButtonStyle(
-                    alignment: Alignment.center,
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        return ColorsApp
-                            .primaryVariant; // Use the component's default.
-                      },
-                    ),
-                    shape: MaterialStateProperty.resolveWith<
-                        RoundedRectangleBorder>(
-                      (Set<MaterialState> states) {
-                        return RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                25)); // Use the component's default.
-                      },
-                    ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text('Cerrar',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold)),
-                  ),
-                  onPressed: () => Navigator.of(context).pop()),
-              TextButton(
-                style: ButtonStyle(
-                  alignment: Alignment.center,
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      return ColorsApp.success; // Use the component's default.
-                    },
-                  ),
-                  shape:
-                      MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
-                    (Set<MaterialState> states) {
-                      return RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              25)); // Use the component's default.
-                    },
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('Estoy de acuerdo!',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                onPressed: () {
-                  changeRequestStatus(
-                      '',
-                      context,
-                      idTrabajador,
-                      id,
-                      idEstado == '01' && isJefeArea
-                          ? '02'
-                          : idEstado == '02' && isDth
-                              ? '03'
-                              : idEstado);
-                },
-              )
-            ],
-          );
-        }); */
   }
 
   void _showModalAnularRefuse(BuildContext context, String idTrabajador,
@@ -1223,7 +739,7 @@ class ListJustification extends StatelessWidget {
           TextEditingController inputFieldCtrl = TextEditingController();
           return AlertDialog(
             elevation: 0,
-            backgroundColor: ColorsApp.info,
+            backgroundColor: ColorsApp.neutral200,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
             titlePadding: EdgeInsets.zero,
@@ -1272,7 +788,7 @@ class ListJustification extends StatelessWidget {
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
-                  onPressed: () => Navigator.of(context).pop()),
+                  onPressed: () => Get.back()),
               TextButton(
                 style: ButtonStyle(
                   alignment: Alignment.center,

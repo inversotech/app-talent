@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/general/date_model.dart';
 import 'package:lamb_talent/resources/services/account_status/account_status_service.dart';
+import 'package:lamb_talent/shared/components/app_card.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 
 import 'detail.dart';
 
@@ -16,135 +18,117 @@ class DepositedHelpTravel extends StatelessWidget {
   final Function(bool) onChange;
   final DateModel dateModel;
   final String code;
-  DepositedHelpTravel(
-      {Key? key,
-      required this.title,
-      required this.data,
-      required this.onChange,
-      required this.dateModel,
-      required this.code})
-      : super(key: key);
+  DepositedHelpTravel({
+    super.key,
+    required this.title,
+    required this.data,
+    required this.onChange,
+    required this.dateModel,
+    required this.code,
+  });
 
   @override
   Widget build(BuildContext context) {
     final Map dataMap = data != null ? data as Map : {};
-    final colorScheme = Theme.of(context).colorScheme;
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600, fontSize: 16.0),
-            ),
-            const SizedBox(height: 12.0),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              color: colorScheme.surfaceContainerLowest,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  children: [
-                    _buildRowItem(
-                      context,
-                      label: 'Informadas',
-                      value: format
-                          .format(double.parse(dataMap.containsKey('ingresos')
-                              ? dataMap['ingresos'].toString()
-                              : '0'))
-                          .toString(),
-                      buttonColor: ColorsApp.warning,
-                      onPressed: () {
-                        onChange(true);
-                        _getItemsIncome(context);
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    _buildRowItem(
-                      context,
-                      label: 'Adelanto',
-                      value: format
-                          .format(double.parse(dataMap.containsKey('descuentos')
-                              ? dataMap['descuentos'].toString()
-                              : '0'))
-                          .toString(),
-                      buttonColor: ColorsApp.success,
-                      onPressed: () {
-                        onChange(true);
-                        _getItemsDiscount(context);
-                      },
-                    ),
-                    const Divider(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                            (double.parse(dataMap.containsKey('sub_total')
-                                        ? dataMap['sub_total'].toString()
-                                        : '0')) >
-                                    0
-                                ? 'Depositado'
-                                : 'Descontado',
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w500,
-                                color: colorScheme.onSurfaceVariant,
-                                fontSize: 13)),
-                        Text(
-                            format
-                                .format(double.parse(
-                                    dataMap.containsKey('sub_total')
-                                        ? dataMap['sub_total'].toString()
-                                        : '0'))
-                                .toString(),
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w600,
-                                color: colorScheme.onSurface)),
-                      ],
-                    )
-                  ],
+
+    return AppCard(
+      padding: const EdgeInsets.all(Spacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppText.h3(title),
+          const SizedBox(height: Spacing.md),
+          // Card interna — filas informadas/adelanto
+          AppCard.neutral(
+            padding: const EdgeInsets.all(Spacing.md),
+            child: Column(
+              children: [
+                _buildRowItem(
+                  context,
+                  label: 'Informadas',
+                  value: format
+                      .format(double.parse(dataMap.containsKey('ingresos')
+                          ? dataMap['ingresos'].toString()
+                          : '0'))
+                      .toString(),
+                  buttonColor: ColorsApp.warning,
+                  onPressed: () {
+                    onChange(true);
+                    _getItemsIncome(context);
+                  },
                 ),
-              ),
-            ),
-            const SizedBox(height: 8.0),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
-              color: colorScheme.primaryContainer,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 14.0),
-                child: Row(
+                const SizedBox(height: Spacing.sm),
+                _buildRowItem(
+                  context,
+                  label: 'Adelanto',
+                  value: format
+                      .format(double.parse(dataMap.containsKey('descuentos')
+                          ? dataMap['descuentos'].toString()
+                          : '0'))
+                      .toString(),
+                  buttonColor: ColorsApp.success,
+                  onPressed: () {
+                    onChange(true);
+                    _getItemsDiscount(context);
+                  },
+                ),
+                const Divider(height: 24, color: ColorsApp.neutral200),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Saldo final',
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.onPrimaryContainer,
-                            fontSize: 14)),
-                    Text(
-                        format
-                            .format(double.parse(dataMap.containsKey('total')
-                                ? dataMap['total'].toString()
-                                : '0'))
-                            .toString(),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w700,
-                            color: colorScheme.onPrimaryContainer,
-                            fontSize: 16)),
+                    AppText.bodySmall(
+                      (double.parse(dataMap.containsKey('sub_total')
+                                  ? dataMap['sub_total'].toString()
+                                  : '0')) >
+                              0
+                          ? 'Depositado'
+                          : 'Descontado',
+                      color: ColorsApp.neutral500,
+                    ),
+                    AppText.h3(
+                      format
+                          .format(double.parse(
+                              dataMap.containsKey('sub_total')
+                                  ? dataMap['sub_total'].toString()
+                                  : '0'))
+                          .toString(),
+                      color: ColorsApp.neutral800,
+                    ),
                   ],
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: Spacing.sm),
+          // Card saldo final con fondo primary
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Spacing.md,
+              vertical: Spacing.md,
+            ),
+            decoration: BoxDecoration(
+              color: ColorsApp.primary.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppText.body(
+                  'Saldo final',
+                  color: ColorsApp.primary,
                 ),
-              ),
-            )
-          ],
-        ),
+                AppText.h3(
+                  format
+                      .format(double.parse(dataMap.containsKey('total')
+                          ? dataMap['total'].toString()
+                          : '0'))
+                      .toString(),
+                  color: ColorsApp.primary,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -156,26 +140,19 @@ class DepositedHelpTravel extends StatelessWidget {
     required Color buttonColor,
     required VoidCallback onPressed,
   }) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label,
-            style: GoogleFonts.montserrat(
-                fontWeight: FontWeight.w400,
-                color: colorScheme.onSurfaceVariant,
-                fontSize: 13)),
+        AppText.bodySmall(label, color: ColorsApp.neutral500),
         Row(
           children: [
-            Text(value,
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w500, color: colorScheme.onSurface)),
-            const SizedBox(width: 8),
+            AppText.body(value, color: ColorsApp.neutral800),
+            const SizedBox(width: Spacing.sm),
             IconButton.filled(
               onPressed: onPressed,
               style: IconButton.styleFrom(
                 backgroundColor: buttonColor,
-                foregroundColor: Colors.white,
+                foregroundColor: ColorsApp.white,
                 minimumSize: const Size(36, 36),
                 padding: EdgeInsets.zero,
               ),
@@ -219,7 +196,6 @@ class DepositedHelpTravel extends StatelessWidget {
       }
     }
     onChange(false);
-    // _showModalDetail(context, detail); // by pedro
     _showModalDetail(detail);
   }
 
@@ -255,7 +231,6 @@ class DepositedHelpTravel extends StatelessWidget {
       }
     }
     onChange(false);
-    // _showModalDetail(context, detail);
     _showModalDetail(detail);
   }
 
@@ -264,16 +239,14 @@ class DepositedHelpTravel extends StatelessWidget {
         barrierDismissible: true,
         AlertDialog(
             elevation: 0,
-            backgroundColor: ColorsApp.info,
+            backgroundColor: ColorsApp.neutral200,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0)),
+                borderRadius: BorderRadius.circular(AppRadius.lg)),
             contentPadding: const EdgeInsets.all(0.0),
             titlePadding: EdgeInsets.zero,
             scrollable: false,
             content: SizedBox(
-              width: Get.width
-              //MediaQuery.of(context).size.width
-              ,
+              width: Get.width,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -281,8 +254,6 @@ class DepositedHelpTravel extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: IconButton(
                           onPressed: () => Get.back(),
-
-                          // Navigator.of(context).pop(),
                           icon: const Icon(Icons.highlight_off)),
                     ),
                     Detail(listData: data, isModal: true),
@@ -290,35 +261,5 @@ class DepositedHelpTravel extends StatelessWidget {
                 ),
               ),
             )));
-
-    /* await showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-              elevation: 0,
-              backgroundColor: ColorsApp.info,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25.0)),
-              contentPadding: const EdgeInsets.all(0.0),
-              titlePadding: EdgeInsets.zero,
-              scrollable: false,
-              content: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: IconButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            icon: const Icon(Icons.highlight_off)),
-                      ),
-                      Detail(listData: data, isModal: true),
-                    ],
-                  ),
-                ),
-              ));
-        }); */
   }
 }

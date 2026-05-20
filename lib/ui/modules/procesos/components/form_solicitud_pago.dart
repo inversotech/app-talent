@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:lamb_talent/controllers/procesos/form_solicitud_pago_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/resources/models/models.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:lamb_talent/shared/components/secondary_screen.dart';
 
 class FormSolicitudPago extends StatelessWidget {
@@ -86,7 +87,7 @@ class FormSolicitudPago extends StatelessWidget {
           labelStyle: GoogleFonts.montserrat(
             fontWeight: FontWeight.w500,
             fontSize: 14,
-            color: ColorsApp.control,
+            color: ColorsApp.neutral500,
           ),
           labelText: 'Descripción',
         ),
@@ -122,7 +123,7 @@ class FormSolicitudPago extends StatelessWidget {
           labelStyle: GoogleFonts.montserrat(
             fontWeight: FontWeight.w500,
             fontSize: 14,
-            color: ColorsApp.control,
+            color: ColorsApp.neutral500,
           ),
           labelText: 'Fecha',
           suffixIcon: const Icon(Icons.calendar_today_outlined),
@@ -165,13 +166,9 @@ class FormSolicitudPago extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 8),
-          child: Text(
+          child: AppText.labelLarge(
             'Documentos de gasto',
-            style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w600,
-              fontSize: 15,
-              color: ColorsApp.primary,
-            ),
+            color: ColorsApp.primary,
           ),
         ),
         ...(controller.formData.value.documentos ?? [])
@@ -184,7 +181,7 @@ class FormSolicitudPago extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: ColorsApp.info.withValues(alpha: 0.2),
+              color: ColorsApp.neutral200.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
@@ -196,21 +193,13 @@ class FormSolicitudPago extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      AppText.label(
                         doc.nombre ?? '',
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
-                          color: ColorsApp.primary,
-                        ),
+                        color: ColorsApp.primary,
                       ),
-                      Text(
+                      AppText.bodySmall(
                         '${doc.tipo ?? ''} • S/. ${doc.monto?.toStringAsFixed(2) ?? '0.00'}',
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          color: ColorsApp.control,
-                        ),
+                        color: ColorsApp.neutral500,
                       ),
                     ],
                   ),
@@ -235,7 +224,7 @@ class FormSolicitudPago extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  border: Border.all(color: ColorsApp.info, width: 1),
+                  border: Border.all(color: ColorsApp.neutral200, width: 1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
@@ -243,13 +232,9 @@ class FormSolicitudPago extends StatelessWidget {
                   children: [
                     const Icon(Icons.add, color: ColorsApp.primary, size: 20),
                     const SizedBox(width: 6),
-                    Text(
+                    AppText.label(
                       'Agregar documento',
-                      style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13,
-                        color: ColorsApp.primary,
-                      ),
+                      color: ColorsApp.primary,
                     ),
                   ],
                 ),

@@ -11,7 +11,7 @@ void showModalQr() async {
   Get.dialog(
       AlertDialog(
           elevation: 0,
-          backgroundColor: ColorsApp.info,
+          backgroundColor: ColorsApp.neutral200,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
           title: Align(

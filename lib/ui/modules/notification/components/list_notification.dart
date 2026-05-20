@@ -11,6 +11,7 @@ import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/enviroment/enviroment.dart';
 import 'package:lamb_talent/resources/models/notification/notification_general.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:lamb_talent/shared/components/expanded_text.dart';
 
 class ListNotification extends StatelessWidget {
@@ -65,9 +66,8 @@ class ListNotification extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
-          child: Text('No se encontró información para mostrar.',
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400, color: ColorsApp.primary)),
+          child: AppText.body('No se encontró información para mostrar.',
+              color: ColorsApp.primary),
         ),
       );
     }
@@ -139,22 +139,16 @@ class ListNotification extends StatelessWidget {
                     CircleAvatar(
                       backgroundColor: ColorsApp.primary,
                       radius: 25,
-                      child: Text(item.nombreEntidad!.toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.montserrat(
-                              color: ColorsApp.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16.0)),
+                      child: AppText.h3(item.nombreEntidad!.toUpperCase(),
+                          textAlign: TextAlign.center, color: ColorsApp.white),
                     ),
                     const SizedBox(width: 12.0),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                              '${capitalize(DateFormat.EEEE('es').format(item.fechaInicio!).substring(0, 3))}, ${DateFormat.d('es').format(item.fechaInicio!)} de ${capitalize(DateFormat.MMM('es').format(item.fechaInicio!))} a las ${Jiffy.parseFromDateTime(item.fechaInicio!).format(pattern: 'hh:mm a').toLowerCase()}',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400, fontSize: 14.0)),
+                          AppText.body(
+                              '${capitalize(DateFormat.EEEE('es').format(item.fechaInicio!).substring(0, 3))}, ${DateFormat.d('es').format(item.fechaInicio!)} de ${capitalize(DateFormat.MMM('es').format(item.fechaInicio!))} a las ${Jiffy.parseFromDateTime(item.fechaInicio!).format(pattern: 'hh:mm a').toLowerCase()}'),
                           ExpandableText(
                             text: item.mensaje.toString(),
                             style: GoogleFonts.montserrat(
@@ -165,7 +159,7 @@ class ListNotification extends StatelessWidget {
                             trimCollapsedText: '...más',
                             trimExpandedText: ' menos',
                             styleClickableText: GoogleFonts.montserrat(
-                                color: ColorsApp.control,
+                                color: ColorsApp.neutral500,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14.0),
                           )
@@ -235,24 +229,18 @@ class ListNotification extends StatelessWidget {
                     CircleAvatar(
                       backgroundColor: ColorsApp.warning,
                       radius: 25,
-                      child: Text(item.nombreEntidad!.toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.montserrat(
-                              color: ColorsApp.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16.0)),
+                      child: AppText.h3(item.nombreEntidad!.toUpperCase(),
+                          textAlign: TextAlign.center, color: ColorsApp.white),
                     ),
                     const SizedBox(width: 12.0),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          AppText.bodySmall(
                               capitalize(
                                   Jiffy.parseFromDateTime(item.fechaInicio!)
-                                      .fromNow()),
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400, fontSize: 12.0)),
+                                      .fromNow())),
                           const SizedBox(height: 8.0),
                           ExpandableText(
                             text: item.mensaje.toString(),
@@ -264,7 +252,7 @@ class ListNotification extends StatelessWidget {
                             trimCollapsedText: '...más',
                             trimExpandedText: ' menos',
                             styleClickableText: GoogleFonts.montserrat(
-                                color: ColorsApp.control,
+                                color: ColorsApp.neutral500,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14.0),
                           ),
@@ -302,11 +290,8 @@ class ListNotification extends StatelessWidget {
                                           color: ColorsApp.primary),
                                       const SizedBox(width: 12.0),
                                       Flexible(
-                                        child: Text('Ver pdf',
-                                            style: GoogleFonts.montserrat(
-                                                fontWeight: FontWeight.w400,
-                                                color: ColorsApp.primary,
-                                                fontSize: 14.0),
+                                        child: AppText.body('Ver pdf',
+                                            color: ColorsApp.primary,
                                             overflow: TextOverflow.ellipsis),
                                       ),
                                     ],
@@ -331,11 +316,8 @@ class ListNotification extends StatelessWidget {
                                           width: 35,
                                           color: ColorsApp.primary),
                                       const SizedBox(width: 12.0),
-                                      Text('Ver enlace',
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w400,
-                                              color: ColorsApp.primary,
-                                              fontSize: 14.0),
+                                      AppText.body('Ver enlace',
+                                          color: ColorsApp.primary,
                                           overflow: TextOverflow.ellipsis)
                                     ],
                                   ),
@@ -359,11 +341,8 @@ class ListNotification extends StatelessWidget {
                                           width: 35,
                                           color: ColorsApp.primary),
                                       const SizedBox(width: 12.0),
-                                      Text('Ver video',
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w400,
-                                              color: ColorsApp.primary,
-                                              fontSize: 14.0),
+                                      AppText.body('Ver video',
+                                          color: ColorsApp.primary,
                                           overflow: TextOverflow.ellipsis)
                                     ],
                                   ),
@@ -436,13 +415,11 @@ class ListNotification extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        child: Text(
+                        child: AppText.labelLarge(
                             item.countLikes.toString() +
                                 (item.countLikes! > 1
                                     ? ' Me gustas'
-                                    : ' Me gusta'),
-                            style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w600, fontSize: 14.0)),
+                                    : ' Me gusta')),
                         onTap: () {
                           onPressedLikes(item);
                         },
@@ -464,7 +441,7 @@ class ListNotification extends StatelessWidget {
                         trimCollapsedText: '...más',
                         trimExpandedText: ' menos',
                         styleClickableText: GoogleFonts.montserrat(
-                            color: ColorsApp.control,
+                            color: ColorsApp.neutral500,
                             fontWeight: FontWeight.w400,
                             fontSize: 14.0),
                       ),
@@ -472,12 +449,9 @@ class ListNotification extends StatelessWidget {
                           ? Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: GestureDetector(
-                                child: Text(
+                                child: AppText.body(
                                     'Ver ${item.countComentarios}${item.countComentarios! > 1 ? ' comentarios' : ' comentario'}',
-                                    style: GoogleFonts.montserrat(
-                                        color: ColorsApp.control,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14.0)),
+                                    color: ColorsApp.neutral500),
                                 onTap: () {
                                   onPressedComment(item, false, index);
                                 },
@@ -485,14 +459,11 @@ class ListNotification extends StatelessWidget {
                             )
                           : Container(),
                       const SizedBox(height: 8.0),
-                      Text(
+                      AppText.body(
                           capitalize(
                               Jiffy.parseFromDateTime(item.fechaInicio!)
                                   .fromNow()),
-                          style: GoogleFonts.montserrat(
-                              color: ColorsApp.control,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14.0)),
+                          color: ColorsApp.neutral500),
                     ],
                   ),
                 ),
@@ -627,13 +598,9 @@ class _CardPhotosState extends State<CardPhotos> {
                 borderRadius: BorderRadius.circular(25)),
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-            child: Text(
+            child: AppText.labelLarge(
               '$itemChangePhoto/${widget.photos.length}',
-              style: GoogleFonts.montserrat(
-                color: ColorsApp.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+              color: ColorsApp.white,
             ),
           ),
         ),

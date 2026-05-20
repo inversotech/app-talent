@@ -3,6 +3,7 @@ import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:lamb_talent/core/user_preferences.dart';
 import 'package:lamb_talent/resources/models/general/menu.dart';
 import 'package:lamb_talent/resources/services/general/worker_service.dart';
@@ -38,6 +39,7 @@ class AppScreen extends StatelessWidget {
   final double paddingTop;
   final double paddingBottom;
   final Color colorLoading;
+  final VoidCallback? onShowQr;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   final Color backgroundColor;
@@ -62,12 +64,13 @@ class AppScreen extends StatelessWidget {
     this.leftBeforeBackground = 4,
     this.rightBeforeBackground = 4,
     this.bottomBeforeBackground = 4,
-    this.paddingLeft = 12,
-    this.paddingRight = 12,
-    this.paddingTop = 8,
-    this.paddingBottom = 8,
+    this.paddingLeft = Spacing.lg,
+    this.paddingRight = Spacing.lg,
+    this.paddingTop = Spacing.md,
+    this.paddingBottom = Spacing.md,
     this.backgroundColor = ColorsApp.white,
     this.colorLoading = ColorsApp.primary,
+    this.onShowQr,
     super.key,
   });
   @override
@@ -76,12 +79,15 @@ class AppScreen extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [ColorsApp.primary, ColorsApp.primaryVariant],
-          ),
+        decoration: BoxDecoration(
+          color: principalPage ? ColorsApp.primary : null,
+          gradient: principalPage
+              ? null
+              : const LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [ColorsApp.neutral50, ColorsApp.neutral100],
+                ),
         ),
         child: DefaultTabController(
           initialIndex: tabsData.initialIndex,
@@ -118,7 +124,7 @@ class AppScreen extends StatelessWidget {
     }
     if (!userPreferences.isWorkerChild) {
       final split = userPreferences.fullnamePerson.toString().split(' ');
-      return '${split[0]}!';
+      return '${split[0]} ${split.length > 1 ? split[1] : ''}';
     }
     return userPreferences.fullnamePerson.toString();
   }
@@ -148,8 +154,10 @@ class AppScreen extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        color: isSelected ? Colors.white : Colors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        color: isSelected
+            ? Colors.white.withValues(alpha: 0.15)
+            : Colors.transparent,
       ),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
@@ -170,7 +178,8 @@ class AppScreen extends StatelessWidget {
           element.icon.toString(),
           height: 30.0,
           fit: BoxFit.cover,
-          color: isSelected ? ColorsApp.primary : Colors.white,
+          color:
+              isSelected ? Colors.white : Colors.white.withValues(alpha: 0.5),
         ),
         Text(element.title.toString()),
       ],
@@ -216,131 +225,237 @@ class AppScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
       elevation: 0,
-      toolbarHeight: showTitleHeader ? 80.0 : null,
-      title: SizedBox(
-        width: double.infinity,
-        child: Stack(
-          children: [
-            _buildEntitySelector(context),
-            _buildCenterContent(),
-            _buildActionButtons(context),
-            const SizedBox(height: 10),
-          ],
+      toolbarHeight: showTitleHeader ? 72.0 : null,
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [ColorsApp.primary, ColorsApp.primaryLight],
+          ),
         ),
       ),
-    );
-  }
-
-  /// Selector de entidad (izquierda del AppBar)
-  Widget _buildEntitySelector(BuildContext context) {
-    final entityName = userPreferences.nameEntity?.toString() ?? '';
-    final canChangeEntity =
-        userPreferences.cantEntities > 1 || userPreferences.cantDeptos > 1;
-
-    return Positioned(
-      top: 5,
-      left: 0,
-      child: canChangeEntity
-          ? InkWell(
-              onTap: () => showModalChangeEntity(context),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Text(
-                        entityName,
-                        style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18.0,
-                          color: ColorsApp.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Icon(Icons.arrow_drop_down, size: 30),
-                ],
-              ),
-            )
-          : SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Text(
-                entityName,
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18.0,
-                  color: ColorsApp.white,
-                ),
-              ),
-            ),
-    );
-  }
-
-  /// Contenido central del AppBar (logo + saludo)
-  Widget _buildCenterContent() {
-    return Center(
-      child: Column(
+      title: Row(
         children: [
-          Image.asset('assets/icons/logo.png', height: 40.0, fit: BoxFit.cover),
+          // Logo LAMB
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.all(6),
+            child: Image.asset('assets/icons/logo.png', fit: BoxFit.contain),
+          ),
+          const SizedBox(width: Spacing.sm),
+          // Saludo + nombre + entidad
           if (showTitleHeader)
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Wrap(
-                direction: Axis.horizontal,
-                alignment: WrapAlignment.center,
-                crossAxisAlignment: WrapCrossAlignment.center,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   if (!userPreferences.isWorkerChild)
                     Text(
-                      _getGreeting(),
+                      '${_getGreeting()} 👋',
                       style: GoogleFonts.montserrat(
-                        fontSize: 16.0,
+                        fontSize: 11.0,
                         fontWeight: FontWeight.w400,
-                        color: Colors.white,
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
                   Text(
                     _getDisplayName(),
                     style: GoogleFonts.montserrat(
-                      fontSize: 16.0,
+                      fontSize: 15.0,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
+                  if (userPreferences.nameEntity != null)
+                    Text(
+                      userPreferences.nameEntity.toString(),
+                      style: GoogleFonts.montserrat(
+                        fontSize: 11.0,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white.withValues(alpha: 0.7),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                 ],
               ),
             ),
         ],
       ),
+      actions: [
+        IconButton(
+          onPressed: () => _showSettingsModal(context),
+          icon: const Icon(Icons.settings_outlined, color: Colors.white),
+        ),
+      ],
     );
   }
 
-  /// Botones de acción (derecha del AppBar)
-  Widget _buildActionButtons(BuildContext context) {
-    return Positioned(
-      top: -10,
-      right: 0,
-      child: Row(
-        children: [
-          if (userPreferences.searchPerson && showSearchPerson)
-            IconButton(
-              onPressed: () => _searchWorker(context),
-              icon: const Icon(Icons.person_search, color: Colors.white),
+  /// Modal de configuración — agrupa acciones según permisos del usuario
+  void _showSettingsModal(BuildContext context) {
+    final canChangeEntity =
+        userPreferences.cantEntities > 1 || userPreferences.cantDeptos > 1;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: ColorsApp.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(AppRadius.lg),
+              topRight: Radius.circular(AppRadius.lg),
             ),
-          if (!userPreferences.isWorkerChild)
-            IconButton(
-              onPressed: () => _logout(context),
-              icon: const Icon(Icons.logout, color: Colors.white),
-            )
-          else
-            IconButton(
-              onPressed: _backToHome,
-              icon: const Icon(Icons.home, color: Colors.white),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Handle
+              Container(
+                margin: const EdgeInsets.only(top: 12, bottom: 4),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: ColorsApp.neutral300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              // Info del usuario
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                    Spacing.lg, Spacing.sm, Spacing.lg, Spacing.md),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: ColorsApp.neutral100,
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: Image.asset('assets/icons/logo.png',
+                          fit: BoxFit.contain),
+                    ),
+                    const SizedBox(width: Spacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            userPreferences.fullnamePerson?.toString() ?? '',
+                            style: GoogleFonts.montserrat(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: ColorsApp.neutral900,
+                            ),
+                          ),
+                          if (userPreferences.nameEntity != null)
+                            Text(
+                              userPreferences.nameEntity.toString(),
+                              style: GoogleFonts.montserrat(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: ColorsApp.neutral500,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+              // Opciones según permisos
+              if (onShowQr != null)
+                _buildSettingsOption(
+                  icon: Icons.qr_code_2,
+                  label: 'Ver QR',
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    onShowQr!();
+                  },
+                ),
+              if (canChangeEntity)
+                _buildSettingsOption(
+                  icon: Icons.swap_horiz_rounded,
+                  label: 'Cambiar entidad',
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    showModalChangeEntity(context);
+                  },
+                ),
+              if (userPreferences.searchPerson && showSearchPerson)
+                _buildSettingsOption(
+                  icon: Icons.person_search_outlined,
+                  label: 'Buscar trabajador',
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _searchWorker(context);
+                  },
+                ),
+              if (userPreferences.isWorkerChild)
+                _buildSettingsOption(
+                  icon: Icons.arrow_back_outlined,
+                  label: 'Volver a mis datos',
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _backToHome();
+                  },
+                ),
+              const Divider(height: 1),
+              _buildSettingsOption(
+                icon: Icons.logout_outlined,
+                label: 'Cerrar sesión',
+                color: ColorsApp.danger,
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _logout(context);
+                },
+              ),
+              SizedBox(height: MediaQuery.of(ctx).padding.bottom + Spacing.sm),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// Opción individual del modal de configuración
+  Widget _buildSettingsOption({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    Color? color,
+  }) {
+    final effectiveColor = color ?? ColorsApp.neutral800;
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: Spacing.lg, vertical: Spacing.md),
+        child: Row(
+          children: [
+            Icon(icon, color: effectiveColor, size: 22),
+            const SizedBox(width: Spacing.md),
+            Text(
+              label,
+              style: GoogleFonts.montserrat(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: effectiveColor,
+              ),
             ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -360,7 +475,10 @@ class AppScreen extends StatelessWidget {
 
     if (principalPage) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(AppRadius.lg),
+          topRight: Radius.circular(AppRadius.lg),
+        ),
         child: refresher,
       );
     }
@@ -373,7 +491,7 @@ class AppScreen extends StatelessWidget {
         bottom: bottomBeforeBackground,
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         child: Container(
           color: backgroundColor,
           padding: EdgeInsets.only(
@@ -409,18 +527,23 @@ class AppScreen extends StatelessWidget {
   Widget? _buildBottomNavBar(_TabsData tabsData) {
     if (!showTabs) return null;
 
-    return TabBar(
-      unselectedLabelColor: Colors.white,
-      labelColor: ColorsApp.primary,
-      onTap: (val) {
-        if (tabsData.initialIndex != val &&
-            userPreferences.menu != null &&
-            val < userPreferences.menu!.length) {
-          Get.offAllNamed(userPreferences.menu![val].url.toString());
-        }
-      },
-      labelPadding: const EdgeInsets.symmetric(vertical: 8.0),
-      tabs: tabsData.tabs,
+    return Container(
+      color: ColorsApp.primary,
+      child: TabBar(
+        unselectedLabelColor: Colors.white.withValues(alpha: 0.5),
+        labelColor: Colors.white,
+        indicatorColor: Colors.white,
+        dividerColor: Colors.transparent,
+        onTap: (val) {
+          if (tabsData.initialIndex != val &&
+              userPreferences.menu != null &&
+              val < userPreferences.menu!.length) {
+            Get.offAllNamed(userPreferences.menu![val].url.toString());
+          }
+        },
+        labelPadding: const EdgeInsets.symmetric(vertical: 8.0),
+        tabs: tabsData.tabs,
+      ),
     );
   }
 

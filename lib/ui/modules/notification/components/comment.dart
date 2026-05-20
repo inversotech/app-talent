@@ -81,7 +81,7 @@ class Comment extends StatelessWidget {
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       color:
-                                                          ColorsApp.control))),
+                                                          ColorsApp.neutral500))),
                                           IconButton(
                                               icon: const Icon(Icons.close,
                                                   color: Colors.black),
@@ -205,7 +205,7 @@ class Comment extends StatelessWidget {
                 style: TextButton.styleFrom(
                     minimumSize: Size.zero,
                     padding: EdgeInsets.zero,
-                    backgroundColor: item.pressDelete ? ColorsApp.info : null),
+                    backgroundColor: item.pressDelete ? ColorsApp.neutral200 : null),
                 onLongPress: () {
                   if (!controller.userPref.isWorkerChild) {
                     controller.fnPressDelete(item, index, 0, false);
@@ -308,7 +308,7 @@ class Comment extends StatelessWidget {
                                         Jiffy.parseFromDateTime(item.updatedAt!)
                                             .fromNow(),
                                         style: GoogleFonts.montserrat(
-                                            color: ColorsApp.control,
+                                            color: ColorsApp.neutral500,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 14.0)),
                                   ),
@@ -321,7 +321,7 @@ class Comment extends StatelessWidget {
                                               ? ' Me gustas'
                                               : ' Me gusta'),
                                       style: GoogleFonts.montserrat(
-                                          color: ColorsApp.control,
+                                          color: ColorsApp.neutral500,
                                           fontWeight: FontWeight.w400,
                                           fontSize: 14.0)),
                                   const SizedBox(
@@ -339,7 +339,7 @@ class Comment extends StatelessWidget {
                                     },
                                     child: Text('Responder',
                                         style: GoogleFonts.montserrat(
-                                            color: ColorsApp.control,
+                                            color: ColorsApp.neutral500,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 14.0)),
                                   ),
@@ -362,7 +362,7 @@ class Comment extends StatelessWidget {
                         child: Row(
                           children: [
                             const Icon(Icons.horizontal_rule,
-                                color: ColorsApp.control),
+                                color: ColorsApp.neutral500),
                             GestureDetector(
                               onTap: () {
                                 controller.fnShowComments(item, index);
@@ -370,7 +370,7 @@ class Comment extends StatelessWidget {
                               child: Text(
                                   'Ver ${item.comentarios!.isEmpty ? item.countComentarios.toString() + (item.countComentarios! > 1 ? ' respuestas' : ' respuesta') : 'más respuestas'}',
                                   style: GoogleFonts.montserrat(
-                                      color: ColorsApp.control,
+                                      color: ColorsApp.neutral500,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14.0)),
                             ),
@@ -409,7 +409,7 @@ class Comment extends StatelessWidget {
                 style: TextButton.styleFrom(
                     minimumSize: Size.zero,
                     padding: EdgeInsets.zero,
-                    backgroundColor: item.pressDelete ? ColorsApp.info : null),
+                    backgroundColor: item.pressDelete ? ColorsApp.neutral200 : null),
                 onLongPress: () {
                   if (!controller.userPref.isWorkerChild) {
                     controller.fnPressDelete(item, indexParent, index, true);
@@ -512,7 +512,7 @@ class Comment extends StatelessWidget {
                                         Jiffy.parseFromDateTime(item.updatedAt!)
                                             .fromNow(),
                                         style: GoogleFonts.montserrat(
-                                            color: ColorsApp.control,
+                                            color: ColorsApp.neutral500,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 14.0)),
                                   ),
@@ -525,7 +525,7 @@ class Comment extends StatelessWidget {
                                               ? ' Me gustas'
                                               : ' Me gusta'),
                                       style: GoogleFonts.montserrat(
-                                          color: ColorsApp.control,
+                                          color: ColorsApp.neutral500,
                                           fontWeight: FontWeight.w400,
                                           fontSize: 14.0)),
                                 ],

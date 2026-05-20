@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/controllers/holiday/holiday_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
+import 'package:lamb_talent/shared/components/app_button.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:lamb_talent/shared/components/secondary_screen.dart';
 
 import 'components/list_holiday.dart';
@@ -35,72 +37,53 @@ class HolidayPage extends StatelessWidget {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 2.0),
-                              child: TextButton(
-                                style: ButtonStyle(
-                                  alignment: Alignment.center,
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                      return ColorsApp
-                                          .warning; // Use the component's default.
-                                    },
-                                  ),
-                                  shape: MaterialStateProperty.resolveWith<
-                                      RoundedRectangleBorder>(
-                                    (Set<MaterialState> states) {
-                                      return RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              25)); // Use the component's default.
-                                    },
+                              child: Material(
+                                color: ColorsApp.warning,
+                                borderRadius:
+                                    BorderRadius.circular(AppRadius.pill),
+                                child: InkWell(
+                                  onTap: () {
+                                    _showModalAnularRefuse(
+                                        context, '03', 'Observar', controller);
+                                  },
+                                  borderRadius:
+                                      BorderRadius.circular(AppRadius.pill),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: Spacing.md,
+                                        vertical: Spacing.sm),
+                                    child: Text('Observar',
+                                        style: TextStyle(
+                                            color: ColorsApp.white,
+                                            fontWeight: FontWeight.bold)),
                                   ),
                                 ),
-                                child: const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Text('Observar',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                onPressed: () {
-                                  _showModalAnularRefuse(
-                                      context, '03', 'Observar', controller);
-                                },
                               ),
                             ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 2.0),
-                              child: TextButton(
-                                style: ButtonStyle(
-                                  alignment: Alignment.center,
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                      return ColorsApp
-                                          .success; // Use the component's default.
-                                    },
-                                  ),
-                                  shape: MaterialStateProperty.resolveWith<
-                                      RoundedRectangleBorder>(
-                                    (Set<MaterialState> states) {
-                                      return RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              25)); // Use the component's default.
-                                    },
+                              child: Material(
+                                color: ColorsApp.success,
+                                borderRadius:
+                                    BorderRadius.circular(AppRadius.pill),
+                                child: InkWell(
+                                  onTap: () {
+                                    _showModalApprove(
+                                        context, '02', controller);
+                                  },
+                                  borderRadius:
+                                      BorderRadius.circular(AppRadius.pill),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: Spacing.md,
+                                        vertical: Spacing.sm),
+                                    child: Text('Aprobar',
+                                        style: TextStyle(
+                                            color: ColorsApp.white,
+                                            fontWeight: FontWeight.bold)),
                                   ),
                                 ),
-                                child: const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Text('Aprobar',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold)),
-                                ),
-                                onPressed: () {
-                                  _showModalApprove(context, '02', controller);
-                                },
                               ),
                             )
                           ]),
@@ -110,14 +93,15 @@ class HolidayPage extends StatelessWidget {
                   builder: (BuildContext context, BoxConstraints constraints) {
                 return Column(
                   children: [
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: Spacing.sm),
                     Container(
                       width: 140,
                       decoration: BoxDecoration(
                           color: ColorsApp.primary,
                           border: Border.all(color: ColorsApp.primary),
-                          borderRadius: BorderRadius.circular(25.0)),
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          borderRadius: BorderRadius.circular(AppRadius.pill)),
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: Spacing.sm),
                       child: InkWell(
                           onTap: () {
                             _selectYearPicker(context, controller);
@@ -129,21 +113,21 @@ class HolidayPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Image.asset('assets/icons/calendar.png',
-                                    height: 30, width: 30, color: Colors.white),
-                                const SizedBox(width: 8.0),
-                                Obx(() => Text(
+                                    height: 30,
+                                    width: 30,
+                                    color: ColorsApp.white),
+                                const SizedBox(width: Spacing.sm),
+                                Obx(() => AppText.body(
                                       controller.selectYear.toString(),
-                                      style: GoogleFonts.montserrat(
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.white),
+                                      color: ColorsApp.white,
                                     )),
                                 const Icon(Icons.arrow_drop_down,
-                                    color: Colors.white)
+                                    color: ColorsApp.white)
                               ],
                             ),
                           )),
                     ),
-                    const SizedBox(height: 12.0),
+                    const SizedBox(height: Spacing.sm + Spacing.xs),
                     Obx(() => Column(
                           children: [
                             controller.loadingDataInit.value
@@ -156,10 +140,10 @@ class HolidayPage extends StatelessWidget {
                                     padding: const EdgeInsets.only(left: 40.0),
                                     child: Column(
                                       children: [
-                                        const SizedBox(height: 8.0),
+                                        const SizedBox(height: Spacing.sm),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
+                                              horizontal: Spacing.sm),
                                           child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -167,26 +151,20 @@ class HolidayPage extends StatelessWidget {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
                                               children: [
-                                                Text(
+                                                AppText.labelLarge(
                                                   'Total días programados',
-                                                  style: GoogleFonts.montserrat(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: ColorsApp.primary),
+                                                  color: ColorsApp.primary,
                                                 ),
-                                                Text(
+                                                AppText.labelLarge(
                                                   controller.totalPro.value
                                                       .toString(),
-                                                  style: GoogleFonts.montserrat(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: ColorsApp.primary),
+                                                  color: ColorsApp.primary,
                                                 )
                                               ]),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
+                                              horizontal: Spacing.sm),
                                           child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -194,20 +172,14 @@ class HolidayPage extends StatelessWidget {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
                                               children: [
-                                                Text(
+                                                AppText.labelLarge(
                                                   'Total días gozados',
-                                                  style: GoogleFonts.montserrat(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: ColorsApp.primary),
+                                                  color: ColorsApp.primary,
                                                 ),
-                                                Text(
+                                                AppText.labelLarge(
                                                   controller.totalGo.value
                                                       .toString(),
-                                                  style: GoogleFonts.montserrat(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: ColorsApp.primary),
+                                                  color: ColorsApp.primary,
                                                 )
                                               ]),
                                         )
@@ -229,83 +201,34 @@ class HolidayPage extends StatelessWidget {
         barrierDismissible: false,
         AlertDialog(
           elevation: 0,
-          backgroundColor: ColorsApp.info,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          backgroundColor: ColorsApp.neutral200,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.sm)),
           titlePadding: EdgeInsets.zero,
           scrollable: true,
-          titleTextStyle: GoogleFonts.montserrat(
+          titleTextStyle: const TextStyle(
               color: ColorsApp.primary,
               fontWeight: FontWeight.bold,
-              fontSize: 18),
+              fontSize: FontSizes.xl),
           title: Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: Spacing.sm),
               child: Text(('Aprobar').toUpperCase()),
             ),
           ),
           content: Column(children: [
             Image.asset('assets/icons/check.png',
                 height: 50, width: 50, color: ColorsApp.success),
-            Text(
+            AppText.body(
                 '¿Desea aprobar la vacación programada de: ${controller.userPreferences.fullnamePerson}?',
-                style: GoogleFonts.montserrat(
-                    color: ColorsApp.primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14),
+                color: ColorsApp.primary,
                 textAlign: TextAlign.center)
           ]),
           actions: [
-            TextButton(
-                style: ButtonStyle(
-                  alignment: Alignment.center,
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      return ColorsApp
-                          .primaryVariant; // Use the component's default.
-                    },
-                  ),
-                  shape:
-                      MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
-                    (Set<MaterialState> states) {
-                      return RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              25)); // Use the component's default.
-                    },
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('Cerrar',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                onPressed: () => Get.back()
-                // Navigator.of(context).pop()
-                ),
-            TextButton(
-              style: ButtonStyle(
-                alignment: Alignment.center,
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                    return ColorsApp.success; // Use the component's default.
-                  },
-                ),
-                shape:
-                    MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
-                  (Set<MaterialState> states) {
-                    return RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            25)); // Use the component's default.
-                  },
-                ),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text('Estoy de acuerdo!',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-              ),
+            AppButton.outlined(
+                text: 'Cerrar', onPressed: () => Get.back()),
+            AppButton.primary(
+              text: 'Estoy de acuerdo!',
               onPressed: () {
                 controller.changeRequestStatus(context, '', idEstado);
               },
@@ -319,7 +242,7 @@ class HolidayPage extends StatelessWidget {
         builder: (context) {
           return AlertDialog(
             elevation: 0,
-            backgroundColor: ColorsApp.info,
+            backgroundColor: ColorsApp.neutral200,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
             titlePadding: EdgeInsets.zero,
@@ -410,82 +333,35 @@ class HolidayPage extends StatelessWidget {
         barrierDismissible: false,
         AlertDialog(
           elevation: 0,
-          backgroundColor: ColorsApp.info,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          backgroundColor: ColorsApp.neutral200,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.sm)),
           titlePadding: EdgeInsets.zero,
           scrollable: true,
-          titleTextStyle: GoogleFonts.montserrat(
+          titleTextStyle: const TextStyle(
               color: ColorsApp.primary,
               fontWeight: FontWeight.bold,
-              fontSize: 18),
+              fontSize: FontSizes.xl),
           title: Center(
               child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.only(top: Spacing.sm),
             child: Text(text.toUpperCase()),
           )),
           content: TextFormField(
             controller: inputFieldCtrl,
             decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppRadius.sm)),
               labelText: 'Comentario (opcional)',
             ),
             maxLines: 4,
             keyboardType: TextInputType.multiline,
           ),
           actions: [
-            TextButton(
-                style: ButtonStyle(
-                  alignment: Alignment.center,
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      return ColorsApp
-                          .primaryVariant; // Use the component's default.
-                    },
-                  ),
-                  shape:
-                      MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
-                    (Set<MaterialState> states) {
-                      return RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              25)); // Use the component's default.
-                    },
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('Cerrar',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                onPressed: () => Get.back()
-                // Navigator.of(context).pop() by pedro
-                ),
-            TextButton(
-              style: ButtonStyle(
-                alignment: Alignment.center,
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                    return ColorsApp
-                        .primaryVariant; // Use the component's default.
-                  },
-                ),
-                shape:
-                    MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
-                  (Set<MaterialState> states) {
-                    return RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            25)); // Use the component's default.
-                  },
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(text,
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-              ),
+            AppButton.outlined(
+                text: 'Cerrar', onPressed: () => Get.back()),
+            AppButton.primary(
+              text: text,
               onPressed: () {
                 controller.changeRequestStatus(
                     context,
@@ -505,7 +381,7 @@ class HolidayPage extends StatelessWidget {
           TextEditingController inputFieldCtrl = TextEditingController();
           return AlertDialog(
             elevation: 0,
-            backgroundColor: ColorsApp.info,
+            backgroundColor: ColorsApp.neutral200,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
             titlePadding: EdgeInsets.zero,

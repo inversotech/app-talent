@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/ui/modules/markings/components/list_markings.dart';
 import 'package:lamb_talent/controllers/markings/marking_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:lamb_talent/shared/components/secondary_screen.dart';
 
 class MyMarkingsPage extends StatelessWidget {
@@ -29,17 +30,18 @@ class MyMarkingsPage extends StatelessWidget {
             child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: Spacing.sm),
                 child: Column(children: [
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: Spacing.sm),
                   Container(
                       decoration: BoxDecoration(
                           border:
                               Border.all(color: ColorsApp.primary, width: 1.5),
-                          borderRadius: BorderRadius.circular(25.0)),
+                          borderRadius:
+                              BorderRadius.circular(AppRadius.pill)),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 6.0, horizontal: 12.0),
+                            vertical: Spacing.sm, horizontal: Spacing.md),
                         child: Obx(() => Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -61,11 +63,9 @@ class MyMarkingsPage extends StatelessWidget {
                                                     3
                                             ? const Icon(Icons.arrow_drop_down)
                                             : Container(),
-                                        Text(
+                                        AppText.label(
                                           controller.selectOptionTitle.value,
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w400,
-                                              color: ColorsApp.primary),
+                                          color: ColorsApp.primary,
                                         ),
                                       ],
                                     )),
@@ -75,19 +75,17 @@ class MyMarkingsPage extends StatelessWidget {
                                     },
                                     child: Row(
                                       children: [
-                                        Text(
+                                        AppText.label(
                                             controller.getOptionName(
                                                 controller.selectOption.value),
-                                            style: GoogleFonts.montserrat(
-                                                fontWeight: FontWeight.w400,
-                                                color: ColorsApp.primary)),
+                                            color: ColorsApp.primary),
                                         const Icon(Icons.arrow_drop_down)
                                       ],
                                     )),
                               ],
                             )),
                       )),
-                  const SizedBox(height: 12.0),
+                  const SizedBox(height: Spacing.sm + Spacing.xs),
                   Obx(() => Column(
                         children: [
                           controller.loadingDataInit.value

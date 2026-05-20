@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/controllers/auth/login_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
+import 'package:lamb_talent/shared/components/app_button.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
+import 'package:lamb_talent/shared/components/app_text_field.dart';
 
+/// Página de Login rediseñada siguiendo Golden Rules for Clean UI Design
+///
+/// Cambios aplicados:
+/// - Gradiente simplificado en header (primary → primaryLight)
+/// - AppTextField para inputs consistentes
+/// - AppButton.primary para botón de login
+/// - AppText para todos los textos
+/// - Spacing generoso (Spacing.lg = 24px entre elementos)
+/// - Nueva paleta de colores con neutrales
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
@@ -21,6 +33,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
+  /// Header section con gradiente simplificado
   Widget _headerSection() {
     return Expanded(
       flex: 2,
@@ -30,7 +43,8 @@ class LoginPage extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [ColorsApp.primary, Color.fromARGB(255, 3, 36, 71)],
+            // colors: [ColorsApp.primary, ColorsApp.primaryLight],
+            colors: [ColorsApp.primary, ColorsApp.primary],
           ),
         ),
         child: SafeArea(
@@ -38,28 +52,25 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Logo
               Image.asset(
                 'assets/icons/logo.png',
                 height: 60,
                 fit: BoxFit.contain,
               ),
-              const SizedBox(height: 24),
-              Text(
+              const SizedBox(height: Spacing.lg),
+
+              // Título principal
+              AppText.display2(
                 'Bienvenido',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  fontSize: 32,
-                ),
+                color: ColorsApp.white,
               ),
-              const SizedBox(height: 8),
-              Text(
+              const SizedBox(height: Spacing.sm),
+
+              // Subtítulo
+              AppText.body(
                 'Ingresa tus credenciales',
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w300,
-                  color: Colors.white70,
-                  fontSize: 14,
-                ),
+                color: ColorsApp.white.withValues(alpha: 0.85),
               ),
             ],
           ),
@@ -68,19 +79,25 @@ class LoginPage extends StatelessWidget {
     );
   }
 
+  /// Form section con spacing generoso
   Widget _formSection(BuildContext context) {
     return Expanded(
       flex: 3,
       child: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          color: Colors.white,
+        decoration: BoxDecoration(
+          color: ColorsApp.white,
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(32),
+            top: Radius.circular(Spacing.xl),
           ),
         ),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(28, 32, 28, 24),
+          padding: const EdgeInsets.fromLTRB(
+            Spacing.xl,
+            Spacing.xl,
+            Spacing.xl,
+            Spacing.lg,
+          ),
           child: GetBuilder<LoginController>(
             init: LoginController(),
             builder: (_) => Form(
@@ -89,11 +106,11 @@ class LoginPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _usernameField(),
-                  const SizedBox(height: 20),
-                  _passwordField(context),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: Spacing.lg),
+                  _passwordField(),
+                  const SizedBox(height: Spacing.md),
                   _checkWidget(),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: Spacing.xl),
                   _submitButton(context),
                 ],
               ),
@@ -104,107 +121,54 @@ class LoginPage extends StatelessWidget {
     );
   }
 
+  /// Campo de usuario usando AppTextField
   Widget _usernameField() {
-    return TextFormField(
+    return AppTextField(
       controller: controller.username,
+      label: 'Usuario',
+      hintText: 'Ingrese su usuario',
+      prefixIcon: Icons.person_outline_rounded,
       keyboardType: TextInputType.text,
-      autofocus: true,
-      style: GoogleFonts.montserrat(
-        fontSize: 16,
-        color: ColorsApp.primary,
-      ),
-      decoration: _inputDecoration(
-        label: 'Usuario',
-        hint: 'Ingrese su usuario',
-        icon: Icons.person_outline_rounded,
-      ),
+      textInputAction: TextInputAction.next,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Usuario requerido';
         }
         return null;
       },
-      onEditingComplete: () => controller.focusPassword.requestFocus(),
+      onFieldSubmitted: (_) => controller.focusPassword.requestFocus(),
     );
   }
 
-  Widget _passwordField(BuildContext context) {
+  /// Campo de contraseña con toggle de visibilidad
+  Widget _passwordField() {
     return Obx(
-      () => TextFormField(
+      () => AppTextField(
         controller: controller.password,
         focusNode: controller.focusPassword,
+        label: 'Contraseña',
+        hintText: 'Ingrese su contraseña',
+        prefixIcon: Icons.lock_outline_rounded,
         obscureText: controller.obscureText.value,
-        style: GoogleFonts.montserrat(
-          fontSize: 16,
-          color: ColorsApp.primary,
-        ),
-        decoration: _inputDecoration(
-          label: 'Contraseña',
-          hint: 'Ingrese su contraseña',
-          icon: Icons.lock_outline_rounded,
-          suffixIcon: IconButton(
-            icon: Icon(
-              controller.obscureText.value
-                  ? Icons.visibility_outlined
-                  : Icons.visibility_off_outlined,
-              color: ColorsApp.control,
-            ),
-            onPressed: () {
-              controller.obscureText.value = !controller.obscureText.value;
-            },
-          ),
-        ),
+        textInputAction: TextInputAction.done,
+        suffixIcon: controller.obscureText.value
+            ? Icons.visibility_outlined
+            : Icons.visibility_off_outlined,
+        onSuffixIconPressed: () {
+          controller.obscureText.value = !controller.obscureText.value;
+        },
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Contraseña requerida';
           }
           return null;
         },
-        onEditingComplete: () => controller.loginLamb(context),
+        onFieldSubmitted: (_) => controller.loginLamb(Get.context!),
       ),
     );
   }
 
-  InputDecoration _inputDecoration({
-    required String label,
-    required String hint,
-    required IconData icon,
-    Widget? suffixIcon,
-  }) {
-    return InputDecoration(
-      labelText: label,
-      hintText: hint,
-      labelStyle: GoogleFonts.montserrat(
-        fontWeight: FontWeight.w500,
-        color: ColorsApp.primaryVariant,
-      ),
-      hintStyle: GoogleFonts.montserrat(
-        color: ColorsApp.control,
-      ),
-      prefixIcon: Icon(icon, color: ColorsApp.primaryVariant),
-      suffixIcon: suffixIcon,
-      filled: true,
-      fillColor: ColorsApp.info.withValues(alpha: 0.25),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: ColorsApp.primary, width: 2),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: ColorsApp.danger),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: ColorsApp.danger, width: 2),
-      ),
-    );
-  }
-
+  /// Checkbox para guardar credenciales
   Widget _checkWidget() {
     return Obx(
       () => Row(
@@ -218,42 +182,26 @@ class LoginPage extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
               ),
-              side: const BorderSide(color: ColorsApp.control),
+              side: BorderSide(color: ColorsApp.neutral400),
               onChanged: (val) => controller.checkCredencial.value = val!,
             ),
           ),
-          const SizedBox(width: 12),
-          Text(
+          const SizedBox(width: Spacing.md),
+          AppText.body(
             'Guardar credenciales',
-            style: GoogleFonts.montserrat(
-              color: ColorsApp.primaryVariant,
-              fontSize: 14,
-            ),
+            color: ColorsApp.neutral700,
           ),
         ],
       ),
     );
   }
 
+  /// Botón de submit usando AppButton
   Widget _submitButton(BuildContext context) {
-    return FilledButton(
-      style: FilledButton.styleFrom(
-        backgroundColor: ColorsApp.primary,
-        foregroundColor: Colors.white,
-        minimumSize: const Size.fromHeight(54),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
-        elevation: 0,
-      ),
+    return AppButton.primary(
+      text: 'Ingresar',
       onPressed: () => controller.loginLamb(context),
-      child: Text(
-        'Ingresar',
-        style: GoogleFonts.montserrat(
-          fontSize: 17,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
+      fullWidth: true,
     );
   }
 }

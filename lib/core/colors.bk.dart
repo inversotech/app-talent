@@ -4,20 +4,23 @@ import 'package:flutter/material.dart';
 /// Basado en TailwindCSS v3 + Golden Rules for Clean UI Design
 ///
 /// Principio: Diseñar en gris primero (80% neutrales, 15% primary, 5% semantic)
-class ColorsApp {
+class ColorsAppBk {
   // ============================================================================
   // COLORES PRINCIPALES
   // ============================================================================
 
-  /// Primary: Azul oscuro marino
+  /// Primary: Indigo moderno (reemplaza el azul muy oscuro anterior #0D1F33)
   /// Uso: Botones principales, headers, elementos de marca
-  static const Color primary = Color(0xFF17233C);
+  /// Contraste: WCAG AAA sobre blanco
+  static const Color primary = Color(0xFF1E40AF); // Indigo-700
 
-  /// Primary Light: Variante más clara para gradientes y hover
-  static const Color primaryLight = Color(0xFF1E3352);
+  /// Primary Light: Para estados hover/activos
+  /// Uso: Botones hover, elementos interactivos, gradientes
+  static const Color primaryLight = Color(0xFF3B82F6); // Blue-500
 
-  /// Primary Dark: Variante más oscura para estados pressed
-  static const Color primaryDark = Color(0xFF0D1626);
+  /// Primary Dark: Para énfasis adicional
+  /// Uso: Texto sobre fondos claros, estados pressed
+  static const Color primaryDark = Color(0xFF1E3A8A); // Blue-900
 
   // ============================================================================
   // COLORES SEMÁNTICOS
@@ -100,7 +103,8 @@ class ColorsApp {
   static const Color secondary = Color(0xFFF5DBDE); // Rosa - deprecado
 
   /// @deprecated Usar primaryLight en su lugar
-  static const Color primaryVariant = Color(0xFF1E3352); // Reemplazado por primaryLight
+  static const Color primaryVariant =
+      Color(0xFF3B82F6); // Reemplazado por primaryLight
 
   /// @deprecated Color nunca usado, será removido
   static const Color basic = Color(0xFFBBDECC); // Verde claro - deprecado

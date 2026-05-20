@@ -20,14 +20,14 @@ class SolicitudValeList extends StatelessWidget {
           padding: const EdgeInsets.only(top: 60),
           child: Column(
             children: [
-              const Icon(Icons.receipt_outlined, size: 64, color: ColorsApp.info),
+              const Icon(Icons.receipt_outlined, size: 64, color: ColorsApp.neutral200),
               const SizedBox(height: 16),
               Text(
                 'Próximamente',
                 style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
-                  color: ColorsApp.control,
+                  color: ColorsApp.neutral500,
                 ),
               ),
               const SizedBox(height: 8),
@@ -36,7 +36,7 @@ class SolicitudValeList extends StatelessWidget {
                 style: GoogleFonts.montserrat(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  color: ColorsApp.control,
+                  color: ColorsApp.neutral500,
                 ),
               ),
             ],

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/resources/models/models.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 
 class ListMarking extends StatelessWidget {
   final List<MarkingModel> listData;
@@ -31,7 +32,7 @@ class ListMarking extends StatelessWidget {
             return Column(
               children: [
                 const SizedBox(
-                  height: 8,
+                  height: Spacing.sm,
                 ),
                 _createItemMarking(
                     item.fecha!,
@@ -40,12 +41,12 @@ class ListMarking extends StatelessWidget {
                         : '',
                     _getColorEnt(item)),
                 const SizedBox(
-                  height: 6,
+                  height: Spacing.xs,
                 ),
                 const Divider(
                     height: 1, color: ColorsApp.primary, thickness: 1),
                 const SizedBox(
-                  height: 6,
+                  height: Spacing.xs,
                 ),
                 item.horaBaseSalRef != null && item.horaBaseEntRef != null
                     ? Column(
@@ -92,7 +93,7 @@ class ListMarking extends StatelessWidget {
                         : '',
                     _getColorSal(item)),
                 const SizedBox(
-                  height: 8,
+                  height: Spacing.sm,
                 ),
               ],
             );
@@ -104,11 +105,10 @@ class ListMarking extends StatelessWidget {
           itemCount: listData.length);
     } else {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(Spacing.sm),
         child: Center(
-          child: Text('No se encontró información para mostrar.',
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400, color: ColorsApp.primary)),
+          child: AppText.body('No se encontró información para mostrar.',
+              color: ColorsApp.primary),
         ),
       );
     }
@@ -117,7 +117,7 @@ class ListMarking extends StatelessWidget {
   Color _getColorEnt(MarkingModel item) {
     Color color = ColorsApp.success;
     if (item.horaBaseEnt == null) {
-      color = ColorsApp.info;
+      color = ColorsApp.neutral200;
     } else if (item.horaEntJust == '1') {
       color = ColorsApp.primary;
     } else if (item.horaEntradaReal == null) {
@@ -190,7 +190,7 @@ class ListMarking extends StatelessWidget {
 
   Padding _createItemMarking(DateTime fecha, String horaMarking, Color color) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.5),
+      padding: const EdgeInsets.symmetric(horizontal: Spacing.sm, vertical: 1.5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -199,31 +199,23 @@ class ListMarking extends StatelessWidget {
               CircleAvatar(
                 radius: 16,
                 backgroundColor: color,
-                child: Text(Jiffy.parseFromDateTime(fecha).format(pattern: 'dd'),
-                    style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                        fontSize: 18.0)),
+                child: AppText.h2(
+                    Jiffy.parseFromDateTime(fecha).format(pattern: 'dd'),
+                    color: Colors.white),
               ),
-              const SizedBox(width: 12.0),
-              Text(
+              const SizedBox(width: Spacing.md),
+              AppText.bodyLarge(
                 '${capitalize(DateFormat.MMMM('es').format(fecha))}, ${Jiffy.parseFromDateTime(fecha).format(pattern: 'yyyy')}',
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w400,
-                    color: ColorsApp.primary,
-                    fontSize: 15.0),
+                color: ColorsApp.primary,
               )
             ],
           ),
-          Text(
+          AppText.bodyLarge(
             horaMarking.isNotEmpty
                 ? DateFormat('hh:mm a').format(DateTime.parse(
                     '${DateFormat('y-MM-dd').format(DateTime.now())} $horaMarking'))
                 : '      ---     ',
-            style: GoogleFonts.montserrat(
-                fontWeight: FontWeight.w400,
-                color: ColorsApp.primary,
-                fontSize: 15.0),
+            color: ColorsApp.primary,
           ),
         ],
       ),

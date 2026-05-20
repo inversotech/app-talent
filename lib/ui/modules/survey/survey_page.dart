@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/controllers/survey/survey_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:lamb_talent/resources/models/general/person.dart';
 import 'package:lamb_talent/resources/models/quiz/quiz.dart';
 import 'package:lamb_talent/resources/services/general/worker_service.dart';
 import 'package:lamb_talent/shared/components/app_screen.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:lamb_talent/shared/components/search_delegate.dart';
 
 import 'components/list_survey.dart';
@@ -39,54 +40,48 @@ class SurveyPage extends StatelessWidget {
                                   'ADD')
                               .isNotEmpty &&
                           !controller.preferences.isWorkerChild
-                      ? TextButton(
-                          style: ButtonStyle(
-                            alignment: Alignment.center,
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                return ColorsApp
-                                    .success; // Use the component's default.
-                              },
-                            ),
-                            shape: MaterialStateProperty.resolveWith<
-                                RoundedRectangleBorder>(
-                              (Set<MaterialState> states) {
-                                return RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        25)); // Use the component's default.
-                              },
+                      ? Material(
+                          color: ColorsApp.success,
+                          borderRadius: BorderRadius.circular(AppRadius.pill),
+                          child: InkWell(
+                            onTap: () async {
+                              controller
+                                  .goToFormSurvey(controller.idPerson.value);
+                            },
+                            borderRadius:
+                                BorderRadius.circular(AppRadius.pill),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: Spacing.lg,
+                                  vertical: Spacing.sm),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  controller.activeButtonAddQuiz.value
+                                      ? const Icon(Icons.person,
+                                          color: ColorsApp.white)
+                                      : const Icon(Icons.person_add,
+                                          color: ColorsApp.white),
+                                  const SizedBox(width: Spacing.sm),
+                                  Text(
+                                    controller.activeButtonAddQuiz.value
+                                        ? 'Realizar encuesta'
+                                        : 'Encuestar nueva persona',
+                                    style: const TextStyle(
+                                        color: ColorsApp.white),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          onPressed: () async {
-                            controller
-                                .goToFormSurvey(controller.idPerson.value);
-                          },
-                          child: SizedBox(
-                            width: 200.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                controller.activeButtonAddQuiz.value
-                                    ? const Icon(Icons.person,
-                                        color: Colors.white)
-                                    : const Icon(Icons.person_add,
-                                        color: Colors.white),
-                                Text(
-                                  controller.activeButtonAddQuiz.value
-                                      ? 'Realizar encuesta'
-                                      : 'Encuestar nueva persona',
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ))
+                        )
                       : null,
                   child: LayoutBuilder(builder:
                       (BuildContext context, BoxConstraints constraints) {
                     return Column(
                       children: [
-                        const SizedBox(height: 8.0),
+                        const SizedBox(height: Spacing.sm),
                         AppBar(
                           centerTitle: false,
                           automaticallyImplyLeading: false,
@@ -183,22 +178,20 @@ class SurveyPage extends StatelessWidget {
                                 ]
                               : null,
                           elevation: 0,
-                          backgroundColor: Colors.white,
+                          backgroundColor: ColorsApp.white,
                           toolbarHeight: 40.0,
                           title: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
+                            padding:
+                                const EdgeInsets.only(left: Spacing.sm),
+                            child: AppText.h1(
                               'Auto reporte diario',
-                              style: GoogleFonts.montserrat(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w700,
-                                  color: ColorsApp.primary),
+                              color: ColorsApp.primary,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: Spacing.xl / 2),
                         _widgetFilters(context),
-                        const SizedBox(height: 8.0),
+                        const SizedBox(height: Spacing.sm),
                         _widgetBody(constraints, context)
                       ],
                     );
@@ -212,7 +205,7 @@ class SurveyPage extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
             border: Border.all(color: ColorsApp.primary, width: 1.5),
-            borderRadius: BorderRadius.circular(25.0)),
+            borderRadius: BorderRadius.circular(AppRadius.pill)),
         child: Column(
           children: [
             InkWell(
@@ -221,22 +214,16 @@ class SurveyPage extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 6.0, horizontal: 12.0),
+                      vertical: Spacing.sm, horizontal: Spacing.md),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: const [
-                          Text(''),
-                        ],
-                      ),
+                      const Row(children: [Text('')]),
                       Row(
                         children: [
-                          Text(
+                          AppText.label(
                               '${controller.dateModel.value.nameMonth}, ${controller.dateModel.value.year}',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorsApp.primary)),
+                              color: ColorsApp.primary),
                           const Icon(Icons.arrow_drop_down)
                         ],
                       ),
@@ -277,11 +264,8 @@ class SurveyPage extends StatelessWidget {
                                 AssetImage('assets/img/user-default.png'),
                           ),
                   ),
-                  label: Text(controller.personSelect.name,
-                      style: GoogleFonts.montserrat(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary)),
+                  label: AppText.label(controller.personSelect.name,
+                      color: ColorsApp.primary),
                   deleteIcon: const Icon(Icons.close),
                   onDeleted: () {
                     controller.idPerson.value = '';

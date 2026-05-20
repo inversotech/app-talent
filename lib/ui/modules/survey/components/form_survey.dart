@@ -6,6 +6,7 @@ import 'package:lamb_talent/controllers/survey/form_survey_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/resources/models/quiz/quiz_item.dart';
 import 'package:lamb_talent/shared/components/app_screen.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:lamb_talent/shared/components/checkbox_app.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -246,14 +247,9 @@ class FormSurveyPerson extends StatelessWidget {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Center(
-                                                child: Text(
+                                                child: AppText.body(
                                                     'No se encontró información para mostrar.',
-                                                    style:
-                                                        GoogleFonts.montserrat(
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color: ColorsApp
-                                                                .primary)),
+                                                    color: ColorsApp.primary),
                                               ),
                                             )
                                     ],
@@ -455,17 +451,11 @@ class FormSurveyPerson extends StatelessWidget {
                     Flexible(
                       child: Wrap(
                         children: [
-                          Text(surveyItem.titulo.toString(),
-                              style: GoogleFonts.montserrat(
-                                  fontSize: 13.0,
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorsApp.primary)),
+                          AppText.label(surveyItem.titulo.toString(),
+                              color: ColorsApp.primary),
                           surveyItem.descripcion != null
-                              ? Text('(${surveyItem.descripcion})',
-                                  style: GoogleFonts.montserrat(
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorsApp.primary))
+                              ? AppText.label('(${surveyItem.descripcion})',
+                                  color: ColorsApp.primary)
                               : Container(),
                         ],
                       ),
@@ -551,11 +541,8 @@ class FormSurveyPerson extends StatelessWidget {
         ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(surveyItem.titulo.toString(),
-                  style: GoogleFonts.montserrat(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w500,
-                      color: ColorsApp.primary)),
+              AppText.bodySmall(surveyItem.titulo.toString(),
+                  color: ColorsApp.primary),
               Radio<String>(
                 value: surveyItem.idItem.toString(),
                 groupValue: parent.valorInicial,
@@ -575,11 +562,8 @@ class FormSurveyPerson extends StatelessWidget {
           )
         : Row(
             children: [
-              Text(surveyItem.titulo.toString(),
-                  style: GoogleFonts.montserrat(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w500,
-                      color: ColorsApp.primary)),
+              AppText.bodySmall(surveyItem.titulo.toString(),
+                  color: ColorsApp.primary),
               CheckboxApp(
                   size: 15,
                   value: surveyItem.valorInicial == 'true',

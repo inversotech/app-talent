@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/controllers/license_permit/license_permit_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:lamb_talent/shared/components/secondary_screen.dart';
 
 import 'components/list_license_permit.dart';
@@ -35,9 +36,9 @@ class LicensePermitPage extends StatelessWidget {
                 builder: (BuildContext context, BoxConstraints constraints) {
               return Column(
                 children: [
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: Spacing.sm),
                   Obx(() => _widgetFilters(controller)),
-                  const SizedBox(height: 12.0),
+                  const SizedBox(height: Spacing.sm + Spacing.xs),
                   Obx(() => _widgetBody(constraints, controller)),
                 ],
               );
@@ -50,7 +51,7 @@ class LicensePermitPage extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
             border: Border.all(color: ColorsApp.primary, width: 1.5),
-            borderRadius: BorderRadius.circular(25.0)),
+            borderRadius: BorderRadius.circular(AppRadius.pill)),
         child: Column(
           children: [
             InkWell(
@@ -59,22 +60,16 @@ class LicensePermitPage extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 6.0, horizontal: 12.0),
+                      vertical: Spacing.sm, horizontal: Spacing.md),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: const [
-                          Text(''),
-                        ],
-                      ),
+                      const Row(children: [Text('')]),
                       Row(
                         children: [
-                          Text(
+                          AppText.label(
                               '${controller.dateModel.value.nameMonth}, ${controller.dateModel.value.year}',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorsApp.primary)),
+                              color: ColorsApp.primary),
                           const Icon(Icons.arrow_drop_down)
                         ],
                       ),

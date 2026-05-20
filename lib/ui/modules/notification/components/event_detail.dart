@@ -176,7 +176,7 @@ class EventDetail extends StatelessWidget {
                         trimCollapsedText: '...más',
                         trimExpandedText: ' menos',
                         styleClickableText: GoogleFonts.montserrat(
-                            color: ColorsApp.control,
+                            color: ColorsApp.neutral500,
                             fontWeight: FontWeight.w400,
                             fontSize: 14.0),
                       )

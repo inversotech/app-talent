@@ -11,6 +11,7 @@ import 'package:lamb_talent/core/colors.dart';
 import 'package:lamb_talent/resources/models/models.dart';
 import 'package:lamb_talent/shared/components/secondary_screen.dart';
 import 'package:lamb_talent/shared/components/checkbox_app.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:select_form_field/select_form_field.dart';
 
 class FormJustification extends StatelessWidget {
@@ -345,10 +346,8 @@ class FormJustification extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Flexible(
-                    child: Text(controller.evidenceText.value.toLowerCase(),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w500,
-                            color: ColorsApp.primary))),
+                    child: AppText.label(controller.evidenceText.value.toLowerCase(),
+                        color: ColorsApp.primary)),
                 Row(
                   children: [
                     controller.formData.value.idEstadoJustif == '01'
@@ -506,21 +505,17 @@ class FormJustification extends StatelessWidget {
                             color: controller.listColorsMarkingSelected[index]),
                       ),
                       item.fechahora != null
-                          ? Text(
+                          ? AppText.body(
                               '${DateFormat('hh:mm a').format(DateTime.parse(item.fechahora.toString())).toLowerCase()} (Registrado)',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorsApp.primary))
+                              color: ColorsApp.primary)
                           : Container(),
                       item.fechahoraManual != null
-                          ? Text(
+                          ? AppText.body(
                               DateFormat('hh:mm a')
                                   .format(DateTime.parse(
                                       item.fechahoraManual.toString()))
                                   .toLowerCase(),
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w400,
-                                  color: ColorsApp.primary))
+                              color: ColorsApp.primary)
                           : Container(),
                       item.esJustificado
                           ? const Text('Justificado')
@@ -541,7 +536,7 @@ class FormJustification extends StatelessWidget {
         barrierDismissible: false,
         AlertDialog(
           elevation: 0,
-          backgroundColor: ColorsApp.info,
+          backgroundColor: ColorsApp.neutral200,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
           titlePadding: EdgeInsets.zero,
@@ -611,84 +606,5 @@ class FormJustification extends StatelessWidget {
             )
           ],
         ));
-
-    /* await showDialog(
-        context: buildContext,
-        barrierDismissible: false,
-        builder: (context) {
-          TextEditingController inputFieldCtrl = TextEditingController();
-          return AlertDialog(
-            elevation: 0,
-            backgroundColor: ColorsApp.info,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25.0)),
-            titlePadding: EdgeInsets.zero,
-            scrollable: true,
-            content: TextFormField(
-              controller: inputFieldCtrl,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                labelText: 'Descripción (opcional)',
-              ),
-              maxLines: 4,
-              keyboardType: TextInputType.multiline,
-            ),
-            actions: [
-              TextButton(
-                  style: ButtonStyle(
-                    alignment: Alignment.center,
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        return ColorsApp
-                            .primary; // Use the component's default.
-                      },
-                    ),
-                    shape: MaterialStateProperty.resolveWith<
-                        RoundedRectangleBorder>(
-                      (Set<MaterialState> states) {
-                        return RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                25)); // Use the component's default.
-                      },
-                    ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child:
-                        Text('Cerrar', style: TextStyle(color: Colors.white)),
-                  ),
-                  onPressed: () => Navigator.of(context).pop()),
-              TextButton(
-                style: ButtonStyle(
-                  alignment: Alignment.center,
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      return ColorsApp.danger; // Use the component's default.
-                    },
-                  ),
-                  shape:
-                      MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
-                    (Set<MaterialState> states) {
-                      return RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              25)); // Use the component's default.
-                    },
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('Anular'),
-                ),
-                onPressed: () {
-                  controller.changeRequestStatus(
-                      inputFieldCtrl.value.text.isNotEmpty
-                          ? inputFieldCtrl.value.text
-                          : '');
-                },
-              )
-            ],
-          );
-        }); */
   }
 }

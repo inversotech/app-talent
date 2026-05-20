@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 
 class CheckboxApp extends StatelessWidget {
   final bool value;
@@ -26,7 +27,7 @@ class CheckboxApp extends StatelessWidget {
               const BoxDecoration(shape: BoxShape.circle, color: ColorsApp.primary),
           child: Center(
             child: Container(
-              padding: const EdgeInsets.all(2.0),
+              padding: const EdgeInsets.all(Spacing.xs),
               child: value
                   ? Icon(
                       Icons.check,
@@ -36,7 +37,7 @@ class CheckboxApp extends StatelessWidget {
                   : Container(
                     height: size,
                     width: size,
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(Spacing.sm),
                       decoration: const BoxDecoration(
                           shape: BoxShape.circle, color: Colors.white),
                     ),

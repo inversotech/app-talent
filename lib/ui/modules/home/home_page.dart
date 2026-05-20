@@ -10,9 +10,11 @@ import 'package:intl/intl.dart';
 
 import 'package:lamb_talent/controllers/home/home_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:lamb_talent/core/functions/capitalize.dart';
 import 'package:lamb_talent/resources/models/assistance/assistance_summary.dart';
 import 'package:lamb_talent/shared/components/app_screen.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 
 import 'components/carousel_slider_item.dart';
 import 'components/time_dynamic.dart';
@@ -45,6 +47,7 @@ class HomePage extends StatelessWidget {
                 enablePullUp: false,
                 showTabs: true,
                 onRefresh: controller.onRefresh,
+                onShowQr: controller.fnShowModalQr,
                 leftBeforeBackground: 0,
                 rightBeforeBackground: 0,
                 bottomBeforeBackground: 0,
@@ -67,12 +70,12 @@ class HomePage extends StatelessWidget {
     final theme = Theme.of(Get.context!);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: Spacing.md),
       child: Card(
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
         ),
         color: theme.colorScheme.surfaceContainerLowest,
         child: Column(
@@ -92,79 +95,32 @@ class HomePage extends StatelessWidget {
                 idDescripcionMarcacion: controller.idDescripMarcacion.value,
               ),
 
-            // Header Section
+            // Header: título + botones en una fila
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-              child: Column(
+              padding: const EdgeInsets.fromLTRB(
+                  Spacing.md, Spacing.md, Spacing.xs, Spacing.xs),
+              child: Row(
                 children: [
-                  // Action Buttons Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Schedule Button
-                      IconButton.filledTonal(
-                        onPressed: () {
-                          controller.fnShowModalSchedule();
-                        },
-                        icon: const Icon(Icons.calendar_month_outlined),
-                        style: IconButton.styleFrom(
-                          backgroundColor:
-                              ColorsApp.info.withValues(alpha: 0.3),
-                          foregroundColor: ColorsApp.primary,
-                        ),
-                      ),
-                      // QR Button
-                      FilledButton.tonal(
-                        onPressed: () {
-                          controller.fnShowModalQr();
-                        },
-                        style: FilledButton.styleFrom(
-                          backgroundColor:
-                              ColorsApp.info.withValues(alpha: 0.3),
-                          foregroundColor: ColorsApp.primary,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 12,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.qr_code_2, size: 20),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Ver QR',
-                              style: GoogleFonts.montserrat(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // List Button
-                      IconButton.filledTonal(
-                        onPressed: () {
-                          controller.goToMarkings();
-                        },
-                        icon: const Icon(Icons.format_list_numbered_rounded),
-                        style: IconButton.styleFrom(
-                          backgroundColor:
-                              ColorsApp.info.withValues(alpha: 0.3),
-                          foregroundColor: ColorsApp.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 12),
-                  // Title
-                  Text(
-                    'Asistencia',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
+                  Expanded(
+                    child: AppText.h1(
+                      'Asistencia',
                       color: ColorsApp.primary,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: controller.fnShowModalSchedule,
+                    icon: const Icon(Icons.calendar_month_outlined),
+                    style: IconButton.styleFrom(
+                      backgroundColor: ColorsApp.neutral200,
+                      foregroundColor: ColorsApp.primary,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: controller.goToMarkings,
+                    icon: const Icon(Icons.format_list_numbered_rounded),
+                    style: IconButton.styleFrom(
+                      backgroundColor: ColorsApp.neutral200,
+                      foregroundColor: ColorsApp.primary,
                     ),
                   ),
                 ],
@@ -174,7 +130,7 @@ class HomePage extends StatelessWidget {
             // Chart Section
             Obx(() => _createChartPie()),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: Spacing.md),
           ],
         ),
       ),
@@ -186,53 +142,63 @@ class HomePage extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Column(
-      children: [
-        // Indicadores fijos
-        Obx(() => Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List<Widget>.generate(4, (index) {
-                  final isActive = index == controller.carouselIndex.value;
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    width: isActive ? 24 : 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: isActive
-                          ? Colors.white
-                          : Colors.white.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  );
-                }),
-              ),
-            )),
-        // Carrusel
-        CarouselSlider(
-          items: [
-            _buildJustificationSlider(constraints),
-            _buildLicensePermitSlider(constraints),
-            _buildVacationSlider(constraints, buildContext),
-            _buildOvertimeSlider(constraints),
-          ],
-          carouselController: controller.controllerCarousel,
-          options: CarouselOptions(
-            height: 267,
-            viewportFraction: 1,
-            initialPage: 0,
-            enableInfiniteScroll: true,
-            reverse: false,
-            autoPlay: false,
-            scrollDirection: Axis.horizontal,
-            onPageChanged: (index, reason) {
-              controller.carouselIndex.value = index;
-            },
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [ColorsApp.primary, ColorsApp.primaryLight],
         ),
-      ],
+      ),
+      child: Column(
+        children: [
+          // Indicadores fijos
+          Obx(() => Padding(
+                padding: const EdgeInsets.only(top: Spacing.lg),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List<Widget>.generate(4, (index) {
+                    final isActive = index == controller.carouselIndex.value;
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      margin:
+                          const EdgeInsets.symmetric(horizontal: Spacing.xs),
+                      width: isActive ? 24 : 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: isActive
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    );
+                  }),
+                ),
+              )),
+          // Carrusel
+          CarouselSlider(
+            items: [
+              _buildJustificationSlider(constraints),
+              _buildLicensePermitSlider(constraints),
+              _buildVacationSlider(constraints, buildContext),
+              _buildOvertimeSlider(constraints),
+            ],
+            carouselController: controller.controllerCarousel,
+            options: CarouselOptions(
+              height: 267,
+              viewportFraction: 1,
+              initialPage: 0,
+              enableInfiniteScroll: true,
+              reverse: false,
+              autoPlay: false,
+              scrollDirection: Axis.horizontal,
+              onPageChanged: (index, reason) {
+                controller.carouselIndex.value = index;
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -556,17 +522,9 @@ class HomePage extends StatelessWidget {
             xValueMapper: (AssistanceSummaryModel data, _) =>
                 capitalize(data.nombre),
             yValueMapper: (AssistanceSummaryModel data, _) => data.cantidad,
-            dataLabelMapper: (AssistanceSummaryModel data, _) =>
-                data.cantidad.toString(),
             pointColorMapper: (AssistanceSummaryModel data, _) =>
                 controller.colorAssistance(data.code),
-            dataLabelSettings: DataLabelSettings(
-              isVisible: true,
-              textStyle: GoogleFonts.montserrat(
-                fontWeight: FontWeight.w400,
-                fontSize: 11,
-              ),
-            ),
+            dataLabelSettings: const DataLabelSettings(isVisible: false),
           ),
         ],
       ),

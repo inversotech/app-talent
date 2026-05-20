@@ -9,6 +9,7 @@ import 'package:lamb_talent/core/colors.dart';
 import 'package:get/get.dart';
 import 'package:lamb_talent/resources/models/overtime/process_overtime.dart';
 import 'package:lamb_talent/resources/services/overtime/overtime_service.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
 
 class ListOvertime extends StatelessWidget {
@@ -46,11 +47,8 @@ class ListOvertime extends StatelessWidget {
           List<OvertimeModel> children = listData[index].children!;
           return Column(children: [
             approve
-                ? Text(itemFather.apellidonombre.toString(),
-                    style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w400,
-                        color: ColorsApp.primary,
-                        fontSize: 16.0))
+                ? AppText.h3(itemFather.apellidonombre.toString(),
+                    color: ColorsApp.primary)
                 : Container(),
             ListView.separated(
               separatorBuilder: (context, index) {
@@ -88,15 +86,12 @@ class ListOvertime extends StatelessWidget {
                                 children: [
                                   CircleAvatar(
                                     radius: 18,
-                                    backgroundColor: ColorsApp.info,
-                                    child: Text(
+                                    backgroundColor: ColorsApp.neutral200,
+                                    child: AppText.labelLarge(
                                         item.codigoSobretiempo != null
                                             ? item.codigoSobretiempo.toString()
                                             : ' ',
-                                        style: GoogleFonts.montserrat(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.white,
-                                            fontSize: 14)),
+                                        color: Colors.white),
                                   ),
                                   const SizedBox(width: 8.0),
                                   Flexible(
@@ -107,13 +102,10 @@ class ListOvertime extends StatelessWidget {
                                           MainAxisAlignment.start,
                                       children: [
                                         const SizedBox(height: 4.0),
-                                        Text(
+                                        AppText.h3(
                                           capitalize(
                                               item.tipoSobretiempo.toString()),
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w600,
-                                              color: ColorsApp.primary,
-                                              fontSize: 16.0),
+                                          color: ColorsApp.primary,
                                         ),
                                         _dateWidget(item)
                                       ],
@@ -133,9 +125,8 @@ class ListOvertime extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
-          child: Text('No se encontró información para mostrar.',
-              style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w400, color: ColorsApp.primary)),
+          child: AppText.body('No se encontró información para mostrar.',
+              color: ColorsApp.primary),
         ),
       );
     }
@@ -152,38 +143,26 @@ class ListOvertime extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               item.codigoPeriodo.toString() == 'H'
-                  ? Text(
+                  ? AppText.label(
                       'Fecha: ${Jiffy.parse(item.fecha!, pattern: 'yyyy-MM-dd').format(pattern: 'dd|MM|yyyy')}',
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary,
-                          fontSize: 12.0))
+                      color: ColorsApp.primary)
                   : Container(),
               item.codigoPeriodo.toString() == 'H'
-                  ? Text(
+                  ? AppText.label(
                       'Hora: ${Jiffy.parse(item.horaDesde!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}-${Jiffy.parse(item.horaHasta!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}',
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary,
-                          fontSize: 12.0))
+                      color: ColorsApp.primary)
                   : Container(),
               item.codigoPeriodo.toString() == 'D'
-                  ? Text(
+                  ? AppText.label(
                       'Fecha: ${Jiffy.parse(item.fecha!, pattern: 'yyyy-MM-dd').format(pattern: 'dd|MM|yyyy')}',
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary,
-                          fontSize: 12.0))
+                      color: ColorsApp.primary)
                   : Container()
             ],
           ),
         ),
         item.codigoPeriodo != null && item.codigoPeriodo == 'H'
-            ? Text('Tiempo: ${item.horas!} horas',
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w500,
-                    color: ColorsApp.primary,
-                    fontSize: 12.0))
+            ? AppText.label('Tiempo: ${item.horas!} horas',
+                color: ColorsApp.primary)
             : Container()
       ],
     );
@@ -200,38 +179,26 @@ class ListOvertime extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               item.codigoPeriodo.toString() == 'H'
-                  ? Text(
+                  ? AppText.label(
                       'Fecha: ${Jiffy.parse(item.fecha!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary,
-                          fontSize: 12.0))
+                      color: ColorsApp.primary)
                   : Container(),
               item.codigoPeriodo.toString() == 'H'
-                  ? Text(
+                  ? AppText.label(
                       'Hora: ${Jiffy.parse(item.horaDesde!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}-${Jiffy.parse(item.horaHasta!, pattern: 'HH:mm').format(pattern: 'hh:mm a')}',
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary,
-                          fontSize: 12.0))
+                      color: ColorsApp.primary)
                   : Container(),
               item.codigoPeriodo.toString() == 'D'
-                  ? Text(
+                  ? AppText.label(
                       'Fecha: ${Jiffy.parse(item.fecha!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
-                      style: GoogleFonts.montserrat(
-                          fontWeight: FontWeight.w500,
-                          color: ColorsApp.primary,
-                          fontSize: 12.0))
+                      color: ColorsApp.primary)
                   : Container()
             ],
           ),
         ),
         item.codigoPeriodo != null && item.codigoPeriodo == 'H'
-            ? Text('Tiempo: ${item.horas!} horas',
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w500,
-                    color: ColorsApp.primary,
-                    fontSize: 12.0))
+            ? AppText.label('Tiempo: ${item.horas!} horas',
+                color: ColorsApp.primary)
             : Container()
       ],
     );
@@ -246,42 +213,31 @@ class ListOvertime extends StatelessWidget {
         Column(
           children: [
             !detail
-                ? Text(
+                ? AppText.label(
                     item.estadoNombre.toString(),
-                    style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13.0,
-                        color: item.idEstadoSobretiempo == '01'
-                            ? ColorsApp.primary
-                            : item.idEstadoSobretiempo == '02'
-                                ? ColorsApp.success
-                                : item.idEstadoSobretiempo == '03'
-                                    ? ColorsApp.danger
-                                    : item.idEstadoSobretiempo == '04'
+                    color: item.idEstadoSobretiempo == '01'
+                        ? ColorsApp.primary
+                        : item.idEstadoSobretiempo == '02'
+                            ? ColorsApp.success
+                            : item.idEstadoSobretiempo == '03'
+                                ? ColorsApp.danger
+                                : item.idEstadoSobretiempo == '04'
+                                    ? ColorsApp.success
+                                    : item.idEstadoSobretiempo == '05'
                                         ? ColorsApp.success
-                                        : item.idEstadoSobretiempo == '05'
-                                            ? ColorsApp.success
-                                            : item.idEstadoSobretiempo == '06'
+                                        : item.idEstadoSobretiempo == '06'
+                                            ? ColorsApp.danger
+                                            : item.idEstadoSobretiempo == '00'
                                                 ? ColorsApp.danger
-                                                : item.idEstadoSobretiempo ==
-                                                        '00'
-                                                    ? ColorsApp.danger
-                                                    : Colors.black),
+                                                : Colors.black,
                   )
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Tipo: ',
-                          style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13.0,
-                              color: ColorsApp.primary)),
-                      Text(item.tipoSobretiempo.toString(),
-                          style: GoogleFonts.montserrat(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13.0,
-                              color: ColorsApp.primary)),
+                      AppText.label('Tipo: ', color: ColorsApp.primary),
+                      AppText.label(item.tipoSobretiempo.toString(),
+                          color: ColorsApp.primary),
                     ],
                   )
           ],
@@ -297,7 +253,7 @@ class ListOvertime extends StatelessWidget {
         barrierDismissible: true,
         AlertDialog(
           elevation: 0,
-          backgroundColor: ColorsApp.info,
+          backgroundColor: ColorsApp.neutral200,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
           title: Align(
@@ -305,7 +261,7 @@ class ListOvertime extends StatelessWidget {
             child: IconButton(
                 icon: Image.asset('assets/icons/close.png',
                     height: 40, width: 40, color: ColorsApp.primary),
-                onPressed: () => Navigator.of(context).pop()),
+                onPressed: () => Get.back()),
           ),
           contentPadding: const EdgeInsets.all(8.0),
           titlePadding: EdgeInsets.zero,
@@ -327,12 +283,9 @@ class ListOvertime extends StatelessWidget {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 4.0),
-                            child: Text(
+                            child: AppText.h3(
                                 capitalize(data.tipoSobretiempo.toString()),
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w600,
-                                    color: ColorsApp.primary,
-                                    fontSize: 16.0)),
+                                color: ColorsApp.primary),
                           ),
                           const SizedBox(height: 8.0),
                           Padding(
@@ -349,16 +302,10 @@ class ListOvertime extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('Motivo',
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w600,
-                                              color: ColorsApp.primary,
-                                              fontSize: 13.0)),
-                                      Text(data.motivo.toString(),
-                                          style: GoogleFonts.montserrat(
-                                              fontWeight: FontWeight.w500,
-                                              color: ColorsApp.primary,
-                                              fontSize: 12.0))
+                                      AppText.labelLarge('Motivo',
+                                          color: ColorsApp.primary),
+                                      AppText.label(data.motivo.toString(),
+                                          color: ColorsApp.primary)
                                     ],
                                   )
                                 : Container(),
@@ -395,23 +342,17 @@ class ListOvertime extends StatelessWidget {
                                                   .toString()
                                                   .toUpperCase() ==
                                               'SI'
-                                          ? Text(
+                                          ? AppText.label(
                                               'Fecha: ${Jiffy.parse(data.fechaCompensar!, pattern: 'dd/MM/yyyy').format(pattern: 'dd|MM|yyyy')}',
-                                              style: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  color: ColorsApp.primary,
-                                                  fontSize: 12.0))
+                                              color: ColorsApp.primary)
                                           : Container(),
                                       data.compensado
                                                   .toString()
                                                   .toUpperCase() ==
                                               'SI'
-                                          ? Text(
+                                          ? AppText.label(
                                               'Comentario:  ${data.comentarioCompensar.toString()} ',
-                                              style: GoogleFonts.montserrat(
-                                                  fontWeight: FontWeight.w500,
-                                                  color: ColorsApp.primary,
-                                                  fontSize: 12.0))
+                                              color: ColorsApp.primary)
                                           : Container(),
                                     ],
                                   ),
@@ -426,40 +367,31 @@ class ListOvertime extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Proceso: ',
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w600,
-                                        color: ColorsApp.primary,
-                                        fontSize: 13.0)),
+                                AppText.labelLarge('Proceso: ',
+                                    color: ColorsApp.primary),
                                 Flexible(
-                                  child: Text(
+                                  child: AppText.body(
                                     data.estadoNombre.toString(),
-                                    style: GoogleFonts.montserrat(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14.0,
-                                        color: data.idEstadoSobretiempo == '01'
-                                            ? ColorsApp.primary
-                                            : data.idEstadoSobretiempo == '02'
-                                                ? ColorsApp.success
+                                    color: data.idEstadoSobretiempo == '01'
+                                        ? ColorsApp.primary
+                                        : data.idEstadoSobretiempo == '02'
+                                            ? ColorsApp.success
+                                            : data.idEstadoSobretiempo == '03'
+                                                ? ColorsApp.danger
                                                 : data.idEstadoSobretiempo ==
-                                                        '03'
-                                                    ? ColorsApp.danger
+                                                        '04'
+                                                    ? ColorsApp.success
                                                     : data.idEstadoSobretiempo ==
-                                                            '04'
+                                                            '05'
                                                         ? ColorsApp.success
                                                         : data.idEstadoSobretiempo ==
-                                                                '05'
-                                                            ? ColorsApp.success
+                                                                '06'
+                                                            ? ColorsApp.danger
                                                             : data.idEstadoSobretiempo ==
-                                                                    '06'
+                                                                    '00'
                                                                 ? ColorsApp
                                                                     .danger
-                                                                : data.idEstadoSobretiempo ==
-                                                                        '00'
-                                                                    ? ColorsApp
-                                                                        .danger
-                                                                    : Colors
-                                                                        .black),
+                                                                : Colors.black,
                                   ),
                                 )
                               ],
@@ -518,13 +450,12 @@ class ListOvertime extends StatelessWidget {
                               },
                             ),
                           ),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text('Anular',
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white)),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold)),
                           ),
                           onPressed: () {
                             _showModalAnularRefuse(
@@ -648,29 +579,20 @@ class ListOvertime extends StatelessWidget {
                     ? StepState.error
                     : StepState.complete
                 : StepState.disabled,
-            title: Text(val.nombre.toString(),
-                style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w500,
-                    color: ColorsApp.primary,
-                    fontSize: 14.0)),
+            title: AppText.labelLarge(val.nombre.toString(),
+                color: ColorsApp.primary),
             subtitle: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 val.email != null
-                    ? Text(
+                    ? AppText.bodySmall(
                         '${val.email}: ${Jiffy.parse(val.fecha.toString(), pattern: "dd/MM/yyyy HH:mm").format(pattern: 'dd|MM|yyyy hh:mm a')}',
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w300,
-                            color: ColorsApp.primary,
-                            fontSize: 12.0))
+                        color: ColorsApp.primary)
                     : Container(),
                 val.comentario != null
-                    ? Text(val.comentario.toString(),
-                        style: GoogleFonts.montserrat(
-                            fontWeight: FontWeight.w300,
-                            color: ColorsApp.primary,
-                            fontSize: 12.0))
+                    ? AppText.bodySmall(val.comentario.toString(),
+                        color: ColorsApp.primary)
                     : Container()
               ],
             ),
@@ -713,7 +635,7 @@ class ListOvertime extends StatelessWidget {
           TextEditingController inputFieldCtrl = TextEditingController();
           return AlertDialog(
             elevation: 0,
-            backgroundColor: ColorsApp.info,
+            backgroundColor: ColorsApp.neutral200,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
             titlePadding: EdgeInsets.zero,
@@ -762,7 +684,7 @@ class ListOvertime extends StatelessWidget {
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
-                  onPressed: () => Navigator.of(context).pop()),
+                  onPressed: () => Get.back()),
               TextButton(
                 style: ButtonStyle(
                   alignment: Alignment.center,
@@ -828,7 +750,7 @@ class ListOvertime extends StatelessWidget {
         barrierDismissible: false,
         AlertDialog(
           elevation: 0,
-          backgroundColor: ColorsApp.info,
+          backgroundColor: ColorsApp.neutral200,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           titlePadding: EdgeInsets.zero,
@@ -851,11 +773,8 @@ class ListOvertime extends StatelessWidget {
           content: Column(children: [
             Image.asset('assets/icons/check.png',
                 height: 50, width: 50, color: ColorsApp.success),
-            Text('¿Desea aprobar el sobretiempo?',
-                style: GoogleFonts.montserrat(
-                    color: ColorsApp.primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14))
+            AppText.labelLarge('¿Desea aprobar el sobretiempo?',
+                color: ColorsApp.primary)
           ]),
           actions: [
             TextButton(
@@ -882,9 +801,7 @@ class ListOvertime extends StatelessWidget {
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
-                onPressed: () => Get.back()
-                // Navigator.of(context).pop()
-                ),
+                onPressed: () => Get.back()),
             TextButton(
               style: ButtonStyle(
                 alignment: Alignment.center,
@@ -923,106 +840,5 @@ class ListOvertime extends StatelessWidget {
             )
           ],
         ));
-
-    /* await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return AlertDialog(
-            elevation: 0,
-            backgroundColor: ColorsApp.info,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            titlePadding: EdgeInsets.zero,
-            scrollable: true,
-            titleTextStyle: GoogleFonts.montserrat(
-                color: ColorsApp.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 18),
-            title: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text((idEstado == '01' && isJefeArea
-                        ? 'Aprobación Area'
-                        : idEstado == '02' && isDth
-                            ? 'Aprobación DTH'
-                            : '')
-                    .toUpperCase()),
-              ),
-            ),
-            content: Column(children: [
-              Image.asset('assets/icons/check.png',
-                  height: 50, width: 50, color: ColorsApp.success),
-              Text('¿Desea aprobar el/la permiso/licencia?',
-                  style: GoogleFonts.montserrat(
-                      color: ColorsApp.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14))
-            ]),
-            actions: [
-              TextButton(
-                  style: ButtonStyle(
-                    alignment: Alignment.center,
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        return ColorsApp
-                            .primaryVariant; // Use the component's default.
-                      },
-                    ),
-                    shape: MaterialStateProperty.resolveWith<
-                        RoundedRectangleBorder>(
-                      (Set<MaterialState> states) {
-                        return RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                25)); // Use the component's default.
-                      },
-                    ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text('Cerrar',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold)),
-                  ),
-                  onPressed: () => Navigator.of(context).pop()),
-              TextButton(
-                style: ButtonStyle(
-                  alignment: Alignment.center,
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      return ColorsApp.success; // Use the component's default.
-                    },
-                  ),
-                  shape:
-                      MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
-                    (Set<MaterialState> states) {
-                      return RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              25)); // Use the component's default.
-                    },
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('Estoy de acuerdo!',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-                onPressed: () {
-                  changeRequestStatus(
-                      '',
-                      context,
-                      idTrabajador,
-                      id,
-                      idEstado == '01' && isJefeArea
-                          ? '02'
-                          : idEstado == '02' && isDth
-                              ? '03'
-                              : idEstado);
-                },
-              )
-            ],
-          );
-        }); */
   }
 }

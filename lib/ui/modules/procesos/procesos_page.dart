@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lamb_talent/controllers/procesos/procesos_controller.dart';
 import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:lamb_talent/shared/components/app_screen.dart';
+import 'package:lamb_talent/shared/components/app_card.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
 
 class ProcesosPage extends StatelessWidget {
   final controller = Get.put(ProcesosController());
@@ -27,26 +29,31 @@ class ProcesosPage extends StatelessWidget {
                 enablePullUp: false,
                 showTabs: true,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.all(Spacing.sm),
                   child: Column(
                     children: [
-                      const SizedBox(height: 16),
+                      const SizedBox(height: Spacing.xs),
                       _buildSectionCard(
                         title: 'Solicitud de Pago',
+                        subtitle:
+                            '¿Tienes comprobantes pedientes de reembolso?',
                         icon: Icons.payment_outlined,
                         color: ColorsApp.primary,
                         onTap: controller.goToSolicitudPago,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: Spacing.xs),
                       _buildSectionCard(
                         title: 'Solicitud de Vale',
+                        subtitle:
+                            '¿Necesitas un vale para gastos de tu trabajo?',
                         icon: Icons.receipt_outlined,
                         color: ColorsApp.warning,
                         onTap: controller.goToSolicitudVale,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: Spacing.xs),
                       _buildSectionCard(
                         title: 'Rendir Vale',
+                        subtitle: '¿Tienes vales pendientes de rendir?',
                         icon: Icons.assignment_return_outlined,
                         color: ColorsApp.success,
                         onTap: controller.goToRendirVale,
@@ -65,56 +72,48 @@ class ProcesosPage extends StatelessWidget {
     required IconData icon,
     required Color color,
     required VoidCallback onTap,
+    String? subtitle,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+    return AppCard(
+      onTap: onTap,
+      padding: const EdgeInsets.all(Spacing.md),
+      borderRadius: AppRadius.sm,
+      child: Row(
+        children: [
+          // Ícono con fondo circular
+          Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+            ),
+            child: Center(
+              child: Icon(icon, color: color, size: 22),
+            ),
           ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
+          const SizedBox(width: Spacing.md),
+          // Título + subtítulo
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Icon(icon, color: color, size: 24),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: ColorsApp.primary,
-                    ),
-                  ),
-                ),
-                const Icon(Icons.arrow_forward_ios,
-                    color: ColorsApp.control, size: 18),
+                AppText.h3(title, color: ColorsApp.neutral800),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 2),
+                  AppText.label(subtitle, color: ColorsApp.neutral500),
+                ],
               ],
             ),
           ),
-        ),
+          // Flecha indicadora
+          Icon(
+            Icons.arrow_forward_ios,
+            color: ColorsApp.neutral400,
+            size: 15,
+          ),
+        ],
       ),
     );
   }

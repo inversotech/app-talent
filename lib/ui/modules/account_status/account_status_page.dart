@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lamb_talent/controllers/account_status/account_status_controller.dart';
+import 'package:lamb_talent/core/colors.dart';
+import 'package:lamb_talent/core/design_tokens.dart';
 import 'package:lamb_talent/shared/components/app_screen.dart';
+import 'package:lamb_talent/shared/components/app_card.dart';
+import 'package:lamb_talent/shared/components/app_text.dart';
+import 'package:lamb_talent/shared/components/app_button.dart';
 import 'package:lamb_talent/shared/components/loading.dart';
 
 import 'components/deposited_help_travel.dart';
@@ -41,8 +46,9 @@ class AccountStatusPage extends StatelessWidget {
                       children: [
                         // Indicadores fijos
                         Obx(() => Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: Spacing.sm,
+                              ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: List<Widget>.generate(5, (index) {
@@ -56,9 +62,11 @@ class AccountStatusPage extends StatelessWidget {
                                     height: 8,
                                     decoration: BoxDecoration(
                                       color: isActive
-                                          ? Colors.white
-                                          : Colors.white.withValues(alpha: 0.3),
-                                      borderRadius: BorderRadius.circular(4),
+                                          ? ColorsApp.white
+                                          : ColorsApp.white
+                                              .withValues(alpha: 0.3),
+                                      borderRadius:
+                                          BorderRadius.circular(AppRadius.sm),
                                     ),
                                   );
                                 }),
@@ -112,7 +120,7 @@ class AccountStatusPage extends StatelessWidget {
                 : '0',
             showBoleta: true,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Spacing.sm),
           Obx(() => AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 child: !controller.loadingDetail.value &&
@@ -152,7 +160,7 @@ class AccountStatusPage extends StatelessWidget {
                         : '0'))
                 : '0',
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Spacing.sm),
           Obx(() => AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 child: !controller.loadingDetail.value &&
@@ -194,7 +202,7 @@ class AccountStatusPage extends StatelessWidget {
                         : '0'))
                 : '0',
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Spacing.sm),
           Obx(() => AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 child: !controller.loadingDetail.value &&
@@ -232,19 +240,17 @@ class AccountStatusPage extends StatelessWidget {
                 ? controller.dataGeneral['adelanto_ayudas'].toString()
                 : '0',
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Spacing.sm),
           Obx(() => AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 child: !controller.loadingDetail.value &&
                         controller.selectSlider.value == 3
-                    ? Card(
+                    ? AppCard(
                         key: const ValueKey('convenios'),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Detail(
-                              listData: controller.listDataDetail,
-                              isModal: false,
-                              title: 'Convenios personales'),
+                        child: Detail(
+                          listData: controller.listDataDetail,
+                          isModal: false,
+                          title: 'Convenios personales',
                         ),
                       )
                     : _buildDetailPlaceholder(),
@@ -265,19 +271,17 @@ class AccountStatusPage extends StatelessWidget {
                 ? controller.dataGeneral['a_rendir'].toString()
                 : '0',
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Spacing.sm),
           Obx(() => AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 child: !controller.loadingDetail.value &&
                         controller.selectSlider.value == 4
-                    ? Card(
+                    ? AppCard(
                         key: const ValueKey('rendir'),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Detail(
-                              listData: controller.listDataDetail,
-                              isModal: false,
-                              title: 'A rendir'),
+                        child: Detail(
+                          listData: controller.listDataDetail,
+                          isModal: false,
+                          title: 'A rendir',
                         ),
                       )
                     : _buildDetailPlaceholder(),
@@ -287,7 +291,7 @@ class AccountStatusPage extends StatelessWidget {
     );
   }
 
-  // Card header con estilo Material 3
+  // Card header con estilo del sistema de diseño
   Widget _buildHeaderCard({
     required String title,
     String? titleContinue,
@@ -295,100 +299,79 @@ class AccountStatusPage extends StatelessWidget {
     bool showBoleta = false,
   }) {
     final format = NumberFormat.currency(symbol: 'S/. ', locale: 'en_US');
-    final theme = Theme.of(Get.context!);
 
-    return Card(
-      elevation: 0,
-      color: theme.colorScheme.surfaceContainerLowest,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Filtro de fecha
-            InkWell(
-              onTap: () => controller.selectDate(),
-              borderRadius: BorderRadius.circular(25),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: theme.colorScheme.outline.withValues(alpha: 0.5)),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.calendar_month_outlined,
-                        size: 20, color: theme.colorScheme.primary),
-                    const SizedBox(width: 8),
-                    Text(
-                      '${controller.dateModel.value.nameMonth}, ${controller.dateModel.value.year}',
-                      style: TextStyle(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
+    return AppCard.spacious(
+      backgroundColor: ColorsApp.neutral50,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Filtro de fecha
+          InkWell(
+            onTap: () => controller.selectDate(),
+            borderRadius: BorderRadius.circular(AppRadius.pill),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Spacing.md,
+                vertical: Spacing.sm,
               ),
-            ),
-            const SizedBox(height: 16),
-            // Contenido principal
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Icons.account_balance_wallet_outlined,
-                        size: 32, color: theme.colorScheme.primary),
-                    const SizedBox(height: 4),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                    if (titleContinue != null)
-                      Text(
-                        titleContinue,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                  ],
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: ColorsApp.neutral300,
                 ),
-                if (showBoleta)
-                  TextButton.icon(
-                    onPressed: () => controller.getTicketPayment(),
-                    icon: Icon(Icons.picture_as_pdf_outlined,
-                        size: 20, color: theme.colorScheme.primary),
-                    label: Text(
-                      'Ver boleta',
-                      style: TextStyle(color: theme.colorScheme.primary),
-                    ),
+                borderRadius: BorderRadius.circular(AppRadius.pill),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.calendar_month_outlined,
+                    size: 18,
+                    color: ColorsApp.primary,
                   ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            // Monto
-            Text(
-              format.format(double.parse(amount)),
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.w500,
-                color: theme.colorScheme.primary,
+                  const SizedBox(width: Spacing.sm),
+                  AppText.label(
+                    '${controller.dateModel.value.nameMonth}, ${controller.dateModel.value.year}',
+                    color: ColorsApp.primary,
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: Spacing.lg),
+          // Contenido principal
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.account_balance_wallet_outlined,
+                    size: 32,
+                    color: ColorsApp.primary,
+                  ),
+                  const SizedBox(height: Spacing.xs),
+                  AppText.h2(title, color: ColorsApp.neutral800),
+                  if (titleContinue != null)
+                    AppText.h2(titleContinue, color: ColorsApp.neutral800),
+                ],
+              ),
+              if (showBoleta)
+                AppButton.text(
+                  text: 'Ver boleta',
+                  icon: Icons.picture_as_pdf_outlined,
+                  onPressed: () => controller.getTicketPayment(),
+                ),
+            ],
+          ),
+          const SizedBox(height: Spacing.md),
+          // Monto
+          AppText.display1(
+            format.format(double.parse(amount)),
+            color: ColorsApp.primary,
+          ),
+        ],
       ),
     );
   }
