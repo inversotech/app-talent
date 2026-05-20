@@ -1,0 +1,2 @@
+/Users/vitmaraliaga/develop/mobile/app-talent/android/app/.cxx/RelWithDebInfo/3n24312p/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/vitmaraliaga/develop/mobile/app-talent/android/app/.cxx/RelWithDebInfo/3n24312p/armeabi-v7a/CMakeFiles/rebuild_cache.dir
