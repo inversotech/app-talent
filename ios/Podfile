@@ -1,9 +1,9 @@
+ENV['FLUTTER_DISABLE_SWIFT_PACKAGE_MANAGER'] = '1'
 # Uncomment this line to define a global platform for your project
 platform :ios, '15.6'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
-ENV['FLUTTER_DISABLE_SWIFT_PACKAGE_MANAGER'] = '1'
 
 project 'Runner', {
   'Debug' => :debug,
